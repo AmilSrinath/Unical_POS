@@ -1,2 +1,0 @@
-# hspc-pos-system
-

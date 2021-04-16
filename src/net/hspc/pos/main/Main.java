@@ -6,7 +6,7 @@
 package net.hspc.pos.main;
 
 import javax.swing.SwingUtilities;
-import net.hspc.pos.view.LogInForm;
+import net.hspc.pos.view.main.LogInForm;
 
 /**
  *

@@ -2,9 +2,8 @@ server_ip=localhost
 server_port=3306
 server_user=root
 server_pw=sanjuka1998
-server_db=hspc_pos
-#login interface  ---- for touch screen=1 -----for normal screen=0
-SCREEN_TYPE=1
+server_pwd=pos8991akujnas
+server_db=unical_pos
 
-#welcome screen splash 1==zincat logo,2== eideas logo
-SPLASH_SCREEN=1
+#Delivery_Fee
+DELIVERY_FEE=330

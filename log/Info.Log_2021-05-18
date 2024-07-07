@@ -1,0 +1,6 @@
+2021-05-18 12:45:26,897 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2021-05-18 12:54:48,364 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2021-05-18 12:57:25,145 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2021-05-18 12:58:41,513 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2021-05-18 13:00:28,925 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2021-05-18 13:08:28,928 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)

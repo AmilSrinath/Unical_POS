@@ -6,6 +6,9 @@
 package net.unical.pos.view.deliveryOrders;
 
 import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.Format;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -72,6 +76,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private ArrayList<Integer> paymentTypeIds=new ArrayList<>();
     private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
     private ArrayList<Integer> customersList=new ArrayList<>();
+    private ArrayList<Double> itemWeightList=new ArrayList<>();
     
     private DeliveryOrderController deliveryOrderController;
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
@@ -87,7 +92,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     boolean customer_exist=false;
     
     
-    public DeliveryOrders(Dashboard dashboard) {
+    public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException {
         initComponents();
         
         this.dashboard=dashboard;
@@ -119,7 +124,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         
 //        AutoCompleteDecorator.decorate(jComboBox1);
 //        getPhone1();
+
+        FileInputStream fis = new FileInputStream("config.txt");
+        Properties props = new Properties();
+        props.load(fis);
         
+        deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
+        weightTxt.setText("0");
     }
 
     /**
@@ -186,10 +197,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         paymentTypeCombo = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        paid_amountTxt = new javax.swing.JTextField();
+        weightTxt = new javax.swing.JTextField();
         saveOrderBtn1 = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
-        weightCombo = new javax.swing.JComboBox<>();
         phoneTwoCmb = new javax.swing.JComboBox<>();
         phoneOneCmb = new javax.swing.JComboBox<>();
         fr_de_chb = new java.awt.Checkbox();
@@ -481,6 +491,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
+        itemCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemComboActionPerformed(evt);
+            }
+        });
+
         jLabel8.setText("Select Item :");
 
         qtyTxt.setText("1");
@@ -567,7 +583,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         deliveyFeeLbl.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         deliveyFeeLbl.setForeground(new java.awt.Color(0, 153, 0));
         deliveyFeeLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        deliveyFeeLbl.setText("350.00");
 
         jLabel13.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 102, 153));
@@ -688,9 +703,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel15.setText("Weight(kg) :");
 
-        weightCombo.setEditable(true);
-        weightCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "100", "150", "200", "250", "300", "350", "400", "450", "500", "600", "700", "800", "900", "1000" }));
-
         phoneTwoCmb.setEditable(true);
         phoneTwoCmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -767,7 +779,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(paid_amountTxt)
                             .addComponent(paymentTypeCombo, 0, 76, Short.MAX_VALUE)
                             .addComponent(codTxt))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -778,8 +789,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 .addComponent(saveOrderBtn))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(weightCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(5, 5, 5)
+                                .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
@@ -788,7 +799,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 2, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel3)
@@ -856,16 +867,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(weightCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(paid_amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1161,49 +1170,114 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
-        
-        Double totalAmount=0.00;
-        
-        if(qtyTxt.getText().isEmpty()){
+
+        Double totalAmount = 0.00;
+        Double totalWeight = 0.00;
+
+        if (qtyTxt.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "QTY..?");
-        }else{
-            
-            Integer itemIndex=itemCombo.getSelectedIndex();
-            Double qty=Double.parseDouble(qtyTxt.getText());
-            
-            String itemName=(String) itemCombo.getSelectedItem();
-            Integer itemId=itemIds.get(itemIndex);
-            Double itemPrice=itemPriceList.get(itemIndex);
-        
-            Double amount=itemPrice*qty;
-//            totalAmount+=totalAmount+amount;
-        
-            Object itemData[]={itemId,itemName,itemPrice,qty,amount};
+            return;
+        }
+
+        Integer itemIndex = itemCombo.getSelectedIndex();
+        Double qty = Double.parseDouble(qtyTxt.getText());
+
+        String itemName = (String) itemCombo.getSelectedItem();
+        Integer itemId = itemIds.get(itemIndex);
+        Double itemPrice = itemPriceList.get(itemIndex);
+        Double itemWeight = itemWeightList.get(itemIndex);
+
+        Double amount = itemPrice * qty;
+        boolean itemFound = false;
+
+        for (int i = 0; i < itemListTableModel.getRowCount(); i++) {
+            Integer existingItemId = (Integer) itemListTableModel.getValueAt(i, 0);
+            if (existingItemId.equals(itemId)) {
+                Double existingQty = (Double) itemListTableModel.getValueAt(i, 3);
+                Double newQty = existingQty + qty;
+                Double newAmount = itemPrice * newQty;
+
+                itemListTableModel.setValueAt(newQty, i, 3);
+                itemListTableModel.setValueAt(newAmount, i, 4);
+
+                itemFound = true;
+                break;
+            }
+        }
+
+        if (!itemFound) {
+            Object itemData[] = {itemId, itemName, itemPrice, qty, amount};
             itemListTableModel.addRow(itemData);
         }
-        
-        if(itemListTableModel.getRowCount()==0){
-            subTotAmountLbl.setText("0.00");
-            totAmountLbl.setText("0.00");
-        }else{
-            for (int i = 0; itemListTable.getRowCount() > i; i++) {
-                Double price=(Double) itemListTable.getValueAt(i, 2);
-                Double qty=(Double) itemListTable.getValueAt(i, 3);
 
-                totalAmount=totalAmount+price*qty;
-            }
-            subTotAmountLbl.setText(totalAmount+"");
-            
-            Double deliveryFee=Double.parseDouble(deliveyFeeLbl.getText());
-            totAmountLbl.setText(totalAmount+deliveryFee+"");
-            
-            paid_amountTxt.setText("0.00");
-            codTxt.setText(totAmountLbl.getText());
+        updateTotals();
+
+        Properties props = loadProperties();
+        if (props != null) {
+            calculateDeliveryFee(props);
         }
-        
-        
     }//GEN-LAST:event_addBtnActionPerformed
 
+    private void updateTotals() {
+        Double totalAmount = 0.00;
+        Double totalWeight = 0.00;
+
+        if (itemListTableModel.getRowCount() == 0) {
+            subTotAmountLbl.setText("0.00");
+            totAmountLbl.setText("0.00");
+            weightTxt.setText("0");
+        } else {
+            for (int i = 0; i < itemListTable.getRowCount(); i++) {
+                Double price = (Double) itemListTable.getValueAt(i, 2);
+                Double qty = (Double) itemListTable.getValueAt(i, 3);
+                Double weight = itemWeightList.get(itemIds.indexOf(itemListTable.getValueAt(i, 0)));
+
+                totalAmount += price * qty;
+                totalWeight += weight * qty;
+            }
+            subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+
+            Double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+
+            codTxt.setText(totAmountLbl.getText());
+            weightTxt.setText(String.format("%.2f", totalWeight));
+        }
+    }
+    
+    
+    private Properties loadProperties() {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream("config.txt")) {
+            props.load(fis);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Config file not found", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Error loading config file", ex);
+        }
+        return props;
+    }
+
+    private void calculateDeliveryFee(Properties props) {
+        String deliveryFeeStr = props.getProperty("DELIVERY_FEE");
+        Double DELIVERY_FEE = Double.parseDouble(deliveryFeeStr);
+
+        String addCostPer1KgStr = props.getProperty("ADD_COST_PER_1KG");
+        Double ADD_COST_PER_1KG = Double.parseDouble(addCostPer1KgStr);
+
+        Double w = Double.parseDouble(weightTxt.getText());
+
+        if (w >= 1000) {
+            Integer kylo = (int) (w / 1000);
+            Double value = kylo * ADD_COST_PER_1KG;
+            Double totalFee = value + DELIVERY_FEE;
+            deliveyFeeLbl.setText(String.format("%.2f", totalFee));
+        }
+        System.out.println(deliveyFeeLbl.getText());
+    }
+    
+    
+    
     private void saveOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtnActionPerformed
         ArrayList<OrderDetailsDto> orderDetailsDtos=new ArrayList<>();
         
@@ -1248,7 +1322,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setPhoneTwo(phoneTwo);
                     deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
                     deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
-                    deliveryOrderDto.setWeight(weightCombo.getSelectedItem().toString());
+                    deliveryOrderDto.setWeight(weightTxt.getText().toString());
                     deliveryOrderDto.setFreeShip(free_ship);
                     deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                     deliveryOrderDto.setRemark(remarkTxt.getText());
@@ -1286,24 +1360,68 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
         
-        int row=itemListTable.getSelectedRow();
-        itemListTableModel.removeRow(row);
-        Double totalAmount=0.00;
-        
-        for (int i = 0; itemListTable.getRowCount() > i; i++) {
-                Double price=(Double) itemListTable.getValueAt(i, 2);
-                Double qty=(Double) itemListTable.getValueAt(i, 3);
+        int row = itemListTable.getSelectedRow();
+        if (row != -1) {
+            itemListTableModel.removeRow(row);
+        }
 
-                totalAmount=totalAmount+price*qty;
-            }
-            subTotAmountLbl.setText(totalAmount+"");
-            
-            Double deliveryFee=Double.parseDouble(deliveyFeeLbl.getText());
-            totAmountLbl.setText(totalAmount+deliveryFee+"");
-            
-            codTxt.setText(totAmountLbl.getText());
+        Double totalAmount = 0.00;
+        Double totalWeight = 0.00;
+
+        for (int i = 0; i < itemListTable.getRowCount(); i++) {
+            Double price = (Double) itemListTable.getValueAt(i, 2);
+            Double qty = (Double) itemListTable.getValueAt(i, 3);
+            Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
+            Double weight = itemWeightList.get(itemIds.indexOf(itemId));
+
+            totalAmount += price * qty;
+            totalWeight += weight * qty;
+        }
+
+        subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+
+        Double deliveryFee = calculateDeliveryFee(totalWeight);
+        deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
+
+        totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+
+        codTxt.setText(totAmountLbl.getText());
+        weightTxt.setText(String.format("%.2f", totalWeight));
     }//GEN-LAST:event_removeBtnActionPerformed
 
+    private Double calculateDeliveryFee(Double totalWeight) {
+        Properties props = loadPropertie();
+        if (props == null) {
+            return 0.00; // Default to 0 if properties are not loaded
+        }
+
+        String deliveryFeeStr = props.getProperty("DELIVERY_FEE");
+        Double DELIVERY_FEE = Double.parseDouble(deliveryFeeStr);
+
+        String addCostPer1KgStr = props.getProperty("ADD_COST_PER_1KG");
+        Double ADD_COST_PER_1KG = Double.parseDouble(addCostPer1KgStr);
+
+        if (totalWeight >= 1000) {
+            Integer kylo = (int) (totalWeight / 1000);
+            Double value = kylo * ADD_COST_PER_1KG;
+            return value + DELIVERY_FEE;
+        } else {
+            return DELIVERY_FEE;
+        }
+    }
+
+    private Properties loadPropertie() {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream("config.txt")) {
+            props.load(fis);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Config file not found", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Error loading config file", ex);
+        }
+        return props;
+    }
+    
     private void itemListTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_itemListTablePropertyChange
 
     }//GEN-LAST:event_itemListTablePropertyChange
@@ -1354,7 +1472,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_printAllOrdersBtnActionPerformed
 
     private void saveOrderBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtn1ActionPerformed
-        Double amount=Double.parseDouble(paid_amountTxt.getText());
+        Double amount=Double.parseDouble(weightTxt.getText());
         Double total=Double.parseDouble(totAmountLbl.getText());
         
         Double cod=total-amount;
@@ -1432,6 +1550,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private void phoneOneCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneOneCmbActionPerformed
         if(phoneOneCmb.getSelectedIndex()!=-1){
             try {
+               
                 String number=phoneOneCmb.getSelectedItem()+"";
                 
                 List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='"+number+"' OR `phone_two`='"+number+"'");
@@ -1511,12 +1630,27 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
-            
-            orderCode = Integer.parseInt(deliveryOrdersTable.getValueAt(deliveryOrdersTable.getSelectedRow(), 1).toString());
-            System.out.println("Order Code : "+orderCode);
-            
-            order_options.setLocationRelativeTo(null);
-            order_options.setVisible(true);
+            int selectedRow = deliveryOrdersTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String orderCodeStr = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+                if (!orderCodeStr.isEmpty()) {
+                    try {
+                        orderCode = Integer.parseInt(orderCodeStr);
+                        System.out.println("Order Code : " + orderCode);
+
+                        order_options.setLocationRelativeTo(null);
+                        order_options.setVisible(true);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid order code: " + orderCodeStr);
+                        JOptionPane.showMessageDialog(this, "Invalid order code");
+                    }
+                } else {
+                    System.out.println("Order code is empty");
+                    JOptionPane.showMessageDialog(this, "Order code is empty");
+                }
+            } else {
+                System.out.println("No row selected");
+            }
         }
         
     }//GEN-LAST:event_deliveryOrdersTableMousePressed
@@ -1596,8 +1730,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        clearText();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
+        qtyTxt.requestFocus();
+    }//GEN-LAST:event_itemComboActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1707,7 +1845,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JTextField orderCodeTxt;
     private javax.swing.JDialog order_options;
-    private javax.swing.JTextField paid_amountTxt;
     private javax.swing.JComboBox<String> paymentTypeCombo;
     private javax.swing.JComboBox<String> paymentTypeCombo2;
     private javax.swing.JComboBox<String> phoneOneCmb;
@@ -1722,7 +1859,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel subTotAmountLbl;
     private javax.swing.JLabel totAmountLbl;
     private javax.swing.JLabel total_orders_count_txt;
-    private javax.swing.JComboBox<String> weightCombo;
+    private javax.swing.JTextField weightTxt;
     // End of variables declaration//GEN-END:variables
 
     private void getItems() {
@@ -1734,8 +1871,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 itemCombo.addItem(mainItem.getItemName());
                 itemIds.add(mainItem.getItemId());
                 itemPriceList.add(mainItem.getUnitPrice());
+                itemWeightList.add(mainItem.getWeight());
             }
-            
+            System.out.println(itemWeightList);
         } catch (Exception ex) {
             
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
@@ -1831,13 +1969,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
             Date date = new Date();
-            Double paidAmount=Double.parseDouble(paid_amountTxt.getText());
+            Double paidAmount=Double.parseDouble(weightTxt.getText());
             
             String orderCode=orderCodeTxt.getText();
             hm.put("DATE", formatter.format(date));
             hm.put("PAID_AMOUNT", paidAmount);
             hm.put("ORDER_ID", orderId);
-            hm.put("WEIGHT", weightCombo.getSelectedItem());
+            hm.put("WEIGHT", weightTxt.getText());
             
             JasperReport jr = JasperCompileManager.compileReport("D:/Unical/Unical-Pos-System/reports/Delivery_Receipt.jrxml");
             JasperPrint jp = JasperFillManager.fillReport(jr, hm, DBCon.getDatabaseConnection());
@@ -1898,8 +2036,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void clearText() {
         phoneOneCmb.setSelectedIndex(-1);
-        phoneOneCmb.setSelectedIndex(-1);
+        phoneTwoCmb.setSelectedIndex(-1);
         addressTxt.setText("");
+        remarkTxt.setText("");
         customerNameTxt.setText("");
 //        phone2Txt.setText("");
     }

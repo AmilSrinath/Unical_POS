@@ -28,11 +28,12 @@ public class MainItemDto {
     Integer sellingItem;
     Integer status;
     Integer userId;
+    Double weight;
 
     public MainItemDto() {
     }
 
-    public MainItemDto(Integer itemId, Integer barCode, Integer mainCategoryId, Integer subCataegoryId, String prefix, String codePrefix, Double discount, String itemName, String unitType, String priterType, Double costPrice, Double unitPrice, String imagePath, Integer grnStatus, Integer sellingItem, Integer status, Integer userId) {
+    public MainItemDto(Integer itemId, Integer barCode, Integer mainCategoryId, Integer subCataegoryId, String prefix, String codePrefix, Double discount, String itemName, String unitType, String priterType, Double costPrice, Double unitPrice, String imagePath, Integer grnStatus, Integer sellingItem, Integer status, Integer userId, Double weight) {
         this.itemId = itemId;
         this.barCode = barCode;
         this.mainCategoryId = mainCategoryId;
@@ -50,6 +51,7 @@ public class MainItemDto {
         this.sellingItem = sellingItem;
         this.status = status;
         this.userId = userId;
+        this.weight = weight;
     }
 
     public Integer getItemId() {
@@ -188,5 +190,12 @@ public class MainItemDto {
         this.userId = userId;
     }
     
+    public Double getWeight(){
+        return weight;
+    }
+    
+    public void setWeight(Double weight){
+        this.weight = weight;
+    }
     
 }

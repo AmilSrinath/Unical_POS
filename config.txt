@@ -1,9 +1,11 @@
 server_ip=localhost
 server_port=3306
 server_user=root
-server_pw=sanjuka1998
-server_pwd=pos8991akujnas
+server_pw=12345678
+server_pwd=pos87654321
 server_db=unical_pos
 
 #Delivery_Fee
-DELIVERY_FEE=330
+DELIVERY_FEE=350
+
+ADD_COST_PER_1KG=100

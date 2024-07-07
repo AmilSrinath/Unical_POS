@@ -36,7 +36,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
         PosMainItem item = new PosMainItem(itemDto.getItemId(),itemDto.getBarCode(),itemDto.getMainCategoryId(),itemDto.getSubCataegoryId(),
                  itemDto.getPrefix(), itemDto.getCodePrefix(), itemDto.getDiscount(),
                 itemDto.getItemName(), itemDto.getUnitType(), itemDto.getPriterType(), itemDto.getCostPrice(), itemDto.getUnitPrice(),
-                itemDto.getImagePath(),itemDto.getStatus(), itemDto.getGrnStatus(),itemDto.getSellingItem(), itemDto.getUserId(), 1);
+                itemDto.getImagePath(),itemDto.getStatus(), itemDto.getGrnStatus(),itemDto.getSellingItem(), itemDto.getUserId(), 1, itemDto.getWeight());
         return repo.save(item);
 
     }
@@ -56,7 +56,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     model.getPrefix(), model.getCodePrefix(), model.getDiscount(), 
                     model.getItemName(), model.getUnitType(), model.getPriterType(), 
                     model.getCostPrice(), model.getUnitPrice(), model.getImagePath(), 
-                    model.getGrnStatus(),model.getSellingItem(), model.getStatus(), model.getUserId()));
+                    model.getGrnStatus(),model.getSellingItem(), model.getStatus(), model.getUserId(),model.getWeight()));
         }
 
         return mainItemDtos;
@@ -82,7 +82,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     model.getPrefix(), model.getCodePrefix(), model.getDiscount(), 
                     model.getItemName(), model.getUnitType(), model.getPriterType(), 
                     model.getCostPrice(), model.getUnitPrice(), model.getImagePath(), 
-                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId()));
+                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId(),model.getWeight()));
         }
 
         return mainItemDtos;
@@ -100,7 +100,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     model.getPrefix(), model.getCodePrefix(), model.getDiscount(), 
                     model.getItemName(), model.getUnitType(), model.getPriterType(), 
                     model.getCostPrice(), model.getUnitPrice(), model.getImagePath(), 
-                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId()));
+                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId(),model.getWeight()));
         }
         
         return mainItemDtos;
@@ -118,7 +118,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     model.getPrefix(), model.getCodePrefix(), model.getDiscount(), 
                     model.getItemName(), model.getUnitType(), model.getPriterType(), 
                     model.getCostPrice(), model.getUnitPrice(), model.getImagePath(), 
-                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId()));
+                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId(),model.getWeight()));
         }
         
         return mainItemDtos;
@@ -136,7 +136,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     model.getPrefix(), model.getCodePrefix(), model.getDiscount(), 
                     model.getItemName(), model.getUnitType(), model.getPriterType(), 
                     model.getCostPrice(), model.getUnitPrice(), model.getImagePath(), 
-                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId()));
+                    model.getGrnStatus(), model.getStatus(),model.getSellingItem(), model.getUserId(),model.getWeight()));
         }
         
         return mainItemDtos;

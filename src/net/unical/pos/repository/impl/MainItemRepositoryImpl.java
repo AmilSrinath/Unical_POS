@@ -21,7 +21,7 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
 
     @Override
     public boolean save(PosMainItem item)throws Exception{
-        return Statement.executeUpdate("INSERT into pos_main_item_tb values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        return Statement.executeUpdate("INSERT into pos_main_item_tb values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 0,
                 item.getBarCode(),
                 item.getMainItemCategoryId(),
@@ -39,7 +39,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                 item.getGrnStatus(),
                 item.getSellingItem(),
                 item.getUserId(),
-                item.getVisible()) > 0 ;
+                item.getVisible(),
+                item.getWeight()) > 0 ;
     }
 
     @Override
@@ -48,7 +49,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
         
         ArrayList<PosMainItem> posMainItems=new ArrayList<>();
         while(rst.next()){
-            posMainItems.add(new PosMainItem(rst.getInt(1),
+            posMainItems.add(new PosMainItem(
+                    rst.getInt(1),
                     rst.getInt(2),
                     rst.getInt(3),
                     rst.getInt(4),
@@ -65,7 +67,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                     rst.getInt(15),
                     rst.getInt(16),
                     rst.getInt(17),
-                    rst.getInt(18)
+                    rst.getInt(18),
+                    rst.getDouble(19)
             ));
         }
         return posMainItems;
@@ -93,7 +96,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                     rst.getInt(15),
                     rst.getInt(16),
                     rst.getInt(17),
-                    rst.getInt(18)
+                    rst.getInt(18),
+                    rst.getDouble(19)
             ));
         }
         return posMainItems;
@@ -122,7 +126,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                     rst.getInt(15),
                     rst.getInt(16),
                     rst.getInt(17),
-                    rst.getInt(18)
+                    rst.getInt(18),
+                    rst.getDouble(19)
             ));
         }
         return posMainItems;
@@ -155,7 +160,8 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                     rst.getInt(15),
                     rst.getInt(16),
                     rst.getInt(17),
-                    rst.getInt(18)
+                    rst.getInt(18),
+                    rst.getDouble(19)
             ));
         }
         return posMainItems;

@@ -50,7 +50,8 @@ public class CustomerServiceImpl implements CustomerServiceCustom{
         List<CustomerModel>customerModels=customerRepositoryCustom.getCustomer(quary);
         Vector<CustomerDto>customerDtos=new Vector<>();
         for(CustomerModel customerModel:customerModels){
-            customerDtos.add(new CustomerDto(customerModel.getCustomerId(),
+            customerDtos.add(new CustomerDto(
+                    customerModel.getCustomerId(),
                     customerModel.getCustomerName(),
                     customerModel.getNic(),
                     customerModel.getAddress(),

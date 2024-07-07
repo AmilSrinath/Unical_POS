@@ -11,8 +11,11 @@ import java.awt.Font;
 import static java.awt.Font.BOLD;
 import static java.awt.Font.DIALOG;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Configurations;
@@ -728,12 +731,17 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_deliveryOrdersBtnMouseExited
 
     private void deliveryOrdersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deliveryOrdersBtnActionPerformed
-        DeliveryOrders deliveryOrders = new DeliveryOrders(this);
-        desktopPane.add(deliveryOrders);
-        Dimension d = desktopPane.getSize();
-        deliveryOrders.setLayer(desktopPane.POPUP_LAYER);
-        deliveryOrders.setSize(d);
-        deliveryOrders.setVisible(true);
+        DeliveryOrders deliveryOrders;
+        try {
+            deliveryOrders = new DeliveryOrders(this);
+            desktopPane.add(deliveryOrders);
+            Dimension d = desktopPane.getSize();
+            deliveryOrders.setLayer(desktopPane.POPUP_LAYER);
+            deliveryOrders.setSize(d);
+            deliveryOrders.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_deliveryOrdersBtnActionPerformed
 
     /**

@@ -29,11 +29,12 @@ public class PosMainItem {
     private Integer status;
     private Integer userId;
     private Integer visible;
+    private Double weight;
 
     public PosMainItem() {
     }
 
-    public PosMainItem(Integer itemId, Integer barCode, Integer mainItemCategoryId, Integer subItemCategoryId, String prefix, String codePrefix, Double discount, String itemName, String unitType, String priterType, Double costPrice, Double unitPrice, String imagePath, Integer grnStatus, Integer sellingItem, Integer status, Integer userId, Integer visible) {
+    public PosMainItem(Integer itemId, Integer barCode, Integer mainItemCategoryId, Integer subItemCategoryId, String prefix, String codePrefix, Double discount, String itemName, String unitType, String priterType, Double costPrice, Double unitPrice, String imagePath, Integer grnStatus, Integer sellingItem, Integer status, Integer userId, Integer visible, Double weight) {
         this.itemId = itemId;
         this.barCode = barCode;
         this.mainItemCategoryId = mainItemCategoryId;
@@ -52,6 +53,7 @@ public class PosMainItem {
         this.status = status;
         this.userId = userId;
         this.visible = visible;
+        this.weight = weight;
     }
 
     public Integer getItemId() {
@@ -198,5 +200,12 @@ public class PosMainItem {
         this.visible = visible;
     }
     
+    public Double getWeight(){
+        return weight;
+    }
+    
+    public void setWeight(Double weight){
+        this.weight = weight;
+    }
     
 }

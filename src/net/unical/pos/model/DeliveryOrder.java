@@ -34,9 +34,17 @@ public class DeliveryOrder {
     private String remark;
     private Integer PaymentTypeId;
     private Integer isPrint;
+    private String customerNumber;
     
     private ArrayList<OrderDetailsDto> orderDetailsDtos;
 
+    public String getCustomerNumber(){
+        return customerNumber;
+    }
+    
+    public void setCustomerNumber(String customerNumber){
+        this.customerNumber = customerNumber;
+    }
     
     public String getDate() {
         return date;

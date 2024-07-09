@@ -112,7 +112,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }else{
                 
 //                Add Customer
-                ps=con.prepareStatement("INSERT INTO pos_main_customer_tb(customer_name,address,phone_one,phone_two,status,user_id,visible) VALUES(?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+                ps=con.prepareStatement("INSERT INTO pos_main_customer_tb(customer_name,address,phone_one,phone_two,status,user_id,visible,customer_number) VALUES(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, deliveryOrder.getCustomerName());
                 ps.setString(2, deliveryOrder.getAddress());
                 ps.setString(3, deliveryOrder.getPhoneOne());
@@ -120,6 +120,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(5, 1);
                 ps.setInt(6, 1);
                 ps.setInt(7, 1);
+                ps.setString(8, deliveryOrder.getCustomerNumber());
                 ps.executeUpdate();
                 rst=ps.getGeneratedKeys();
                 if (rst.next()) {

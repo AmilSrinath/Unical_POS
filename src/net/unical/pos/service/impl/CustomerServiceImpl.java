@@ -39,7 +39,8 @@ public class CustomerServiceImpl implements CustomerServiceCustom{
                 customerDto.getLoyaltyPoints(),
                 customerDto.getStatus(),
                 customerDto.getUserId(),
-                customerDto.getVisible()
+                customerDto.getVisible(),
+                customerDto.getCustomerNumber()
         );
         
         return customerRepositoryCustom.save(customerModel);
@@ -62,7 +63,8 @@ public class CustomerServiceImpl implements CustomerServiceCustom{
                     customerModel.getLoyaltyPoints(),
                     customerModel.getStatus(),
                     customerModel.getUserId(),
-                    customerModel.getVisible()
+                    customerModel.getVisible(),
+                    customerModel.getCustomerNumber()
             ));
         }
         return customerDtos;

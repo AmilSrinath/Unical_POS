@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,44 @@ import net.unical.pos.repository.custom.DeliveryOrderRepositoryCustom;
  * @author Sanjuka
  */
 public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCustom{
+    
+    @Override
+    public String getOrderIDByBillNo(String billNo) {
+        String orderId = null;
+        PreparedStatement ps = null;
+        ResultSet rst = null;
+        Connection con = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+            String query = "SELECT order_id FROM pos_main_order_tb WHERE bill_no = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, billNo);
+            rst = ps.executeQuery();
+
+            if (rst.next()) {
+                orderId = rst.getString("order_id");
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println("Connection Error (: " + ex.getMessage());
+        } finally {
+            try {
+                if (rst != null) {
+                    rst.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return orderId;
+    }
 
     @Override
     public Integer save(DeliveryOrder deliveryOrder) throws Exception {
@@ -218,7 +257,9 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
         return deliveryId;
     }
-
+    
+    
+    
     @Override
     public ArrayList<DeliveryOrder> getAll(String date,Integer paymentType) throws Exception {
         PreparedStatement ps = null;
@@ -480,7 +521,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
        return deliveryOrders;
     }
 
-    public void update(Integer orderCode, int status_id) throws Exception {
+    public void update(String orderCode, int status_id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rst = null;
         boolean isLocalConnection = false;
@@ -627,4 +668,119 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
        return deliveryOrdersAmounts;
         
     }
+    
+    public boolean update(DeliveryOrder deliveryOrderDto, Integer orderId) throws ClassNotFoundException, SQLException {
+        
+        changeItemStatusByOrderID(deliveryOrderDto, orderId);
+        updateDeliveryDetails(deliveryOrderDto);
+        updateOrder(deliveryOrderDto, orderId);
+        updateCustomer(deliveryOrderDto);
+        updateOrderDetails(deliveryOrderDto,orderId);
+        
+        return true;
+    }
+
+    private boolean changeItemStatusByOrderID(DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
+        String updateOrderDetailsStatusSQL = "UPDATE pos_main_order_details_tb SET status = 0 WHERE order_id = ?";
+        
+        PreparedStatement orderDetailsStatusStatement = null;
+        Connection connection = connection = DBCon.getDatabaseConnection();
+        
+        orderDetailsStatusStatement = connection.prepareStatement(updateOrderDetailsStatusSQL);
+        orderDetailsStatusStatement.setInt(1, orderId);
+        
+        return orderDetailsStatusStatement.executeUpdate() > 0;
+    }
+
+    private boolean updateDeliveryDetails(DeliveryOrder deliveryOrderDto) throws SQLException, ClassNotFoundException {
+        String updateOrderSQL = "UPDATE pos_main_delivery_order_tb SET "
+                + "customer_id = ?, cod_amount = ?, weight = ?, remark = ?, "
+                + "status_id = ?, is_free_delivery = ?, is_return = ?, user_id = ? "
+                + "WHERE order_code = ?";
+        
+        PreparedStatement orderStatement = null;
+        Connection connection = connection = DBCon.getDatabaseConnection();
+        
+        orderStatement = connection.prepareStatement(updateOrderSQL);
+        orderStatement.setObject(1, deliveryOrderDto.getCustomerId());
+        orderStatement.setDouble(2, deliveryOrderDto.getCod());
+        orderStatement.setString(3, deliveryOrderDto.getWeight());
+        orderStatement.setString(4, deliveryOrderDto.getRemark());
+        orderStatement.setInt(5, 2);
+        orderStatement.setInt(6, deliveryOrderDto.getFreeShip());
+        orderStatement.setInt(7, 0);
+        orderStatement.setInt(8, 1);
+        orderStatement.setString(9, deliveryOrderDto.getOrderCode());
+
+        return orderStatement.executeUpdate() > 0;
+    }
+
+    private boolean updateOrder(DeliveryOrder deliveryOrderDto, Integer orderId) throws ClassNotFoundException, SQLException {
+        String updateMainOrderSQL = "UPDATE pos_main_order_tb SET "
+                + "customer_id = ?, sub_total_price = ?, "
+                + "delivery_fee = ?, total_order_price = ?, table_id = ?, "
+                + "remark = ?, edited_by = ?, status = ? "
+                + "WHERE delivery_order_id = (SELECT delivery_id FROM pos_main_delivery_order_tb WHERE order_code = ?)";
+        
+        PreparedStatement mainOrderStatement = null;
+        Connection connection = connection = DBCon.getDatabaseConnection();
+        
+        mainOrderStatement = connection.prepareStatement(updateMainOrderSQL);
+        mainOrderStatement.setInt(1, deliveryOrderDto.getCustomerId());
+        mainOrderStatement.setDouble(2, deliveryOrderDto.getSubTotalPrice());
+        mainOrderStatement.setDouble(3, deliveryOrderDto.getDeliveryFee());
+        mainOrderStatement.setDouble(4, deliveryOrderDto.getGrandTotalPrice());
+        mainOrderStatement.setInt(5, deliveryOrderDto.getPaymentTypeId());
+        mainOrderStatement.setString(6, deliveryOrderDto.getRemark());
+        mainOrderStatement.setInt(7, 1);
+        mainOrderStatement.setInt(8, 1);
+        mainOrderStatement.setString(9, deliveryOrderDto.getOrderCode());
+
+        return mainOrderStatement.executeUpdate() > 0;
+    }
+
+    private boolean updateCustomer(DeliveryOrder deliveryOrderDto) throws ClassNotFoundException, SQLException {
+        String updateCustomerSQL = "UPDATE pos_main_customer_tb SET "
+                + "customer_name = ?, address = ?, phone_one = ?, phone_two = ?, customer_number = ? "
+                + "WHERE customer_id = ?";
+        
+        PreparedStatement customerStatement = null;
+        Connection connection = connection = DBCon.getDatabaseConnection();
+        
+        customerStatement = connection.prepareStatement(updateCustomerSQL);
+        customerStatement.setString(1, deliveryOrderDto.getCustomerName());
+        customerStatement.setString(2, deliveryOrderDto.getAddress());
+        customerStatement.setString(3, deliveryOrderDto.getPhoneOne());
+        customerStatement.setString(4, deliveryOrderDto.getPhoneTwo());
+        customerStatement.setString(5, deliveryOrderDto.getCustomerNumber());
+        customerStatement.setInt(6, deliveryOrderDto.getCustomerId());
+        
+        return customerStatement.executeUpdate() > 0;
+    }
+
+    private boolean updateOrderDetails(DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
+        String insertOrderDetailsSQL = "INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id) VALUES(?,?,?,?,?,?,?)";
+        
+        PreparedStatement insertOrderDetailsStatement = null;
+        Connection connection = connection = DBCon.getDatabaseConnection();
+        
+        for (OrderDetailsDto detail : deliveryOrderDto.getOrderDetailsDtos()) {
+            insertOrderDetailsStatement = connection.prepareStatement(insertOrderDetailsSQL);
+            
+            insertOrderDetailsStatement.setInt(1, orderId);
+            insertOrderDetailsStatement.setInt(2, detail.getItemId());
+            insertOrderDetailsStatement.setInt(3, detail.getQty());
+            insertOrderDetailsStatement.setDouble(4, detail.getPerItemPrice());
+            insertOrderDetailsStatement.setDouble(5, detail.getTotalItemPrice());
+            insertOrderDetailsStatement.setInt(6, 1);
+            insertOrderDetailsStatement.setInt(7, 1);
+            
+            if(insertOrderDetailsStatement.executeUpdate() < 0){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
 }

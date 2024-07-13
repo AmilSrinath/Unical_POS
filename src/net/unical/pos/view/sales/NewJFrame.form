@@ -52,7 +52,7 @@
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jTabbedPane1" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane1" pref="666" max="32767" attributes="0"/>
                           <Component id="jPanel5" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jPanel39" alignment="0" min="-2" pref="274" max="-2" attributes="0"/>
@@ -1395,14 +1395,6 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
             <Component class="org.jdesktop.swingx.JXTable" name="orderDetailsTbl">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="if (orderDetailsTbl.getColumnModel().getColumnCount() &gt; 0) {&#xa;    orderDetailsTbl.getColumnModel().getColumn(0).setMinWidth(0);&#xa;    orderDetailsTbl.getColumnModel().getColumn(0).setPreferredWidth(0);&#xa;    orderDetailsTbl.getColumnModel().getColumn(0).setMaxWidth(0);&#xa;}"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="orderDetailsTbl.setCellSelectionEnabled(true);&#xa;&#xa;orderDetailsTbl.setIntercellSpacing(new java.awt.Dimension(1, 5));&#xa;&#xa;orderDetailsTbl.setRowHeight(38);&#xa;&#xa;orderDetailsTbl.getTableHeader().setReorderingAllowed(false);"/>

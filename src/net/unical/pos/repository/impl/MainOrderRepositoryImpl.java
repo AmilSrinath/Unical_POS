@@ -19,6 +19,7 @@ import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dto.MainOrderDto;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.dto.OrderDto;
+import net.unical.pos.model.OrderModel;
 import net.unical.pos.model.PosMainOrder;
 import net.unical.pos.repository.custom.MainOrderRepositoryCustom;
 
@@ -184,8 +185,45 @@ public class MainOrderRepositoryImpl implements MainOrderRepositoryCustom {
     }
 
     @Override
-    public ArrayList<OrderDto> getAllOrders(String query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<OrderModel> getAllOrders() throws SQLException, ClassNotFoundException {
+        Connection con = DBCon.getDatabaseConnection();
+        String query = "SELECT * FROM pos_main_order_tb";
+
+        ArrayList<OrderModel> orderDtos = new ArrayList<>();
+
+        try (PreparedStatement pstmt = con.prepareStatement(query); 
+             ResultSet rst = pstmt.executeQuery()) {
+            while (rst.next()) {
+                orderDtos.add(new OrderModel(
+                        rst.getInt(1),
+                    rst.getInt(2),
+                    rst.getInt(3),
+                    rst.getString(4),
+                    rst.getInt(5),
+                    rst.getDouble(6),
+                    rst.getDouble(7),
+                    rst.getDouble(8),
+                    rst.getDouble(9),
+                    rst.getInt(10),
+                    rst.getInt(11),
+                    rst.getDate(12),
+                    rst.getDate(13),
+                    rst.getInt(14),
+                    rst.getInt(15),
+                    rst.getString(16),
+                    rst.getInt(17),
+                    rst.getInt(18),
+                    rst.getInt(19),
+                    rst.getInt(20),
+                    rst.getInt(21)
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return orderDtos;
     }
 
     

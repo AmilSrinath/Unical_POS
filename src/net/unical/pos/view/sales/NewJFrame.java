@@ -878,8 +878,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jScrollPane8.setPreferredSize(new java.awt.Dimension(218, 763));
 
-        orderDetailsTbl.setBackground(new java.awt.Color(255, 255, 255));
-        orderDetailsTbl.setForeground(new java.awt.Color(0, 0, 0));
         orderDetailsTbl.setCellSelectionEnabled(true);
 
         orderDetailsTbl.setIntercellSpacing(new java.awt.Dimension(1, 5));
@@ -1064,7 +1062,7 @@ public class NewJFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTabbedPane1)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()

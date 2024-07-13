@@ -6,6 +6,7 @@
 package net.unical.pos.repository.custom;
 
 import java.util.ArrayList;
+import net.unical.pos.model.OrderDetails;
 import net.unical.pos.model.PosMainOrderDetails;
 
 /**
@@ -15,5 +16,9 @@ import net.unical.pos.model.PosMainOrderDetails;
 public interface MainOrderDetailRepositoryCustom {
 
     public ArrayList<PosMainOrderDetails> getOrderDetails(Integer orderId);
+    
+    public ArrayList<PosMainOrderDetails> getOrderDetailsByOrderId(Integer orderId);
+    
+    public ArrayList<OrderDetails[]> getOrderDetailsByCustomerId(Integer customerId);
     
 }

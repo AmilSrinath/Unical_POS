@@ -2679,7 +2679,7 @@ public class Order extends javax.swing.JFrame {
                     orderDetailsDto.setItemBarCode(0);
                     orderDetailsDto.setUnitTypeId(1);
                     orderDetailsDto.setPrinterTypeId(1);
-                    orderDetailsDto.setQty((Double) orderDetailsTbl.getValueAt(i, 2));
+                    orderDetailsDto.setQty((Integer) orderDetailsTbl.getValueAt(i, 2));
                     orderDetailsDto.setPerItemPrice((Double) orderDetailsTbl.getValueAt(i, 3));
                     orderDetailsDto.setTotalDiscountPrice(0.00);
                     orderDetailsDto.setTotalItemPrice((Double)orderDetailsTbl.getValueAt(i, 2)*

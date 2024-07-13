@@ -8,6 +8,7 @@ package net.unical.pos.repository.custom;
 import java.util.ArrayList;
 import net.unical.pos.dto.MainOrderDto;
 import net.unical.pos.dto.OrderDto;
+import net.unical.pos.model.OrderModel;
 import net.unical.pos.model.PosMainOrder;
 
 /**
@@ -24,7 +25,7 @@ public interface MainOrderRepositoryCustom {
 
     public Integer saveMainOrder(MainOrderDto mainOrderDto)throws Exception;
 
-    public ArrayList<OrderDto> getAllOrders(String query)throws Exception;
+    public ArrayList<OrderModel> getAllOrders()throws Exception;
 
    
     

@@ -17,7 +17,7 @@ public class OrderDetailsDto {
     private Integer itemBarCode;
     private Integer unitTypeId;
     private Integer printerTypeId;
-    private Double qty;
+    private Integer qty;
     private Double perItemPrice;
     private Double totalDiscountPrice;
     private Double totalItemPrice;
@@ -28,7 +28,7 @@ public class OrderDetailsDto {
     public OrderDetailsDto() {
     }
 
-    public OrderDetailsDto(Integer orderDetailsId, Integer orderId, Integer itemId, Integer itemBarCode, Integer unitTypeId, Integer printerTypeId, Double qty, Double perItemPrice, Double totalDiscountPrice, Double totalItemPrice, String remark, Integer status, Integer userId) {
+    public OrderDetailsDto(Integer orderDetailsId, Integer orderId, Integer itemId, Integer itemBarCode, Integer unitTypeId, Integer printerTypeId, Integer qty, Double perItemPrice, Double totalDiscountPrice, Double totalItemPrice, String remark, Integer status, Integer userId) {
         this.orderDetailsId = orderDetailsId;
         this.orderId = orderId;
         this.itemId = itemId;
@@ -92,11 +92,11 @@ public class OrderDetailsDto {
         this.printerTypeId = printerTypeId;
     }
 
-    public Double getQty() {
+    public Integer getQty() {
         return qty;
     }
 
-    public void setQty(Double qty) {
+    public void setQty(Integer qty) {
         this.qty = qty;
     }
 

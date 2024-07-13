@@ -18,4 +18,6 @@ public interface DeliveryOrderRepositoryCustom {
     public ArrayList<DeliveryOrder> getAll(String date,Integer paymentType)throws Exception;
 
     public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType);
+    
+    public String getOrderIDByBillNo(String billNo);
 }

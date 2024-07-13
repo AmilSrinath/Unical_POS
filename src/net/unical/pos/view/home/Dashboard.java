@@ -741,6 +741,8 @@ public class Dashboard extends javax.swing.JFrame {
             deliveryOrders.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_deliveryOrdersBtnActionPerformed
 

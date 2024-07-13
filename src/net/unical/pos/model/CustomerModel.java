@@ -25,11 +25,12 @@ public class CustomerModel {
     private Integer status;
     private Integer userId;
     private Integer visible;
+    private String customer_number;
 
     public CustomerModel() {
     }
 
-    public CustomerModel(Integer customerId, String customerName, String nic, String address, Integer phoneOne, Date createdDate, Integer isLoyalty, Double loyaltyPoints, Integer status, Integer userId, Integer visible) {
+    public CustomerModel(Integer customerId, String customerName, String nic, String address, Integer phoneOne, Date createdDate, Integer isLoyalty, Double loyaltyPoints, Integer status, Integer userId, Integer visible, String customer_number) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.nic = nic;
@@ -41,23 +42,17 @@ public class CustomerModel {
         this.status = status;
         this.userId = userId;
         this.visible = visible;
+        this.customer_number = customer_number;
     }
     
-    public CustomerModel(Integer customerId, String customerName, String nic, String address, Integer phoneOne, Integer phoneTwo, Date createdDate, Integer isLoyalty, Double loyaltyPoints, Integer status, Integer userId, Integer visible) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.nic = nic;
-        this.address = address;
-        this.phoneOne = phoneOne;
-        this.phoneTwo = phoneTwo;
-        this.createdDate = createdDate;
-        this.isLoyalty = isLoyalty;
-        this.loyaltyPoints = loyaltyPoints;
-        this.status = status;
-        this.userId = userId;
-        this.visible = visible;
+    public String getCustomerNumber() {
+        return customer_number;
     }
 
+    public void setCustomerNumber(String customer_number) {
+        this.customer_number = customer_number;
+    }
+    
     public Integer getCustomerId() {
         return customerId;
     }

@@ -77,6 +77,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                     customerModel.setStatus(rst.getInt("status"));
                     customerModel.setUserId(rst.getInt("user_id"));
                     customerModel.setVisible(rst.getInt("visible"));
+                    customerModel.setCustomerNumber(rst.getString("customer_number"));
                     customerModels.add(customerModel);
             }
             

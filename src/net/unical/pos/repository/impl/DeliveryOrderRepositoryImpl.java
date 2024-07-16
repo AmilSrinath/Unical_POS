@@ -783,4 +783,78 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return true;
     }
 
+    public DeliveryOrder getOrderById(String orderId) {
+        PreparedStatement ps = null;
+        ResultSet rst = null;
+        boolean isLocalConnection = false;
+        Connection con = null;
+
+        DeliveryOrder deliveryOrder = null;
+
+        try {
+
+            if (con == null) {
+                con = DBCon.getDatabaseConnection();
+                isLocalConnection = true;
+            }
+
+            String sql = "SELECT dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, ct.phone_one, ct.phone_two, " +
+                         "ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, dot.is_return, ot.total_order_price, dot.remark, " +
+                         "pt.payment_type_id, ot.is_print " +
+                         "FROM pos_main_delivery_order_tb dot " +
+                         "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                         "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                         "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                         "WHERE dot.order_code = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, orderId);
+
+            rst = ps.executeQuery();
+
+            if (rst.next()) {
+                deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setOrderId(rst.getInt("delivery_id"));
+                deliveryOrder.setOrderCode(rst.getString("order_code"));
+                deliveryOrder.setCustomerName(rst.getString("customer_name"));
+                deliveryOrder.setAddress(rst.getString("address"));
+                deliveryOrder.setCod(rst.getDouble("cod_amount"));
+                deliveryOrder.setPhoneOne(rst.getString("phone_one"));
+                deliveryOrder.setPhoneTwo(rst.getString("phone_two"));
+                deliveryOrder.setSubTotalPrice(rst.getDouble("sub_total_price"));
+                deliveryOrder.setDeliveryFee(rst.getDouble("delivery_fee"));
+                deliveryOrder.setStatus(rst.getInt("status"));
+                deliveryOrder.setStatusType(rst.getInt("status_id"));
+                deliveryOrder.setIsReturn(rst.getInt("is_return"));
+                deliveryOrder.setGrandTotalPrice(rst.getDouble("total_order_price"));
+                deliveryOrder.setRemark(rst.getString("remark"));
+                deliveryOrder.setPaymentTypeId(rst.getInt("payment_type_id"));
+                deliveryOrder.setIsPrint(rst.getInt("is_print"));
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (isLocalConnection && con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                }
+            }
+            if (rst != null) {
+                try {
+                    rst.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+        return deliveryOrder;
+    }
+
 }

@@ -17,8 +17,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.Reports.Reports;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
 import net.unical.pos.view.employee.Employee;
@@ -72,8 +74,8 @@ public class Dashboard extends javax.swing.JFrame {
         pmsBtn = new org.jdesktop.swingx.JXButton();
         logoutBtn = new org.jdesktop.swingx.JXButton();
         employeeBtn = new org.jdesktop.swingx.JXButton();
-        configurationsBtn = new org.jdesktop.swingx.JXButton();
         deliveryOrdersBtn = new org.jdesktop.swingx.JXButton();
+        configurationsBtn = new org.jdesktop.swingx.JXButton();
         navBarPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -171,7 +173,7 @@ public class Dashboard extends javax.swing.JFrame {
                 propertyBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(propertyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
+        jPanel3.add(propertyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
 
         reportsBtn.setBackground(new java.awt.Color(0, 77, 128));
         reportsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -192,7 +194,7 @@ public class Dashboard extends javax.swing.JFrame {
                 reportsBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(reportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
+        jPanel3.add(reportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 210, 60));
 
         inventoryBtn.setBackground(new java.awt.Color(0, 77, 128));
         inventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -234,7 +236,7 @@ public class Dashboard extends javax.swing.JFrame {
                 banquetBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(banquetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 210, 60));
+        jPanel3.add(banquetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 210, 60));
 
         pmsBtn.setBackground(new java.awt.Color(0, 77, 128));
         pmsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -255,7 +257,7 @@ public class Dashboard extends javax.swing.JFrame {
                 pmsBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 210, 60));
+        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
 
         logoutBtn.setBackground(new java.awt.Color(0, 77, 128));
         logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -297,28 +299,7 @@ public class Dashboard extends javax.swing.JFrame {
                 employeeBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
-
-        configurationsBtn.setBackground(new java.awt.Color(0, 77, 128));
-        configurationsBtn.setForeground(new java.awt.Color(255, 255, 255));
-        configurationsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/settings_40px.png"))); // NOI18N
-        configurationsBtn.setText("Configurtions");
-        configurationsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        configurationsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        configurationsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                configurationsBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                configurationsBtnMouseExited(evt);
-            }
-        });
-        configurationsBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configurationsBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(configurationsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 210, 60));
+        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
 
         deliveryOrdersBtn.setBackground(new java.awt.Color(0, 77, 128));
         deliveryOrdersBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -340,6 +321,27 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(deliveryOrdersBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 210, 60));
+
+        configurationsBtn.setBackground(new java.awt.Color(0, 77, 128));
+        configurationsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        configurationsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-filter-45.png"))); // NOI18N
+        configurationsBtn.setText("  Filter Order");
+        configurationsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        configurationsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        configurationsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                configurationsBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                configurationsBtnMouseExited(evt);
+            }
+        });
+        configurationsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configurationsBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(configurationsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 210, 60));
 
         navBarPanel.setBackground(new java.awt.Color(0, 102, 153));
 
@@ -491,7 +493,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(604, Short.MAX_VALUE))
+                .addContainerGap(553, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -709,7 +711,17 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_configurationsBtnMouseExited
 
     private void configurationsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurationsBtnActionPerformed
-        // TODO add your handling code here:
+        OrderFilter orderFilter;
+        try {
+            orderFilter = new OrderFilter(this);
+            desktopPane.add(orderFilter);
+            Dimension d = desktopPane.getSize();
+            orderFilter.setLayer(desktopPane.POPUP_LAYER);
+            orderFilter.setSize(d);
+            orderFilter.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_configurationsBtnActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

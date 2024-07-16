@@ -54,6 +54,13 @@ public class OrderFilter extends JInternalFrame {
         this.paymentTypesController=new PaymentTypesController();
         setCurrentDate();
         getPaymentTypes();
+        
+        
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String fromDate = formatter.format(jXDatePicker1.getDate());
+        String toDate = formatter.format(jXDatePicker2.getDate());
+        
+        getAllOrders(fromDate, toDate, 0, 0);
     }
 
     /**
@@ -88,6 +95,8 @@ public class OrderFilter extends JInternalFrame {
         total_orders_count_txt = new javax.swing.JLabel();
         paymentTypeCombo1 = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
+        statusCmb = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
 
         orderOptions.setResizable(false);
 
@@ -308,6 +317,27 @@ public class OrderFilter extends JInternalFrame {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Payment Type");
 
+        statusCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Any", "Active", "Pending", "Wrapping", "Out of Delivery", "Delivered", "Return", "Cancel" }));
+        statusCmb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                statusCmbMouseClicked(evt);
+            }
+        });
+        statusCmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusCmbActionPerformed(evt);
+            }
+        });
+        statusCmb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                statusCmbKeyReleased(evt);
+            }
+        });
+
+        jLabel21.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("Status");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -320,7 +350,7 @@ public class OrderFilter extends JInternalFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(100, 100, 100)
                         .addComponent(jLabel18)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
+                .addGap(58, 58, 58)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(90, 90, 90)
@@ -335,36 +365,29 @@ public class OrderFilter extends JInternalFrame {
                         .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
+                        .addComponent(statusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
                         .addComponent(jButton1)
-                        .addGap(94, 94, 94)
+                        .addGap(95, 95, 95)
                         .addComponent(jLabel20)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addGap(13, 13, 13)
                         .addComponent(jLabel16)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel21)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(7, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel16))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -372,12 +395,29 @@ public class OrderFilter extends JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(2, 2, 2))
-                    .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)))
                 .addContainerGap())
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel17)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(statusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel21))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -421,14 +461,13 @@ public class OrderFilter extends JInternalFrame {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
-        
-        int index=0;
-        if(paymentTypeCombo1.getSelectedIndex()!=0){
-            index=paymentTypeCombo1.getSelectedIndex();
-            getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-        }else{
-            getAllOrders(fromDate,toDate,0);
-        }
+
+        int paymentTypeIndex = paymentTypeCombo1.getSelectedIndex();
+        int paymentType = paymentTypeIndex != 0 ? paymentTypeIds_2.get(paymentTypeIndex - 1) : 0;
+
+        int statusIndex = statusCmb.getSelectedIndex();
+
+        getAllOrders(fromDate, toDate, paymentType, statusIndex);
     }//GEN-LAST:event_jButton1ActionPerformed
     
     private void setCurrentDate() {
@@ -456,66 +495,78 @@ public class OrderFilter extends JInternalFrame {
     }
     
     
-    private void getAllOrders(String fromDate,String toDate,Integer paymentType) {
-        try {
-            ArrayList<DeliveryOrder>deliveryOrderDtos=deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType);
-            ArrayList<DeliveryOrderAmounts>deliveryOrderAmountDto=deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
-            
-            DefaultTableModel dtm=(DefaultTableModel) deliveryOrdersTable.getModel();
-            dtm.setRowCount(0);
-            
-            String status=null;
-            boolean isPrint=false;
-            
-            int orderId=0;
-            int count=0;
-            double totAmount=0.00;
-            double totDeliveryFee=0.00;
-            double totCod=0.00;
-            double totReturns=0.00;
-                    
-            for(DeliveryOrder dto:deliveryOrderDtos){
-                count++;
-//                codTot=codTot+dto.getCod();
-                if (dto.getStatusType() == 1) {
-                    status = "Active";
-                } else if (dto.getStatusType() == 2) {
-                    status = "Pending";
-                } else if (dto.getStatusType() == 3) {
-                    status = "Wrapping";
-                } else if (dto.getStatusType() == 4) {
-                    status = "Out of Delivery";
-                } else if (dto.getStatusType() == 5) {
-                    status = "Delivered";
-                } else if (dto.getStatusType() == 6) {
-                    status = "Return";
-                } else {
-                    status = "Cancel";
-                }
+    private void getAllOrders(String fromDate, String toDate, Integer paymentType, int status) {
+    try {
+        ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType, status);
+        ArrayList<DeliveryOrderAmounts> deliveryOrderAmountDto = deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
+        
+        DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
+        dtm.setRowCount(0);
+        
+        String statusText = null;
+        boolean isPrint = false;
+        
+        int count = 0;
+        double totAmount = 0.00;
+        double totDeliveryFee = 0.00;
+        double totCod = 0.00;
+        double totReturns = 0.00;
                 
-                if(dto.getIsPrint()==1){
-                    isPrint=true;
-                }else{
-                    isPrint=false;
-                }
-                Object[] rowData={dto.getOrderId(),dto.getOrderCode(),dto.getCustomerName(),dto.getPhoneOne(),dto.getPhoneTwo(),dto.getCod(),dto.getGrandTotalPrice(),status};
-                dtm.addRow(rowData);
-                
-                orderId=dto.getOrderId();
+        for (DeliveryOrder dto : deliveryOrderDtos) {
+            count++;
+            switch (dto.getStatusType()) {
+                case 1:
+                    statusText = "Active";
+                    break;
+                case 2:
+                    statusText = "Pending";
+                    break;
+                case 3:
+                    statusText = "Wrapping";
+                    break;
+                case 4:
+                    statusText = "Out of Delivery";
+                    break;
+                case 5:
+                    statusText = "Delivered";
+                    break;
+                case 6:
+                    statusText = "Return";
+                    break;
+                case 7:
+                    statusText = "Cancel";
+                    break;
+                default:
+                    statusText = "Unknown";
+                    break;
             }
             
-            for(DeliveryOrderAmounts amounts:deliveryOrderAmountDto){
-                totAmount=amounts.getTotalAmount();
-                totDeliveryFee=amounts.getTotalDeliveryCharge();
-                totCod=amounts.getTotalCod();
-                totReturns = amounts.getTotalReturns();
-            }
-            
-            total_orders_count_txt.setText(count+"");
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            isPrint = dto.getIsPrint() == 1;
+            Object[] rowData = {
+                dto.getOrderId(), 
+                dto.getOrderCode(), 
+                dto.getCustomerName(), 
+                dto.getPhoneOne(), 
+                dto.getPhoneTwo(), 
+                dto.getCod(), 
+                dto.getGrandTotalPrice(), 
+                statusText
+            };
+            dtm.addRow(rowData);
         }
+        
+        for (DeliveryOrderAmounts amounts : deliveryOrderAmountDto) {
+            totAmount = amounts.getTotalAmount();
+            totDeliveryFee = amounts.getTotalDeliveryCharge();
+            totCod = amounts.getTotalCod();
+            totReturns = amounts.getTotalReturns();
+        }
+        
+        total_orders_count_txt.setText(String.valueOf(count));
+    } catch (Exception ex) {
+        Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
     }
+}
     
     
     private void deliveryOrdersTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_deliveryOrdersTableKeyReleased
@@ -655,7 +706,7 @@ public class OrderFilter extends JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                getAllOrders(fromDate, toDate, 0);
+                getAllOrders(fromDate, toDate, 0,0);
 
                 orderOptions.dispose();
             } catch (Exception ex) {
@@ -672,7 +723,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0);
+            getAllOrders(fromDate, toDate, 0,0);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -688,7 +739,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0);
+            getAllOrders(fromDate, toDate, 0,0);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -704,7 +755,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0);
+            getAllOrders(fromDate, toDate, 0,0);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -720,7 +771,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0);
+            getAllOrders(fromDate, toDate, 0,0);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -736,13 +787,27 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0);
+            getAllOrders(fromDate, toDate, 0,0);
 
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnWrappingActionPerformed
+
+    private void statusCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statusCmbMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statusCmbMouseClicked
+
+    private void statusCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusCmbActionPerformed
+        System.out.println("AAAAAAA : "+statusCmb.getSelectedIndex());
+        
+        
+    }//GEN-LAST:event_statusCmbActionPerformed
+
+    private void statusCmbKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_statusCmbKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statusCmbKeyReleased
 
     /**
      * @param args the command line arguments
@@ -794,6 +859,7 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane6;
@@ -802,6 +868,7 @@ public class OrderFilter extends JInternalFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JDialog orderOptions;
     private javax.swing.JComboBox<String> paymentTypeCombo1;
+    private javax.swing.JComboBox<String> statusCmb;
     private javax.swing.JLabel total_orders_count_txt;
     // End of variables declaration//GEN-END:variables
 

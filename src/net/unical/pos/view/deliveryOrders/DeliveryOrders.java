@@ -2571,7 +2571,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getAllOrders(String fromDate,String toDate,Integer paymentType) {
         try {
-            ArrayList<DeliveryOrder>deliveryOrderDtos=deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType);
+            ArrayList<DeliveryOrder>deliveryOrderDtos=deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType,0);
             ArrayList<DeliveryOrderAmounts>deliveryOrderAmountDto=deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
             
             DefaultTableModel dtm=(DefaultTableModel) deliveryOrdersTable.getModel();

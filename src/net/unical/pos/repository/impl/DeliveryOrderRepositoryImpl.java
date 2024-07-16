@@ -359,103 +359,80 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     }
 
     @Override
-    public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType) {
+    public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType, int status) {
+        ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
+        Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet rst = null;
-        boolean isLocalConnection = false;
-        Connection con = null;
-        
-        ArrayList<DeliveryOrder> deliveryOrders=new ArrayList<>();
-        
+        ResultSet rs = null;
+
         try {
-            
-            if (con == null) {
-                con = DBCon.getDatabaseConnection();
-                isLocalConnection = true;
+            conn = DBCon.getDatabaseConnection();
+            StringBuilder sql = new StringBuilder(
+                "SELECT dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
+                "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, " +
+                "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print " +
+                "FROM pos_main_delivery_order_tb dot " +
+                "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                "WHERE dot.status = 1 AND DATE(dot.created_date) BETWEEN ? AND ?"
+            );
+
+            if (paymentType != 0) {
+                sql.append(" AND pt.payment_type_id = ?");
             }
-            
-            String sql="";
-            
-//            System.out.println("Payment Type : "+paymentType);
-            if(paymentType==1){
-                sql="SELECT dot.delivery_id,dot.order_code,ct.customer_name,ct.address,dot.cod_amount,ct.phone_one,ct.phone_two,\n" +
-"ot.sub_total_price,ot.delivery_fee,dot.status,dot.status_id,dot.is_return,ot.total_order_price,dot.remark,pt.payment_type_id,ot.is_print \n" +
-"FROM pos_main_delivery_order_tb dot\n" +
-"INNER JOIN pos_main_customer_tb ct ON dot.customer_id=ct.customer_id\n" +
-"INNER JOIN pos_main_order_tb ot ON dot.delivery_id=ot.delivery_order_id\n" +
-"INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id=pt.payment_type_id\n" +
-"WHERE dot.status=1 AND DATE(dot.created_date) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND pt.payment_type_id='"+paymentType+"'";
-            }else if(paymentType==2){
-                sql="SELECT dot.delivery_id,dot.order_code,ct.customer_name,ct.address,dot.cod_amount,ct.phone_one,ct.phone_two,\n" +
-"ot.sub_total_price,ot.delivery_fee,dot.status,dot.status_id,dot.is_return,ot.total_order_price,dot.remark,pt.payment_type_id,ot.is_print \n" +
-"FROM pos_main_delivery_order_tb dot\n" +
-"INNER JOIN pos_main_customer_tb ct ON dot.customer_id=ct.customer_id\n" +
-"INNER JOIN pos_main_order_tb ot ON dot.delivery_id=ot.delivery_order_id\n" +
-"INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id=pt.payment_type_id\n" +
-"WHERE dot.status=1 AND DATE(dot.created_date) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND pt.payment_type_id='"+paymentType+"'";
-            }else{
-                sql="SELECT dot.delivery_id,dot.order_code,ct.customer_name,ct.address,dot.cod_amount,ct.phone_one,ct.phone_two,\n" +
-"ot.sub_total_price,ot.delivery_fee,dot.status,dot.status_id,dot.is_return,ot.total_order_price,dot.remark,pt.payment_type_id,ot.is_print \n" +
-"FROM pos_main_delivery_order_tb dot\n" +
-"INNER JOIN pos_main_customer_tb ct ON dot.customer_id=ct.customer_id\n" +
-"INNER JOIN pos_main_order_tb ot ON dot.delivery_id=ot.delivery_order_id\n" +
-"INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id=pt.payment_type_id\n" +
-"WHERE dot.status=1 AND DATE(dot.created_date) BETWEEN '"+fromDate+"' AND '"+toDate+"'";
+            if (status != 0) {
+                sql.append(" AND dot.status_id = ?");
             }
-            
-//            System.out.println(sql);
-            ps=con.prepareStatement(sql);
-            
-            rst=ps.executeQuery();
-            
-            
-            while(rst.next()){
-                DeliveryOrder deliveryOrder=new DeliveryOrder();
-                        deliveryOrder.setOrderId(rst.getInt("delivery_id"));
-                        deliveryOrder.setOrderCode(rst.getString("order_code"));
-                        deliveryOrder.setCustomerName(rst.getString("customer_name"));
-                        deliveryOrder.setAddress(rst.getString("address"));
-                        deliveryOrder.setCod(rst.getDouble("cod_amount"));
-                        deliveryOrder.setPhoneOne(rst.getString("phone_one"));
-                        deliveryOrder.setPhoneTwo(rst.getString("phone_two"));
-                        deliveryOrder.setSubTotalPrice(rst.getDouble("sub_total_price"));
-                        deliveryOrder.setDeliveryFee(rst.getDouble("delivery_fee"));
-                        deliveryOrder.setStatus(rst.getInt("status"));
-                        deliveryOrder.setStatusType(rst.getInt("status_id"));
-                        deliveryOrder.setIsReturn(rst.getInt("is_return"));
-                        deliveryOrder.setGrandTotalPrice(rst.getDouble("total_order_price"));
-                        deliveryOrder.setRemark(rst.getString("remark"));
-                        deliveryOrder.setPaymentTypeId(rst.getInt("payment_type_id"));
-                        deliveryOrder.setIsPrint(rst.getInt("is_print"));
-                        
-                        deliveryOrders.add(deliveryOrder);
+
+            ps = conn.prepareStatement(sql.toString());
+            ps.setString(1, fromDate);
+            ps.setString(2, toDate);
+            int paramIndex = 3;
+            if (paymentType != 0) {
+                ps.setInt(paramIndex++, paymentType);
             }
-            
+            if (status != 0) {
+                ps.setInt(paramIndex++, status);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
+                deliveryOrder.setOrderCode(rs.getString("order_code"));
+                deliveryOrder.setCustomerName(rs.getString("customer_name"));
+                deliveryOrder.setAddress(rs.getString("address"));
+                deliveryOrder.setCod(rs.getDouble("cod_amount"));
+                deliveryOrder.setPhoneOne(rs.getString("phone_one"));
+                deliveryOrder.setPhoneTwo(rs.getString("phone_two"));
+                deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
+                deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
+                deliveryOrder.setStatus(rs.getInt("status"));
+                deliveryOrder.setStatusType(rs.getInt("status_id"));
+                deliveryOrder.setIsReturn(rs.getInt("is_return"));
+                deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
+                deliveryOrder.setRemark(rs.getString("remark"));
+                deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
+                deliveryOrder.setIsPrint(rs.getInt("is_print"));
+
+                deliveryOrders.add(deliveryOrder);
+            }
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-        }finally {
-
-            if (isLocalConnection && con != null) {
-                try {
-                    con.close();
-                } catch (Exception e) {
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                }
-            }
-            if (rst != null) {
-                try {
-                    rst.close();
-                } catch (Exception e) {
-                }
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-       return deliveryOrders;
+        return deliveryOrders;
     }
+
 
 
     public ArrayList<DeliveryOrder> getDeliveryOrdersByCustomer(Integer customer_id) {

@@ -76,7 +76,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
 
     @Override
     public ArrayList<DeliveryOrderDto> getAllDurationOrders(String fromDate, String toDate, Integer paymentType) {
-        ArrayList<DeliveryOrder>deliveryOrders=deliveryOrderRepositoryCustom.getAllDuration(fromDate,toDate,paymentType);
+        ArrayList<DeliveryOrder>deliveryOrders=deliveryOrderRepositoryCustom.getAllDuration(fromDate,toDate,paymentType,0);
         ArrayList<DeliveryOrderDto>deliveryOrderDtos=new ArrayList<>();
         for(DeliveryOrder deliveryOrder:deliveryOrders){
             deliveryOrderDtos.add(new DeliveryOrderDto(deliveryOrder.getOrderId(),

@@ -240,9 +240,9 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/net/unical/pos/imagers/Dashboard/icons8-banquet-45.png"/>
+                  <Image iconType="3" name="/net/unical/pos/imagers/Dashboard/icons8-payment-35.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Banquet"/>
+                <Property name="text" type="java.lang.String" value="Payment"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="15" style="1"/>
                 </Property>

@@ -21,6 +21,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Configurations;
 import net.unical.pos.view.OrderFilter.OrderFilter;
+import net.unical.pos.view.Payment.Payment;
 import net.unical.pos.view.Reports.Reports;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
 import net.unical.pos.view.employee.Employee;
@@ -219,8 +220,8 @@ public class Dashboard extends javax.swing.JFrame {
 
         banquetBtn.setBackground(new java.awt.Color(0, 77, 128));
         banquetBtn.setForeground(new java.awt.Color(255, 255, 255));
-        banquetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-banquet-45.png"))); // NOI18N
-        banquetBtn.setText("Banquet");
+        banquetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-payment-35.png"))); // NOI18N
+        banquetBtn.setText("Payment");
         banquetBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         banquetBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         banquetBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -681,7 +682,17 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_banquetBtnMouseExited
 
     private void banquetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_banquetBtnActionPerformed
-        // TODO add your handling code here:
+        Payment orderFilter;
+        try {
+            orderFilter = new Payment(this);
+            desktopPane.add(orderFilter);
+            Dimension d = desktopPane.getSize();
+            orderFilter.setLayer(desktopPane.POPUP_LAYER);
+            orderFilter.setSize(d);
+            orderFilter.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_banquetBtnActionPerformed
 
     private void pmsBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pmsBtnMouseEntered

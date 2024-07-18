@@ -72,30 +72,33 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         ResultSet rst = null;
         boolean isLocalConnection = false;
         Connection con = null;
-        
-        Integer customerId=null;
-        Integer deliveryId=null;
-        Integer orderId=null;
-        
+
+        Integer customerId = null;
+        Integer deliveryId = null;
+        Integer orderId = null;
+
         try {
             if (con == null) {
                 con = DBCon.getDatabaseConnection();
                 isLocalConnection = true;
             }
-            
+
             con.setAutoCommit(false);
-            
-            System.out.println("Customer Id : "+deliveryOrder.getCustomerId());
-            if(deliveryOrder.getCustomerId()!=null){
-                
+
+            System.out.println("Customer Id : " + deliveryOrder.getCustomerId());
+            if (deliveryOrder.getCustomerId() != null) {
                 System.out.println("Customer Updated");
-//              Update Customer
-                ps=con.prepareStatement("UPDATE pos_main_customer_tb SET customer_name = '"+deliveryOrder.getCustomerName()+"', address='"+deliveryOrder.getAddress()+"', phone_one='"+deliveryOrder.getPhoneOne()+"',"
-                        + "phone_two='"+deliveryOrder.getPhoneTwo()+"' WHERE customer_id='"+deliveryOrder.getCustomerId()+"'");
+                // Update Customer
+                ps = con.prepareStatement("UPDATE pos_main_customer_tb SET customer_name = ?, address = ?, phone_one = ?, phone_two = ? WHERE customer_id = ?");
+                ps.setString(1, deliveryOrder.getCustomerName());
+                ps.setString(2, deliveryOrder.getAddress());
+                ps.setString(3, deliveryOrder.getPhoneOne());
+                ps.setString(4, deliveryOrder.getPhoneTwo());
+                ps.setInt(5, deliveryOrder.getCustomerId());
                 ps.executeUpdate();
-                
-//              Add Delivery
-                ps=con.prepareStatement("INSERT INTO pos_main_delivery_order_tb(customer_id,order_code,cod_amount,weight,remark,status,is_free_delivery,user_id) VALUES(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+                // Add Delivery
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -105,14 +108,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(7, deliveryOrder.getFreeShip());
                 ps.setInt(8, 1);
                 ps.executeUpdate();
-                rst=ps.getGeneratedKeys();
+                rst = ps.getGeneratedKeys();
                 if (rst.next()) {
-                    // returen value from previous action
                     deliveryId = rst.getInt(1);
                 }
-                
-//              Add Order
-                ps=con.prepareStatement("INSERT INTO pos_main_order_tb(customer_id,delivery_order_id,bill_no,sub_total_price,delivery_fee,total_order_price,payment_type_id,remark,user_id,status,visible) VALUES(?,?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+                // Add Order
+                ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setInt(2, deliveryId);
                 ps.setString(3, deliveryOrder.getOrderCode());
@@ -125,16 +127,15 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(10, 1);
                 ps.setInt(11, 1);
                 ps.executeUpdate();
-                rst=ps.getGeneratedKeys();
+                rst = ps.getGeneratedKeys();
                 if (rst.next()) {
-                    // returen value from previous action
                     orderId = rst.getInt(1);
                 }
-                
-//                Add Order Details
-                ArrayList<OrderDetailsDto> orderDetailsDtos=deliveryOrder.getOrderDetailsDtos();
-                for(OrderDetailsDto detailsDto:orderDetailsDtos){
-                    ps=con.prepareStatement("INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id) VALUES(?,?,?,?,?,?,?)");
+
+                // Add Order Details
+                ArrayList<OrderDetailsDto> orderDetailsDtos = deliveryOrder.getOrderDetailsDtos();
+                for (OrderDetailsDto detailsDto : orderDetailsDtos) {
+                    ps = con.prepareStatement("INSERT INTO pos_main_order_details_tb (order_id, item_id, quantity, per_item_price, total_item_price, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
                     ps.setInt(1, orderId);
                     ps.setInt(2, detailsDto.getItemId());
                     ps.setDouble(3, detailsDto.getQty());
@@ -143,15 +144,11 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     ps.setInt(6, 1);
                     ps.setInt(7, 1);
                     ps.executeUpdate();
-
-//                    ps=con.prepareStatement("UPDATE pos_inv_stock_tb SET quantity = quantity-'"+detailsDto.getQty()+"'WHERE item_id='"+detailsDto.getItemId()+"'");
-    //                System.out.println("UPDATE pos_inv_stock_tb SET quantity = quantity-'"+detailsDto.getQty()+"'WHERE item_id='"+detailsDto.getItemId()+"'");
-//                    ps.executeUpdate();
                 }
-            }else{
-                
-//                Add Customer
-                ps=con.prepareStatement("INSERT INTO pos_main_customer_tb(customer_name,address,phone_one,phone_two,status,user_id,visible,customer_number) VALUES(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+            } else {
+                // Add Customer
+                ps = con.prepareStatement("INSERT INTO pos_main_customer_tb (customer_name, address, phone_one, phone_two, status, user_id, visible, customer_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, deliveryOrder.getCustomerName());
                 ps.setString(2, deliveryOrder.getAddress());
                 ps.setString(3, deliveryOrder.getPhoneOne());
@@ -161,15 +158,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(7, 1);
                 ps.setString(8, deliveryOrder.getCustomerNumber());
                 ps.executeUpdate();
-                rst=ps.getGeneratedKeys();
+                rst = ps.getGeneratedKeys();
                 if (rst.next()) {
-                    // returen value from previous action
                     customerId = rst.getInt(1);
                 }
-                
-                
-    //            Add Delivery
-                ps=con.prepareStatement("INSERT INTO pos_main_delivery_order_tb(customer_id,order_code,cod_amount,weight,remark,status,is_free_delivery,user_id) VALUES(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+                // Add Delivery
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, customerId);
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -179,14 +174,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(7, deliveryOrder.getFreeShip());
                 ps.setInt(8, 1);
                 ps.executeUpdate();
-                rst=ps.getGeneratedKeys();
+                rst = ps.getGeneratedKeys();
                 if (rst.next()) {
-                    // returen value from previous action
                     deliveryId = rst.getInt(1);
                 }
 
-    //            Add Order
-                ps=con.prepareStatement("INSERT INTO pos_main_order_tb(customer_id,delivery_order_id,bill_no,sub_total_price,delivery_fee,total_order_price,payment_type_id,remark,user_id,status,visible) VALUES(?,?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+                // Add Order
+                ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, customerId);
                 ps.setInt(2, deliveryId);
                 ps.setString(3, deliveryOrder.getOrderCode());
@@ -199,16 +193,15 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(10, 1);
                 ps.setInt(11, 1);
                 ps.executeUpdate();
-                rst=ps.getGeneratedKeys();
+                rst = ps.getGeneratedKeys();
                 if (rst.next()) {
-                    // returen value from previous action
                     orderId = rst.getInt(1);
                 }
 
-    //            Add Order Details
-                ArrayList<OrderDetailsDto> orderDetailsDtos=deliveryOrder.getOrderDetailsDtos();
-                for(OrderDetailsDto detailsDto:orderDetailsDtos){
-                    ps=con.prepareStatement("INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id) VALUES(?,?,?,?,?,?,?)");
+                // Add Order Details
+                ArrayList<OrderDetailsDto> orderDetailsDtos = deliveryOrder.getOrderDetailsDtos();
+                for (OrderDetailsDto detailsDto : orderDetailsDtos) {
+                    ps = con.prepareStatement("INSERT INTO pos_main_order_details_tb (order_id, item_id, quantity, per_item_price, total_item_price, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
                     ps.setInt(1, orderId);
                     ps.setInt(2, detailsDto.getItemId());
                     ps.setDouble(3, detailsDto.getQty());
@@ -217,21 +210,25 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     ps.setInt(6, 1);
                     ps.setInt(7, 1);
                     ps.executeUpdate();
-
-//                    ps=con.prepareStatement("UPDATE pos_inv_stock_tb SET quantity = quantity-'"+detailsDto.getQty()+"'WHERE item_id='"+detailsDto.getItemId()+"'");
-    //                System.out.println("UPDATE pos_inv_stock_tb SET quantity = quantity-'"+detailsDto.getQty()+"'WHERE item_id='"+detailsDto.getItemId()+"'");
-//                    ps.executeUpdate();
                 }
             }
-            
+
+            // Add Payment
+            ps = con.prepareStatement("INSERT INTO pos_payment_tb (order_code, customer_id, cod, total_amount, payment_status) VALUES (?, ?, ?, ?, ?)");
+            ps.setString(1, deliveryOrder.getOrderCode());
+            ps.setInt(2, deliveryOrder.getCustomerId() != null ? deliveryOrder.getCustomerId() : customerId);
+            ps.setDouble(3, deliveryOrder.getCod());
+            ps.setDouble(4, deliveryOrder.getGrandTotalPrice());
+            ps.setInt(5, 1); // Assuming 1 is the default status
+            ps.executeUpdate();
+
             con.commit();
-            
+
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             con.rollback();
             return null;
-        }finally {
-
+        } finally {
             if (isLocalConnection && con != null) {
                 try {
                     con.close();
@@ -253,7 +250,6 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     return null;
                 }
             }
-
         }
         return deliveryId;
     }
@@ -832,6 +828,10 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
         }
         return deliveryOrder;
+    }
+
+    public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, int paymentType) {
+        return null;
     }
 
 }

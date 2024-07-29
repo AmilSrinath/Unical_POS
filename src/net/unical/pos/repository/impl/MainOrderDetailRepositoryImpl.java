@@ -115,7 +115,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
 
         try {
             conn = DBCon.getDatabaseConnection();
-            String query = "SELECT o.order_id, i.item_name, d.quantity, d.per_item_price, d.total_item_price, " +
+            String query = "SELECT o.order_id, o.bill_no, i.item_name, d.quantity, d.per_item_price, d.total_item_price, " +
                            "o.total_order_price, o.delivery_fee " +
                            "FROM pos_main_order_tb o " +
                            "JOIN pos_main_order_details_tb d ON o.order_id = d.order_id " +
@@ -131,13 +131,13 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
             while (rs.next()) {
                 OrderDetails rowData = new OrderDetails(
                     rs.getInt("order_id"),
+                    rs.getString("bill_no"),
                     rs.getString("item_name"),
                     rs.getInt("quantity"),
                     rs.getDouble("per_item_price"),
                     rs.getDouble("total_item_price"),
-                        rs.getDouble("delivery_fee"),
+                    rs.getDouble("delivery_fee"),
                     rs.getDouble("total_order_price")
-                    
                 );
 
                 int orderId = rs.getInt("order_id");
@@ -165,5 +165,6 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
 
         return orderDetailsList;
     }
+
 
 }

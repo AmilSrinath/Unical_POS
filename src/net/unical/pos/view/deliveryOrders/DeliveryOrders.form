@@ -248,7 +248,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel24">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Order ID :"/>
+                <Property name="text" type="java.lang.String" value="Order Code :"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel25">

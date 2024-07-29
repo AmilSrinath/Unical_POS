@@ -13,7 +13,7 @@ import net.unical.pos.dto.OrderDetailsDto;
  * @author Sanjuka
  */
 public class DeliveryOrder {
-    
+
     private Integer orderId;
     private String orderCode;
     private Integer customerId;
@@ -32,20 +32,25 @@ public class DeliveryOrder {
     private Double grandTotalPrice;
     private String date;
     private String remark;
-    private Integer PaymentTypeId;
+    private Integer paymentTypeId;
     private Integer isPrint;
     private String customerNumber;
-    
+
+    private Integer paymentId;
+    private Double codPayment;
+    private Double totalAmount;
+    private Integer paymentStatus;
+
     private ArrayList<OrderDetailsDto> orderDetailsDtos;
 
-    public String getCustomerNumber(){
+    public String getCustomerNumber() {
         return customerNumber;
     }
-    
-    public void setCustomerNumber(String customerNumber){
+
+    public void setCustomerNumber(String customerNumber) {
         this.customerNumber = customerNumber;
     }
-    
+
     public String getDate() {
         return date;
     }
@@ -53,7 +58,7 @@ public class DeliveryOrder {
     public void setDate(String date) {
         this.date = date;
     }
-    
+
     public Integer getOrderId() {
         return orderId;
     }
@@ -151,11 +156,11 @@ public class DeliveryOrder {
     }
 
     public Integer getPaymentTypeId() {
-        return PaymentTypeId;
+        return paymentTypeId;
     }
 
-    public void setPaymentTypeId(Integer PaymentTypeId) {
-        this.PaymentTypeId = PaymentTypeId;
+    public void setPaymentTypeId(Integer paymentTypeId) {
+        this.paymentTypeId = paymentTypeId;
     }
 
     public ArrayList<OrderDetailsDto> getOrderDetailsDtos() {
@@ -165,8 +170,8 @@ public class DeliveryOrder {
     public void setOrderDetailsDtos(ArrayList<OrderDetailsDto> orderDetailsDtos) {
         this.orderDetailsDtos = orderDetailsDtos;
     }
-    
-     public Integer getIsPrint() {
+
+    public Integer getIsPrint() {
         return isPrint;
     }
 
@@ -214,4 +219,35 @@ public class DeliveryOrder {
         this.statusType = statusType;
     }
 
+    public Integer getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(Integer paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public Double getCodPayment() {
+        return codPayment;
+    }
+
+    public void setCodPayment(Double codPayment) {
+        this.codPayment = codPayment;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Integer getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(Integer paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 }

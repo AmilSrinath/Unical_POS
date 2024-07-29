@@ -165,7 +165,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             public void actionPerformed(ActionEvent e) {
                 String selectedOrderId = (String) orderIDCmb.getSelectedItem();
                 if (selectedOrderId != null) {
-                    filterOrdersByOrderId(Integer.parseInt(selectedOrderId));
+                    filterOrdersByOrderId(selectedOrderId);
                 }
             }
         });
@@ -351,7 +351,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         jLabel23.setText("Phone Number 2 :");
 
-        jLabel24.setText("Order ID :");
+        jLabel24.setText("Order Code :");
 
         jLabel25.setText("Customer Address :");
 
@@ -464,7 +464,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         order_options.setResizable(false);
 
         order_options.setSize(new java.awt.Dimension(509, 128));
-        order_options.setPreferredSize(new java.awt.Dimension(1500, 81));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Action Order", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 14), new java.awt.Color(0, 153, 204))); // NOI18N
@@ -2014,24 +2013,25 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         ArrayList<OrderDetails[]> orderDetailsList = mainOrderDetailRepositoryImpl.getOrderDetailsByCustomerId(customer_id);
 
-        Set<Integer> uniqueOrderIds = new HashSet<>();
+        Set<String> uniqueOrderCodes = new HashSet<>();
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
                 dtm.addRow(orderDetails.toArray());
-                uniqueOrderIds.add(orderDetails.getOrder_id());
+                uniqueOrderCodes.add(orderDetails.getOrderCode());
             }
         }
         customerOrderDetailsTbl.setModel(dtm);
 
         orderIDCmb.removeAllItems();
-        for (Integer orderId : uniqueOrderIds) {
-            orderIDCmb.addItem(orderId.toString());
+        for (String orderCode : uniqueOrderCodes) {
+            orderIDCmb.addItem(orderCode);
         }
     }
+
     
     
-    private void filterOrdersByOrderId(Integer orderId) {
+    private void filterOrdersByOrderId(String orderCode) {
         String[] columnNames = {"Item Name", "Quantity", "Per Item Price", "Total Item Price", "Delivery Fee", "Total Order Price"};
         DefaultTableModel dtm = new DefaultTableModel(columnNames, 0);
 
@@ -2041,7 +2041,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
-                if (orderDetails.getOrder_id().equals(orderId)) {
+                if (orderDetails.getOrderCode().equals(orderCode)) {
                     dtm.addRow(orderDetails.toArray());
                     netTotal += orderDetails.getDelivery_fee();
                 }

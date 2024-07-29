@@ -10,6 +10,7 @@ package net.unical.pos.model;
  */
 public class OrderDetails {
     private Integer order_id;
+    private String orderCode;
     private String item_name;
     private Integer quantity;
     private Double per_item_price;
@@ -19,7 +20,7 @@ public class OrderDetails {
     
     public OrderDetails() {}
     
-    public OrderDetails(Integer order_id, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double total_order_price, Double delivery_fee) {
+    public OrderDetails(Integer order_id, String orderCode, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double total_order_price, Double delivery_fee) {
         this.order_id = order_id;
         this.item_name = item_name;
         this.quantity = quantity;
@@ -27,6 +28,7 @@ public class OrderDetails {
         this.total_item_price = total_item_price;
         this.total_order_price = total_order_price;
         this.delivery_fee = delivery_fee;
+        this.orderCode = orderCode;
     }
     
     public Integer getOrder_id() {
@@ -35,6 +37,14 @@ public class OrderDetails {
 
     public void setOrder_id(Integer order_id) {
         this.order_id = order_id;
+    }
+    
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getItem_name() {

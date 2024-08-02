@@ -853,7 +853,6 @@ public class OrderFilter extends JInternalFrame {
                     JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
                     JasperViewer.viewReport(jasperPrint,false);
                     
-                    
                     DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
                     int rowCount = dtm.getRowCount();
 

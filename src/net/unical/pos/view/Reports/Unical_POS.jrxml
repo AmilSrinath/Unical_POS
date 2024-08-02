@@ -24,7 +24,7 @@ FROM
 INNER JOIN
     pos_main_delivery_order_tb d ON p.delivery_order_id = d.delivery_id
 WHERE
-    p.created_Date BETWEEN  $P{dateFrom}  AND $P{dateTo} ;]]>
+    Date(p.created_Date) BETWEEN  $P{dateFrom}  AND $P{dateTo} ;]]>
 	</queryString>
 	<field name="Total_Report_Cash" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Cash"/>

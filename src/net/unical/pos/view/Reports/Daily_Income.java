@@ -134,7 +134,7 @@ public class Daily_Income extends javax.swing.JInternalFrame {
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePickerFrom.getDate());
             String toDate = formatter.format(jXDatePickerTo.getDate());
-
+            
             JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/Unical_POS.jrxml");
             JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
 

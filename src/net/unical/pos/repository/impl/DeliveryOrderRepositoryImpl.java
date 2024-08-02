@@ -37,7 +37,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         try {
             con = DBCon.getDatabaseConnection();
-            String query = "SELECT order_id FROM pos_main_order_tb WHERE bill_no = ?";
+            String query = "SELECT order_id FROM pos_main_order_tb WHERE delivery_order_id = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, billNo);
             rst = ps.executeQuery();

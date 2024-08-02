@@ -2268,8 +2268,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number format in total amount or delivery fee: " + e.getMessage());
                     }
+                    
+                    String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
 
-                    String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(orderCodeStr);
+                    String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_ID);
                     if (orderID != null) {
                         Integer oid = Integer.parseInt(orderID);
                         ArrayList<PosMainOrderDetails> orderDetails = mainOrderDetailRepositoryImpl.getOrderDetailsByOrderId(oid);

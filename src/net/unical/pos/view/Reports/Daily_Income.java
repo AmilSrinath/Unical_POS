@@ -5,6 +5,8 @@
  */
 package net.unical.pos.view.Reports;
 
+import java.sql.SQLException;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -16,7 +18,10 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.reports.DailySalesPrinter;
 import net.unical.pos.view.home.Dashboard;
 
@@ -50,16 +55,18 @@ public class Daily_Income extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jXDatePickerFrom = new org.jdesktop.swingx.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jXDatePickerTo = new org.jdesktop.swingx.JXDatePicker();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Created Date");
+        jLabel1.setText("From");
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setText("Generate Report");
@@ -69,30 +76,43 @@ public class Daily_Income extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("To");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jXDatePickerTo, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jXDatePickerFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jButton1)))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(jXDatePickerFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(jXDatePickerTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -110,27 +130,26 @@ public class Daily_Income extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
         try {
-            String orderdate = dateOnly.format(jXDatePicker1.getDate());
-            int numberOfOrders = 0;
-            
-            DailySalesPrinter dailySalesPrinter = new DailySalesPrinter();
-            
-            HashMap<String, Object> hm = new HashMap<String, Object>();
-            
-//            hm.put("REP_TITLE", "Daily Sales Summury");
-//            hm.put("REP_DATE_TIME", orderdate);
-//            hm.put("REP_NO_OF_ORDERS", numberOfOrders);
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePickerFrom.getDate());
+            String toDate = formatter.format(jXDatePickerTo.getDate());
 
-            hm.put("TOTAL_INCOME", 100000);
+            JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/Unical_POS.jrxml");
+            JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
+
+            HashMap<String, Object> hm = new HashMap<>();
+            hm.put("dateFrom", fromDate);
+            hm.put("dateTo", toDate);
             
-            String source="./reports/Delivery_Incom_Report.jrxml";
-            JasperReport jr = JasperCompileManager.compileReport(source);
-            JasperPrint jp = JasperFillManager.fillReport(jr, hm, new JRTableModelDataSource(dataTableModel));
-            JasperViewer view = new JasperViewer(jp, false);
-            view.setVisible(true);
+            
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
+            JasperViewer.viewReport(jasperPrint,false);
         } catch (JRException ex) {
+            Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -173,7 +192,9 @@ public class Daily_Income extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePickerFrom;
+    private org.jdesktop.swingx.JXDatePicker jXDatePickerTo;
     // End of variables declaration//GEN-END:variables
 }

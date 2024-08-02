@@ -4,24 +4,35 @@
  */
 package net.unical.pos.view.OrderFilter;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.view.home.Dashboard;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.unical.pos.controller.DeliveryOrderController;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import net.unical.pos.controller.PaymentTypesController;
+import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.view.Reports.Daily_Income;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
 /**
  *
@@ -97,6 +108,7 @@ public class OrderFilter extends JInternalFrame {
         jLabel16 = new javax.swing.JLabel();
         statusCmb = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
+        btnPrint = new javax.swing.JButton();
 
         orderOptions.setResizable(false);
 
@@ -420,15 +432,26 @@ public class OrderFilter extends JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnPrint.setText("Print");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane6))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -437,7 +460,9 @@ public class OrderFilter extends JInternalFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -800,14 +825,57 @@ public class OrderFilter extends JInternalFrame {
     }//GEN-LAST:event_statusCmbMouseClicked
 
     private void statusCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusCmbActionPerformed
-        System.out.println("AAAAAAA : "+statusCmb.getSelectedIndex());
-        
         
     }//GEN-LAST:event_statusCmbActionPerformed
 
     private void statusCmbKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_statusCmbKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_statusCmbKeyReleased
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        // TODO add your handling code here:
+        
+        if(paymentTypeCombo1.getSelectedIndex()==0){
+            if (statusCmb.getSelectedIndex()==3) {
+                try {
+                    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    String fromDate = formatter.format(jXDatePicker1.getDate());
+                    String toDate = formatter.format(jXDatePicker2.getDate());
+
+                    JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/OrderFilter/OutForDeliveries.jrxml");
+                    JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
+
+                    HashMap<String, Object> hm = new HashMap<>();
+                    hm.put("fromDate", fromDate);
+                    hm.put("toDate", toDate);
+                    hm.put("totalOrder", total_orders_count_txt.getText());
+
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
+                    JasperViewer.viewReport(jasperPrint,false);
+                    
+                    
+                    DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
+                    int rowCount = dtm.getRowCount();
+
+                    for (int i = 0; i < rowCount; i++) {
+                        String orderCode = (String) dtm.getValueAt(i, 1);
+                        deliveryOrderRepositoryImpl.update(orderCode, 4);
+                    }
+                    
+                    getAllOrders(fromDate, toDate, 0, 3);
+                    
+                } catch (JRException | ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select status is wrapping");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select payment type is any");
+        }
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
      * @param args the command line arguments
@@ -849,6 +917,7 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeliverd;
     private javax.swing.JButton btnOutForDelivery;
+    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnReturn;
     private javax.swing.JButton btnWrapping;
     private org.jdesktop.swingx.JXTable deliveryOrdersTable;

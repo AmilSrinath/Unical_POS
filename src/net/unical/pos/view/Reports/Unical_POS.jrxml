@@ -7,24 +7,66 @@
 	<parameter name="dateTo" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT
-    FORMAT(SUM(CASE WHEN p.payment_type_id = 1 THEN p.total_order_price ELSE 0 END), 2) AS Total_Report_Cash,
-    FORMAT(SUM(CASE WHEN p.payment_type_id = 2 THEN p.total_order_price ELSE 0 END), 2) AS Total_Report_Card,
+    FORMAT(SUM(CASE
+               WHEN p.payment_type_id = 1 AND d.status_id NOT IN (6, 7)
+               THEN p.total_order_price
+               ELSE 0
+               END), 2) AS Total_Report_Cash,
+    FORMAT(SUM(CASE
+               WHEN p.payment_type_id = 2 AND d.status_id NOT IN (6, 7)
+               THEN p.total_order_price
+               ELSE 0
+               END), 2) AS Total_Report_Card,
     COUNT(*) AS Number_of_All_Orders,
-    FORMAT(SUM(CASE WHEN d.status_id = 6 THEN p.total_order_price ELSE 0 END), 2) AS Return_Orders_Total,
-    COUNT(CASE WHEN d.status_id = 6 THEN 1 ELSE NULL END) AS Return_Orders_Count,
-    FORMAT(SUM(CASE WHEN d.status_id = 7 THEN p.total_order_price ELSE 0 END), 2) AS Cancel_Orders_Total,
-    COUNT(CASE WHEN d.status_id = 7 THEN 1 ELSE NULL END) AS Cancel_Orders_Count,
-    FORMAT(SUM(d.cod_amount), 2) AS Total_Delivery_Charge,
+    FORMAT(SUM(CASE
+               WHEN d.status_id = 6
+               THEN p.total_order_price
+               ELSE 0
+               END), 2) AS Return_Orders_Total,
+    COUNT(CASE
+          WHEN d.status_id = 6
+          THEN 1
+          ELSE NULL
+          END) AS Return_Orders_Count,
+    FORMAT(SUM(CASE
+               WHEN d.status_id = 7
+               THEN p.total_order_price
+               ELSE 0
+               END), 2) AS Cancel_Orders_Total,
+    COUNT(CASE
+          WHEN d.status_id = 7
+          THEN 1
+          ELSE NULL
+          END) AS Cancel_Orders_Count,
+    FORMAT(SUM(p.delivery_fee), 2) AS Total_Delivery_Charge,
     FORMAT(
-        SUM(CASE WHEN p.payment_type_id IN (1, 2) THEN p.total_order_price ELSE 0 END) +
-        SUM(CASE WHEN d.status_id IN (6, 7) THEN p.total_order_price ELSE 0 END) +
-        SUM(d.cod_amount), 2) AS Grand_Total
+        SUM(CASE
+            WHEN p.payment_type_id = 1 AND d.status_id NOT IN (6, 7)
+            THEN p.total_order_price
+            ELSE 0
+            END) +
+        SUM(CASE
+            WHEN p.payment_type_id = 2 AND d.status_id NOT IN (6, 7)
+            THEN p.total_order_price
+            ELSE 0
+            END) +
+        SUM(CASE
+            WHEN d.status_id = 6
+            THEN p.total_order_price
+            ELSE 0
+            END) +
+        SUM(CASE
+            WHEN d.status_id = 7
+            THEN p.total_order_price
+            ELSE 0
+            END) +
+        SUM(p.delivery_fee), 2) AS Grand_Total
 FROM
     pos_main_order_tb p
 INNER JOIN
     pos_main_delivery_order_tb d ON p.delivery_order_id = d.delivery_id
 WHERE
-    Date(p.created_Date) BETWEEN  $P{dateFrom}  AND $P{dateTo} ;]]>
+    Date(p.created_Date) BETWEEN  $P{dateFrom}  AND  $P{dateTo} ;]]>
 	</queryString>
 	<field name="Total_Report_Cash" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Cash"/>

@@ -17,10 +17,11 @@ public class OrderDetails {
     private Double total_item_price;
     private Double delivery_fee;
     private Double total_order_price;
+    private String date;
     
     public OrderDetails() {}
     
-    public OrderDetails(Integer order_id, String orderCode, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double total_order_price, Double delivery_fee) {
+    public OrderDetails(Integer order_id, String orderCode, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double total_order_price, Double delivery_fee, String date) {
         this.order_id = order_id;
         this.item_name = item_name;
         this.quantity = quantity;
@@ -29,6 +30,7 @@ public class OrderDetails {
         this.total_order_price = total_order_price;
         this.delivery_fee = delivery_fee;
         this.orderCode = orderCode;
+        this.date = date;
     }
     
     public Integer getOrder_id() {
@@ -94,18 +96,13 @@ public class OrderDetails {
     public void setDelivery_fee(Double delivery_fee) {
         this.delivery_fee = delivery_fee;
     }
-
-    @Override
-    public String toString() {
-        return "OrderDetails{" +
-                "order_id=" + order_id +
-                ", item_name='" + item_name + '\'' +
-                ", quantity=" + quantity +
-                ", per_item_price=" + per_item_price +
-                ", total_item_price=" + total_item_price +
-                ", total_order_price=" + total_order_price +
-                ", delivery_fee=" + delivery_fee +
-                '}';
+    
+    public String getDate(){
+        return date;
+    }
+    
+    public void setDate(String date){
+        this.date=date;
     }
     
     public Object[] toArray() {
@@ -115,7 +112,8 @@ public class OrderDetails {
             per_item_price,
             total_item_price,
             total_order_price,
-            delivery_fee
+            delivery_fee,
+            date
         };
     }
 }

@@ -35,6 +35,7 @@ public class DeliveryOrder {
     private Integer paymentTypeId;
     private Integer isPrint;
     private String customerNumber;
+    private Double paidAmount;
 
     private Integer paymentId;
     private Double codPayment;
@@ -249,5 +250,13 @@ public class DeliveryOrder {
 
     public void setPaymentStatus(Integer paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+    
+    public Double getPaidAmount(){
+        return paidAmount;
+    }
+    
+    public void setPaidAmount(Double paidAmount){
+        this.paidAmount = paidAmount;
     }
 }

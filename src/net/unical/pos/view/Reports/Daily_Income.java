@@ -135,7 +135,7 @@ public class Daily_Income extends javax.swing.JInternalFrame {
             String fromDate = formatter.format(jXDatePickerFrom.getDate());
             String toDate = formatter.format(jXDatePickerTo.getDate());
             
-            JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/Unical_POS.jrxml");
+            JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/DurationSales.jrxml");
             JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
 
             HashMap<String, Object> hm = new HashMap<>();

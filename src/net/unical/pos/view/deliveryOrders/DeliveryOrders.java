@@ -170,18 +170,29 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         });
         
         paymentTypeCombo.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String selectedPaymentType = (String) paymentTypeCombo.getSelectedItem();
+            
+            private String previousPaymentType = null;
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedPaymentType = (String) paymentTypeCombo.getSelectedItem();
 
-            if (selectedPaymentType != null && selectedPaymentType.equals("Card")) {
-                codTxt.setText("0");
-            }else{
-                codTxt.setText(totAmountLbl.getText());
+                if (selectedPaymentType != null && !selectedPaymentType.equals(previousPaymentType)) {
+                    if (selectedPaymentType.equals("Card")) {
+                        saveOrderBtn1.setEnabled(false);
+                        PaidAmountTxt.setText(codTxt.getText());
+                        codTxt.setText("0");
+                    } else {
+                        saveOrderBtn1.setEnabled(true);
+                        codTxt.setText(PaidAmountTxt.getText());
+                        PaidAmountTxt.setText("0");
+                    }
+                    previousPaymentType = selectedPaymentType;
+                }
             }
-        }
-    });
-
+        });
+        
+        PaidAmountTxt.setText("0");
     }
 
     /**
@@ -269,6 +280,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jButton8 = new javax.swing.JButton();
         customerNumberTxt = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
+        PaidAmountTxt = new javax.swing.JTextField();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
@@ -939,6 +951,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel30.setText("Customer Number :");
 
+        PaidAmountTxt.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        PaidAmountTxt.setForeground(new java.awt.Color(153, 0, 0));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -955,18 +970,22 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(paymentTypeCombo, 0, 76, Short.MAX_VALUE)
-                            .addComponent(codTxt))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(codTxt)
+                            .addComponent(PaidAmountTxt))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(saveOrderBtn))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addGap(5, 5, 5)
-                                .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(saveOrderBtn))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1060,12 +1079,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(PaidAmountTxt)
+                            .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1073,7 +1095,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addComponent(saveOrderBtn)
                         .addComponent(jLabel4))
                     .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         deliveryOrdersTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1403,47 +1425,80 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             itemListTableModel.addRow(itemData);
         }
 
-        updateTotals();
-
+        addUpdateTotals();
+        
         Properties props = loadProperties();
         if (props != null) {
             calculateDeliveryFee(props);
         }
+        
+        addUpdateTotals();
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void updateTotals() {
-        Double totalAmount = 0.00;
-        Double totalWeight = 0.00;
+        double totalAmount = 0.0;
+        double totalWeight = 0.0;
 
-        if (itemListTableModel.getRowCount() == 0) {
+        if (itemListTable.getRowCount() == 0) {
             subTotAmountLbl.setText("0.00");
             totAmountLbl.setText("0.00");
             weightTxt.setText("0");
         } else {
             for (int i = 0; i < itemListTable.getRowCount(); i++) {
-                Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
+                int itemId = (Integer) itemListTable.getValueAt(i, 0);
 
-                Number priceValue = (Number) itemListTable.getValueAt(i, 2);
-                Double price = priceValue.doubleValue();
+                double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
+                int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
 
-                Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
-                Integer qty = qtyValue.intValue();
-            
-                Double weight = itemWeightList.get(itemIds.indexOf(itemListTable.getValueAt(i, 0)));
+                double weight = itemWeightList.get(itemIds.indexOf(itemId));
 
                 totalAmount += price * qty;
                 totalWeight += weight * qty;
             }
+
             subTotAmountLbl.setText(String.format("%.2f", totalAmount));
 
-            Double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+            double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
             totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
 
-            codTxt.setText(totAmountLbl.getText());
+            //codTxt.setText(totAmountLbl.getText());
+            
             weightTxt.setText(String.format("%.2f", totalWeight));
         }
     }
     
+    private void addUpdateTotals() {
+        double totalAmount = 0.0;
+        double totalWeight = 0.0;
+
+        if (itemListTable.getRowCount() == 0) {
+            subTotAmountLbl.setText("0.00");
+            totAmountLbl.setText("0.00");
+            weightTxt.setText("0");
+        } else {
+            for (int i = 0; i < itemListTable.getRowCount(); i++) {
+                int itemId = (Integer) itemListTable.getValueAt(i, 0);
+
+                double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
+                int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
+
+                double weight = itemWeightList.get(itemIds.indexOf(itemId));
+
+                totalAmount += price * qty;
+                totalWeight += weight * qty;
+            }
+
+            subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+
+            double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+            
+            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+
+            codTxt.setText(totAmountLbl.getText());
+            
+            weightTxt.setText(String.format("%.2f", totalWeight));
+        }
+    }
     
     private Properties loadProperties() {
         Properties props = new Properties();
@@ -1600,6 +1655,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setFreeShip(free_ship);
                 deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                 deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
+                deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
 
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -1707,6 +1763,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setFreeShip(free_ship);
                     deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                     deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
+                    deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
 
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -1891,13 +1948,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_printAllOrdersBtnActionPerformed
 
     private void saveOrderBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtn1ActionPerformed
-        Double amount=Double.parseDouble(weightTxt.getText());
+        Double amount=Double.parseDouble(PaidAmountTxt.getText());
         Double total=Double.parseDouble(totAmountLbl.getText());
         
         Double cod=total-amount;
         codTxt.setText(cod+"");
-        
-//        for(PaymentTypeDto dto:pa)
     }//GEN-LAST:event_saveOrderBtn1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -2266,26 +2321,36 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     String phoneOne = deliveryOrdersTable.getValueAt(selectedRow, 3) != null ? deliveryOrdersTable.getValueAt(selectedRow, 3).toString() : "";
                     String phoneTwo = deliveryOrdersTable.getValueAt(selectedRow, 4) != null ? deliveryOrdersTable.getValueAt(selectedRow, 4).toString() : "";
                     String customerName = deliveryOrdersTable.getValueAt(selectedRow, 2) != null ? deliveryOrdersTable.getValueAt(selectedRow, 2).toString() : "";
-                    String cod = deliveryOrdersTable.getValueAt(selectedRow, 5) != null ? deliveryOrdersTable.getValueAt(selectedRow, 5).toString() : "";
-                    String totalAmount = deliveryOrdersTable.getValueAt(selectedRow, 6) != null ? deliveryOrdersTable.getValueAt(selectedRow, 6).toString() : "";
+                    Double cod = deliveryOrdersTable.getValueAt(selectedRow, 5) != null ? Double.parseDouble(deliveryOrdersTable.getValueAt(selectedRow, 5).toString()) : 0.0;
+                    Double totalAmount = deliveryOrdersTable.getValueAt(selectedRow, 6) != null ? Double.parseDouble(deliveryOrdersTable.getValueAt(selectedRow, 6).toString()) : 0.0;
 
                     phoneOneCmb.setSelectedItem(phoneOne);
                     phoneTwoCmb.setSelectedItem(phoneTwo);
                     customerNameTxt.setText(customerName);
                     orderCodeTxt.setText(orderCodeStr);
-                    codTxt.setText(cod);
-                    totAmountLbl.setText(totalAmount);
 
-                    try {
-                        double subTot = Double.parseDouble(totalAmount) - Double.parseDouble(deliveyFeeLbl.getText());
-                        subTotAmountLbl.setText(String.format("%.2f", subTot));
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid number format in total amount or delivery fee: " + e.getMessage());
+                    totAmountLbl.setText(totalAmount.toString());
+
+                    if (cod == 0.0) {
+                        // Card payment
+                        paymentTypeCombo.setSelectedIndex(1);
+                        PaidAmountTxt.setText(totalAmount.toString());
+                        codTxt.setText("0");
+                    } else {
+                        // Cash payment
+                        paymentTypeCombo.setSelectedIndex(0);
+                        double remainingAmount = totalAmount - cod;
+                        PaidAmountTxt.setText(Double.toString(remainingAmount));
+                        codTxt.setText(cod+"");
                     }
-                    
-                    String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
 
+                    // Additional logic for updating totals and other details...
+                    double subTot = totalAmount - Double.parseDouble(deliveyFeeLbl.getText());
+                    subTotAmountLbl.setText(String.format("%.2f", subTot));
+
+                    String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_ID);
+
                     if (orderID != null) {
                         Integer oid = Integer.parseInt(orderID);
                         ArrayList<PosMainOrderDetails> orderDetails = mainOrderDetailRepositoryImpl.getOrderDetailsByOrderId(oid);
@@ -2316,7 +2381,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                         double deliveryFee = calculateDeliveryFee(totalWeight);
                         deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
-                        totAmountLbl.setText(String.format("%.2f", Double.parseDouble(totalAmount) + deliveryFee));
+                        totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
 
                     } else {
                         System.out.println("Order ID not found for the given bill number.");
@@ -2451,6 +2516,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AddressLabel;
     private javax.swing.JLabel NameLabel;
+    private javax.swing.JTextField PaidAmountTxt;
     private javax.swing.JLabel Phone1Label;
     private javax.swing.JLabel Phone2Label;
     private javax.swing.JButton addBtn;

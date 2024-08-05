@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DurationSales" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1b532f75-e09e-4781-8661-e3912de4efa1">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (16)"/>
+	<parameter name="dateFrom" class="java.lang.String"/>
+	<parameter name="dateTo" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    SUM(CASE
+            WHEN pmd.status_id NOT IN (6, 7) THEN pmd.cod_amount
+            ELSE 0
+        END) AS Total_Report_Cash,
+    SUM(CASE
+            WHEN pmd.status_id NOT IN (6, 7) THEN pmo.paid_amount
+            ELSE 0
+        END) AS Total_Report_Card,
+    COUNT(pmo.order_id) AS Number_of_orders,
+    COUNT(CASE
+            WHEN pmd.status_id = 6 THEN 1
+            ELSE NULL
+        END) AS Return_orders_count,
+    COUNT(CASE
+            WHEN pmd.status_id = 7 THEN 1
+            ELSE NULL
+        END) AS Cancel_orders_count,
+    SUM(CASE
+            WHEN pmd.status_id = 6 THEN pmo.total_order_price
+            ELSE 0
+        END) AS Return_orders_Total,
+    SUM(CASE
+            WHEN pmd.status_id = 7 THEN pmo.total_order_price
+            ELSE 0
+        END) AS Cancel_orders_Total,
+    SUM(pmo.delivery_fee) AS Total_delivery_charge,
+    (
+        SUM(CASE
+                WHEN pmd.status_id NOT IN (6, 7) THEN pmd.cod_amount
+                ELSE 0
+            END) +
+        SUM(CASE
+                WHEN pmd.status_id NOT IN (6, 7) THEN pmo.paid_amount
+                ELSE 0
+            END) +
+        SUM(CASE
+                WHEN pmd.status_id = 6 THEN pmo.total_order_price
+                ELSE 0
+            END) +
+        SUM(CASE
+                WHEN pmd.status_id = 7 THEN pmo.total_order_price
+                ELSE 0
+            END)
+    ) AS Grand_total
+FROM
+    pos_main_order_tb pmo
+JOIN
+    pos_main_delivery_order_tb pmd
+ON
+    pmo.delivery_order_id = pmd.delivery_id
+WHERE
+    DATE (pmo.created_Date) BETWEEN  $P{dateFrom}  AND  $P{dateTo} ;]]>
+	</queryString>
+	<field name="Total_Report_Cash" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Cash"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_Report_Cash"/>
+	</field>
+	<field name="Total_Report_Card" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Card"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_Report_Card"/>
+	</field>
+	<field name="Number_of_orders" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Number_of_orders"/>
+		<property name="com.jaspersoft.studio.field.label" value="Number_of_orders"/>
+	</field>
+	<field name="Return_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Return_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Return_orders_count"/>
+	</field>
+	<field name="Cancel_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Cancel_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cancel_orders_count"/>
+	</field>
+	<field name="Return_orders_Total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Return_orders_Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Return_orders_Total"/>
+	</field>
+	<field name="Cancel_orders_Total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Cancel_orders_Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cancel_orders_Total"/>
+	</field>
+	<field name="Total_delivery_charge" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Total_delivery_charge"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_delivery_charge"/>
+	</field>
+	<field name="Grand_total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Grand_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Grand_total"/>
+	</field>
+	<group name="Total_Report_Cash">
+		<groupExpression><![CDATA[$F{Total_Report_Cash}]]></groupExpression>
+	</group>
+	<group name="Total_Report_Card">
+		<groupExpression><![CDATA[$F{Total_Report_Card}]]></groupExpression>
+	</group>
+	<group name="Number_of_orders">
+		<groupExpression><![CDATA[$F{Number_of_orders}]]></groupExpression>
+	</group>
+	<group name="Return_orders_count">
+		<groupExpression><![CDATA[$F{Return_orders_count}]]></groupExpression>
+	</group>
+	<group name="Cancel_orders_count">
+		<groupExpression><![CDATA[$F{Cancel_orders_count}]]></groupExpression>
+	</group>
+	<group name="Return_orders_Total">
+		<groupExpression><![CDATA[$F{Return_orders_Total}]]></groupExpression>
+	</group>
+	<group name="Cancel_orders_Total">
+		<groupExpression><![CDATA[$F{Cancel_orders_Total}]]></groupExpression>
+	</group>
+	<group name="Total_delivery_charge">
+		<groupExpression><![CDATA[$F{Total_delivery_charge}]]></groupExpression>
+	</group>
+	<group name="Grand_total">
+		<groupExpression><![CDATA[$F{Grand_total}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="176" y="10" width="203" height="30" uuid="58912505-c76f-482b-8389-33f21657fdcb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Duration Sales]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="111" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="60" width="130" height="20" uuid="5205db2c-3a15-4bec-8bfd-10de8ac73389"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Number of orders	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="40" width="130" height="20" uuid="896889bb-9196-4796-bccd-f34ec836b384"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[To			:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="80" width="135" height="20" uuid="f1736813-e1f5-4647-8bf3-d09348c6da92"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ADMIN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="20" width="130" height="20" uuid="56405de4-7f83-40bb-8882-b7153656e2a7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[From			:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="80" width="130" height="20" uuid="3fce39d6-2068-487b-b5d1-37422e57615f"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Generated by		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="20" width="130" height="20" uuid="d1a1312b-cb1e-45d3-a824-a075605a936d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Return Order Count	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="40" width="130" height="20" uuid="04502d36-073e-4306-9b1f-28ae680917e2"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Cancel Order Count	:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-20" y="106" width="600" height="1" uuid="d567a948-5c5c-4f9b-80af-db9448581474"/>
+			</line>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="435" y="86" width="100" height="20" uuid="aaf81b89-ef71-42d3-b42e-8feddf9e51da"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="411" y="86" width="30" height="20" uuid="d3c9f058-114f-41ae-89d6-b3ba3bfdc96d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="20" width="130" height="19" uuid="711c8c94-275c-45fd-b340-c937c52d15a1"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dateFrom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="39" width="130" height="20" uuid="9c9a41b5-a3fc-4bc7-a855-178cbba3cac4"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dateTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="60" width="132" height="19" uuid="0edb2fb0-c7da-42eb-aea2-8aacfeb9572d"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Number_of_orders}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="40" width="100" height="19" uuid="d452d2e6-281f-4c44-bbef-0253fcdd333c"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Cancel_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="20" width="100" height="18" uuid="eadadfe8-601e-46b4-b8a6-98ad14700263"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Return_orders_count}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="219" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="114" width="170" height="26" uuid="7a844a4b-91cf-4dce-86e5-6e1b981f788f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Total Delivery Charge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="90" width="140" height="24" uuid="5c6f3a30-a230-42e2-ad2f-ca28dedfe57d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Cancel Orders Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="43" width="140" height="23" uuid="ea595dac-a3cd-41c4-8cde-0bb66d88d848">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f1d7de7e-9633-4e6c-901f-ce798ca9f441"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Total Report Card]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="170" width="170" height="26" uuid="b72c7199-8029-47db-92b9-8577d371c058"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Grand Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="66" width="140" height="24" uuid="a7f35cd8-7c06-4d7c-b0dd-b757430acf39"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Return Orders Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="20" width="140" height="23" uuid="f7096de1-4c1c-4c80-907e-0443a33fdde3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17723c6d-59de-4911-8eb3-b135ceb4418b"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Total Report Cash]]></text>
+			</staticText>
+			<line>
+				<reportElement x="390" y="158" width="145" height="1" uuid="4a3a1c2c-1152-4cb7-be07-c9524bae9e78"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="280" y="21" width="256" height="22" uuid="3dd3f80c-f643-4193-8342-3d5b555024ee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Report_Cash}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="43" width="258" height="22" uuid="459a1679-5da0-4f81-bb9d-dd07c3eaa1f7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Report_Card}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="65" width="256" height="24" uuid="2d0a814d-266b-4291-9060-806340f9fed9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Return_orders_Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="90" width="254" height="23" uuid="0d4bd910-59d7-4cd6-bd4d-6f4c76211938"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cancel_orders_Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="114" width="250" height="26" uuid="edceda85-05bf-435f-a146-257d671405a8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_delivery_charge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="170" width="215" height="26" uuid="c719c2f0-713f-4730-b082-ee1c465c7b88"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Grand_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

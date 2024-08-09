@@ -14,7 +14,9 @@
         <group>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/DeliveryOrderRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/DeliveryOrder.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/Reports.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/Daily_Income.java</file>
         </group>
     </open-files>
 </project-private>

@@ -651,21 +651,43 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
     
     public boolean update(DeliveryOrder deliveryOrderDto, Integer orderId) throws ClassNotFoundException, SQLException {
-        
-        changeItemStatusByOrderID(deliveryOrderDto, orderId);
-        updateDeliveryDetails(deliveryOrderDto);
-        updateOrder(deliveryOrderDto, orderId);
-        updateCustomer(deliveryOrderDto);
-        updateOrderDetails(deliveryOrderDto,orderId);
-        
-        return true;
+        Connection connection = null;
+        boolean success = false;
+
+        try {
+            connection = DBCon.getDatabaseConnection();
+            connection.setAutoCommit(false);
+
+            if (changeItemStatusByOrderID(connection, deliveryOrderDto, orderId) &&
+                updateDeliveryDetails(connection, deliveryOrderDto) &&
+                updateOrder(connection, deliveryOrderDto, orderId) &&
+                updateCustomer(connection, deliveryOrderDto) &&
+                updateOrderDetails(connection, deliveryOrderDto, orderId)) {
+
+                connection.commit();
+                success = true;
+            } else {
+                connection.rollback();
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+
+        return success;
     }
 
-    private boolean changeItemStatusByOrderID(DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
+    private boolean changeItemStatusByOrderID(Connection connection, DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
         String updateOrderDetailsStatusSQL = "UPDATE pos_main_order_details_tb SET status = 0 WHERE order_id = ?";
         
         PreparedStatement orderDetailsStatusStatement = null;
-        Connection connection = connection = DBCon.getDatabaseConnection();
         
         orderDetailsStatusStatement = connection.prepareStatement(updateOrderDetailsStatusSQL);
         orderDetailsStatusStatement.setInt(1, orderId);
@@ -673,14 +695,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return orderDetailsStatusStatement.executeUpdate() > 0;
     }
 
-    private boolean updateDeliveryDetails(DeliveryOrder deliveryOrderDto) throws SQLException, ClassNotFoundException {
+    private boolean updateDeliveryDetails(Connection connection, DeliveryOrder deliveryOrderDto) throws SQLException, ClassNotFoundException {
         String updateOrderSQL = "UPDATE pos_main_delivery_order_tb SET "
                 + "customer_id = ?, cod_amount = ?, weight = ?, remark = ?, "
                 + "status_id = ?, is_free_delivery = ?, is_return = ?, user_id = ? "
                 + "WHERE order_code = ?";
         
         PreparedStatement orderStatement = null;
-        Connection connection = connection = DBCon.getDatabaseConnection();
         
         orderStatement = connection.prepareStatement(updateOrderSQL);
         orderStatement.setObject(1, deliveryOrderDto.getCustomerId());
@@ -696,15 +717,14 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return orderStatement.executeUpdate() > 0;
     }
 
-    private boolean updateOrder(DeliveryOrder deliveryOrderDto, Integer orderId) throws ClassNotFoundException, SQLException {
+    private boolean updateOrder(Connection connection, DeliveryOrder deliveryOrderDto, Integer orderId) throws ClassNotFoundException, SQLException {
         String updateMainOrderSQL = "UPDATE pos_main_order_tb SET "
                 + "customer_id = ?, sub_total_price = ?, "
                 + "delivery_fee = ?, total_order_price = ?, table_id = ?, "
-                + "remark = ?, edited_by = ?, status = ? "
+                + "remark = ?, edited_by = ?, status = ?, paid_amount = ? "
                 + "WHERE delivery_order_id = (SELECT delivery_id FROM pos_main_delivery_order_tb WHERE order_code = ?)";
         
         PreparedStatement mainOrderStatement = null;
-        Connection connection = connection = DBCon.getDatabaseConnection();
         
         mainOrderStatement = connection.prepareStatement(updateMainOrderSQL);
         mainOrderStatement.setInt(1, deliveryOrderDto.getCustomerId());
@@ -715,18 +735,18 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         mainOrderStatement.setString(6, deliveryOrderDto.getRemark());
         mainOrderStatement.setInt(7, 1);
         mainOrderStatement.setInt(8, 1);
-        mainOrderStatement.setString(9, deliveryOrderDto.getOrderCode());
+        mainOrderStatement.setString(9, deliveryOrderDto.getPaidAmount()+"");
+        mainOrderStatement.setString(10, deliveryOrderDto.getOrderCode());
 
         return mainOrderStatement.executeUpdate() > 0;
     }
 
-    private boolean updateCustomer(DeliveryOrder deliveryOrderDto) throws ClassNotFoundException, SQLException {
+    private boolean updateCustomer(Connection connection, DeliveryOrder deliveryOrderDto) throws ClassNotFoundException, SQLException {
         String updateCustomerSQL = "UPDATE pos_main_customer_tb SET "
                 + "customer_name = ?, address = ?, phone_one = ?, phone_two = ?, customer_number = ? "
                 + "WHERE customer_id = ?";
         
         PreparedStatement customerStatement = null;
-        Connection connection = connection = DBCon.getDatabaseConnection();
         
         customerStatement = connection.prepareStatement(updateCustomerSQL);
         customerStatement.setString(1, deliveryOrderDto.getCustomerName());
@@ -739,11 +759,10 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return customerStatement.executeUpdate() > 0;
     }
 
-    private boolean updateOrderDetails(DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
+    private boolean updateOrderDetails(Connection connection, DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
         String insertOrderDetailsSQL = "INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id) VALUES(?,?,?,?,?,?,?)";
         
         PreparedStatement insertOrderDetailsStatement = null;
-        Connection connection = connection = DBCon.getDatabaseConnection();
         
         for (OrderDetailsDto detail : deliveryOrderDto.getOrderDetailsDtos()) {
             insertOrderDetailsStatement = connection.prepareStatement(insertOrderDetailsSQL);

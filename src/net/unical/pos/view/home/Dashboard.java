@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Configurations;
 import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.Payment.Payment;
+import net.unical.pos.view.Inquiry.Inquiry;
 import net.unical.pos.view.Reports.Reports;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
 import net.unical.pos.view.employee.Employee;
@@ -77,6 +78,7 @@ public class Dashboard extends javax.swing.JFrame {
         employeeBtn = new org.jdesktop.swingx.JXButton();
         deliveryOrdersBtn = new org.jdesktop.swingx.JXButton();
         configurationsBtn = new org.jdesktop.swingx.JXButton();
+        inquiryBtn = new org.jdesktop.swingx.JXButton();
         navBarPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -174,7 +176,7 @@ public class Dashboard extends javax.swing.JFrame {
                 propertyBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(propertyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
+        jPanel3.add(propertyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 210, 60));
 
         reportsBtn.setBackground(new java.awt.Color(0, 77, 128));
         reportsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -195,7 +197,7 @@ public class Dashboard extends javax.swing.JFrame {
                 reportsBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(reportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 210, 60));
+        jPanel3.add(reportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 210, 60));
 
         inventoryBtn.setBackground(new java.awt.Color(0, 77, 128));
         inventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -258,7 +260,7 @@ public class Dashboard extends javax.swing.JFrame {
                 pmsBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
+        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
 
         logoutBtn.setBackground(new java.awt.Color(0, 77, 128));
         logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -279,7 +281,7 @@ public class Dashboard extends javax.swing.JFrame {
                 logoutBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 210, 60));
+        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 210, 60));
 
         employeeBtn.setBackground(new java.awt.Color(0, 77, 128));
         employeeBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -300,7 +302,7 @@ public class Dashboard extends javax.swing.JFrame {
                 employeeBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
+        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
 
         deliveryOrdersBtn.setBackground(new java.awt.Color(0, 77, 128));
         deliveryOrdersBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -343,6 +345,27 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(configurationsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 210, 60));
+
+        inquiryBtn.setBackground(new java.awt.Color(0, 77, 128));
+        inquiryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        inquiryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-inquiry-40.png"))); // NOI18N
+        inquiryBtn.setText("Inquiry");
+        inquiryBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        inquiryBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        inquiryBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                inquiryBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                inquiryBtnMouseExited(evt);
+            }
+        });
+        inquiryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inquiryBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(inquiryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
 
         navBarPanel.setBackground(new java.awt.Color(0, 102, 153));
 
@@ -494,7 +517,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(553, Short.MAX_VALUE))
+                .addContainerGap(659, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -769,6 +792,29 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deliveryOrdersBtnActionPerformed
 
+    private void inquiryBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inquiryBtnMouseEntered
+        inquiryBtn.setBackground(new Color(11,125,182));
+        setVisible(true);
+    }//GEN-LAST:event_inquiryBtnMouseEntered
+
+    private void inquiryBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inquiryBtnMouseExited
+        btnBackgroundExit();
+    }//GEN-LAST:event_inquiryBtnMouseExited
+
+    private void inquiryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inquiryBtnActionPerformed
+        Inquiry inquiry;
+        try {
+            inquiry = new Inquiry(this);
+            desktopPane.add(inquiry);
+            Dimension d = desktopPane.getSize();
+            inquiry.setLayer(desktopPane.POPUP_LAYER);
+            inquiry.setSize(d);
+            inquiry.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_inquiryBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -812,6 +858,7 @@ public class Dashboard extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXButton deliveryOrdersBtn;
     public javax.swing.JDesktopPane desktopPane;
     private org.jdesktop.swingx.JXButton employeeBtn;
+    private org.jdesktop.swingx.JXButton inquiryBtn;
     private org.jdesktop.swingx.JXButton inventoryBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -856,5 +903,6 @@ public class Dashboard extends javax.swing.JFrame {
         reportsBtn.setBackground(new Color(0, 77, 128));
         configurationsBtn.setBackground(new Color(0, 77, 128));
         logoutBtn.setBackground(new Color(0, 77, 128));    
+        inquiryBtn.setBackground(new Color(0, 77, 128));    
     }
 }

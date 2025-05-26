@@ -5,6 +5,7 @@
  */
 package net.unical.pos.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import net.unical.pos.dto.OrderDetailsDto;
 
@@ -36,6 +37,9 @@ public class DeliveryOrder {
     private Integer isPrint;
     private String customerNumber;
     private Double paidAmount;
+    private Date createDate;
+    private Date editedDate;
+    private Integer userID;
 
     private Integer paymentId;
     private Double codPayment;
@@ -43,22 +47,6 @@ public class DeliveryOrder {
     private Integer paymentStatus;
 
     private ArrayList<OrderDetailsDto> orderDetailsDtos;
-
-    public String getCustomerNumber() {
-        return customerNumber;
-    }
-
-    public void setCustomerNumber(String customerNumber) {
-        this.customerNumber = customerNumber;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public Integer getOrderId() {
         return orderId;
@@ -74,6 +62,14 @@ public class DeliveryOrder {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -132,6 +128,14 @@ public class DeliveryOrder {
         this.deliveryFee = deliveryFee;
     }
 
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -140,12 +144,44 @@ public class DeliveryOrder {
         this.status = status;
     }
 
+    public Integer getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(Integer statusType) {
+        this.statusType = statusType;
+    }
+
+    public Integer getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(Integer isReturn) {
+        this.isReturn = isReturn;
+    }
+
+    public Integer getFreeShip() {
+        return freeShip;
+    }
+
+    public void setFreeShip(Integer freeShip) {
+        this.freeShip = freeShip;
+    }
+
     public Double getGrandTotalPrice() {
         return grandTotalPrice;
     }
 
     public void setGrandTotalPrice(Double grandTotalPrice) {
         this.grandTotalPrice = grandTotalPrice;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getRemark() {
@@ -164,14 +200,6 @@ public class DeliveryOrder {
         this.paymentTypeId = paymentTypeId;
     }
 
-    public ArrayList<OrderDetailsDto> getOrderDetailsDtos() {
-        return orderDetailsDtos;
-    }
-
-    public void setOrderDetailsDtos(ArrayList<OrderDetailsDto> orderDetailsDtos) {
-        this.orderDetailsDtos = orderDetailsDtos;
-    }
-
     public Integer getIsPrint() {
         return isPrint;
     }
@@ -180,44 +208,44 @@ public class DeliveryOrder {
         this.isPrint = isPrint;
     }
 
-    public String getWeight() {
-        return weight;
+    public String getCustomerNumber() {
+        return customerNumber;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setCustomerNumber(String customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Double getPaidAmount() {
+        return paidAmount;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setPaidAmount(Double paidAmount) {
+        this.paidAmount = paidAmount;
     }
 
-    public Integer getFreeShip() {
-        return freeShip;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setFreeShip(Integer freeShip) {
-        this.freeShip = freeShip;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Integer getIsReturn() {
-        return isReturn;
+    public Date getEditedDate() {
+        return editedDate;
     }
 
-    public void setIsReturn(Integer isReturn) {
-        this.isReturn = isReturn;
+    public void setEditedDate(Date editedDate) {
+        this.editedDate = editedDate;
     }
 
-    public Integer getStatusType() {
-        return statusType;
+    public Integer getUserID() {
+        return userID;
     }
 
-    public void setStatusType(Integer statusType) {
-        this.statusType = statusType;
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public Integer getPaymentId() {
@@ -251,12 +279,14 @@ public class DeliveryOrder {
     public void setPaymentStatus(Integer paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
-    
-    public Double getPaidAmount(){
-        return paidAmount;
+
+    public ArrayList<OrderDetailsDto> getOrderDetailsDtos() {
+        return orderDetailsDtos;
     }
-    
-    public void setPaidAmount(Double paidAmount){
-        this.paidAmount = paidAmount;
+
+    public void setOrderDetailsDtos(ArrayList<OrderDetailsDto> orderDetailsDtos) {
+        this.orderDetailsDtos = orderDetailsDtos;
     }
+
+    
 }

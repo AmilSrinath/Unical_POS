@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -582,7 +583,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(393, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1764,6 +1765,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                     deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
                     deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
+                    deliveryOrderDto.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
+                    deliveryOrderDto.setEditedDate(new java.sql.Date(System.currentTimeMillis()));
+                    deliveryOrderDto.setUserID(1);
 
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));

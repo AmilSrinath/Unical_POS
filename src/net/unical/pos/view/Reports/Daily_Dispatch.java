@@ -5,12 +5,19 @@
  */
 package net.unical.pos.view.Reports;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -22,29 +29,49 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import net.unical.pos.dbConnection.DBConnection;
+import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.reports.DailySalesPrinter;
+import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.home.Dashboard;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author Sanjuka
  */
-public class Daily_Income extends javax.swing.JInternalFrame {
+public class Daily_Dispatch extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form Daily_Income
      */
     
     Dashboard dashboard;
+    private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
     
     SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd");
     private DefaultTableModel dataTableModel;
     
-    public Daily_Income(Dashboard dashboard) {
+    public Daily_Dispatch(Dashboard dashboard) {
         initComponents();
         this.dashboard=dashboard;
+        this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
+        
+        setCurrentDate();
     }
 
+    private void setCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        jXDatePickerFrom.setDate(date);
+        jXDatePickerTo.setDate(date);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -130,30 +157,95 @@ public class Daily_Income extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ArrayList<WrapperOrder> wrapperOrders = null;
         try {
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePickerFrom.getDate());
-            String toDate = formatter.format(jXDatePickerTo.getDate());
-            
-            JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/DurationSales.jrxml");
-            JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
-
-            HashMap<String, Object> hm = new HashMap<>();
-            hm.put("dateFrom", fromDate);
-            hm.put("dateTo", toDate);
-            
-            
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
-            JasperViewer.viewReport(jasperPrint,false);
-        } catch (JRException ex) {
-            Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+            wrapperOrders = deliveryOrderRepositoryImpl.getDaliyOutOfDeliveryOrder(jXDatePickerFrom.getDate(), jXDatePickerTo.getDate());
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Daily_Dispatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (!wrapperOrders.isEmpty()) {
+            try {
+                generateExcel(wrapperOrders); // method to be created
+            } catch (Exception ex) {
+                Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(this, "Excel file generated successfully.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No records found for the selected dates.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Wrapping Orders");
+
+        // Header row
+        String[] headers = {"TrackingNumber","Reference","PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
+        Row headerRow = sheet.createRow(0);
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        headerStyle.setFont(font);
+
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Data rows
+        int rowNum = 1;
+        for (WrapperOrder order : orders) {
+            double totalWeightKg = order.getWeight() / 1000.0;
+            int kilos = (int) totalWeightKg;
+            int grams = (int) ((totalWeightKg - kilos) * 1000);
+
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(order.getOrderCode());
+            row.createCell(1).setCellValue(order.getDeliveryId());
+            row.createCell(2).setCellValue(0);
+            row.createCell(3).setCellValue(order.getCustomerName());
+            row.createCell(4).setCellValue(order.getAddress());
+            row.createCell(5).setCellValue(0);
+            row.createCell(6).setCellValue(order.getPhoneOne()+" / "+order.getPhoneTwo());
+            row.createCell(7).setCellValue(1);
+            row.createCell(8).setCellValue(kilos);
+            row.createCell(9).setCellValue(grams);
+            row.createCell(10).setCellValue(order.getCodAmount()+"");
+            row.createCell(11).setCellValue(0);
+            row.createCell(12).setCellValue(0);
+        }
+
+        // Auto-size columns
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        try {
+            // File chooser for user to pick save location
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Excel File");
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                    filePath += ".xlsx";
+                }
+
+                FileOutputStream out = new FileOutputStream(filePath);
+                workbook.write(out);
+                out.close();
+                workbook.close();
+
+                JOptionPane.showMessageDialog(null, "Excel file generated successfully at:\n" + filePath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error saving Excel file: " + e.getMessage());
+        }
+    }
     /**
      * @param args the command line arguments
      */

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package net.unical.pos.view.Payment;
+package net.unical.pos.view.Inquiry;
 
+import net.unical.pos.view.Payment.*;
 import net.unical.pos.view.OrderFilter.*;
 import java.text.DateFormat;
 import java.text.Format;
@@ -29,7 +30,7 @@ import net.unical.pos.view.deliveryOrders.DeliveryOrders;
  *
  * @author apple
  */
-public class Payment extends JInternalFrame {
+public class Inquiry extends JInternalFrame {
     private ArrayList<Integer> paymentTypeIds=new ArrayList<>();
     private PaymentTypesController paymentTypesController;
     private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
@@ -39,7 +40,7 @@ public class Payment extends JInternalFrame {
     /**
      * Creates new form OrderFilter
      */
-    public Payment() {
+    public Inquiry() {
         initComponents();
         setTitle("Order Filter");
         setClosable(true);
@@ -51,7 +52,7 @@ public class Payment extends JInternalFrame {
     
     Dashboard dashboard;
     
-    public Payment(Dashboard dashboard){
+    public Inquiry(Dashboard dashboard){
         this();dashboard = dashboard;
         this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
         this.paymentTypesController=new PaymentTypesController();
@@ -537,11 +538,11 @@ public class Payment extends JInternalFrame {
             try {
                 getOrderById(orderIdText);
             } catch (NumberFormatException e) {
-                Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, e);
-                Log.error(Payment.class, "Invalid Order ID: ", e);
+                Logger.getLogger(Inquiry.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(Inquiry.class, "Invalid Order ID: ", e);
             }
         } else {
-            Logger.getLogger(Payment.class.getName()).log(Level.WARNING, "Order ID is empty");
+            Logger.getLogger(Inquiry.class.getName()).log(Level.WARNING, "Order ID is empty");
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
@@ -604,21 +605,23 @@ public class Payment extends JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Payment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inquiry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Payment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inquiry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Payment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inquiry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Payment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inquiry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Payment().setVisible(true);
+                new Inquiry().setVisible(true);
             }
         });
     }
@@ -682,12 +685,12 @@ public class Payment extends JInternalFrame {
                 };
                 dtm.addRow(rowData);
             } else {
-                Logger.getLogger(Payment.class.getName()).log(Level.WARNING, "No order found for Order ID: " + orderId);
+                Logger.getLogger(Inquiry.class.getName()).log(Level.WARNING, "No order found for Order ID: " + orderId);
             }
 
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(Payment.class, "Cannot load order details: ", ex);
+            Log.error(Inquiry.class, "Cannot load order details: ", ex);
         }
     }
 

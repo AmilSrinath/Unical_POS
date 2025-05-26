@@ -20,6 +20,7 @@ import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
+import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.repository.custom.DeliveryOrderRepositoryCustom;
 
 /**
@@ -217,12 +218,15 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
 
             // Add Payment
-            ps = con.prepareStatement("INSERT INTO pos_payment_tb (order_id, customer_id, cod, total_amount, payment_status) VALUES (?, ?, ?, ?, ?)");
+            ps = con.prepareStatement("INSERT INTO pos_payment_tb (order_id, customer_id, cod, total_amount, payment_status, created_Date, edited_Date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, orderId);
             ps.setInt(2, deliveryOrder.getCustomerId() != null ? deliveryOrder.getCustomerId() : customerId);
             ps.setDouble(3, deliveryOrder.getCod());
             ps.setDouble(4, deliveryOrder.getGrandTotalPrice());
             ps.setInt(5, 0);
+            ps.setDate(6, deliveryOrder.getCreateDate());
+            ps.setDate(7, deliveryOrder.getEditedDate());
+            ps.setInt(8, deliveryOrder.getUserID());
             ps.executeUpdate();
 
             con.commit();
@@ -861,4 +865,85 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return null;
     }
 
+    public ArrayList<WrapperOrder> getWrappingOrder(Date fromDate, Date toDate) throws ClassNotFoundException {
+        ArrayList<WrapperOrder> list = new ArrayList<>();
+        String sql = "SELECT dot.order_code, dot.delivery_id, ct.customer_name, ct.address, dot.cod_amount, " +
+                     "ct.phone_one, ct.phone_two, dot.weight " +
+                     "FROM pos_main_delivery_order_tb dot " +
+                     "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                     "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                     "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                     "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id " +
+                     "WHERE dot.status_id = 3 AND Date(dot.created_date) BETWEEN ? AND ?";
+
+        try (Connection con = DBCon.getDatabaseConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setDate(1, new java.sql.Date(fromDate.getTime()));
+            pst.setDate(2, new java.sql.Date(toDate.getTime()));
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                WrapperOrder order = new WrapperOrder(
+                    rs.getString("order_code"),
+                    rs.getString("delivery_id"),
+                    rs.getString("customer_name"),
+                    rs.getString("address"),
+                    rs.getDouble("cod_amount"),
+                    rs.getString("phone_one"),
+                    rs.getString("phone_two"),
+                    rs.getDouble("weight")
+                );
+                list.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public ArrayList<WrapperOrder> getDaliyOutOfDeliveryOrder(Date fromDate, Date toDate) throws ClassNotFoundException {
+        ArrayList<WrapperOrder> list = new ArrayList<>();
+        String sql = "SELECT dot.order_code, dot.delivery_id, ct.customer_name, ct.address, dot.cod_amount, " +
+                     "ct.phone_one, ct.phone_two, dot.weight " +
+                     "FROM pos_main_delivery_order_tb dot " +
+                     "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                     "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                     "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                     "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id " +
+                     "WHERE dot.status_id = 4 AND Date(dot.created_date) BETWEEN ? AND ?";
+
+        try (Connection con = DBCon.getDatabaseConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setDate(1, new java.sql.Date(fromDate.getTime()));
+            pst.setDate(2, new java.sql.Date(toDate.getTime()));
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                WrapperOrder order = new WrapperOrder(
+                    rs.getString("order_code"),
+                    rs.getString("delivery_id"),
+                    rs.getString("customer_name"),
+                    rs.getString("address"),
+                    rs.getDouble("cod_amount"),
+                    rs.getString("phone_one"),
+                    rs.getString("phone_two"),
+                    rs.getDouble("weight")
+                );
+                list.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
+    
 }

@@ -6,8 +6,10 @@
 package net.unical.pos.view.Reports;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,8 +45,15 @@ public class Daily_Income extends javax.swing.JInternalFrame {
     public Daily_Income(Dashboard dashboard) {
         initComponents();
         this.dashboard=dashboard;
+        setCurrentDate();
     }
 
+    private void setCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        jXDatePickerFrom.setDate(date);
+        jXDatePickerTo.setDate(date);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

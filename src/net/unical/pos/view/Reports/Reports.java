@@ -6,6 +6,13 @@
 package net.unical.pos.view.Reports;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import net.unical.pos.model.WrapperOrder;
+import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.employee.EmployeeManagement;
 import net.unical.pos.view.home.Dashboard;
 
@@ -36,6 +43,7 @@ public class Reports extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         saveOrderBtn = new javax.swing.JButton();
+        saveOrderBtn1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -54,6 +62,15 @@ public class Reports extends javax.swing.JInternalFrame {
             }
         });
 
+        saveOrderBtn1.setBackground(new java.awt.Color(0, 102, 153));
+        saveOrderBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        saveOrderBtn1.setText("Daily Dispatch");
+        saveOrderBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveOrderBtn1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -61,13 +78,17 @@ public class Reports extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(saveOrderBtn)
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(saveOrderBtn1)
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(saveOrderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveOrderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(241, Short.MAX_VALUE))
         );
 
@@ -93,6 +114,15 @@ public class Reports extends javax.swing.JInternalFrame {
         daily_Income.setSize(d);
         daily_Income.setVisible(true);
     }//GEN-LAST:event_saveOrderBtnActionPerformed
+
+    private void saveOrderBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtn1ActionPerformed
+        Daily_Dispatch daily_Dispatch = new Daily_Dispatch(dashboard);
+        dashboard.desktopPane.add(daily_Dispatch);
+        Dimension d = dashboard.desktopPane.getSize();
+        daily_Dispatch.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        daily_Dispatch.setSize(d);
+        daily_Dispatch.setVisible(true);        
+    }//GEN-LAST:event_saveOrderBtn1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,5 +162,6 @@ public class Reports extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton saveOrderBtn;
+    private javax.swing.JButton saveOrderBtn1;
     // End of variables declaration//GEN-END:variables
 }

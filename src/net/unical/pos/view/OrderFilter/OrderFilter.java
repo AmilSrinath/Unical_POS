@@ -4,6 +4,8 @@
  */
 package net.unical.pos.view.OrderFilter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.Format;
@@ -13,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import net.unical.pos.view.home.Dashboard;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -23,7 +26,11 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dbConnection.DBConnection;
@@ -31,9 +38,17 @@ import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
+import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.view.Reports.Daily_Income;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author apple
@@ -835,47 +850,106 @@ public class OrderFilter extends JInternalFrame {
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         // TODO add your handling code here:
         
-        if(paymentTypeCombo1.getSelectedIndex()==0){
-            if (statusCmb.getSelectedIndex()==3) {
+        if(paymentTypeCombo1.getSelectedIndex() == 0){
+            if (statusCmb.getSelectedIndex() == 3) {
+                ArrayList<WrapperOrder> wrapperOrders = null;
                 try {
-                    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    String fromDate = formatter.format(jXDatePicker1.getDate());
-                    String toDate = formatter.format(jXDatePicker2.getDate());
-
-                    JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/OrderFilter/OutForDeliveries.jrxml");
-                    JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
-
-                    HashMap<String, Object> hm = new HashMap<>();
-                    hm.put("fromDate", fromDate);
-                    hm.put("toDate", toDate);
-                    hm.put("totalOrder", total_orders_count_txt.getText());
-
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
-                    JasperViewer.viewReport(jasperPrint,false);
-                    
-                    DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
-                    int rowCount = dtm.getRowCount();
-
-                    for (int i = 0; i < rowCount; i++) {
-                        String orderCode = (String) dtm.getValueAt(i, 1);
-                        deliveryOrderRepositoryImpl.update(orderCode, 4);
-                    }
-                    
-                    getAllOrders(fromDate, toDate, 0, 3);
-                    
-                } catch (JRException | ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
+                    wrapperOrders = deliveryOrderRepositoryImpl.getWrappingOrder(jXDatePicker1.getDate(), jXDatePicker2.getDate());
+                } catch (ClassNotFoundException ex) {
                     Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else{
-                JOptionPane.showMessageDialog(this, "Please select status is wrapping");
+                if (!wrapperOrders.isEmpty()) {
+                    try {
+                        generateExcel(wrapperOrders); // method to be created
+                    } catch (Exception ex) {
+                        Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    JOptionPane.showMessageDialog(this, "Excel file generated successfully.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No records found for the selected dates.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select status as Wrapping");
             }
-        }else{
-            JOptionPane.showMessageDialog(this, "Please select payment type is any");
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select payment type as Any");
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
+    public void generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Wrapping Orders");
+
+        // Header row
+        String[] headers = {"TrackingNumber","Reference","PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
+        Row headerRow = sheet.createRow(0);
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        headerStyle.setFont(font);
+
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Data rows
+        int rowNum = 1;
+        for (WrapperOrder order : orders) {
+            double totalWeightKg = order.getWeight() / 1000.0;
+            int kilos = (int) totalWeightKg;
+            int grams = (int) ((totalWeightKg - kilos) * 1000);
+
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(order.getOrderCode());
+            row.createCell(1).setCellValue(order.getDeliveryId());
+            row.createCell(2).setCellValue(0);
+            row.createCell(3).setCellValue(order.getCustomerName());
+            row.createCell(4).setCellValue(order.getAddress());
+            row.createCell(5).setCellValue(0);
+            row.createCell(6).setCellValue(order.getPhoneOne()+" / "+order.getPhoneTwo());
+            row.createCell(7).setCellValue(1);
+            row.createCell(8).setCellValue(kilos);
+            row.createCell(9).setCellValue(grams);
+            row.createCell(10).setCellValue(order.getCodAmount()+"");
+            row.createCell(11).setCellValue(0);
+            row.createCell(12).setCellValue(0);
+            
+            deliveryOrderRepositoryImpl.update(order.getOrderCode(), 4);
+        }
+
+        // Auto-size columns
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        try {
+            // File chooser for user to pick save location
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Excel File");
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                    filePath += ".xlsx";
+                }
+
+                FileOutputStream out = new FileOutputStream(filePath);
+                workbook.write(out);
+                out.close();
+                workbook.close();
+
+                JOptionPane.showMessageDialog(null, "Excel file generated successfully at:\n" + filePath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error saving Excel file: " + e.getMessage());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.view.Configuration.Configuration;
 import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.Payment.Payment;
 import net.unical.pos.view.Inquiry.Inquiry;
@@ -79,6 +80,7 @@ public class Dashboard extends javax.swing.JFrame {
         deliveryOrdersBtn = new org.jdesktop.swingx.JXButton();
         configurationsBtn = new org.jdesktop.swingx.JXButton();
         inquiryBtn = new org.jdesktop.swingx.JXButton();
+        configurationBtn = new org.jdesktop.swingx.JXButton();
         navBarPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -281,7 +283,7 @@ public class Dashboard extends javax.swing.JFrame {
                 logoutBtnActionPerformed(evt);
             }
         });
-        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 210, 60));
+        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 720, 210, 60));
 
         employeeBtn.setBackground(new java.awt.Color(0, 77, 128));
         employeeBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -366,6 +368,27 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(inquiryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
+
+        configurationBtn.setBackground(new java.awt.Color(0, 77, 128));
+        configurationBtn.setForeground(new java.awt.Color(255, 255, 255));
+        configurationBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-configuration-48.png"))); // NOI18N
+        configurationBtn.setText("Configurations");
+        configurationBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        configurationBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        configurationBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                configurationBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                configurationBtnMouseExited(evt);
+            }
+        });
+        configurationBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configurationBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(configurationBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 210, 60));
 
         navBarPanel.setBackground(new java.awt.Color(0, 102, 153));
 
@@ -517,7 +540,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(659, Short.MAX_VALUE))
+                .addContainerGap(693, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -530,7 +553,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         centerPanelLayout.setVerticalGroup(
             centerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(desktopPane)
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -815,6 +838,29 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_inquiryBtnActionPerformed
 
+    private void configurationBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_configurationBtnMouseEntered
+        configurationBtn.setBackground(new Color(11,125,182));
+        configurationBtn.setVisible(true);
+    }//GEN-LAST:event_configurationBtnMouseEntered
+
+    private void configurationBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_configurationBtnMouseExited
+        btnBackgroundExit();
+    }//GEN-LAST:event_configurationBtnMouseExited
+
+    private void configurationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurationBtnActionPerformed
+        Configuration configuration;
+        try {
+            configuration = new Configuration(this);
+            desktopPane.add(configuration);
+            Dimension d = desktopPane.getSize();
+            configuration.setLayer(desktopPane.POPUP_LAYER);
+            configuration.setSize(d);
+            configuration.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_configurationBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -853,6 +899,7 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXButton banquetBtn;
     private javax.swing.JPanel centerPanel;
+    private org.jdesktop.swingx.JXButton configurationBtn;
     private org.jdesktop.swingx.JXButton configurationsBtn;
     private org.jdesktop.swingx.JXButton dashboardBtn;
     private org.jdesktop.swingx.JXButton deliveryOrdersBtn;
@@ -882,14 +929,6 @@ public class Dashboard extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXButton salesBtn;
     // End of variables declaration//GEN-END:variables
     
-    private void btnBackgroundEnterd(){
-        dashboardBtn.setBackground(new Color(255, 204, 0));
-        salesBtn.setBackground(new Color(255, 204, 0));
-        propertyBtn.setBackground(new Color(255, 204, 0));
-        employeeBtn.setBackground(new Color(255, 204, 0));
-        reportsBtn.setBackground(new Color(255, 204, 0));
-        logoutBtn.setBackground(new Color(255, 204, 0));
-    }
     
     private void btnBackgroundExit(){
         dashboardBtn.setBackground(new Color(0, 77, 128));
@@ -904,5 +943,6 @@ public class Dashboard extends javax.swing.JFrame {
         configurationsBtn.setBackground(new Color(0, 77, 128));
         logoutBtn.setBackground(new Color(0, 77, 128));    
         inquiryBtn.setBackground(new Color(0, 77, 128));    
+        configurationBtn.setBackground(new Color(0, 77, 128));    
     }
 }

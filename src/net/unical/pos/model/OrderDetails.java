@@ -18,21 +18,23 @@ public class OrderDetails {
     private Double delivery_fee;
     private Double total_order_price;
     private String date;
+    private int status;
     
     public OrderDetails() {}
-    
-    public OrderDetails(Integer order_id, String orderCode, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double total_order_price, Double delivery_fee, String date) {
+
+    public OrderDetails(Integer order_id, String orderCode, String item_name, Integer quantity, Double per_item_price, Double total_item_price, Double delivery_fee, Double total_order_price, String date, int status) {
         this.order_id = order_id;
+        this.orderCode = orderCode;
         this.item_name = item_name;
         this.quantity = quantity;
         this.per_item_price = per_item_price;
         this.total_item_price = total_item_price;
-        this.total_order_price = total_order_price;
         this.delivery_fee = delivery_fee;
-        this.orderCode = orderCode;
+        this.total_order_price = total_order_price;
         this.date = date;
+        this.status = status;
     }
-    
+
     public Integer getOrder_id() {
         return order_id;
     }
@@ -40,7 +42,7 @@ public class OrderDetails {
     public void setOrder_id(Integer order_id) {
         this.order_id = order_id;
     }
-    
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -81,6 +83,14 @@ public class OrderDetails {
         this.total_item_price = total_item_price;
     }
 
+    public Double getDelivery_fee() {
+        return delivery_fee;
+    }
+
+    public void setDelivery_fee(Double delivery_fee) {
+        this.delivery_fee = delivery_fee;
+    }
+
     public Double getTotal_order_price() {
         return total_order_price;
     }
@@ -89,21 +99,22 @@ public class OrderDetails {
         this.total_order_price = total_order_price;
     }
 
-    public Double getDelivery_fee() {
-        return delivery_fee;
-    }
-
-    public void setDelivery_fee(Double delivery_fee) {
-        this.delivery_fee = delivery_fee;
-    }
-    
-    public String getDate(){
+    public String getDate() {
         return date;
     }
-    
-    public void setDate(String date){
-        this.date=date;
+
+    public void setDate(String date) {
+        this.date = date;
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     
     public Object[] toArray() {
         return new Object[] {
@@ -111,9 +122,9 @@ public class OrderDetails {
             quantity,
             per_item_price,
             total_item_price,
-            total_order_price,
             delivery_fee,
-            date
+            total_order_price,
+            OrderStatus.getDescriptionByCode(status)
         };
     }
 }

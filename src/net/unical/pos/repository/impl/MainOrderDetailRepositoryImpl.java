@@ -107,64 +107,67 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
     }
 
     @Override
-public ArrayList<OrderDetails[]> getOrderDetailsByCustomerId(Integer customerId) {
-    ArrayList<OrderDetails[]> orderDetailsList = new ArrayList<>();
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
+    public ArrayList<OrderDetails[]> getOrderDetailsByCustomerId(Integer customerId) {
+        ArrayList<OrderDetails[]> orderDetailsList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-    try {
-        conn = DBCon.getDatabaseConnection();
-        String query = "SELECT o.order_id, o.bill_no, i.item_name, d.quantity, d.per_item_price, d.total_item_price, " +
-                       "o.total_order_price, o.delivery_fee, o.created_Date " +
-                       "FROM pos_main_order_tb o " +
-                       "JOIN pos_main_order_details_tb d ON o.order_id = d.order_id " +
-                       "JOIN pos_main_item_tb i ON d.item_id = i.item_id " +
-                       "WHERE o.customer_id = ?";
-
-        ps = conn.prepareStatement(query);
-        ps.setInt(1, customerId);
-        rs = ps.executeQuery();
-
-        Map<Integer, List<OrderDetails>> orderDetailsMap = new HashMap<>();
-
-        while (rs.next()) {
-            OrderDetails rowData = new OrderDetails(
-                rs.getInt("order_id"),
-                rs.getString("bill_no"),
-                rs.getString("item_name"),
-                rs.getInt("quantity"),
-                rs.getDouble("per_item_price"),
-                rs.getDouble("total_item_price"),
-                rs.getDouble("delivery_fee"),
-                rs.getDouble("total_order_price"),
-                rs.getString("created_Date")
-            );
-
-            int orderId = rs.getInt("order_id");
-            orderDetailsMap.computeIfAbsent(orderId, k -> new ArrayList<>()).add(rowData);
-        }
-
-        for (List<OrderDetails> details : orderDetailsMap.values()) {
-            orderDetailsList.add(details.toArray(new OrderDetails[0]));
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } catch (ClassNotFoundException ex) {
-        Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        // Close the resources
         try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
+            conn = DBCon.getDatabaseConnection();
+            String query = "SELECT o.order_id, o.bill_no, i.item_name, d.quantity, d.per_item_price, d.total_item_price, " +
+               "o.total_order_price, o.delivery_fee, o.created_Date, dly.status_id " +
+               "FROM pos_main_order_tb o " +
+               "JOIN pos_main_order_details_tb d ON o.order_id = d.order_id " +
+               "JOIN pos_main_item_tb i ON d.item_id = i.item_id " +
+               "LEFT JOIN pos_main_delivery_order_tb dly ON o.bill_no = dly.order_code " +
+               "WHERE o.customer_id = ?";
+
+
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, customerId);
+            rs = ps.executeQuery();
+
+            Map<Integer, List<OrderDetails>> orderDetailsMap = new HashMap<>();
+
+            while (rs.next()) {
+                OrderDetails rowData = new OrderDetails(
+                    rs.getInt("order_id"),
+                    rs.getString("bill_no"),
+                    rs.getString("item_name"),
+                    rs.getInt("quantity"),
+                    rs.getDouble("per_item_price"),
+                    rs.getDouble("total_item_price"),
+                    rs.getDouble("delivery_fee"),
+                    rs.getDouble("total_order_price"),
+                    rs.getString("created_Date"),
+                        rs.getInt("status_id")
+                );
+
+                int orderId = rs.getInt("order_id");
+                orderDetailsMap.computeIfAbsent(orderId, k -> new ArrayList<>()).add(rowData);
+            }
+
+            for (List<OrderDetails> details : orderDetailsMap.values()) {
+                orderDetailsList.add(details.toArray(new OrderDetails[0]));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Close the resources
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    return orderDetailsList;
-}
+        return orderDetailsList;
+    }
 
 }

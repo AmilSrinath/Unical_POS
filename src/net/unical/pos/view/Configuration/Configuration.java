@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.unical.pos.view.Inquiry;
+package net.unical.pos.view.Configuration;
 
+import net.unical.pos.view.Inquiry.*;
 import net.unical.pos.view.employee.*;
 import java.awt.Dimension;
 import net.unical.pos.view.home.Dashboard;
@@ -13,17 +14,17 @@ import net.unical.pos.view.home.Dashboard;
  *
  * @author Sanjuka
  */
-public class Inquiry extends javax.swing.JInternalFrame {
+public class Configuration extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form Employee
      */
     Dashboard dashboard;
-    public Inquiry(Dashboard dashboard) {
+    public Configuration(Dashboard dashboard) {
         this.dashboard=dashboard;
-        this.setTitle("Inquiry");
+        this.setTitle("Configuration");
         initComponents();
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Inquiry Management", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Management", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
     }
 
     /**
@@ -53,7 +54,7 @@ public class Inquiry extends javax.swing.JInternalFrame {
 
         jXButton1.setBackground(new java.awt.Color(0, 102, 153));
         jXButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton1.setText("View Inquiry");
+        jXButton1.setText("Manage Resons");
         jXButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton1ActionPerformed(evt);
@@ -136,12 +137,12 @@ public class Inquiry extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jXButton2ActionPerformed
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
-        ViewInquiry viewInquiry = new ViewInquiry(dashboard);
-        dashboard.desktopPane.add(viewInquiry);
+        ManageReson manageReson = new ManageReson(dashboard);
+        dashboard.desktopPane.add(manageReson);
         Dimension d = dashboard.desktopPane.getSize();
-        viewInquiry.setLayer(dashboard.desktopPane.POPUP_LAYER);
-        viewInquiry.setSize(d);
-        viewInquiry.setVisible(true);
+        manageReson.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        manageReson.setSize(d);
+        manageReson.setVisible(true);
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     /**

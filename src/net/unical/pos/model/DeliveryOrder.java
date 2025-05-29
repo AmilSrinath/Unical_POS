@@ -45,8 +45,17 @@ public class DeliveryOrder {
     private Double codPayment;
     private Double totalAmount;
     private Integer paymentStatus;
+    private Integer isExchange;
 
     private ArrayList<OrderDetailsDto> orderDetailsDtos;
+
+    public Integer getIsExchange() {
+        return isExchange;
+    }
+
+    public void setIsExchange(Integer isExchange) {
+        this.isExchange = isExchange;
+    }
 
     public Integer getOrderId() {
         return orderId;

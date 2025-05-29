@@ -39,7 +39,8 @@ public class Configuration extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jXButton1 = new org.jdesktop.swingx.JXButton();
-        jXButton2 = new org.jdesktop.swingx.JXButton();
+        btnManageCourierCompany = new org.jdesktop.swingx.JXButton();
+        btnManageCourierBranch = new org.jdesktop.swingx.JXButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -61,12 +62,21 @@ public class Configuration extends javax.swing.JInternalFrame {
             }
         });
 
-        jXButton2.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton2.setText("Add Inquiry");
-        jXButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnManageCourierCompany.setBackground(new java.awt.Color(0, 102, 153));
+        btnManageCourierCompany.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageCourierCompany.setText("Manage Courier Company");
+        btnManageCourierCompany.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton2ActionPerformed(evt);
+                btnManageCourierCompanyActionPerformed(evt);
+            }
+        });
+
+        btnManageCourierBranch.setBackground(new java.awt.Color(0, 102, 153));
+        btnManageCourierBranch.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageCourierBranch.setText("Manage Courier Branch");
+        btnManageCourierBranch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageCourierBranchActionPerformed(evt);
             }
         });
 
@@ -76,10 +86,14 @@ public class Configuration extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jXButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jXButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnManageCourierCompany, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jXButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnManageCourierBranch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,8 +101,10 @@ public class Configuration extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(286, Short.MAX_VALUE))
+                .addComponent(btnManageCourierCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnManageCourierBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(234, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -127,14 +143,14 @@ public class Configuration extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
-        AddInquiry addInquiry = new AddInquiry(dashboard);
-        dashboard.desktopPane.add(addInquiry);
+    private void btnManageCourierCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCourierCompanyActionPerformed
+        ManageCourierCompany manageCourierCompany = new ManageCourierCompany(dashboard);
+        dashboard.desktopPane.add(manageCourierCompany);
         Dimension d = dashboard.desktopPane.getSize();
-        addInquiry.setLayer(dashboard.desktopPane.POPUP_LAYER);
-        addInquiry.setSize(d);
-        addInquiry.setVisible(true);
-    }//GEN-LAST:event_jXButton2ActionPerformed
+        manageCourierCompany.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        manageCourierCompany.setSize(d);
+        manageCourierCompany.setVisible(true);
+    }//GEN-LAST:event_btnManageCourierCompanyActionPerformed
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
         ManageReson manageReson = new ManageReson(dashboard);
@@ -144,6 +160,15 @@ public class Configuration extends javax.swing.JInternalFrame {
         manageReson.setSize(d);
         manageReson.setVisible(true);
     }//GEN-LAST:event_jXButton1ActionPerformed
+
+    private void btnManageCourierBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCourierBranchActionPerformed
+        ManageCourierBranch manageCourierBranch = new ManageCourierBranch(dashboard);
+        dashboard.desktopPane.add(manageCourierBranch);
+        Dimension d = dashboard.desktopPane.getSize();
+        manageCourierBranch.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        manageCourierBranch.setSize(d);
+        manageCourierBranch.setVisible(true);
+    }//GEN-LAST:event_btnManageCourierBranchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,10 +206,11 @@ public class Configuration extends javax.swing.JInternalFrame {
 //    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXButton btnManageCourierBranch;
+    private org.jdesktop.swingx.JXButton btnManageCourierCompany;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private org.jdesktop.swingx.JXButton jXButton1;
-    private org.jdesktop.swingx.JXButton jXButton2;
     // End of variables declaration//GEN-END:variables
 
 }

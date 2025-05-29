@@ -89,7 +89,6 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
             System.out.println("Customer Id : " + deliveryOrder.getCustomerId());
             if (deliveryOrder.getCustomerId() != null) {
-                System.out.println("Customer Updated");
                 // Update Customer
                 ps = con.prepareStatement("UPDATE pos_main_customer_tb SET customer_name = ?, address = ?, phone_one = ?, phone_two = ? WHERE customer_id = ?");
                 ps.setString(1, deliveryOrder.getCustomerName());
@@ -100,7 +99,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.executeUpdate();
 
                 // Add Delivery
-                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -109,6 +108,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(6, 1);
                 ps.setInt(7, deliveryOrder.getFreeShip());
                 ps.setInt(8, 1);
+                ps.setInt(9, deliveryOrder.getIsExchange());
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
                 if (rst.next()) {

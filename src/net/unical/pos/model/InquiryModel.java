@@ -17,6 +17,7 @@ public class InquiryModel {
     private String customerName;
     private String customerPhone1;
     private String customerPhone2;
+    private String company;
     private String branch;
     private String branchContact;
     private String reason;
@@ -28,12 +29,13 @@ public class InquiryModel {
     
     public InquiryModel(){}
 
-    public InquiryModel(String wayBill, String customerId, String customerName, String customerPhone1, String customerPhone2, String branch, String branchContact, String reason, String remark, int status, int userId, Date createDate, Date editedDate) {
+    public InquiryModel(String wayBill, String customerId, String customerName, String customerPhone1, String customerPhone2, String company, String branch, String branchContact, String reason, String remark, int status, int userId, Date createDate, Date editedDate) {
         this.wayBill = wayBill;
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone1 = customerPhone1;
         this.customerPhone2 = customerPhone2;
+        this.company = company;
         this.branch = branch;
         this.branchContact = branchContact;
         this.reason = reason;
@@ -42,6 +44,14 @@ public class InquiryModel {
         this.userId = userId;
         this.createDate = createDate;
         this.editedDate = editedDate;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getWayBill() {

@@ -12,6 +12,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageReson.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/config.txt</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/EmployeeTitleRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/home/Dashboard.java</file>
@@ -21,6 +22,8 @@
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Payment/Payment.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/employee/EmployeeTitle.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/DeliveryOrderRepositoryImpl.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/ResonRepositoryImpl.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/CourierCompanyRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/Reports.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/PaymentRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/MainOrderRepositoryImpl.java</file>
@@ -31,10 +34,13 @@
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/employee/MessageDialog.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/service/impl/PurchaseOrderDetailsServiceImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/.idea/workspace.xml</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/Configuration.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageCourierCompany.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/service/impl/GrnServiceImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/MainOrderDetailRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Inquiry/AddInquiry.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/WrapperOrder.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/CourierCompanyModel.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/main/LogInForm.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/custom/DeliveryOrderRepositoryCustom.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/OrderFilter/OrderFilter.java</file>
@@ -44,7 +50,10 @@
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/employee/Employee.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/main/MainForm.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/DeliveryOrder.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/OrderDetails.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/service/impl/MainOrderServiceImpl.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/OrderStatus.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/ResonModel.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/OrderRepo.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/InquiryModel.java</file>

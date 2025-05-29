@@ -10,7 +10,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jPanel5" min="-2" pref="689" max="-2" attributes="0"/>
+              <Component id="jPanel5" min="-2" pref="703" max="-2" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -690,25 +690,30 @@
                                   <Component id="PaidAmountTxt" alignment="1" max="32767" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="saveOrderBtn1" min="-2" pref="68" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="radioExchange" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="fr_de_chb" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="32767" attributes="0"/>
                                               <Component id="saveOrderBtn" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                               <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                               <Component id="weightTxt" min="-2" pref="76" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="saveOrderBtn1" min="-2" pref="68" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -839,6 +844,8 @@
                               </Group>
                           </Group>
                       </Group>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Component id="radioExchange" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -1377,6 +1384,14 @@
                   <Color blue="0" green="0" red="99" type="rgb"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="java.awt.Checkbox" name="radioExchange">
+              <Properties>
+                <Property name="label" type="java.lang.String" value="Exchange"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="radioExchangeMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

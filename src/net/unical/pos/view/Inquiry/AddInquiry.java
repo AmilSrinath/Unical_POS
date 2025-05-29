@@ -29,11 +29,14 @@ import net.unical.pos.controller.DeliveryOrderController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
+import net.unical.pos.model.CourierCompanyModel;
 import net.unical.pos.model.CustomerDataByInquirySearch;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
 import net.unical.pos.model.InquiryModel;
 import net.unical.pos.model.ResonModel;
+import net.unical.pos.repository.impl.CourierBranchRepositoryImpl;
+import net.unical.pos.repository.impl.CourierCompanyRepositoryImpl;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.PaymentRepositoryImpl;
@@ -47,6 +50,8 @@ public class AddInquiry extends JInternalFrame {
     private PaymentTypesController paymentTypesController;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
     private ResonRepositoryImpl resonRepositoryImpl;
+    private CourierCompanyRepositoryImpl courierCompanyRepositoryImpl;
+    private CourierBranchRepositoryImpl courierBranchRepositoryImpl;
 
     /**
      * Creates new form OrderFilter
@@ -71,11 +76,13 @@ public class AddInquiry extends JInternalFrame {
         this.paymentTypesController=new PaymentTypesController();
         this.resonRepositoryImpl = new ResonRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
+        this.courierCompanyRepositoryImpl = new CourierCompanyRepositoryImpl();
+        this.courierBranchRepositoryImpl = new CourierBranchRepositoryImpl();
         loadReasonsToComboBox();
         
         preloadBranches(cmbBranch);
-        enableBranchAutocomplete(cmbBranch);
-
+        cmbBranch.setEnabled(false);
+        loadDataCmbCompany();
     }
 
     /**
@@ -111,6 +118,8 @@ public class AddInquiry extends JInternalFrame {
         txtCustomerContact2 = new javax.swing.JTextField();
         cmbReason = new javax.swing.JComboBox<>();
         cmbBranch = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        cmbCompany = new javax.swing.JComboBox<>();
 
         paymentOptions.setResizable(false);
 
@@ -225,6 +234,19 @@ public class AddInquiry extends JInternalFrame {
         txtCustomerContact2.setEnabled(false);
 
         cmbBranch.setEditable(true);
+        cmbBranch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbBranchActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Company");
+
+        cmbCompany.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCompanyActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,43 +262,49 @@ public class AddInquiry extends JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(55, 55, 55)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel5))
+                                .addGap(40, 40, 40)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel7)
-                                            .addComponent(jLabel8))
-                                        .addGap(38, 38, 38)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtRemark, javax.swing.GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE)
-                                            .addComponent(cmbReason, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(txtWayBill, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(btnSearch))
+                                    .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtCustomerContact1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtCustomerContact2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(txtBranchContact, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(197, 197, 197)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(1001, 1001, 1001)
-                                            .addComponent(btnAddInquiry))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel3)
-                                                .addComponent(jLabel4)
-                                                .addComponent(jLabel2))
-                                            .addGap(40, 40, 40)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                    .addComponent(txtWayBill, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(33, 33, 33)
-                                                    .addComponent(btnSearch))
-                                                .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                    .addComponent(txtCustomerContact1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(txtCustomerContact2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(cmbBranch, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txtBranchContact, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)))))))
+                                        .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cmbBranch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(69, 69, 69)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))))
-                        .addGap(0, 250, Short.MAX_VALUE)))
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addGap(38, 38, 38)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtRemark)
+                                    .addComponent(cmbReason, javax.swing.GroupLayout.PREFERRED_SIZE, 954, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(987, 987, 987)
+                                    .addComponent(btnAddInquiry))
+                                .addComponent(jLabel6)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -299,13 +327,17 @@ public class AddInquiry extends JInternalFrame {
                     .addComponent(txtCustomerContact2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cmbCompany, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(cmbBranch, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBranchContact, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(cmbReason, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -313,9 +345,9 @@ public class AddInquiry extends JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRemark, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addGap(41, 41, 41)
+                .addGap(72, 72, 72)
                 .addComponent(btnAddInquiry, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(261, Short.MAX_VALUE))
+                .addContainerGap(206, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -350,6 +382,7 @@ public class AddInquiry extends JInternalFrame {
         inquiryModel.setCustomerName(txtCustomerName.getText());
         inquiryModel.setCustomerPhone1(txtCustomerContact1.getText());
         inquiryModel.setCustomerPhone2(txtCustomerContact2.getText());
+        inquiryModel.setCompany(cmbCompany.getSelectedItem().toString());
         inquiryModel.setBranch(cmbBranch.getSelectedItem().toString());
         inquiryModel.setBranchContact(txtBranchContact.getText());
         inquiryModel.setReason(cmbReason.getSelectedItem().toString());
@@ -365,6 +398,7 @@ public class AddInquiry extends JInternalFrame {
         cmbReason.setSelectedIndex(0);
         txtRemark.setText("");
         cmbBranch.setSelectedIndex(0);
+        cmbCompany.setSelectedIndex(0);
     }//GEN-LAST:event_btnAddInquiryActionPerformed
 
     private void loadReasonsToComboBox() {
@@ -376,16 +410,6 @@ public class AddInquiry extends JInternalFrame {
         }
     }
     
-    private final List<String> branchList = Arrays.asList(
-        "Akurana", "Ambalangoda", "Ampara", "Anuradhapura", "Avissawella", "Badulla", "Balangoda", "Bandarawela",
-        "Beliatta", "Bibila", "Boralesgamuwa", "Chilaw", "City Office", "Dambulla", "Embilipitiya", "Galgamuwa",
-        "Galle", "Gampola", "Hambantota", "Hatton", "Homagama", "Horana", "Ja Ela", "Jaffna", "Kahawatta", "Kalmunai",
-        "Kalutara", "Kandy", "Kaduwela", "Kegalle", "Kilinochchi", "Kiribathgoda", "Kuliyapitiya", "Kurunegala",
-        "Mawanella", "Mahiyanganaya", "Mannar", "Matale", "Matara", "Mirigama", "Monaragala", "Moratuwa", "Narahenpita",
-        "Negombo", "Nuwaraeliya", "Peradeniya", "Pettah", "Polonnaruwa", "Puttalam", "Ratnapura", "Thambuttegama",
-        "Trincomalee", "Vavuniya", "Welimada", "Yakkala"
-    );
-
     private void enableBranchAutocomplete(JComboBox<String> cmbBranch) {
         cmbBranch.setEditable(true);
 
@@ -424,6 +448,57 @@ public class AddInquiry extends JInternalFrame {
             searchCustomerID = customerDataByInquirySearch.getCustomerId();
         }
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    public void loadDataCmbCompany() {
+        cmbCompany.removeAllItems();
+        cmbCompany.addItem("Select Company");
+        List<CourierCompanyModel> companyModels = courierCompanyRepositoryImpl.getAllCourierCompanies();
+        for (CourierCompanyModel companyModel : companyModels) {
+            cmbCompany.addItem(companyModel.getCompanyName());
+        }
+    }
+    
+    List<String> branchList = new ArrayList<>();
+    
+    private void cmbCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCompanyActionPerformed
+        String selectedCompany = cmbCompany.getSelectedItem().toString();
+        if (selectedCompany.equals("Select Company")) {
+            cmbBranch.setEnabled(false);  // Disable cmbBranch
+        } else {
+            cmbBranch.setEnabled(true);   // Enable cmbBranch
+            
+            //Load data for branch by selected company
+            cmbBranch.removeAllItems();
+            cmbBranch.addItem("Select Branch");
+            try {
+                branchList = courierBranchRepositoryImpl.getBranchByCompanyName(selectedCompany);
+                enableBranchAutocomplete(cmbBranch);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AddInquiry.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (String branch : branchList) {
+                cmbBranch.addItem(branch);
+            }
+        }
+    }//GEN-LAST:event_cmbCompanyActionPerformed
+
+    private void cmbBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbBranchActionPerformed
+        try{
+            String selectedBranch = cmbBranch.getSelectedItem().toString();
+            String selectedCompany = cmbCompany.getSelectedItem().toString();
+
+            if (!selectedBranch.equals("Select Branch")) {
+                try {
+                    String contact = courierBranchRepositoryImpl.getBranchContactByNameAndCompany(selectedBranch, selectedCompany);
+                    txtBranchContact.setText(contact);
+                } catch (Exception ex) {
+                    Logger.getLogger(AddInquiry.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                txtBranchContact.setText("");
+            }
+        }catch(NullPointerException e){}
+    }//GEN-LAST:event_cmbBranchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -473,6 +548,7 @@ public class AddInquiry extends JInternalFrame {
     private javax.swing.JButton btnPaid;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbBranch;
+    private javax.swing.JComboBox<String> cmbCompany;
     private javax.swing.JComboBox<String> cmbReason;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -482,6 +558,7 @@ public class AddInquiry extends JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JDialog paymentOptions;

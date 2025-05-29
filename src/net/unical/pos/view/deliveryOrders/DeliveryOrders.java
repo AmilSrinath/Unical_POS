@@ -282,6 +282,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         customerNumberTxt = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         PaidAmountTxt = new javax.swing.JTextField();
+        radioExchange = new java.awt.Checkbox();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
@@ -478,7 +479,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         check_customer.getContentPane().setLayout(check_customerLayout);
         check_customerLayout.setHorizontalGroup(
             check_customerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         check_customerLayout.setVerticalGroup(
             check_customerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -959,6 +960,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         PaidAmountTxt.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         PaidAmountTxt.setForeground(new java.awt.Color(153, 0, 0));
 
+        radioExchange.setLabel("Exchange");
+        radioExchange.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                radioExchangeMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -979,20 +987,24 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(PaidAmountTxt))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(84, 84, 84)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                         .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(saveOrderBtn))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jLabel15)
                                         .addGap(5, 5, 5)
-                                        .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1093,6 +1105,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(PaidAmountTxt)
                             .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(7, 7, 7)
+                .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1743,11 +1757,18 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Integer orderId=null;
         
         Boolean free_shiping_check=fr_de_chb.getState();
+        
         int free_ship=0;
         if(free_shiping_check){
             free_ship=1;
         }
-        System.out.println("free_ship : "+free_ship);
+        
+        int isExch = 0;
+        Boolean isExchange = radioExchange.getState();
+        if (isExchange) {
+            isExch = 1;
+        }
+        
         try {
                 if(phoneOneCmb.getSelectedItem()!=null){
                     DeliveryOrder deliveryOrderDto=new DeliveryOrder();
@@ -1772,6 +1793,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
                     deliveryOrderDto.setEditedDate(new java.sql.Date(System.currentTimeMillis()));
                     deliveryOrderDto.setUserID(1);
+                    deliveryOrderDto.setIsExchange(isExch);
 
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -2486,6 +2508,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnActiveActionPerformed
 
+    private void radioExchangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExchangeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioExchangeMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -2613,6 +2639,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> phoneTwoCmb;
     private javax.swing.JButton printAllOrdersBtn;
     private javax.swing.JTextField qtyTxt;
+    private java.awt.Checkbox radioExchange;
     private javax.swing.JTextArea remarkTxt;
     private javax.swing.JButton removeBtn;
     private javax.swing.JLabel returnsTotTxt;

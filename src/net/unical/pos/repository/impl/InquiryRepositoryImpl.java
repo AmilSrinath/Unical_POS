@@ -51,27 +51,29 @@ public class InquiryRepositoryImpl {
     public void saveInquiry(InquiryModel inquiryModel) {
         String insertQuery = "INSERT INTO unical_pos.pos_inquiry_tb "
                 + "(way_bill, customer_id, customer_name, customer_phone_1, customer_phone_2, "
-                + "branch, branch_contact, reson, remark, status, created_date, edited_date, user_id) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "company, branch, branch_contact, reson, remark, status, created_date, edited_date, user_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (
-                Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+                Connection conn = DBCon.getDatabaseConnection(); 
+                PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
             stmt.setString(1, inquiryModel.getWayBill());
             stmt.setInt(2, Integer.parseInt(inquiryModel.getCustomerId()));
             stmt.setString(3, inquiryModel.getCustomerName());
             stmt.setString(4, inquiryModel.getCustomerPhone1());
             stmt.setString(5, inquiryModel.getCustomerPhone2());
-            stmt.setString(6, inquiryModel.getBranch());
-            stmt.setString(7, inquiryModel.getBranchContact());
-            stmt.setString(8, inquiryModel.getReason());
-            stmt.setString(9, inquiryModel.getRemark());
-            stmt.setInt(10, 0);
+            stmt.setString(6, inquiryModel.getCompany());
+            stmt.setString(7, inquiryModel.getBranch());
+            stmt.setString(8, inquiryModel.getBranchContact());
+            stmt.setString(9, inquiryModel.getReason());
+            stmt.setString(10, inquiryModel.getRemark());
+            stmt.setInt(11, 0);
 
             java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
-            stmt.setDate(11, currentDate); // created_date
-            stmt.setDate(12, currentDate); // edited_date
+            stmt.setDate(12, currentDate); // created_date
+            stmt.setDate(13, currentDate); // edited_date
 
-            stmt.setInt(13, 1); // user_id
+            stmt.setInt(14, 1); // user_id
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Inquiry saved successfully.");
@@ -136,6 +138,7 @@ public class InquiryRepositoryImpl {
                 model.setCustomerName(rs.getString("customer_name"));
                 model.setCustomerPhone1(rs.getString("customer_phone_1"));
                 model.setCustomerPhone2(rs.getString("customer_phone_2"));
+                model.setCompany(rs.getString("company"));
                 model.setBranch(rs.getString("branch"));
                 model.setBranchContact(rs.getString("branch_contact"));
                 model.setReason(rs.getString("reson"));
@@ -174,6 +177,7 @@ public class InquiryRepositoryImpl {
                 model.setCustomerName(rs.getString("customer_name"));
                 model.setCustomerPhone1(rs.getString("customer_phone_1"));
                 model.setCustomerPhone2(rs.getString("customer_phone_2"));
+                model.setCompany(rs.getString("company"));
                 model.setBranch(rs.getString("branch"));
                 model.setBranchContact(rs.getString("branch_contact"));
                 model.setReason(rs.getString("reson"));

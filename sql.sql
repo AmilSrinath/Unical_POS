@@ -1,3 +1,37 @@
+
+CREATE DATABASE unical_pos_test;
+
+use unical_pos_test;
+
+create table if not exists pos_courier_company_tb
+(
+    company_id      int auto_increment
+        primary key,
+    company_name    varchar(100) null,
+    company_contact varchar(15)  null,
+    address         varchar(200) null,
+    email           varchar(100) null,
+    created_date    datetime     null,
+    edited_date     datetime     null,
+    status          int          null,
+    user_id         int          null
+);
+
+create table if not exists pos_courier_branch_tb
+(
+    branch_id      int auto_increment
+        primary key,
+    branch_name    varchar(100) null,
+    branch_contact varchar(50)  null,
+    created_date   datetime     null,
+    edited_date    datetime     null,
+    company_id     int          null,
+    status         int          null,
+    user_id        int          null,
+    constraint pos_courier_branch_tb_pos_courier_company_tb_company_id_fk
+        foreign key (company_id) references pos_courier_company_tb (company_id)
+);
+
 create table if not exists pos_emp_employee_designation_tb
 (
     designation_id int auto_increment
@@ -170,6 +204,19 @@ create index main_table_location_id
 create index user_id
     on pos_con_sub_table_location_tb (user_id);
 
+create table if not exists pos_config_reson_tb
+(
+    reson_id     int auto_increment
+        primary key,
+    reson        text     not null,
+    status       int      null,
+    created_date datetime null,
+    edited_date  datetime null,
+    user_id      int      null,
+    constraint pos_config_reson_tb_pos_main_user_tb_user_id_fk
+        foreign key (user_id) references pos_main_user_tb (user_id)
+);
+
 create table if not exists pos_inv_stock_category_tb
 (
     stock_category_id int auto_increment
@@ -283,10 +330,12 @@ create table if not exists pos_inquiry_tb
 (
     inquiry_id       int auto_increment
         primary key,
-    way_bill         varchar(20)  null,
+    way_bill         varchar(20)  not null,
     customer_id      int          not null,
     customer_name    varchar(100) null,
-    customer_contact varchar(50)  null,
+    customer_phone_1 varchar(15)  null,
+    customer_phone_2 varchar(15)  not null,
+    company          varchar(50)  null,
     branch           varchar(100) null,
     branch_contact   varchar(50)  null,
     reson            varchar(200) null,
@@ -295,6 +344,8 @@ create table if not exists pos_inquiry_tb
     created_date     date         null,
     edited_date      date         null,
     user_id          int          null,
+    constraint way_bill
+        unique (way_bill),
     constraint pos_inquiry_tb_pos_main_customer_tb_customer_id_fk
         foreign key (customer_id) references pos_main_customer_tb (customer_id),
     constraint pos_inquiry_tb_pos_main_user_tb_user_id_fk
@@ -413,6 +464,7 @@ create table if not exists pos_main_delivery_order_tb
     is_return        int       default 0                 null,
     user_id          int                                 null,
     created_date     timestamp default CURRENT_TIMESTAMP null,
+    is_exchange      int                                 null,
     constraint pos_main_delicery_order_tb_ibfk_1
         foreign key (user_id) references pos_main_user_tb (user_id),
     constraint pos_main_delicery_order_tb_ibfk_2
@@ -674,3 +726,16 @@ create index main_item_category_id
 create index user_id
     on pos_sub_item_category_tb (user_id);
 
+
+
+INSERT INTO pos_status_types (status_type) VALUES ('Active');
+INSERT INTO pos_status_types (status_type) VALUES ('Pending');
+INSERT INTO pos_status_types (status_type) VALUES ('Wrapping');
+INSERT INTO pos_status_types (status_type) VALUES ('Out of Delivery');
+INSERT INTO pos_status_types (status_type) VALUES ('Delivered');
+INSERT INTO pos_status_types (status_type) VALUES ('Return');
+INSERT INTO pos_status_types (status_type) VALUES ('Cancel');
+
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 1, 1);
+INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Super Admin', 'Super Admin', 'System Maintains', 'S', 1, 'S1', '', '0', '', '', 1, 1, 1);
+INSERT INTO pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 1, 'Super Admin', '1234', 1, 1, '');

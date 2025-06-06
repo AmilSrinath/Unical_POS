@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.EmployeeManagementModel;
 import net.unical.pos.repository.custom.EmployeeManagementRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -35,7 +36,7 @@ public class EmployeeManagementRepositoryImpl implements EmployeeManagementRepos
                 entity.getEmail(),
                 entity.getAddress(),
                 entity.getStatus(),
-                entity.getUserId(),
+                LogInForm.userID,
                 entity.getVisible())>0;
     }
 

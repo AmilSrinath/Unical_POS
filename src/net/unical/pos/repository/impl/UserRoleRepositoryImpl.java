@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainUserRole;
 import net.unical.pos.repository.custom.UserRoleRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -24,7 +25,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepositoryCustom {
                 0,
                 posMainUserRole.getRole(),
                 posMainUserRole.getStatus(),
-                posMainUserRole.getUserId(),
+                LogInForm.userID,
                 1) > 0;
 
     }

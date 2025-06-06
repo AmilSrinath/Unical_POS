@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainPaymentTypes;
 import net.unical.pos.repository.custom.PaymentTypesRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -38,7 +39,7 @@ public class PaymentTypesRepositoryImpl implements PaymentTypesRepositoryCustom{
         return Statement.executeUpdate("Insert into pos_main_payment_types_tb values(?,?,?,?,?)",
                 mainPaymentTypes.getPaymentTypeId(),
                 mainPaymentTypes.getName(),
-                mainPaymentTypes.getUserId(),
+                LogInForm.userID,
                 mainPaymentTypes.getStatus(),
                 mainPaymentTypes.getVisible()) > 0;
     }

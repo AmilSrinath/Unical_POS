@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosInvGrn;
 import net.unical.pos.repository.custom.GrnRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -28,7 +29,7 @@ public class GrnRepositoryImpl implements GrnRepositoryCustom{
                 entity.getTotalDiscount(),
                 entity.getCreatedDate(),
                 entity.getStatus(),
-                entity.getUserId(),
+                LogInForm.userID,
                 entity.getVisible());
         
         Integer grnId=0;

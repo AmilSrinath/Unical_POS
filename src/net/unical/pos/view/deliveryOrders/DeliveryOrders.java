@@ -105,7 +105,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     DefaultTableModel itemListTableModel=null;
     DefaultTableModel orderListTableModel=null;
     int default_paymentType=0;
-    String orderCode=null;
+    String orderCode = null;
+    String delivery_id = null;
     Integer customer_id=null;
     boolean customer_exist=false;
     
@@ -160,16 +161,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         //Load All Orders to orders Array
         orders = mainOrderRepositoryImpl.getAllOrders();
         
-        orderIDCmb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedOrderId = (String) orderIDCmb.getSelectedItem();
-                if (selectedOrderId != null) {
-                    filterOrdersByOrderId(selectedOrderId);
-                }
-            }
-        });
-        
         paymentTypeCombo.addActionListener(new ActionListener() {
             
             private String previousPaymentType = null;
@@ -194,6 +185,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         });
         
         PaidAmountTxt.setText("0");
+        
+        orderIDCmb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new javax.swing.Timer(10, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        int selectedOrderId = Integer.parseInt(orderIDCmb.getSelectedItem().toString());
+                        filterOrdersByOrderId(selectedOrderId);
+                        ((javax.swing.Timer) evt.getSource()).stop(); // Stop timer after running once
+                    }
+                }).start();
+            }
+        });
+
     }
 
     /**
@@ -461,9 +467,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(AddressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -1551,11 +1558,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     
     
     private boolean validateInputs() {
-        if (orderCodeTxt.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Order code cannot be empty", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            orderCodeTxt.requestFocus();
-            return false;
-        }
+//        if (orderCodeTxt.getText().trim().isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Order code cannot be empty", "Validation Error", JOptionPane.ERROR_MESSAGE);
+//            orderCodeTxt.requestFocus();
+//            return false;
+//        }
 
         if (customerNameTxt.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Customer name cannot be empty", "Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -1611,21 +1618,22 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             return;
         }
         
-        boolean orderExists = false;
+        if (delivery_id == null) {
+            saveOrder();
+            return;
+        }
+        
         for (OrderModel om : orders) {
-            if (om.getBillNo().equals(orderCodeTxt.getText())) {
-                updateOrder(om.getOrderId());
-                orderExists = true;
+            if (om.getDeliveryOrderId() == Integer.parseInt(delivery_id)) {
+                System.out.println("om.getOrderId :"+ om.getOrderId());
+                updateOrder(om.getOrderId(), delivery_id); //orderId --> main order tb
+                delivery_id = null;
                 break;
             }
         }
-
-        if (!orderExists) {
-            saveOrder();
-        }
     }//GEN-LAST:event_saveOrderBtnActionPerformed
 
-    private void updateOrder(Integer orderId) {
+    private void updateOrder(Integer orderId, String delivery_id) { //orderId --> main order tb
         ArrayList<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
 
         for (int i = 0; i < itemListTable.getRowCount(); i++) {
@@ -1675,13 +1683,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                 deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
                 deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
+                deliveryOrderDto.setOrderId(orderId);
 
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                 deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
 
                 // Assuming there is a method in the repository to update the order
-                boolean isUpdated = deliveryOrderRepositoryImpl.update(deliveryOrderDto, orderId);
+                boolean isUpdated = deliveryOrderRepositoryImpl.update(deliveryOrderDto, orderId, delivery_id);
                 if (isUpdated) {
                     JOptionPane.showMessageDialog(this, "Order updated successfully");
 
@@ -1710,6 +1719,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     totAmountLbl.setText("0.00");
                     customerNumberTxt.setText("");
                     remarkTxt.setText("");
+                    orderCodeTxt.setText("");
                 } else {
                     JOptionPane.showMessageDialog(this, "Update failed");
                 }
@@ -1799,6 +1809,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                     deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
                     orderId=deliveryOrderRepositoryImpl.save(deliveryOrderDto);
+                    
+                    System.out.println("paymentTypeIds.get(index) : "+paymentTypeIds.get(index));
                 }else{
                     JOptionPane.showMessageDialog(this, "Add Phone Number");
                 }
@@ -1827,6 +1839,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 addressTxt.setText("");
                 customerNumberTxt.setText("");
                 remarkTxt.setText("");
+                orderCodeTxt.setText("");
                 
             }else{
                 JOptionPane.showMessageDialog(this, "Save fail..");
@@ -1842,6 +1855,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
+        delivery_id = null;
     }
     
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
@@ -2059,7 +2073,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='"+number+"' OR `phone_two`='"+number+"'");
                 for (CustomerDto customerDto : customerDtos) {
                     phoneOneCmb.setSelectedItem("0"+customerDto.getPhoneOne());
-                    phoneTwoCmb.setSelectedItem("0"+customerDto.getPhoneTwo());
+                    
+                    if (customerDto.getPhoneTwo() == 0) {
+                        phoneTwoCmb.setSelectedItem("");
+                    }else {
+                        phoneTwoCmb.setSelectedItem("0"+customerDto.getPhoneTwo());
+                    }
                     customerNameTxt.setText(customerDto.getCustomerName());
                     addressTxt.setText(customerDto.getAddress());
                     customer_id=customerDto.getCustomerId();
@@ -2090,18 +2109,20 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_fr_de_chbMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        check_customer.setLocationRelativeTo(null);
-        check_customer.setVisible(true);
-        check_customer.repaint();
+        if (phoneOneCmb.getSelectedItem() != null) {
+            check_customer.setLocationRelativeTo(null);
+            check_customer.setVisible(true);
+            check_customer.repaint();
 
-        Phone1Label.setText((String) phoneOneCmb.getSelectedItem());
-        Phone2Label.setText((String) phoneTwoCmb.getSelectedItem());
-        NameLabel.setText(customerNameTxt.getText());
-        AddressLabel.setText(addressTxt.getText());
+            Phone1Label.setText((String) phoneOneCmb.getSelectedItem());
+            Phone2Label.setText((String) phoneTwoCmb.getSelectedItem());
+            NameLabel.setText(customerNameTxt.getText());
+            AddressLabel.setText(addressTxt.getText());
 
-        System.out.println("Customer ID : " + customer_id);
-
-        setupTableModel(customer_id);
+            setupTableModel(customer_id);
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select mobile number", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void setupTableModel(Integer customer_id) {
@@ -2110,25 +2131,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         ArrayList<OrderDetails[]> orderDetailsList = mainOrderDetailRepositoryImpl.getOrderDetailsByCustomerId(customer_id);
 
-        Set<String> uniqueOrderCodes = new HashSet<>();
+        Set<Integer> uniqueOrderCodes = new HashSet<>();
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
                 dtm.addRow(orderDetails.toArray());
-                uniqueOrderCodes.add(orderDetails.getOrderCode());
+                uniqueOrderCodes.add(orderDetails.getOrder_id());
             }
         }
+        customerOrderDetailsTbl.removeAll();
         customerOrderDetailsTbl.setModel(dtm);
 
         orderIDCmb.removeAllItems();
-        for (String orderCode : uniqueOrderCodes) {
-            orderIDCmb.addItem(orderCode);
+        for (Integer orderCode : uniqueOrderCodes) {
+            orderIDCmb.addItem(orderCode.toString());
         }
     }
 
     
     
-    private void filterOrdersByOrderId(String orderCode) {
+    private void filterOrdersByOrderId(int orderCode) {
         String[] columnNames = {"Item Name", "Quantity", "Per Item Price", "Total Item Price", "Delivery Fee", "Total Order Price","Status"};
         DefaultTableModel dtm = new DefaultTableModel(columnNames, 0);
 
@@ -2138,14 +2160,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
-                if (orderDetails.getOrderCode().equals(orderCode)) {
+                if (orderDetails.getOrder_id() == orderCode) {
                     dtm.addRow(orderDetails.toArray());
-                    netTotal += orderDetails.getDelivery_fee();
+                    netTotal = orderDetails.getTotal_order_price();
                     lblDate.setText(orderDetails.getDate());
                 }
             }
         }
 
+        customerOrderDetailsTbl.removeAll();
         customerOrderDetailsTbl.setModel(dtm);
         netTotalLbl.setText(String.format("%.2f", netTotal));
     }
@@ -2226,22 +2249,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     default:
                         throw new AssertionError();
                 }
-                
-                String orderCodeStr = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
-                
-                if (!orderCodeStr.isEmpty()) {
+               
+                String deliveryID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                if (!deliveryID.isEmpty()) {
                     try {
-                        orderCode = orderCodeStr;
+                        delivery_id = deliveryID;
                         order_options.setLocationRelativeTo(null);
                         order_options.setSize(935, 115);
                         order_options.setVisible(true);
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid order code: " + orderCodeStr);
+                        System.out.println("Invalid delivery ID: " + deliveryID);
                         JOptionPane.showMessageDialog(this, "Invalid order code");
                     }
                 } else {
-                    System.out.println("Order code is empty");
-                    JOptionPane.showMessageDialog(this, "Order code is empty");
+                    System.out.println("Delivery ID is empty");
+                    JOptionPane.showMessageDialog(this, "Delivery ID is empty");
                 }
                 
             } else {
@@ -2251,9 +2273,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_deliveryOrdersTableMousePressed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        if(orderCode!=null){
+        if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 6);
+                deliveryOrderRepositoryImpl.update(delivery_id, 6);
                 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -2275,9 +2297,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
-        if (orderCode != null) {
+        if (delivery_id != null) {
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 5);
+                deliveryOrderRepositoryImpl.update(delivery_id, 5);
 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -2298,9 +2320,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnDeliverdActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if(orderCode!=null){
+        if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 7);
+                deliveryOrderRepositoryImpl.update(delivery_id, 7);
                 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -2344,9 +2366,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         int selectedRow = deliveryOrdersTable.getSelectedRow();
 
         if (selectedRow != -1) {
+            String deliveryID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
             String orderCodeStr = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
-            if (orderCodeStr != null && !orderCodeStr.isEmpty()) {
+            if (deliveryID != null && !deliveryID.isEmpty()) {
                 orderCode = orderCodeStr;
+                System.out.println("orderCode : "+orderCode);
+                System.out.println("deliveryID : "+deliveryID);
+                delivery_id = deliveryID;
+                
                 try {
                     String phoneOne = deliveryOrdersTable.getValueAt(selectedRow, 3) != null ? deliveryOrdersTable.getValueAt(selectedRow, 3).toString() : "";
                     String phoneTwo = deliveryOrdersTable.getValueAt(selectedRow, 4) != null ? deliveryOrdersTable.getValueAt(selectedRow, 4).toString() : "";
@@ -2440,9 +2467,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_orderIDCmbActionPerformed
 
     private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
-        if(orderCode!=null){
+        if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 4);
+                deliveryOrderRepositoryImpl.update(delivery_id, 4);
                 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -2463,9 +2490,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnOutForDeliveryActionPerformed
 
     private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
-        if(orderCode!=null){
+        if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 3);
+                deliveryOrderRepositoryImpl.update(delivery_id, 3);
                 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -2486,9 +2513,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnWrappingActionPerformed
 
     private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
-        if(orderCode!=null){
+        if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 1);
+                deliveryOrderRepositoryImpl.update(delivery_id, 1);
                 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());

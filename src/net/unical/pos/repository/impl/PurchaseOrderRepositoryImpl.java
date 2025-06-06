@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PurchaseOrderModel;
 import net.unical.pos.repository.custom.PurchaseOrderRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -32,7 +33,7 @@ public class PurchaseOrderRepositoryImpl implements PurchaseOrderRepositoryCusto
                 purchaseOrderModel.getTotalOrderPrice(),
                 purchaseOrderModel.getPaymentType(),
                 purchaseOrderModel.getStatus(),
-                purchaseOrderModel.getUserId(),
+                LogInForm.userID,
                 purchaseOrderModel.getVisible());
                
                Integer poId=0;

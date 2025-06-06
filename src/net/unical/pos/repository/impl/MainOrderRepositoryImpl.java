@@ -22,6 +22,7 @@ import net.unical.pos.dto.OrderDto;
 import net.unical.pos.model.OrderModel;
 import net.unical.pos.model.PosMainOrder;
 import net.unical.pos.repository.custom.MainOrderRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -116,7 +117,7 @@ public class MainOrderRepositoryImpl implements MainOrderRepositoryCustom {
             ps.setInt(14, mainOrderDto.getOrderDto().getUserId());
             ps.setInt(15, mainOrderDto.getOrderDto().getEditedBy());
             ps.setInt(16, mainOrderDto.getOrderDto().getStatus());
-            ps.setInt(17, mainOrderDto.getOrderDto().getUserId());
+            ps.setInt(17, LogInForm.userID);
             
             ps.executeUpdate();
             rst=ps.getGeneratedKeys();
@@ -141,7 +142,7 @@ public class MainOrderRepositoryImpl implements MainOrderRepositoryCustom {
                 ps.setDouble(10, dto.getTotalItemPrice());
                 ps.setString(11, dto.getRemark());
                 ps.setInt(12, dto.getStatus());
-                ps.setInt(13, dto.getUserId());
+                ps.setInt(13, LogInForm.userID);
                 ps.executeUpdate();
                 
                 

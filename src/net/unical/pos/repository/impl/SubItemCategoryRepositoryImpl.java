@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.SubItemCategoryModel;
 import net.unical.pos.repository.custom.SubItemCategoryRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -29,7 +30,7 @@ public class SubItemCategoryRepositoryImpl implements SubItemCategoryRepositoryC
                 entity.getSubCategoryName(),
                 entity.getImagePath(),
                 entity.getStatus(),
-                entity.getUserId(),
+                LogInForm.userID,
                 entity.getVisible())>0;
     }
 

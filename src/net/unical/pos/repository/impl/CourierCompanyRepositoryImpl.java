@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CourierCompanyModel;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -21,18 +22,20 @@ import net.unical.pos.model.CourierCompanyModel;
 public class CourierCompanyRepositoryImpl {
 
     public void saveCourierCompany(CourierCompanyModel courierCompanyModel) {
-        String sql = "INSERT INTO pos_courier_company_tb (company_name, company_contact, created_date, edited_date, status, user_id) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO pos_courier_company_tb (company_name, company_contact, address, email, created_date, edited_date, status, user_id) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBCon.getDatabaseConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, courierCompanyModel.getCompanyName());
             stmt.setString(2, courierCompanyModel.getCompanyContact());
-            stmt.setTimestamp(3, courierCompanyModel.getCreateDate());
-            stmt.setTimestamp(4, courierCompanyModel.getEditedDate());
-            stmt.setInt(5, courierCompanyModel.getStatus());
-            stmt.setInt(6, courierCompanyModel.getUserId());
+            stmt.setString(3, courierCompanyModel.getAddress());
+            stmt.setString(4, courierCompanyModel.getEmail());
+            stmt.setTimestamp(5, courierCompanyModel.getCreateDate());
+            stmt.setTimestamp(6, courierCompanyModel.getEditedDate());
+            stmt.setInt(7, courierCompanyModel.getStatus());
+            stmt.setInt(8, LogInForm.userID);
 
             stmt.executeUpdate();
 
@@ -41,14 +44,16 @@ public class CourierCompanyRepositoryImpl {
         }
     }
 
-    public void updateCourierCompany(Integer selectedResonId, String companyNameText, String companyContactText) {
-        String sql = "UPDATE pos_courier_company_tb SET company_name = ?, company_contact = ?, edited_date = ? WHERE company_id = ?";
+    public void updateCourierCompany(Integer selectedResonId, String companyNameText, String companyContactText, String address, String email) {
+        String sql = "UPDATE pos_courier_company_tb SET company_name = ?, company_contact = ?, address = ?, email = ?, edited_date = ? WHERE company_id = ?";
 
         try (Connection conn = DBCon.getDatabaseConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, companyNameText);
             stmt.setString(2, companyContactText);
+            stmt.setString(3, address);
+            stmt.setString(4, email);
             stmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
             stmt.setInt(4, selectedResonId);
 
@@ -72,6 +77,8 @@ public class CourierCompanyRepositoryImpl {
                 model.setCompanyId(rs.getInt("company_id"));
                 model.setCompanyName(rs.getString("company_name"));
                 model.setCompanyContact(rs.getString("company_contact"));
+                model.setAddress(rs.getString("address"));
+                model.setEmail(rs.getString("email"));
                 model.setCreateDate(rs.getTimestamp("created_date"));
                 model.setEditedDate(rs.getTimestamp("edited_date"));
                 model.setStatus(rs.getInt("status"));

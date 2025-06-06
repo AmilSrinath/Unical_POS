@@ -120,9 +120,18 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
                "FROM pos_main_order_tb o " +
                "JOIN pos_main_order_details_tb d ON o.order_id = d.order_id " +
                "JOIN pos_main_item_tb i ON d.item_id = i.item_id " +
-               "LEFT JOIN pos_main_delivery_order_tb dly ON o.bill_no = dly.order_code " +
-               "WHERE o.customer_id = ?";
+               "LEFT JOIN pos_main_delivery_order_tb dly ON o.order_id = dly.delivery_id " +
+               "WHERE o.customer_id = ? AND d.status = 1";
 
+            /*
+            
+            o pos_main_order_tb
+            d pos_main_order_details_tb
+            i pos_main_item_tb
+            dly pos_main_delivery_order_tb
+            
+            */
+            
 
             ps = conn.prepareStatement(query);
             ps.setInt(1, customerId);

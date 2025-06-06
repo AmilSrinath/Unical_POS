@@ -688,7 +688,7 @@ public class OrderFilter extends JInternalFrame {
                 }
                 
                 if (!status.equals("Delivered")) {
-                    orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+                    orderCode = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     orderOptions.setLocationRelativeTo(null);
                     orderOptions.setSize(787, 110);
                     orderOptions.setVisible(true);
@@ -916,7 +916,7 @@ public class OrderFilter extends JInternalFrame {
             row.createCell(11).setCellValue(0);
             row.createCell(12).setCellValue(0);
             
-            deliveryOrderRepositoryImpl.update(order.getOrderCode(), 4);
+            deliveryOrderRepositoryImpl.update(order.getDeliveryId(), 4);
         }
 
         // Auto-size columns

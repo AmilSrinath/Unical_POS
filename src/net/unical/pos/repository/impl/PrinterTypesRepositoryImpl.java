@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainPrinterTypes;
 import net.unical.pos.repository.custom.PrinterTypesRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -38,7 +39,7 @@ public class PrinterTypesRepositoryImpl implements PrinterTypesRepositoryCustom{
         return Statement.executeUpdate("Insert into pos_main_printer_type_tb values(?,?,?,?,?)",
                 mainPrinterTypes.getPrinterTypeId(),
                 mainPrinterTypes.getName(),
-                mainPrinterTypes.getUserd(),
+                LogInForm.userID,
                 mainPrinterTypes.getStatus(),
                 mainPrinterTypes.getVisible()) > 0;
     }

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import net.unical.pos.model.MainTableLocation;
 import net.unical.pos.repository.custom.MainTableLocationRepositoryCustom;
 import net.unical.pos.dbConnection.Statement;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -26,7 +27,7 @@ public class MainTableLocationRepositoryImpl implements MainTableLocationReposit
                     mainTableLocation.getLocationName(),
                     mainTableLocation.getImagePath(),
                     mainTableLocation.getStatus(),
-                    mainTableLocation.getUserId(),
+                    LogInForm.userID,
                     mainTableLocation.getVisible()) > 0;
         } catch (Exception ex) {
             Logger.getLogger(MainTableLocationRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);

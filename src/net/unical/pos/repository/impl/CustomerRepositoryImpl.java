@@ -20,6 +20,7 @@ import net.unical.pos.model.CustomerModel;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.TestModel;
 import net.unical.pos.repository.custom.CustomerRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -39,7 +40,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                 customerModel.getIsLoyalty(),
                 customerModel.getLoyaltyPoints(),
                 customerModel.getStatus(),
-                customerModel.getUserId(),
+                LogInForm.userID,
                 customerModel.getVisible()) > 0;
     }
 

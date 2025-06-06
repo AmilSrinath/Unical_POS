@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.MainItemCategoryModel;
 import net.unical.pos.repository.custom.MainItemCategoryRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -28,7 +29,7 @@ public class MainItemCategoryRepositoryImpl implements MainItemCategoryRepositor
                 entity.getCategoryName(),
                 entity.getImagePath(),
                 entity.getStatus(),
-                entity.getUserId(),
+                LogInForm.userID,
                 entity.getVisible(),
                 entity.getCreatedDate(),
                 entity.getEditedBy(),

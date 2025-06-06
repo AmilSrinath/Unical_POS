@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.SubTableLocation;
 import net.unical.pos.repository.custom.SubTableLocationRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -29,7 +30,7 @@ public class SubTableLocationRepositoryImpl implements SubTableLocationRepositor
                     subTableLocation.getSubName(),
                     subTableLocation.getImagePath(),
                     subTableLocation.getStatus(),
-                    subTableLocation.getUserId(),
+                    LogInForm.userID,
                     subTableLocation.getVisible()) > 0;
         } catch (Exception ex) {
             Logger.getLogger(SubTableLocationRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);

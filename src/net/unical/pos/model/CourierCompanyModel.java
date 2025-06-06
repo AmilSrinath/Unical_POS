@@ -15,6 +15,8 @@ public class CourierCompanyModel {
     private int companyId;
     private String companyName;
     private String companyContact;
+    private String address;
+    private String email;
     private Timestamp createDate;
     private Timestamp editedDate;
     private int status;
@@ -22,10 +24,12 @@ public class CourierCompanyModel {
 
     public CourierCompanyModel() {}
 
-    public CourierCompanyModel(int companyId, String companyName, String companyContact, Timestamp createDate, Timestamp editedDate, int status, int userId) {
+    public CourierCompanyModel(int companyId, String companyName, String companyContact, String address, String email, Timestamp createDate, Timestamp editedDate, int status, int userId) {
         this.companyId = companyId;
         this.companyName = companyName;
         this.companyContact = companyContact;
+        this.address = address;
+        this.email = email;
         this.createDate = createDate;
         this.editedDate = editedDate;
         this.status = status;
@@ -54,6 +58,22 @@ public class CourierCompanyModel {
 
     public void setCompanyContact(String companyContact) {
         this.companyContact = companyContact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Timestamp getCreateDate() {
@@ -87,6 +107,7 @@ public class CourierCompanyModel {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     
     
 }

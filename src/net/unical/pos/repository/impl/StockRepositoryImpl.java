@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosInvStock;
 import net.unical.pos.repository.custom.StockRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -34,7 +35,7 @@ public class StockRepositoryImpl implements StockRepositoryCustom{
                 posInvStock.getLastGrnPrice(),
                 posInvStock.getQuantity(),
                 posInvStock.getStatus(),
-                posInvStock.getUserId(),
+                LogInForm.userID,
                 posInvStock.getVisible()) > 0 ;
     }
 

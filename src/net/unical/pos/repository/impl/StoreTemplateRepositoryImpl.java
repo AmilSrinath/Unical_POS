@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.StoreTemplateModel;
 import net.unical.pos.repository.custom.StoreTemplateRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -23,7 +24,7 @@ public class StoreTemplateRepositoryImpl implements StoreTemplateRepositoryCusto
                 storeTemplateModel.getSubItemId(),
                 storeTemplateModel.getTemplateName(),
                 storeTemplateModel.getQty(),
-                storeTemplateModel.getUserId(),
+                LogInForm.userID,
                 storeTemplateModel.getVisible())>0;
     }
     

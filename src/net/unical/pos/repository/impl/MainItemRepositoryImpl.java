@@ -11,6 +11,7 @@ import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainItem;
 import net.unical.pos.model.SubItemCategoryModel;
 import net.unical.pos.repository.custom.MainItemRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -38,7 +39,7 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
                 item.getStatus(),
                 item.getGrnStatus(),
                 item.getSellingItem(),
-                item.getUserId(),
+                LogInForm.userID,
                 item.getVisible(),
                 item.getWeight()) > 0 ;
     }

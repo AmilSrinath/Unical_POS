@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.EmployeeDesignationModel;
 import net.unical.pos.repository.custom.EmployeeDesignationRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -38,7 +39,7 @@ public class EmployeeDesignationRepositoryImpl implements EmployeeDesignationRep
         return Statement.executeUpdate("Insert into pos_emp_employee_designation_tb values(?,?,?,?,?)",
                 designationModel.getDesignationId(),
                 designationModel.getDesignationName(),
-                designationModel.getUserId(),
+                LogInForm.userID,
                 designationModel.getStatus(),
                 designationModel.getVisible()) > 0;
     }

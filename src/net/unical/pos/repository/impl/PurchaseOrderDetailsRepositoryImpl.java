@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PurchaseOrderDetailsModel;
 import net.unical.pos.repository.custom.PurchaseOrderDetailsRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -28,7 +29,7 @@ public class PurchaseOrderDetailsRepositoryImpl implements PurchaseOrderDetailsR
                 purchaseOrderDetailsModel.getExpectedPrice(),
                 purchaseOrderDetailsModel.getLastGrnPrice(),
                 purchaseOrderDetailsModel.getTotalPrice(),
-                purchaseOrderDetailsModel.getUserId())>0;
+                LogInForm.userID)>0;
     }
 
     @Override

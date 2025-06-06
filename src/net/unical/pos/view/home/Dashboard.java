@@ -55,6 +55,7 @@ public class Dashboard extends javax.swing.JFrame {
         
         setExtendedState(Dashboard.MAXIMIZED_BOTH);
         btnBackgroundExit();
+        lblUserName.setText(LogInForm.userName);
     }
 
     /**
@@ -83,7 +84,7 @@ public class Dashboard extends javax.swing.JFrame {
         configurationBtn = new org.jdesktop.swingx.JXButton();
         navBarPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblUserName = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -394,9 +395,9 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        jLabel12.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("User Name");
+        lblUserName.setBackground(new java.awt.Color(204, 204, 204));
+        lblUserName.setForeground(new java.awt.Color(255, 255, 255));
+        lblUserName.setText("User Name");
 
         jLabel17.setBackground(new java.awt.Color(204, 204, 204));
         jLabel17.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -427,7 +428,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         navBarPanelLayout.setVerticalGroup(
@@ -441,7 +442,7 @@ public class Dashboard extends javax.swing.JFrame {
                             .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, navBarPanelLayout.createSequentialGroup()
                             .addContainerGap()
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, navBarPanelLayout.createSequentialGroup()
                             .addGap(6, 6, 6)
                             .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -909,7 +910,6 @@ public class Dashboard extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXButton inventoryBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -920,6 +920,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lblUserName;
     private org.jdesktop.swingx.JXButton logoutBtn;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel navBarPanel;

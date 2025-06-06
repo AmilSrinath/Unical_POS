@@ -14,7 +14,9 @@ import javax.swing.table.DefaultTableModel;
 import net.unical.pos.configurations.Configurations;
 import net.unical.pos.controller.UserAccountManagementController;
 import net.unical.pos.dto.UserDto;
+import net.unical.pos.repository.impl.LoginRepositoryImpl;
 import net.unical.pos.view.home.Dashboard;
+import org.apache.poi.hssf.record.UserSViewEnd;
 
 /**
  *
@@ -27,12 +29,17 @@ public class LogInForm extends javax.swing.JFrame {
      */
     
     private UserAccountManagementController userAccountManagementController;
+    private LoginRepositoryImpl loginRepositoryImpl;
+    
+    public static int userID = 0;
+    public static String userName = null;
     
     public LogInForm() {
         initComponents();
         this.setLocationRelativeTo(null);
         
         this.userAccountManagementController=new UserAccountManagementController();
+        this.loginRepositoryImpl = new LoginRepositoryImpl();
         
         loadAllUsers();
         lowerCaseCharacters();
@@ -471,8 +478,6 @@ public class LogInForm extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 610, 180));
 
-        userNameTbl.setBackground(new java.awt.Color(255, 255, 255));
-        userNameTbl.setForeground(new java.awt.Color(0, 0, 0));
         userNameTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -494,6 +499,14 @@ public class LogInForm extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        userNameTbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userNameTblMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                userNameTblMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(userNameTbl);
@@ -545,9 +558,25 @@ public class LogInForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
-        Dashboard dashboard=new Dashboard();
-        dashboard.setVisible(true);
-        this.dispose();
+        try {
+            if (userName.equals("Super Admin") && passwordTxt.getText().equals("123")) {
+                Dashboard dashboard=new Dashboard();
+                dashboard.setVisible(true);
+                this.dispose();
+            }else {
+                if (loginRepositoryImpl.login(userName, passwordTxt.getText())) {
+                    Dashboard dashboard=new Dashboard();
+                    dashboard.setVisible(true);
+                    this.dispose();
+                }else{
+                    JOptionPane.showMessageDialog(this, "Please Check password", "Password Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "Please select user", "User Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException exception){
+            JOptionPane.showMessageDialog(this, "Please enter password", "Password Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void aBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aBtnActionPerformed
@@ -949,6 +978,17 @@ public class LogInForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowClosed
 
+    private void userNameTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameTblMouseClicked
+        
+    }//GEN-LAST:event_userNameTblMouseClicked
+
+    private void userNameTblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameTblMousePressed
+        if (evt.getClickCount() == 1) {
+            userID = Integer.parseInt(userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 0).toString());
+            userName = userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 1).toString();
+        }
+    }//GEN-LAST:event_userNameTblMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -1052,10 +1092,13 @@ public class LogInForm extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXButton zeroBtn;
     // End of variables declaration//GEN-END:variables
 
+    ArrayList<UserDto> userDtos = null;
+            
     private void loadAllUsers() {
         try {
             String quary="WHERE status=1 and visible=1";
-            ArrayList<UserDto> userDtos=userAccountManagementController.getAllUsers(quary);
+            userDtos = new ArrayList<>();
+            userDtos=userAccountManagementController.getAllUsers(quary);
             
             DefaultTableModel dtm=(DefaultTableModel) userNameTbl.getModel();
             dtm.setRowCount(0);

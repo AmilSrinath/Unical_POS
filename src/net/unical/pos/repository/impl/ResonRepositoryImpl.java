@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.ResonModel;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -34,7 +35,7 @@ public class ResonRepositoryImpl {
             stmt.setInt(2, resonModel.getStatus());
             stmt.setTimestamp(3, resonModel.getCreateDate());
             stmt.setTimestamp(4, resonModel.getEditedDate());
-            stmt.setInt(5, resonModel.getUserId()); // Prefer setInt over converting to String
+            stmt.setInt(5, LogInForm.userID); // Prefer setInt over converting to String
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Inquiry saved successfully.");

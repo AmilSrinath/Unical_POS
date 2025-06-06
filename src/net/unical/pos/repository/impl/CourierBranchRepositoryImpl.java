@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CourierBranchModel;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -35,7 +36,7 @@ public class CourierBranchRepositoryImpl {
             stmt.setTimestamp(4, courierBranchModel.getEditedDate());
             stmt.setString(5, courierBranchModel.getCompanyName());
             stmt.setInt(6, courierBranchModel.getStatus());
-            stmt.setInt(7, courierBranchModel.getUserId());
+            stmt.setInt(7, LogInForm.userID);
 
             stmt.executeUpdate();
 

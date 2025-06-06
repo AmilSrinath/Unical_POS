@@ -11,6 +11,7 @@ import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainPaymentTypes;
 import net.unical.pos.model.PosMainUnitType;
 import net.unical.pos.repository.custom.UnitTypesRepositoryCustom;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -23,7 +24,7 @@ public class UnitTypesRepositoryImpl implements UnitTypesRepositoryCustom{
         return Statement.executeUpdate("Insert into pos_main_unit_type_tb values(?,?,?,?,?)",
                 posMainUnitType.getUnitTypeId(),
                 posMainUnitType.getUnitType(),
-                posMainUnitType.getUserId(),
+                LogInForm.userID,
                 posMainUnitType.getStatus(),
                 posMainUnitType.getVisible()) > 0;
     }

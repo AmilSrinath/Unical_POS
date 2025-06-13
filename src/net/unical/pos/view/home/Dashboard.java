@@ -629,7 +629,12 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_reportsBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
-        LogInForm logInForm=new LogInForm();
+        LogInForm logInForm = null;
+        try {
+            logInForm = new LogInForm();
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
         logInForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_logoutBtnActionPerformed

@@ -85,4 +85,15 @@ public class UserRoleServiceImpl implements UserRoleServiceCustom {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public boolean isEmpty() {
+        try {
+            ArrayList<PosMainUserRole> userRoles = userRoleRepositoryCustom.getAll("");
+            return userRoles.isEmpty();
+        } catch (Exception ex) {
+            Logger.getLogger(UserRoleServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return true; // or false, depending on how you want to handle exceptions
+        }
+    }
+
 }

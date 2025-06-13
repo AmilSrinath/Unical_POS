@@ -34,4 +34,8 @@ public class UserRoleController {
 //        return .updateEmployee(employeeManagementDto);
     return true;
     }
+
+    public boolean isEmpty() {
+        return userRoleServiceCustom.isEmpty();
+    }
 }

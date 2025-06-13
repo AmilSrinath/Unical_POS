@@ -42,6 +42,7 @@ import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.view.Reports.Daily_Income;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import net.unical.pos.view.deliveryOrders.StatusCellRenderer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -372,12 +373,12 @@ public class OrderFilter extends JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(101, 101, 101)
+                        .addComponent(jLabel18))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(jLabel18)))
-                .addGap(58, 58, 58)
+                        .addGap(29, 29, 29)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(57, 57, 57)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(90, 90, 90)
@@ -413,25 +414,22 @@ public class OrderFilter extends JInternalFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)))
-                .addContainerGap())
+                    .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel18))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(statusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,7 +445,9 @@ public class OrderFilter extends JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnPrint.setText("Print");
+        btnPrint.setBackground(new java.awt.Color(0, 153, 0));
+        btnPrint.setForeground(new java.awt.Color(255, 255, 255));
+        btnPrint.setText("Print Wrapping");
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrintActionPerformed(evt);
@@ -465,7 +465,7 @@ public class OrderFilter extends JInternalFrame {
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPrint)
                         .addGap(14, 14, 14)))
                 .addContainerGap())
         );
@@ -606,6 +606,7 @@ public class OrderFilter extends JInternalFrame {
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
+        deliveryOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
     }
     
     
@@ -848,23 +849,30 @@ public class OrderFilter extends JInternalFrame {
     }//GEN-LAST:event_statusCmbKeyReleased
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        // TODO add your handling code here:
-        
-        if(paymentTypeCombo1.getSelectedIndex() == 0){
+        // Validate payment type
+        if (paymentTypeCombo1.getSelectedIndex() == 0) {
+            // Validate status
             if (statusCmb.getSelectedIndex() == 3) {
                 ArrayList<WrapperOrder> wrapperOrders = null;
                 try {
                     wrapperOrders = deliveryOrderRepositoryImpl.getWrappingOrder(jXDatePicker1.getDate(), jXDatePicker2.getDate());
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, "Error retrieving wrapping orders.");
+                    return;
                 }
-                if (!wrapperOrders.isEmpty()) {
+
+                if (wrapperOrders != null && !wrapperOrders.isEmpty()) {
                     try {
-                        generateExcel(wrapperOrders); // method to be created
+                        boolean success = generateExcel(wrapperOrders);
+                        if (!success) {
+                            JOptionPane.showMessageDialog(this, "Excel generation was cancelled or failed.");
+                        }
+                        // success message is shown inside generateExcel() if successful
                     } catch (Exception ex) {
                         Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this, "An error occurred while generating the Excel file.");
                     }
-                    JOptionPane.showMessageDialog(this, "Excel file generated successfully.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No records found for the selected dates.");
                 }
@@ -876,12 +884,11 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
-    public void generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
+    public boolean generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Wrapping Orders");
 
-        // Header row
-        String[] headers = {"TrackingNumber","Reference","PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
+        String[] headers = {"TrackingNumber", "Reference", "PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
         Row headerRow = sheet.createRow(0);
         CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
@@ -894,7 +901,6 @@ public class OrderFilter extends JInternalFrame {
             cell.setCellStyle(headerStyle);
         }
 
-        // Data rows
         int rowNum = 1;
         for (WrapperOrder order : orders) {
             double totalWeightKg = order.getWeight() / 1000.0;
@@ -908,24 +914,20 @@ public class OrderFilter extends JInternalFrame {
             row.createCell(3).setCellValue(order.getCustomerName());
             row.createCell(4).setCellValue(order.getAddress());
             row.createCell(5).setCellValue(0);
-            row.createCell(6).setCellValue(order.getPhoneOne()+" / "+order.getPhoneTwo());
+            row.createCell(6).setCellValue(order.getPhoneOne() + " / " + order.getPhoneTwo());
             row.createCell(7).setCellValue(1);
             row.createCell(8).setCellValue(kilos);
             row.createCell(9).setCellValue(grams);
-            row.createCell(10).setCellValue(order.getCodAmount()+"");
+            row.createCell(10).setCellValue(order.getCodAmount() + "");
             row.createCell(11).setCellValue(0);
             row.createCell(12).setCellValue(0);
-            
-            deliveryOrderRepositoryImpl.update(order.getDeliveryId(), 4);
         }
 
-        // Auto-size columns
         for (int i = 0; i < headers.length; i++) {
             sheet.autoSizeColumn(i);
         }
 
         try {
-            // File chooser for user to pick save location
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Save Excel File");
             int userSelection = fileChooser.showSaveDialog(null);
@@ -941,14 +943,26 @@ public class OrderFilter extends JInternalFrame {
                 out.close();
                 workbook.close();
 
+                // ✅ Only update status AFTER file is saved
+                for (WrapperOrder order : orders) {
+                    deliveryOrderRepositoryImpl.update(order.getDeliveryId(), 4);
+                }
+
                 JOptionPane.showMessageDialog(null, "Excel file generated successfully at:\n" + filePath);
+                return true;
+            } else {
+                workbook.close(); // Close if cancelled
+                return false;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error saving Excel file: " + e.getMessage());
+            return false;
         }
     }
+
+
     
     /**
      * @param args the command line arguments

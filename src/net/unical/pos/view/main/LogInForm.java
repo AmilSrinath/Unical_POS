@@ -12,8 +12,12 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.controller.EmployeeManagementController;
 import net.unical.pos.controller.UserAccountManagementController;
+import net.unical.pos.controller.UserRoleController;
+import net.unical.pos.dto.EmployeeManagementDto;
 import net.unical.pos.dto.UserDto;
+import net.unical.pos.dto.UserRoleDto;
 import net.unical.pos.repository.impl.LoginRepositoryImpl;
 import net.unical.pos.view.home.Dashboard;
 import org.apache.poi.hssf.record.UserSViewEnd;
@@ -30,17 +34,22 @@ public class LogInForm extends javax.swing.JFrame {
     
     private UserAccountManagementController userAccountManagementController;
     private LoginRepositoryImpl loginRepositoryImpl;
+    private UserRoleController userRoleController;
+    private EmployeeManagementController employeeManagementController;
     
     public static int userID = 0;
     public static String userName = null;
     
-    public LogInForm() {
+    public LogInForm() throws Exception {
         initComponents();
         this.setLocationRelativeTo(null);
         
         this.userAccountManagementController=new UserAccountManagementController();
         this.loginRepositoryImpl = new LoginRepositoryImpl();
+        this.userRoleController = new UserRoleController();
+        this.employeeManagementController = new EmployeeManagementController();
         
+        setDefaulUser();
         loadAllUsers();
         lowerCaseCharacters();
     }
@@ -118,7 +127,7 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jXButton1 = new org.jdesktop.swingx.JXButton();
-        passwordTxt = new javax.swing.JTextField();
+        passwordTxt = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -550,27 +559,43 @@ public class LogInForm extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jXButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 80, -1));
-        jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 140, 30));
+        jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 130, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 822, 574));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void setDefaulUser() throws Exception {
+        if (userRoleController.isEmpty()) {
+            boolean isSaveUser=userRoleController.saveUserRole(
+                new UserRoleDto(0,"Super Admin",1,1,1)
+            );
+
+            boolean isSaveEmployee=employeeManagementController.saveEmployee(
+                    new EmployeeManagementDto(0, "Mr", "Super Admin", "System Maintains","",1,"",0,"","","",1,1)
+            );
+
+            UserDto saveUser = userAccountManagementController.saveUser(new UserDto(0, 1,1, "Super Admin", "1234",1,1,""));
+
+            if (isSaveEmployee && isSaveUser && saveUser!=null) {
+                JOptionPane.showMessageDialog(this, "Super Admin save successfully.");
+            }else {
+                JOptionPane.showMessageDialog(this, "Please try agin", "User saving error", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            return;
+        }
+    }
+    
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
         try {
-            if (userName.equals("Super Admin") && passwordTxt.getText().equals("123")) {
+            if (loginRepositoryImpl.login(userName, passwordTxt.getText())) {
                 Dashboard dashboard=new Dashboard();
                 dashboard.setVisible(true);
                 this.dispose();
-            }else {
-                if (loginRepositoryImpl.login(userName, passwordTxt.getText())) {
-                    Dashboard dashboard=new Dashboard();
-                    dashboard.setVisible(true);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(this, "Please Check password", "Password Error", JOptionPane.ERROR_MESSAGE);
-                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Please Check password", "Password Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Please select user", "User Error", JOptionPane.ERROR_MESSAGE);
@@ -983,9 +1008,13 @@ public class LogInForm extends javax.swing.JFrame {
     }//GEN-LAST:event_userNameTblMouseClicked
 
     private void userNameTblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameTblMousePressed
-        if (evt.getClickCount() == 1) {
-            userID = Integer.parseInt(userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 0).toString());
-            userName = userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 1).toString();
+        try {
+            if (evt.getClickCount() == 1) {
+                userID = Integer.parseInt(userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 0).toString());
+                userName = userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 1).toString();
+            }
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            JOptionPane.showMessageDialog(this, "Please select user agin", "User selecting error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_userNameTblMousePressed
 
@@ -1073,7 +1102,7 @@ public class LogInForm extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXButton oBtn;
     private org.jdesktop.swingx.JXButton oneBtn;
     private org.jdesktop.swingx.JXButton pBtn;
-    private javax.swing.JTextField passwordTxt;
+    private javax.swing.JPasswordField passwordTxt;
     private org.jdesktop.swingx.JXButton qBtn;
     private org.jdesktop.swingx.JXButton rBtn;
     private org.jdesktop.swingx.JXButton sBtn;

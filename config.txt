@@ -3,7 +3,7 @@ server_port=3306
 server_user=root
 server_pw=12345678
 server_pwd=pos87654321
-server_db=unical_pos_test
+server_db=unical_pos
 
 #Delivery_Fee
 DELIVERY_FEE=350

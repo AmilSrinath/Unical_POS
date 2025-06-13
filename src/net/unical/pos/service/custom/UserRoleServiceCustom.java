@@ -25,4 +25,6 @@ public interface UserRoleServiceCustom {
     ArrayList<UserRoleDto>getAllUserRole(String quary)throws Exception;
     
     public UserRoleDto searchUserRole(String key)throws Exception;
+
+    public boolean isEmpty();
 }

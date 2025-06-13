@@ -5,6 +5,8 @@
  */
 package net.unical.pos.main;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import net.unical.pos.view.main.LogInForm;
 
@@ -41,7 +43,11 @@ public class Main {
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new LogInForm().setVisible(true);
+                try {
+                    new LogInForm().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

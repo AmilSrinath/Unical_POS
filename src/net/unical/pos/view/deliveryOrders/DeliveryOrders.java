@@ -28,7 +28,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -469,8 +472,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -503,7 +505,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         order_options.setSize(new java.awt.Dimension(509, 128));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Action Order", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 14), new java.awt.Color(0, 153, 204))); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 14), new java.awt.Color(0, 153, 204))); // NOI18N
         jPanel7.setPreferredSize(new java.awt.Dimension(1300, 100));
 
         btnEdit.setBackground(new java.awt.Color(0, 102, 153));
@@ -595,7 +597,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -627,6 +629,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
         );
+
+        jPanel7.getAccessibleContext().setAccessibleName("");
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -704,7 +708,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("QTY : ");
 
-        totAmountLbl.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        totAmountLbl.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         totAmountLbl.setForeground(new java.awt.Color(204, 0, 0));
         totAmountLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         totAmountLbl.setText("0.00");
@@ -761,26 +765,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             itemListTable.getColumnModel().getColumn(2).setMaxWidth(0);
         }
 
-        jLabel10.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(204, 0, 0));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel10.setText("Grand Total :");
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 153, 0));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel11.setText("Delivery Fee :");
 
-        deliveyFeeLbl.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        deliveyFeeLbl.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         deliveyFeeLbl.setForeground(new java.awt.Color(0, 153, 0));
         deliveyFeeLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        jLabel13.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 102, 153));
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("Sub Total :");
 
-        subTotAmountLbl.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        subTotAmountLbl.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         subTotAmountLbl.setForeground(new java.awt.Color(0, 102, 153));
         subTotAmountLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         subTotAmountLbl.setText("0.00");
@@ -804,24 +808,25 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel13)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(subTotAmountLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel11)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(totAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(removeBtn)
+                                .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 4, Short.MAX_VALUE)))
+                                .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(totAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(removeBtn)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(subTotAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -844,9 +849,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(subTotAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(totAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1017,7 +1022,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 24, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel3)
@@ -2256,6 +2261,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         delivery_id = deliveryID;
                         order_options.setLocationRelativeTo(null);
                         order_options.setSize(935, 115);
+                        order_options.setTitle("Actions");
                         order_options.setVisible(true);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid delivery ID: " + deliveryID);
@@ -2272,15 +2278,43 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_deliveryOrdersTableMousePressed
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        clearText();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
+        qtyTxt.requestFocus();
+    }//GEN-LAST:event_itemComboActionPerformed
+
+    private void customerNumberTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNumberTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerNumberTxtActionPerformed
+
+    private void deliveryOrdersTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deliveryOrdersTableMouseClicked
+
+    private void orderIDCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDCmbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_orderIDCmbActionPerformed
+
+    private void radioExchangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExchangeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioExchangeMouseClicked
+
+    private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
         if(delivery_id!=null){
             try {
-                deliveryOrderRepositoryImpl.update(delivery_id, 6);
-                
+                deliveryOrderRepositoryImpl.update(delivery_id, 1);
+
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
-                
+
                 int index=0;
                 if(paymentTypeCombo2.getSelectedIndex()!=0){
                     index=paymentTypeCombo2.getSelectedIndex();
@@ -2293,7 +2327,99 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+    }//GEN-LAST:event_btnActiveActionPerformed
+
+    private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 3);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnWrappingActionPerformed
+
+    private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 4);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnOutForDeliveryActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 7);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 6);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
@@ -2319,49 +2445,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnDeliverdActionPerformed
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if(delivery_id!=null){
-            try {
-                deliveryOrderRepositoryImpl.update(delivery_id, 7);
-                
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String fromDate = formatter.format(jXDatePicker1.getDate());
-                String toDate = formatter.format(jXDatePicker2.getDate());
-                
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
-                }
-                order_options.dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        clearText();
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
-        qtyTxt.requestFocus();
-    }//GEN-LAST:event_itemComboActionPerformed
-
-    private void customerNumberTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNumberTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_customerNumberTxtActionPerformed
-
-    private void deliveryOrdersTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deliveryOrdersTableMouseClicked
-
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         int selectedRow = deliveryOrdersTable.getSelectedRow();
 
@@ -2373,7 +2456,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 System.out.println("orderCode : "+orderCode);
                 System.out.println("deliveryID : "+deliveryID);
                 delivery_id = deliveryID;
-                
+
                 try {
                     String phoneOne = deliveryOrdersTable.getValueAt(selectedRow, 3) != null ? deliveryOrdersTable.getValueAt(selectedRow, 3).toString() : "";
                     String phoneTwo = deliveryOrdersTable.getValueAt(selectedRow, 4) != null ? deliveryOrdersTable.getValueAt(selectedRow, 4).toString() : "";
@@ -2461,83 +2544,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         updateTotals();
     }//GEN-LAST:event_btnEditActionPerformed
-
-    private void orderIDCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDCmbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_orderIDCmbActionPerformed
-
-    private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
-        if(delivery_id!=null){
-            try {
-                deliveryOrderRepositoryImpl.update(delivery_id, 4);
-                
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String fromDate = formatter.format(jXDatePicker1.getDate());
-                String toDate = formatter.format(jXDatePicker2.getDate());
-                
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
-                }
-                order_options.dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnOutForDeliveryActionPerformed
-
-    private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
-        if(delivery_id!=null){
-            try {
-                deliveryOrderRepositoryImpl.update(delivery_id, 3);
-                
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String fromDate = formatter.format(jXDatePicker1.getDate());
-                String toDate = formatter.format(jXDatePicker2.getDate());
-                
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
-                }
-                order_options.dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnWrappingActionPerformed
-
-    private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
-        if(delivery_id!=null){
-            try {
-                deliveryOrderRepositoryImpl.update(delivery_id, 1);
-                
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String fromDate = formatter.format(jXDatePicker1.getDate());
-                String toDate = formatter.format(jXDatePicker2.getDate());
-                
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
-                }
-                order_options.dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnActiveActionPerformed
-
-    private void radioExchangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExchangeMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioExchangeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -2680,7 +2686,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getItems() {
         try {
-            String quary="WHERE main_item_category_id=2 AND visible=1 AND status=1";
+            String quary="WHERE visible=1 AND status=1";
             ArrayList<MainItemDto> itemList=newItemController.getAllItems(quary);
             
             for(MainItemDto mainItem:itemList){
@@ -2714,27 +2720,27 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }
 
-    private void getAllOrders(String fromDate,String toDate,Integer paymentType) {
+    private void getAllOrders(String fromDate, String toDate, Integer paymentType) {
         try {
-            ArrayList<DeliveryOrder>deliveryOrderDtos=deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType,0);
-            ArrayList<DeliveryOrderAmounts>deliveryOrderAmountDto=deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
-            
-            DefaultTableModel dtm=(DefaultTableModel) deliveryOrdersTable.getModel();
+            ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType, 0);
+            ArrayList<DeliveryOrderAmounts> deliveryOrderAmountDto = deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
+
+            DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
             dtm.setRowCount(0);
-            
-            String status=null;
-            boolean isPrint=false;
-            
-            int orderId=0;
-            int count=0;
-            double totAmount=0.00;
-            double totDeliveryFee=0.00;
-            double totCod=0.00;
-            double totReturns=0.00;
-                    
-            for(DeliveryOrder dto:deliveryOrderDtos){
+
+            String status = null;
+            boolean isPrint = false;
+
+            int orderId = 0;
+            int count = 0;
+            double totAmount = 0.00;
+            double totDeliveryFee = 0.00;
+            double totCod = 0.00;
+            double totReturns = 0.00;
+
+            for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
-//                codTot=codTot+dto.getCod();
+
                 if (dto.getStatusType() == 1) {
                     status = "Active";
                 } else if (dto.getStatusType() == 2) {
@@ -2750,38 +2756,48 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     status = "Cancel";
                 }
-                
-                if(dto.getIsPrint()==1){
-                    isPrint=true;
-                }else{
-                    isPrint=false;
-                }
-                Object[] rowData={dto.getOrderId(),dto.getOrderCode(),dto.getCustomerName(),dto.getPhoneOne(),dto.getPhoneTwo(),dto.getCod(),dto.getGrandTotalPrice(),status};
+
+                isPrint = dto.getIsPrint() == 1;
+
+                Object[] rowData = {
+                    dto.getOrderId(),
+                    dto.getOrderCode(),
+                    dto.getCustomerName(),
+                    dto.getPhoneOne(),
+                    dto.getPhoneTwo(),
+                    dto.getCod(),
+                    dto.getGrandTotalPrice(),
+                    status
+                };
+
                 dtm.addRow(rowData);
-                
-                orderId=dto.getOrderId();
+
+                orderId = dto.getOrderId();
             }
-            
-            for(DeliveryOrderAmounts amounts:deliveryOrderAmountDto){
-                totAmount=amounts.getTotalAmount();
-                totDeliveryFee=amounts.getTotalDeliveryCharge();
-                totCod=amounts.getTotalCod();
+
+            for (DeliveryOrderAmounts amounts : deliveryOrderAmountDto) {
+                totAmount = amounts.getTotalAmount();
+                totDeliveryFee = amounts.getTotalDeliveryCharge();
+                totCod = amounts.getTotalCod();
                 totReturns = amounts.getTotalReturns();
             }
-            amountTotTxt.setText(totAmount+"");
-            deliveryChargeTotTxt.setText((totDeliveryFee)+"");
-            codTotTxt.setText(totCod+"");
-            returnsTotTxt.setText(totReturns+"");
-            
 
-            total_orders_count_txt.setText(count+"");
+            amountTotTxt.setText(totAmount + "");
+            deliveryChargeTotTxt.setText((totDeliveryFee) + "");
+            codTotTxt.setText(totCod + "");
+            returnsTotTxt.setText(totReturns + "");
+            total_orders_count_txt.setText(count + "");
+
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        // Assuming status is at column index 7 in your table
+        deliveryOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
     }
 
+
     private void printBill(Integer orderId) {
-        
         try {
             HashMap<String, Object> hm = new HashMap<>();
             

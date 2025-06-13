@@ -173,7 +173,6 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
                           <Component id="btnAddInquiry" min="-2" pref="113" max="-2" attributes="0"/>
-                          <EmptySpace pref="238" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>

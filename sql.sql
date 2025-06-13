@@ -737,5 +737,19 @@ INSERT INTO pos_status_types (status_type) VALUES ('Return');
 INSERT INTO pos_status_types (status_type) VALUES ('Cancel');
 
 INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 1, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (2, 'Admin', 1, 0, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (3, 'Supevisor', 1, 0, 1);
 INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Super Admin', 'Super Admin', 'System Maintains', 'S', 1, 'S1', '', '0', '', '', 1, 1, 1);
 INSERT INTO pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 1, 'Super Admin', '1234', 1, 1, '');
+
+INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (1, 'No Convertion', 1, 1, 1);
+INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (2, 'ml', 1, 1, 1);
+INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (3, 'g', 1, 1, 1);
+
+INSERT INTO pos_main_printer_type_tb (printer_type_id, printer_type, status, user_id, visible) VALUES (1, 'BILL', 1, 1, 1);
+INSERT INTO pos_main_printer_type_tb (printer_type_id, printer_type, status, user_id, visible) VALUES (2, 'KOT', 1, 1, 1);
+
+INSERT INTO pos_main_payment_types_tb (payment_type_id, payment_type, status, user_id, visible) VALUES (1, 'Cash', 1, 1, 1);
+INSERT INTO pos_main_payment_types_tb (payment_type_id, payment_type, status, user_id, visible) VALUES (2, 'Card', 1, 1, 1);
+
+INSERT INTO pos_emp_employee_title_tb (title_id, title_name, status, user_id, visible) VALUES (1, 'Mr', 1, 1, 1);

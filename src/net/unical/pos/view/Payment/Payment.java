@@ -486,6 +486,7 @@ public class Payment extends JInternalFrame {
     } catch (Exception ex) {
         Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
     }
+    paymentOrdersTable.getColumnModel().getColumn(6).setCellRenderer(new StatusCellRenderer());
 }
     
     

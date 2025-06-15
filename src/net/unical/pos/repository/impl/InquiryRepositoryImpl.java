@@ -47,7 +47,6 @@ public class InquiryRepositoryImpl {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace(); // Consider logging instead
         }
-
         return null;
     }
 
@@ -57,9 +56,7 @@ public class InquiryRepositoryImpl {
                 + "company, branch, branch_contact, reson, remark, status, created_date, edited_date, user_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (
-                Connection conn = DBCon.getDatabaseConnection(); 
-                PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+        try (Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
             stmt.setString(1, inquiryModel.getWayBill());
             stmt.setInt(2, Integer.parseInt(inquiryModel.getCustomerId()));
             stmt.setString(3, inquiryModel.getCustomerName());
@@ -100,11 +97,10 @@ public class InquiryRepositoryImpl {
         String updateQuery = "UPDATE unical_pos.pos_inquiry_tb SET status = ?, edited_date = ? WHERE way_bill = ?";
 
         try (
-                Connection conn = DBCon.getDatabaseConnection(); 
-                PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
-                stmt.setInt(1, status);
-                stmt.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-                stmt.setString(3, wayBill);
+                Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, status);
+            stmt.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+            stmt.setString(3, wayBill);
 
             int rowsUpdated = stmt.executeUpdate();
         } catch (Exception e) {
@@ -124,14 +120,12 @@ public class InquiryRepositoryImpl {
         }
 
         try (
-            Connection conn = DBCon.getDatabaseConnection();
-            PreparedStatement stmt = conn.prepareStatement(baseQuery)
-        ) {
+                Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(baseQuery)) {
             stmt.setDate(1, java.sql.Date.valueOf(fromDate));
             stmt.setDate(2, java.sql.Date.valueOf(toDate));
 
             if (status != 0) {
-                stmt.setInt(3, (status-1));
+                stmt.setInt(3, (status - 1));
             }
 
             ResultSet rs = stmt.executeQuery();
@@ -169,9 +163,7 @@ public class InquiryRepositoryImpl {
         String query = "SELECT * FROM unical_pos.pos_inquiry_tb WHERE way_bill LIKE ?";
 
         try (
-            Connection conn = DBCon.getDatabaseConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)
-        ) {
+                Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, "%" + wayBillPart + "%");
 
             ResultSet rs = stmt.executeQuery();
@@ -201,7 +193,5 @@ public class InquiryRepositoryImpl {
 
         return list;
     }
-
-
 
 }

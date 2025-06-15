@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
  */
 public class LoginRepositoryImpl {
 
-    public boolean login(String userName, String password) {
+    public boolean login(int userID, String password) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -33,9 +33,10 @@ public class LoginRepositoryImpl {
                 return false;
             }
 
-            String sql = "SELECT password FROM pos_main_user_tb WHERE username = ? AND status = 1 AND visible = 1";
+            String sql = "SELECT password FROM pos_main_user_tb WHERE user_id = ? AND status = 1 AND visible = 1";
             ps = con.prepareStatement(sql);
-            ps.setString(1, userName);
+            System.out.println("userID : "+userID);
+            ps.setInt(1, userID);
             rs = ps.executeQuery();
 
             if (rs.next()) {

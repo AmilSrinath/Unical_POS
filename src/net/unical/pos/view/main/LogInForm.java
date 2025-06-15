@@ -485,7 +485,7 @@ public class LogInForm extends javax.swing.JFrame {
         });
         jPanel2.add(capsLockBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, -1, 80));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 610, 180));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 610, 180));
 
         userNameTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -559,6 +559,12 @@ public class LogInForm extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jXButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 80, -1));
+
+        passwordTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTxtActionPerformed(evt);
+            }
+        });
         jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 130, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 822, 574));
@@ -588,9 +594,9 @@ public class LogInForm extends javax.swing.JFrame {
         }
     }
     
-    private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
+    private void loginMethod(){
         try {
-            if (loginRepositoryImpl.login(userName, passwordTxt.getText())) {
+            if (loginRepositoryImpl.login(userID, passwordTxt.getText())) {
                 Dashboard dashboard=new Dashboard();
                 dashboard.setVisible(true);
                 this.dispose();
@@ -602,6 +608,10 @@ public class LogInForm extends javax.swing.JFrame {
         } catch (IllegalArgumentException exception){
             JOptionPane.showMessageDialog(this, "Please enter password", "Password Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
+        loginMethod();
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void aBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aBtnActionPerformed
@@ -1012,11 +1022,17 @@ public class LogInForm extends javax.swing.JFrame {
             if (evt.getClickCount() == 1) {
                 userID = Integer.parseInt(userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 0).toString());
                 userName = userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 1).toString();
+                passwordTxt.requestFocusInWindow();
             }
         } catch (java.lang.IndexOutOfBoundsException e) {
             JOptionPane.showMessageDialog(this, "Please select user agin", "User selecting error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, e);
         }
     }//GEN-LAST:event_userNameTblMousePressed
+
+    private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
+        loginMethod();
+    }//GEN-LAST:event_passwordTxtActionPerformed
 
     /**
      * @param args the command line arguments

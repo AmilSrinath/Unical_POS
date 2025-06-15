@@ -296,7 +296,7 @@ public class SubTableLocation extends javax.swing.JInternalFrame {
             try {
                 boolean result=subTableLocationController.saveSubTableLocation(subTableLocationDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                     JOptionPane.showMessageDialog(this, "Failed to add the Category");
                 }
@@ -312,7 +312,7 @@ public class SubTableLocation extends javax.swing.JInternalFrame {
                 subTableLocationDto.setSubTableLocationId((int) subTableLocationTbl.getValueAt(subTableLocationTbl.getSelectedRow(), 0));
                 boolean result=subTableLocationController.updateSubTableLocation(subTableLocationDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                     JOptionPane.showMessageDialog(this, "Update Fail");
                 }

@@ -331,9 +331,9 @@ public class SubCategory extends javax.swing.JInternalFrame {
             try {
                 boolean result=subItemCategoryController.saveSubItemCategory(subItemCategoryDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Success to add the Category");
                 } else {
-                    //                     JOptionPane.showMessageDialog(this, "Failed to add the Category");
+                    JOptionPane.showMessageDialog(this, "Failed to add the Category");
                 }
             } catch (Exception ex) {
                 Logger.getLogger(SubCategory.class.getName()).log(Level.SEVERE, null, ex);
@@ -347,9 +347,9 @@ public class SubCategory extends javax.swing.JInternalFrame {
                 subItemCategoryDto.setSubItemCategoryId((int) subItemCategoryTbl.getValueAt(subItemCategoryTbl.getSelectedRow(), 0));
                 boolean result=subItemCategoryController.updateSubItemCategory(subItemCategoryDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Updated!");
                 } else {
-                    //                     JOptionPane.showMessageDialog(this, "Update Fail");
+                    JOptionPane.showMessageDialog(this, "Update Fail");
                 }
 
             } catch (Exception ex) {

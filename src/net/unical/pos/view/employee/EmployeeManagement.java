@@ -415,7 +415,7 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
             try {
                  boolean result=employeeManagementController.saveEmployee(employeeManagementDto);
                  if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                  } else {
                      
                  }
@@ -431,7 +431,7 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
                 employeeManagementDto.setEmployeeId((int) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 0));
                 boolean result=employeeManagementController.updateEmployee(employeeManagementDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                  } else {
                     
                  }

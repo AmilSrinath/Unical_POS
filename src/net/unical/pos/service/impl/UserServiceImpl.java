@@ -111,4 +111,15 @@ public class UserServiceImpl implements UserServiceCustom {
         return randomString;
 
     }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) throws Exception {
+        return userRepositoryCustom.updateUser(userDto);
+    }
+
+    @Override
+    public UserDto updateUserWithPassword(UserDto userDto) {
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepositoryCustom.updateUserWithPassword(userDto);
+    }
 }

@@ -50,6 +50,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
             }
             return mainOrderDetailses;
         } catch (Exception ex) {
+            Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
@@ -162,6 +163,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
             }
 
         } catch (SQLException e) {
+            Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,6 +174,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
+                Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 e.printStackTrace();
             }
         }

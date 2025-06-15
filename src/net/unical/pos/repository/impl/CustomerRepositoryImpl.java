@@ -90,6 +90,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             if (ps != null) {
@@ -102,6 +103,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }

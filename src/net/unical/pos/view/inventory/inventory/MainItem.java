@@ -811,7 +811,7 @@ public class MainItem extends javax.swing.JInternalFrame {
                             }
                         }
                     }
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                   JOptionPane.showMessageDialog(this, "Failed to add the Category");
                 }
@@ -827,7 +827,7 @@ public class MainItem extends javax.swing.JInternalFrame {
                 itemDto.setItemId((int) ItemTbl.getValueAt(ItemTbl.getSelectedRow(), 0));
                 boolean result=newItemController.updateItem(itemDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                     JOptionPane.showMessageDialog(this, "Update Fail");
                 }

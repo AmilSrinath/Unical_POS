@@ -30,9 +30,12 @@ public class UserAccountManagementController {
         return userServiceCustom.getAllUser(quary);
     }
     
-    public boolean updateUser(UserDto userDto)throws Exception{
-//        return .updateUser(mainUserDto);
-    return true;
+    public UserDto updateUser(UserDto userDto)throws Exception{
+        return userServiceCustom.updateUser(userDto);
+    }
+    
+    public UserDto updateUserWithPassword(UserDto userDto)throws Exception{
+        return userServiceCustom.updateUserWithPassword(userDto);
     }
     
 }

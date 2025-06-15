@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CourierCompanyModel;
 import net.unical.pos.view.main.LogInForm;
@@ -40,6 +42,7 @@ public class CourierCompanyRepositoryImpl {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            Logger.getLogger(CourierCompanyRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
     }
@@ -60,6 +63,7 @@ public class CourierCompanyRepositoryImpl {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            Logger.getLogger(CourierCompanyRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
     }
@@ -87,6 +91,7 @@ public class CourierCompanyRepositoryImpl {
             }
 
         } catch (Exception e) {
+            Logger.getLogger(CourierCompanyRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 

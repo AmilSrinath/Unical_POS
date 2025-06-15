@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.unical.pos.configurations.ConfigPropertyReader;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CourierBranchModel;
 import net.unical.pos.view.main.LogInForm;
@@ -41,6 +44,7 @@ public class CourierBranchRepositoryImpl {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
     }
@@ -63,6 +67,7 @@ public class CourierBranchRepositoryImpl {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
     }
@@ -91,6 +96,7 @@ public class CourierBranchRepositoryImpl {
             }
 
         } catch (Exception e) {
+            Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 
@@ -115,6 +121,7 @@ public class CourierBranchRepositoryImpl {
             }
 
         } catch (SQLException e) {
+            Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 
@@ -140,6 +147,7 @@ public class CourierBranchRepositoryImpl {
             }
 
         } catch (SQLException e) {
+            Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 

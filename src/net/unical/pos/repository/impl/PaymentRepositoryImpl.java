@@ -87,6 +87,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (Exception e) {
+                Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 e.printStackTrace();
             }
         }
@@ -113,6 +114,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (Exception e) {
+                Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 e.printStackTrace();
             }
         }

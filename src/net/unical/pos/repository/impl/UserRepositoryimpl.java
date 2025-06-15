@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import java.sql.ResultSet;
 import net.unical.pos.dbConnection.Statement;
 import java.util.ArrayList;
+import net.unical.pos.dto.UserDto;
 import net.unical.pos.model.PosMainUser;
 import net.unical.pos.repository.custom.UserRepositoryCustom;
 
@@ -84,6 +85,53 @@ public class UserRepositoryimpl implements UserRepositoryCustom {
                     resultSet.getString("token"));
         }
         return mainUser;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        try {
+            boolean updated = Statement.executeUpdate(
+                    "UPDATE pos_main_user_tb SET employee_id = ?, role_id = ?, username = ?, status = ?, visible = ?, token = ? WHERE user_id = ?",
+                    userDto.getEmployeeId(),
+                    userDto.getRoleId(),
+                    userDto.getUserName(),
+                    userDto.getStatus(),
+                    userDto.getVisible(),
+                    userDto.getToken(),
+                    userDto.getUserId()
+            ) > 0;
+
+            return updated ? userDto : null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public UserDto updateUserWithPassword(UserDto userDto) {
+        try {
+            boolean updated = Statement.executeUpdate(
+                    "UPDATE pos_main_user_tb SET employee_id = ?, role_id = ?, username = ?, password = ?, status = ?, visible = ?, token = ? WHERE user_id = ?",
+                    userDto.getEmployeeId(),
+                    userDto.getRoleId(),
+                    userDto.getUserName(),
+                    userDto.getPassword(),
+                    userDto.getStatus(),
+                    userDto.getVisible(),
+                    userDto.getToken(),
+                    userDto.getUserId()
+            ) > 0;
+
+            
+            System.out.println("userDto.getUserId() : "+userDto.getUserId());
+            System.out.println("updated : "+updated);
+            
+            return updated ? userDto : null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

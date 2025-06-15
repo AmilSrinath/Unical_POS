@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -77,11 +79,12 @@ public class ConfigPropertyReader{
             }
             
         } catch (Exception ex) {
-//            Logger.getLogger(ConfigProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConfigPropertyReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 fis.close();
             } catch (IOException ex) {
+                Logger.getLogger(ConfigPropertyReader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

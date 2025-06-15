@@ -61,6 +61,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     con.close();
                 }
             } catch (SQLException e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 System.out.println("Error closing resources: " + e.getMessage());
             }
         }
@@ -439,6 +440,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 e.printStackTrace();
             }
         }
@@ -681,6 +683,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             if (connection != null) {
                 connection.rollback();
             }
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             throw e;
         } finally {
             if (connection != null) {
@@ -859,18 +862,21 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             if (rst != null) {
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -915,6 +921,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
 
         } catch (SQLException e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 
@@ -955,6 +962,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
 
         } catch (SQLException e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
 

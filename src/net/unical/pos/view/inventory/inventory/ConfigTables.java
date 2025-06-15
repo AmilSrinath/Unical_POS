@@ -512,7 +512,7 @@ public class ConfigTables extends javax.swing.JInternalFrame {
             try {
                 boolean result=configTabalesController.saveTables(configTablesDto);
                 if (result) {
-//                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                   JOptionPane.showMessageDialog(this, "Failed to add the Category");
                 }
@@ -528,7 +528,7 @@ public class ConfigTables extends javax.swing.JInternalFrame {
 //                configTablesDto.setConfigTablesId((int) ItemTbl.getValueAt(ItemTbl.getSelectedRow(), 0));
                 boolean result=configTabalesController.updateTables(configTablesDto);
                 if (result) {
-                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                     JOptionPane.showMessageDialog(this, "Update Fail");
                 }

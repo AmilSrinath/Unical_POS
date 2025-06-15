@@ -7,6 +7,8 @@ package net.unical.pos.reports;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -16,6 +18,7 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.configurations.ConfigPropertyReader;
 
 /**
  *
@@ -45,6 +48,7 @@ public class DailySalesPrinter {
                 JasperPrintManager.printReport(jp, false);
             }
         } catch (JRException ex) {
+            Logger.getLogger(DailySalesPrinter.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }
     }

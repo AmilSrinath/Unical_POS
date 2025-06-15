@@ -154,6 +154,7 @@ public class MainOrderRepositoryImpl implements MainOrderRepositoryCustom {
          } catch (SQLException ex) {
             Log.info(MainOrderRepositoryImpl.class, "Error in Order " + ex);
             Log.error(MainOrderRepositoryImpl.class, "Error in Order " + ex);
+            Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
             con.rollback();
             throw ex;
         } 

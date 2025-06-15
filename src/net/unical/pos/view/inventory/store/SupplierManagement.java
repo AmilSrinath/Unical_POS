@@ -8,6 +8,7 @@ package net.unical.pos.view.inventory.store;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -330,7 +331,7 @@ public class SupplierManagement extends javax.swing.JInternalFrame {
             try {
                  boolean result=supplierController.saveSupplier(supplierDto);
                  if (result) {
-//                     configTimer.setMessageTimer(true);
+                     JOptionPane.showMessageDialog(this, "Successfull!");
                  } else {
 //                   JOptionPane.showMessageDialog(this, "Failed to add the Category");
                  }
@@ -346,7 +347,7 @@ public class SupplierManagement extends javax.swing.JInternalFrame {
                 supplierDto.setSupplierId((int) supplierListTbl.getValueAt(supplierListTbl.getSelectedRow(), 0));
                 boolean result=supplierController.updateSupplier(supplierDto);
                 if (result) {
-                     configTimer.setMessageTimer(true);
+                     JOptionPane.showMessageDialog(this, "Successfull!");
                  } else {
 //                     JOptionPane.showMessageDialog(this, "Update Fail");
                  }

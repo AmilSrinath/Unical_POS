@@ -5,9 +5,11 @@
  */
 package net.unical.pos.view.employee;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.unical.pos.configurations.ConfigTimer;
 import net.unical.pos.controller.EmployeeManagementController;
@@ -17,6 +19,7 @@ import net.unical.pos.dto.EmployeeManagementDto;
 import net.unical.pos.dto.UserDto;
 import net.unical.pos.dto.UserRoleDto;
 import net.unical.pos.view.home.Dashboard;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  *
@@ -50,6 +53,7 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         loadAllUsers();
         loadEmployees();
         loadUserRole();
+        jLabel6.setText("<html>Note: Only enter the new password in the password field<br>if you need to change the password.<br>Otherwise, leave the password field blank.</html>");
         
     }
 
@@ -73,9 +77,10 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         userRoleCmb = new javax.swing.JComboBox<>();
         userNameTxt = new org.jdesktop.swingx.JXTextField();
         passwordTxt = new javax.swing.JPasswordField();
-        saveBtn = new org.jdesktop.swingx.JXButton();
+        clearBtn = new org.jdesktop.swingx.JXButton();
         isActiveBox = new javax.swing.JCheckBox();
-        jLabel5 = new javax.swing.JLabel();
+        saveBtn = new org.jdesktop.swingx.JXButton();
+        jLabel6 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         userDetailsTbl = new org.jdesktop.swingx.JXTable();
@@ -94,7 +99,7 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "User Account", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "User Account", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jLabel1.setText("Employee");
 
@@ -103,6 +108,17 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         jLabel3.setText("User Name");
 
         jLabel4.setText("Password");
+
+        clearBtn.setBackground(new java.awt.Color(204, 204, 0));
+        clearBtn.setText("Clear");
+        clearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearBtnActionPerformed(evt);
+            }
+        });
+
+        isActiveBox.setSelected(true);
+        isActiveBox.setText("Is Active");
 
         saveBtn.setBackground(new java.awt.Color(0, 102, 153));
         saveBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,17 +129,17 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
             }
         });
 
-        isActiveBox.setSelected(true);
-        isActiveBox.setText("Is Active");
-
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Profile Picture", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel6.setText("Note: Only enter the new password in the password field if you need to change the password. Otherwise, leave the password field blank.");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -145,10 +161,14 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
                             .addComponent(passwordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(isActiveBox, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addContainerGap(199, Short.MAX_VALUE)
+                    .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,22 +189,23 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(passwordTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(isActiveBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(isActiveBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addContainerGap(304, Short.MAX_VALUE)
+                    .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "User List", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "User List", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        userDetailsTbl.setBackground(new java.awt.Color(255, 255, 255));
         userDetailsTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -208,6 +229,11 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        userDetailsTbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                userDetailsTblMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(userDetailsTbl);
         if (userDetailsTbl.getColumnModel().getColumnCount() > 0) {
             userDetailsTbl.getColumnModel().getColumn(0).setMinWidth(0);
@@ -222,7 +248,7 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,50 +284,120 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        Integer isActive=null;
-        if(isActiveBox.isSelected()){
-            isActive=1;
-        }
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        saveBtn.setText("Save");
+        saveBtn.setBackground(new Color(0, 102, 153)); // Change background color
+        saveBtn.setForeground(Color.WHITE);
+        userID = 0;
         
-        int empIndex=employeeCmb.getSelectedIndex();
-        int roleIndex=userRoleCmb.getSelectedIndex();
-        
-        UserDto userDto=new UserDto(0, 
-                employeeIds.get(empIndex),userRoleIds.get(roleIndex), userNameTxt.getText(), 
-                        passwordTxt.getText(),isActive,1,"");
-        
-        if(!update){
-            try {
-                 UserDto result=userAcountManagementController.saveUser(userDto);
-                 
-                 if (result.getToken()!=null) {
-                    configTimer.setMessageTimer(true);
-                 } else {
-//                     JOptionPane.showMessageDialog(this, "Failed to add the Doctor");
-                 }
-             } catch (Exception ex) {
-                 Logger.getLogger(UserAccountManagement.class.getName()).log(Level.SEVERE, null, ex);
-             }
-        }else{
-            try {
-                if(userDetailsTbl.getSelectedRow()==-1){
-                    return;
-                }
-                
-                userDto.setUserId((int) userDetailsTbl.getValueAt(userDetailsTbl.getSelectedRow(), 0));
-                boolean result=userAcountManagementController.updateUser(userDto);
-                if (result) {
-                    configTimer.setMessageTimer(true);
-                 } else {
-                    
-                 }
+        userNameTxt.setText("");
+        passwordTxt.setText("");
+    }//GEN-LAST:event_clearBtnActionPerformed
 
+    int userID = 0;
+    
+    private void userDetailsTblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userDetailsTblMousePressed
+        if (evt.getClickCount() == 2) {
+            int selectedRow = userDetailsTbl.getSelectedRow();
+            if (selectedRow != -1) {
+                saveBtn.setText("Update");
+                saveBtn.setBackground(Color.ORANGE); // Change background color
+                saveBtn.setForeground(Color.BLACK);  // Change text color
+
+                userNameTxt.setText(userDetailsTbl.getValueAt(selectedRow, 2).toString());
+                isActiveBox.setSelected(Boolean.parseBoolean(userDetailsTbl.getValueAt(selectedRow, 3).toString()));
+                
+                userID = Integer.parseInt(userDetailsTbl.getValueAt(selectedRow, 0).toString());
+            }
+        }
+    }//GEN-LAST:event_userDetailsTblMousePressed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        int empId = 0;
+        int roleId = 0;
+        
+        for(EmployeeManagementDto dto : employeeManagementDtos){
+            if(dto.getName().equals(employeeCmb.getSelectedItem().toString())){
+                empId = dto.getEmployeeId();
+            }
+        }
+            
+        for(UserRoleDto dto : userRoleDtos){
+            if(dto.getRoleName().equals(userRoleCmb.getSelectedItem().toString())){
+                roleId = dto.getUserRoleId();
+            }
+        }
+            
+        if (saveBtn.getText() == "Save") {
+            //Save  
+            UserDto userDto = new UserDto();
+            userDto.setEmployeeId(empId);
+            userDto.setRoleId(roleId);
+            userDto.setPassword(passwordTxt.getText());
+            userDto.setUserName(userNameTxt.getText());
+            if (isActiveBox.isSelected() == true) {
+                userDto.setStatus(1);
+            }else{
+                userDto.setStatus(0);
+            }
+            userDto.setVisible(1);
+            userDto.setToken("");
+            
+            try {
+                userAcountManagementController.saveUser(userDto);
             } catch (Exception ex) {
                 Logger.getLogger(UserAccountManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }else {
+            //Update
+            if (passwordTxt.getText().equals("")) {
+                System.out.println("Empty");
+                
+                UserDto userDto = new UserDto();
+                userDto.setUserId(userID);
+                userDto.setEmployeeId(empId);
+                userDto.setRoleId(roleId);
+                userDto.setPassword(passwordTxt.getText());
+                userDto.setUserName(userNameTxt.getText());
+                if (isActiveBox.isSelected() == true) {
+                    userDto.setStatus(1);
+                }else{
+                    userDto.setStatus(0);
+                }
+                userDto.setVisible(1);
+                userDto.setToken("");
+                
+                try {
+                    userAcountManagementController.updateUser(userDto);
+                } catch (Exception ex) {
+                    Logger.getLogger(UserAccountManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                System.out.println("Not Empty");
+                
+                UserDto userDto = new UserDto();
+                userDto.setUserId(userID);
+                userDto.setEmployeeId(empId);
+                userDto.setRoleId(roleId);
+                userDto.setPassword(passwordTxt.getText());
+                userDto.setUserName(userNameTxt.getText());
+                if (isActiveBox.isSelected() == true) {
+                    userDto.setStatus(1);
+                }else{
+                    userDto.setStatus(0);
+                }
+                userDto.setVisible(1);
+                userDto.setToken("");
+                
+                try {
+                    userAcountManagementController.updateUserWithPassword(userDto);
+                } catch (Exception ex) {
+                    Logger.getLogger(UserAccountManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-//        loadAllUsers();
+        
+        loadAllUsers();
     }//GEN-LAST:event_saveBtnActionPerformed
 
     /**
@@ -340,13 +436,14 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXButton clearBtn;
     private javax.swing.JComboBox<String> employeeCmb;
     private javax.swing.JCheckBox isActiveBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -367,8 +464,9 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
             DefaultTableModel dtm=(DefaultTableModel) userDetailsTbl.getModel();
             dtm.setRowCount(0);
             
-            boolean isActive=false;
             for(UserDto dto: allUsers){
+                boolean isActive=false;
+                
                 if(dto.getStatus()==1){
                     isActive=true;
                 }
@@ -385,10 +483,12 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
             Logger.getLogger(UserAccountManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    ArrayList<EmployeeManagementDto> employeeManagementDtos = null;
 
     private void loadEmployees() {
         try {
-            ArrayList<EmployeeManagementDto> employeeManagementDtos=employeeManagementController.getAllEmployees();
+            employeeManagementDtos=employeeManagementController.getAllEmployees();
         
             for(EmployeeManagementDto dto: employeeManagementDtos){
                 employeeCmb.addItem(dto.getName());
@@ -400,10 +500,12 @@ public class UserAccountManagement extends javax.swing.JInternalFrame {
         }
     }
 
+    ArrayList<UserRoleDto> userRoleDtos = null;
+    
     private void loadUserRole() {
         try {
             String quary="WHERE status=1";
-            ArrayList<UserRoleDto> userRoleDtos=userRoleController.getAllUserRoles(quary);
+            userRoleDtos=userRoleController.getAllUserRoles(quary);
         
             for(UserRoleDto dto: userRoleDtos){
                 userRoleCmb.addItem(dto.getRoleName());

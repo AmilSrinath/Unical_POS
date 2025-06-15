@@ -6,6 +6,7 @@
 package net.unical.pos.repository.custom;
 
 import java.util.ArrayList;
+import net.unical.pos.dto.UserDto;
 import net.unical.pos.model.PosMainUser;
 
 /**
@@ -27,6 +28,10 @@ public interface UserRepositoryCustom {
     boolean login(PosMainUser PosMainUser)throws Exception;
 
     public PosMainUser findUserName(String userName)throws Exception;
+
+    public UserDto updateUser(UserDto userDto);
+
+    public UserDto updateUserWithPassword(UserDto userDto);
     
     
 }

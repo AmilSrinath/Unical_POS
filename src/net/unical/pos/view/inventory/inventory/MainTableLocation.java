@@ -305,7 +305,7 @@ public class MainTableLocation extends javax.swing.JInternalFrame {
             try {
                 boolean result=mainTableLocationController.saveMainTableLocation(mainTableLocationDto);
                 if (result) {
-//                    configTimer.setMessageTimer(true);
+                    JOptionPane.showMessageDialog(this, "Successfull!");
                 } else {
                     //                   JOptionPane.showMessageDialog(this, "Failed to add the Category");
                 }

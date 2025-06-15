@@ -25,4 +25,8 @@ public interface UserServiceCustom {
     ArrayList<UserDto> getAllUser(String quary)throws Exception;
     
     UserDto login(UserDto dto)throws Exception;
+    
+    UserDto updateUser(UserDto userDto)throws Exception;
+
+    public UserDto updateUserWithPassword(UserDto userDto);
 }

@@ -32,6 +32,7 @@ public class ItemList extends javax.swing.JInternalFrame{
         initComponents();
         
         this.newItemController=new MainItemController();
+        this.dashboard = new Dashboard();
         loadAllItems();
     }
 

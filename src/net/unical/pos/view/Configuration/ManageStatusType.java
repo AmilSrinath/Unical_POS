@@ -4,6 +4,7 @@
  */
 package net.unical.pos.view.Configuration;
 
+import java.awt.Color;
 import net.unical.pos.view.Inquiry.*;
 import java.awt.Dimension;
 import java.sql.Timestamp;
@@ -25,32 +26,35 @@ import net.unical.pos.controller.DeliveryOrderController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
-import net.unical.pos.model.CourierBranchModel;
-import net.unical.pos.model.CourierCompanyModel;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
 import net.unical.pos.model.InquiryModel;
 import net.unical.pos.model.ResonModel;
-import net.unical.pos.repository.impl.CourierBranchRepositoryImpl;
-import net.unical.pos.repository.impl.CourierCompanyRepositoryImpl;
+import net.unical.pos.model.StatusRegModel;
+import net.unical.pos.model.StatusTypeModel;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.PaymentRepositoryImpl;
 import net.unical.pos.repository.impl.ResonRepositoryImpl;
+import net.unical.pos.repository.impl.StatusRegRepositoryImpl;
+import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
  * @author apple
  */
-public class ManageCourierBranch extends JInternalFrame {
-    private CourierBranchRepositoryImpl courierBranchRepositoryImpl;
-    private CourierCompanyRepositoryImpl courierCompanyRepositoryImpl;
+public class ManageStatusType extends JInternalFrame {
+    private StatusRegRepositoryImpl statusRegRepositoryImpl;
+    private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
+    
+    List<StatusRegModel> statusRegList = null;
 
     /**
      * Creates new form OrderFilter
      */
-    public ManageCourierBranch() {
+    public ManageStatusType() {
         initComponents();
         setTitle("Order Filter");
         setClosable(true);
@@ -61,13 +65,13 @@ public class ManageCourierBranch extends JInternalFrame {
         desktopPane = new javax.swing.JDesktopPane();
     }
 
-    public ManageCourierBranch(Dashboard dashboard) {
+    public ManageStatusType(Dashboard dashboard) {
         this();
-        this.courierBranchRepositoryImpl = new CourierBranchRepositoryImpl();
-        this.courierCompanyRepositoryImpl = new CourierCompanyRepositoryImpl();
+        this.statusRegRepositoryImpl = new StatusRegRepositoryImpl();
+        this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         
-        getAllCourierBranch();
-        loadDataCmbCompany();
+        loadAllStatusReg();
+        getAllStatusType();
     }
 
     /**
@@ -85,15 +89,13 @@ public class ManageCourierBranch extends JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        resonTable = new org.jdesktop.swingx.JXTable();
+        StatusTypeTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
-        btnAddBranch = new javax.swing.JButton();
-        txtBranchName = new javax.swing.JTextField();
+        btnAddStatusType = new javax.swing.JButton();
+        txtStatusType = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        txtContact = new javax.swing.JTextField();
-        cmbCompany = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
+        cmbStatusReg = new javax.swing.JComboBox<>();
 
         InquiryOptions.setResizable(false);
 
@@ -151,19 +153,19 @@ public class ManageCourierBranch extends JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        resonTable.setModel(new javax.swing.table.DefaultTableModel(
+        StatusTypeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "", "Branch ID", "Branch Name", "Contact", "Company"
+                "", "Status ID", "Reg ID", "Status Type"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -174,124 +176,101 @@ public class ManageCourierBranch extends JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        resonTable.setEditable(false);
-        resonTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        StatusTypeTable.setEditable(false);
+        StatusTypeTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                resonTableMouseClicked(evt);
+                StatusTypeTableMouseClicked(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                resonTableMousePressed(evt);
+                StatusTypeTableMousePressed(evt);
             }
         });
-        resonTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        StatusTypeTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                resonTablePropertyChange(evt);
+                StatusTypeTablePropertyChange(evt);
             }
         });
-        resonTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        StatusTypeTable.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                resonTableKeyReleased(evt);
+                StatusTypeTableKeyReleased(evt);
             }
         });
-        jScrollPane6.setViewportView(resonTable);
-        if (resonTable.getColumnModel().getColumnCount() > 0) {
-            resonTable.getColumnModel().getColumn(0).setMinWidth(5);
-            resonTable.getColumnModel().getColumn(0).setMaxWidth(5);
-            resonTable.getColumnModel().getColumn(1).setMinWidth(150);
-            resonTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-            resonTable.getColumnModel().getColumn(1).setMaxWidth(150);
+        jScrollPane6.setViewportView(StatusTypeTable);
+        if (StatusTypeTable.getColumnModel().getColumnCount() > 0) {
+            StatusTypeTable.getColumnModel().getColumn(0).setMinWidth(5);
+            StatusTypeTable.getColumnModel().getColumn(0).setMaxWidth(5);
+            StatusTypeTable.getColumnModel().getColumn(2).setMinWidth(150);
+            StatusTypeTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+            StatusTypeTable.getColumnModel().getColumn(2).setMaxWidth(150);
         }
-        if (resonTable.getColumnModel().getColumnCount() > 0) {
-            resonTable.getColumnModel().getColumn(0).setMinWidth(0);
-            resonTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-            resonTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        if (StatusTypeTable.getColumnModel().getColumnCount() > 0) {
+            StatusTypeTable.getColumnModel().getColumn(0).setMinWidth(0);
+            StatusTypeTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+            StatusTypeTable.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 153));
 
-        btnAddBranch.setText("Add Branch");
-        btnAddBranch.addActionListener(new java.awt.event.ActionListener() {
+        btnAddStatusType.setText("Add Status Type");
+        btnAddStatusType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBranchActionPerformed(evt);
+                btnAddStatusTypeActionPerformed(evt);
             }
         });
 
-        txtBranchName.addActionListener(new java.awt.event.ActionListener() {
+        txtStatusType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBranchNameActionPerformed(evt);
+                txtStatusTypeActionPerformed(evt);
             }
         });
-        txtBranchName.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtStatusType.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBranchNameKeyReleased(evt);
+                txtStatusTypeKeyReleased(evt);
             }
         });
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Branch Name");
-
-        jLabel19.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Contact");
-
-        txtContact.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtContactActionPerformed(evt);
-            }
-        });
-        txtContact.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtContactKeyReleased(evt);
-            }
-        });
+        jLabel18.setText("Status Type");
 
         jLabel20.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("Select Company");
+        jLabel20.setText("Status Reg");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
+                .addGap(191, 191, 191)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtBranchName, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 742, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(118, 118, 118)
-                .addComponent(btnAddBranch)
-                .addContainerGap(357, Short.MAX_VALUE))
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel18))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtStatusType)
+                    .addComponent(cmbStatusReg, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(247, 247, 247)
+                .addComponent(btnAddStatusType)
+                .addContainerGap(426, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbStatusReg, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel20))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19)
-                            .addComponent(txtBranchName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtStatusType, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel18)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(btnAddBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                        .addGap(56, 56, 56)
+                        .addComponent(btnAddStatusType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -312,7 +291,7 @@ public class ManageCourierBranch extends JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -333,113 +312,103 @@ public class ManageCourierBranch extends JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private Integer selectedBranchId = null;
+    private Integer selectedStatusTypeId = null;
     
-    private void btnAddBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBranchActionPerformed
-        String branchNameText = txtBranchName.getText();
-        String branchContactText = txtContact.getText();
-        String companyText = cmbCompany.getSelectedItem().toString();
+    private void btnAddStatusTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStatusTypeActionPerformed
+        String statusType = txtStatusType.getText();
 
-        if (branchNameText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a branch name.");
-            return;
-        }
-        
-        if (branchContactText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a branch contact.");
-            return;
-        }
-        
-        if (companyText == "Select Company") {
-            JOptionPane.showMessageDialog(this, "Please select a company.");
+        if (statusType.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a status type.");
             return;
         }
 
-        if (selectedBranchId == null) {
+        if (selectedStatusTypeId == null) {
             // Add
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            
-            CourierBranchModel courierBranchModel = new CourierBranchModel();
-            courierBranchModel.setBranchName(branchNameText);
-            courierBranchModel.setCompanyName(companyText);
-            courierBranchModel.setBranchContact(branchContactText);
-            courierBranchModel.setUserId(1);
-            courierBranchModel.setStatus(1);
-            courierBranchModel.setCreateDate(now);
-            courierBranchModel.setEditedDate(now);
+            StatusTypeModel statusTypeModel = new StatusTypeModel();
+            statusTypeModel.setStatus_type(statusType);
 
-            courierBranchRepositoryImpl.saveCourierCompany(courierBranchModel);
+            statusTypeModel.setReg_id(statusRegRepositoryImpl.getStatusRegIdByDes(cmbStatusReg.getSelectedItem()));
+            statusTypeModel.setStatus(1);
+            statusTypeModel.setUser_id(LogInForm.userID);
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            statusTypeModel.setCreate_date(now);
+            statusTypeModel.setEdited_date(now);
+
+            statusTypeRepositoryImpl.saveStatusType(statusTypeModel);
         } else {
             // Update
-            courierBranchRepositoryImpl.updateCourierCompany(selectedBranchId, branchNameText,branchContactText,companyText);
-            btnAddBranch.setText("Add Branch");
-            selectedBranchId = null;
+            statusTypeRepositoryImpl.updateStatusType(selectedStatusTypeId, statusType);
+            btnAddStatusType.setText("Add Status Type");
+            selectedStatusTypeId = null;
         }
 
-        txtBranchName.setText(""); // Clear input
-        txtContact.setText(""); // Clear input
-        cmbCompany.setSelectedIndex(0);
-        getAllCourierBranch();  // Reload table
-    }//GEN-LAST:event_btnAddBranchActionPerformed
-
-    public void loadDataCmbCompany() {
-        cmbCompany.removeAllItems();
-        cmbCompany.addItem("Select Company");
-        List<CourierCompanyModel> companyModels = courierCompanyRepositoryImpl.getAllCourierCompanies();
-        for (CourierCompanyModel companyModel : companyModels) {
-            cmbCompany.addItem(companyModel.getCompanyName());
+        txtStatusType.setText(""); // Clear input
+        getAllStatusType();
+    }//GEN-LAST:event_btnAddStatusTypeActionPerformed
+            
+    public void loadAllStatusReg() {
+        cmbStatusReg.removeAll();
+        statusRegList = statusRegRepositoryImpl.getAllStatusReg();
+        for (StatusRegModel model : statusRegList) {
+            cmbStatusReg.addItem(model.getDescription());
         }
     }
     
-    public void getAllCourierBranch() {
-        String[] columnNames = {"Branch ID","Branch Name","Contact","Company"};
+    public void getAllStatusType() {
+        String[] columnNames = {"Status ID","Reg ID","Status Type"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
-        List<CourierBranchModel> courierBranchModels = courierBranchRepositoryImpl.getAllCourierBranchs();
-        for (CourierBranchModel model : courierBranchModels) {
+        List<StatusTypeModel> statusTypeModels = statusTypeRepositoryImpl.getAllStatusType();
+        for (StatusTypeModel model : statusTypeModels) {
             Object[] row = {
-                model.getBranchId(),
-                model.getBranchName(),
-                model.getBranchContact(),
-                model.getCompanyName()
+                model.getStatus_id(),
+                model.getReg_id(),
+                model.getStatus_type()
             };
             tableModel.addRow(row);
         }
-        resonTable.setModel(tableModel);
+
+        StatusTypeTable.setModel(tableModel);
     }
     
-    private void resonTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resonTableKeyReleased
+    private void StatusTypeTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_StatusTypeTableKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_resonTableKeyReleased
+    }//GEN-LAST:event_StatusTypeTableKeyReleased
 
-    private void resonTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_resonTablePropertyChange
+    private void StatusTypeTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_StatusTypeTablePropertyChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_resonTablePropertyChange
+    }//GEN-LAST:event_StatusTypeTablePropertyChange
 
-    private void resonTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resonTableMousePressed
+    private void StatusTypeTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusTypeTableMousePressed
         if (evt.getClickCount() == 2) {
-            int selectedRow = resonTable.getSelectedRow();
+            int selectedRow = StatusTypeTable.getSelectedRow();
             if (selectedRow != -1) {
-                selectedBranchId = Integer.parseInt(resonTable.getValueAt(selectedRow, 0).toString()); // Assuming reson_id is the 1st column
-                txtBranchName.setText(resonTable.getValueAt(selectedRow, 1).toString());
-                txtContact.setText(resonTable.getValueAt(selectedRow, 2).toString());
-                cmbCompany.setSelectedItem(resonTable.getValueAt(selectedRow, 3).toString());
-                btnAddBranch.setText("Update Branch");
+                for (StatusRegModel model : statusRegList) {
+                    int regID = Integer.parseInt(StatusTypeTable.getValueAt(selectedRow, 1).toString());
+                    if (regID == model.getReg_id()) {
+                        cmbStatusReg.setSelectedItem(model.getDescription());
+                    }
+                }
+                                
+                selectedStatusTypeId = Integer.parseInt(StatusTypeTable.getValueAt(selectedRow, 0).toString()); // Assuming reson_id is the 1st column
+                String statusType = StatusTypeTable.getValueAt(selectedRow, 2).toString();
+                txtStatusType.setText(statusType);
+                btnAddStatusType.setText("Update Status Type");
             }
         }
-    }//GEN-LAST:event_resonTableMousePressed
+    }//GEN-LAST:event_StatusTypeTableMousePressed
 
-    private void resonTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resonTableMouseClicked
+    private void StatusTypeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusTypeTableMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_resonTableMouseClicked
+    }//GEN-LAST:event_StatusTypeTableMouseClicked
 
-    private void txtBranchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchNameActionPerformed
+    private void txtStatusTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusTypeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBranchNameActionPerformed
+    }//GEN-LAST:event_txtStatusTypeActionPerformed
 
-    private void txtBranchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranchNameKeyReleased
+    private void txtStatusTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStatusTypeKeyReleased
         
-    }//GEN-LAST:event_txtBranchNameKeyReleased
+    }//GEN-LAST:event_txtStatusTypeKeyReleased
 
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
         
@@ -448,14 +417,6 @@ public class ManageCourierBranch extends JInternalFrame {
     private void btnNotPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotPaidActionPerformed
         
     }//GEN-LAST:event_btnNotPaidActionPerformed
-
-    private void txtContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContactActionPerformed
-
-    private void txtContactKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContactKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContactKeyReleased
 
     /**
      * @param args the command line arguments
@@ -474,13 +435,13 @@ public class ManageCourierBranch extends JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatusType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatusType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatusType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatusType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -550,27 +511,25 @@ public class ManageCourierBranch extends JInternalFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageCourierBranch().setVisible(true);
+                new ManageStatusType().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog InquiryOptions;
-    private javax.swing.JButton btnAddBranch;
+    private org.jdesktop.swingx.JXTable StatusTypeTable;
+    private javax.swing.JButton btnAddStatusType;
     private javax.swing.JButton btnNotPaid;
     private javax.swing.JButton btnPaid;
-    private javax.swing.JComboBox<String> cmbCompany;
+    private javax.swing.JComboBox<String> cmbStatusReg;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane6;
-    private org.jdesktop.swingx.JXTable resonTable;
-    private javax.swing.JTextField txtBranchName;
-    private javax.swing.JTextField txtContact;
+    private javax.swing.JTextField txtStatusType;
     // End of variables declaration//GEN-END:variables
 
     public javax.swing.JDesktopPane desktopPane;

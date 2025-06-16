@@ -70,6 +70,7 @@ import net.unical.pos.repository.impl.MainOrderRepositoryImpl;
 import net.unical.pos.repository.impl.TestClass;
 import net.unical.pos.service.impl.CustomerServiceImpl;
 import net.unical.pos.view.home.Dashboard;
+import net.unical.pos.view.main.LogInForm;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -630,8 +631,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
         );
 
-        jPanel7.getAccessibleContext().setAccessibleName("");
-
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
@@ -1134,14 +1133,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Delivery Status"
+                "ID", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Date", "Delivery Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, false, false, false
+                false, true, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1524,8 +1523,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
             
             totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
-
-            codTxt.setText(totAmountLbl.getText());
+            
+            if (paymentTypeCombo.getSelectedItem().equals("Card")) {
+                PaidAmountTxt.setText(totAmountLbl.getText());
+            }else {
+                codTxt.setText(totAmountLbl.getText());
+            }
             
             weightTxt.setText(String.format("%.2f", totalWeight));
         }
@@ -1725,6 +1728,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     customerNumberTxt.setText("");
                     remarkTxt.setText("");
                     orderCodeTxt.setText("");
+                    PaidAmountTxt.setText("0");
+                    
+                    itemListTableModel.setRowCount(0);
                 } else {
                     JOptionPane.showMessageDialog(this, "Update failed");
                 }
@@ -1845,7 +1851,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 customerNumberTxt.setText("");
                 remarkTxt.setText("");
                 orderCodeTxt.setText("");
+                Log.info(DeliveryOrders.class, orderId+" Order Save. User ID: "+LogInForm.userID);
                 
+                subTotAmountLbl.setText("0.00");
+                totAmountLbl.setText("0.00");
+                itemListTableModel.setRowCount(0);
+                codTxt.setText("");
+                PaidAmountTxt.setText("0");
             }else{
                 JOptionPane.showMessageDialog(this, "Save fail..");
             }
@@ -2115,6 +2127,25 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (phoneOneCmb.getSelectedItem() != null) {
+            try {
+                setupTableModel(customer_id);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "This customer not have log!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            check_customer.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    customer_id = null;
+                }
+
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    customer_id = null;
+                }
+            });
+            
             check_customer.setLocationRelativeTo(null);
             check_customer.setVisible(true);
             check_customer.repaint();
@@ -2123,8 +2154,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Phone2Label.setText((String) phoneTwoCmb.getSelectedItem());
             NameLabel.setText(customerNameTxt.getText());
             AddressLabel.setText(addressTxt.getText());
-
-            setupTableModel(customer_id);
         }else{
             JOptionPane.showMessageDialog(this, "Please select mobile number", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -2183,7 +2212,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
        if (evt.getClickCount() == 2) {
             int selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
-                String status = deliveryOrdersTable.getValueAt(selectedRow, 7).toString();
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
                 
                 switch (status) {
                     case "Pending":
@@ -2767,6 +2796,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     dto.getPhoneTwo(),
                     dto.getCod(),
                     dto.getGrandTotalPrice(),
+                    dto.getCreateDate(),
                     status
                 };
 
@@ -2793,7 +2823,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         
         // Assuming status is at column index 7 in your table
-        deliveryOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
+        deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
     }
 
 

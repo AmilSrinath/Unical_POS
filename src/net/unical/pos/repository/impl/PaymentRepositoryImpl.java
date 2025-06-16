@@ -33,10 +33,13 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 "SELECT p.payment_id, p.cod, p.total_amount, p.payment_status, " +
                 "o.order_id, o.customer_id, o.delivery_order_id, o.bill_no, o.sub_total_price, " +
                 "o.delivery_fee, o.total_order_price, o.payment_type_id, " +
-                "o.created_Date, o.remark, o.is_print " +
+                "o.created_Date, o.remark, o.is_print, " +
+                "d.status_id " +
                 "FROM pos_payment_tb p " +
                 "INNER JOIN pos_main_order_tb o ON p.order_id = o.order_id " +
-                "WHERE DATE(o.created_Date) BETWEEN ? AND ?"
+                "INNER JOIN pos_main_delivery_order_tb d ON d.delivery_id = o.delivery_order_id " +
+                "WHERE DATE(o.created_Date) BETWEEN ? AND ? " +
+                "AND d.status_id IN (4, 5) "
             );
 
             if (paymentType != null && paymentType != 0) {
@@ -68,7 +71,6 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 deliveryOrder.setOrderCode(rs.getString("bill_no"));
                 deliveryOrder.setOrderId(rs.getInt("order_id"));
                 deliveryOrder.setCustomerId(rs.getInt("customer_id"));
-                deliveryOrder.setOrderCode(rs.getString("bill_no"));
                 deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
                 deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
                 deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
@@ -88,7 +90,6 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 if (conn != null) conn.close();
             } catch (Exception e) {
                 Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-                e.printStackTrace();
             }
         }
         return deliveryOrders;

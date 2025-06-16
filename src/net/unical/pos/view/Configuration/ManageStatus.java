@@ -4,6 +4,7 @@
  */
 package net.unical.pos.view.Configuration;
 
+import java.awt.Color;
 import net.unical.pos.view.Inquiry.*;
 import java.awt.Dimension;
 import java.sql.Timestamp;
@@ -25,32 +26,30 @@ import net.unical.pos.controller.DeliveryOrderController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
-import net.unical.pos.model.CourierBranchModel;
-import net.unical.pos.model.CourierCompanyModel;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
 import net.unical.pos.model.InquiryModel;
 import net.unical.pos.model.ResonModel;
-import net.unical.pos.repository.impl.CourierBranchRepositoryImpl;
-import net.unical.pos.repository.impl.CourierCompanyRepositoryImpl;
+import net.unical.pos.model.StatusRegModel;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.PaymentRepositoryImpl;
 import net.unical.pos.repository.impl.ResonRepositoryImpl;
+import net.unical.pos.repository.impl.StatusRegRepositoryImpl;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
  * @author apple
  */
-public class ManageCourierBranch extends JInternalFrame {
-    private CourierBranchRepositoryImpl courierBranchRepositoryImpl;
-    private CourierCompanyRepositoryImpl courierCompanyRepositoryImpl;
+public class ManageStatus extends JInternalFrame {
+    private StatusRegRepositoryImpl statusRegRepositoryImpl;
 
     /**
      * Creates new form OrderFilter
      */
-    public ManageCourierBranch() {
+    public ManageStatus() {
         initComponents();
         setTitle("Order Filter");
         setClosable(true);
@@ -61,13 +60,11 @@ public class ManageCourierBranch extends JInternalFrame {
         desktopPane = new javax.swing.JDesktopPane();
     }
 
-    public ManageCourierBranch(Dashboard dashboard) {
+    public ManageStatus(Dashboard dashboard) {
         this();
-        this.courierBranchRepositoryImpl = new CourierBranchRepositoryImpl();
-        this.courierCompanyRepositoryImpl = new CourierCompanyRepositoryImpl();
+        this.statusRegRepositoryImpl = new StatusRegRepositoryImpl();
         
-        getAllCourierBranch();
-        loadDataCmbCompany();
+        getAllStatusReg();
     }
 
     /**
@@ -87,13 +84,9 @@ public class ManageCourierBranch extends JInternalFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         resonTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
-        btnAddBranch = new javax.swing.JButton();
-        txtBranchName = new javax.swing.JTextField();
+        btnAddStatusReg = new javax.swing.JButton();
+        txtStatusReg = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        txtContact = new javax.swing.JTextField();
-        cmbCompany = new javax.swing.JComboBox<>();
-        jLabel20 = new javax.swing.JLabel();
 
         InquiryOptions.setResizable(false);
 
@@ -156,14 +149,14 @@ public class ManageCourierBranch extends JInternalFrame {
 
             },
             new String [] {
-                "", "Branch ID", "Branch Name", "Contact", "Company"
+                "", "Reg ID", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -209,89 +202,50 @@ public class ManageCourierBranch extends JInternalFrame {
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 153));
 
-        btnAddBranch.setText("Add Branch");
-        btnAddBranch.addActionListener(new java.awt.event.ActionListener() {
+        btnAddStatusReg.setText("Add Status Reg");
+        btnAddStatusReg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBranchActionPerformed(evt);
+                btnAddStatusRegActionPerformed(evt);
             }
         });
 
-        txtBranchName.addActionListener(new java.awt.event.ActionListener() {
+        txtStatusReg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBranchNameActionPerformed(evt);
+                txtStatusRegActionPerformed(evt);
             }
         });
-        txtBranchName.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtStatusReg.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBranchNameKeyReleased(evt);
+                txtStatusRegKeyReleased(evt);
             }
         });
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Branch Name");
-
-        jLabel19.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Contact");
-
-        txtContact.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtContactActionPerformed(evt);
-            }
-        });
-        txtContact.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtContactKeyReleased(evt);
-            }
-        });
-
-        jLabel20.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("Select Company");
+        jLabel18.setText("Description");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtBranchName, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 742, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(118, 118, 118)
-                .addComponent(btnAddBranch)
-                .addContainerGap(357, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
+                .addComponent(txtStatusReg, javax.swing.GroupLayout.PREFERRED_SIZE, 1033, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddStatusReg)
+                .addGap(112, 112, 112))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19)
-                            .addComponent(txtBranchName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(btnAddBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtStatusReg, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18)
+                    .addComponent(btnAddStatusReg, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -312,7 +266,7 @@ public class ManageCourierBranch extends JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -333,80 +287,54 @@ public class ManageCourierBranch extends JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private Integer selectedBranchId = null;
+    private Integer selectedStatusRegId = null;
     
-    private void btnAddBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBranchActionPerformed
-        String branchNameText = txtBranchName.getText();
-        String branchContactText = txtContact.getText();
-        String companyText = cmbCompany.getSelectedItem().toString();
+    private void btnAddStatusRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStatusRegActionPerformed
+        String statusReg = txtStatusReg.getText();
 
-        if (branchNameText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a branch name.");
-            return;
-        }
-        
-        if (branchContactText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a branch contact.");
-            return;
-        }
-        
-        if (companyText == "Select Company") {
-            JOptionPane.showMessageDialog(this, "Please select a company.");
+        if (statusReg.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a status Reg.");
             return;
         }
 
-        if (selectedBranchId == null) {
+        if (selectedStatusRegId == null) {
             // Add
+            StatusRegModel statusRegModel = new StatusRegModel();
+            statusRegModel.setDescription(statusReg);
+            statusRegModel.setStatus(1);
+            statusRegModel.setUser_id(LogInForm.userID);
             Timestamp now = new Timestamp(System.currentTimeMillis());
-            
-            CourierBranchModel courierBranchModel = new CourierBranchModel();
-            courierBranchModel.setBranchName(branchNameText);
-            courierBranchModel.setCompanyName(companyText);
-            courierBranchModel.setBranchContact(branchContactText);
-            courierBranchModel.setUserId(1);
-            courierBranchModel.setStatus(1);
-            courierBranchModel.setCreateDate(now);
-            courierBranchModel.setEditedDate(now);
+            statusRegModel.setCreate_date(now);
+            statusRegModel.setEdited_date(now);
 
-            courierBranchRepositoryImpl.saveCourierCompany(courierBranchModel);
+            statusRegRepositoryImpl.saveStatusReg(statusRegModel);
         } else {
             // Update
-            courierBranchRepositoryImpl.updateCourierCompany(selectedBranchId, branchNameText,branchContactText,companyText);
-            btnAddBranch.setText("Add Branch");
-            selectedBranchId = null;
+            statusRegRepositoryImpl.updateStatusReg(selectedStatusRegId, statusReg);
+            btnAddStatusReg.setText("Add Status Reg");
+            selectedStatusRegId = null;
         }
 
-        txtBranchName.setText(""); // Clear input
-        txtContact.setText(""); // Clear input
-        cmbCompany.setSelectedIndex(0);
-        getAllCourierBranch();  // Reload table
-    }//GEN-LAST:event_btnAddBranchActionPerformed
+        txtStatusReg.setText(""); // Clear input
+        getAllStatusReg();  // Reload table
+    }//GEN-LAST:event_btnAddStatusRegActionPerformed
 
-    public void loadDataCmbCompany() {
-        cmbCompany.removeAllItems();
-        cmbCompany.addItem("Select Company");
-        List<CourierCompanyModel> companyModels = courierCompanyRepositoryImpl.getAllCourierCompanies();
-        for (CourierCompanyModel companyModel : companyModels) {
-            cmbCompany.addItem(companyModel.getCompanyName());
-        }
-    }
-    
-    public void getAllCourierBranch() {
-        String[] columnNames = {"Branch ID","Branch Name","Contact","Company"};
+    public void getAllStatusReg() {
+        String[] columnNames = {"Reg ID","Description"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
-        List<CourierBranchModel> courierBranchModels = courierBranchRepositoryImpl.getAllCourierBranchs();
-        for (CourierBranchModel model : courierBranchModels) {
+        List<StatusRegModel> statusList = statusRegRepositoryImpl.getAllStatusReg();
+        for (StatusRegModel model : statusList) {
             Object[] row = {
-                model.getBranchId(),
-                model.getBranchName(),
-                model.getBranchContact(),
-                model.getCompanyName()
+                model.getReg_id(),
+                model.getDescription()
             };
             tableModel.addRow(row);
         }
+
         resonTable.setModel(tableModel);
     }
+
     
     private void resonTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resonTableKeyReleased
         // TODO add your handling code here:
@@ -420,11 +348,10 @@ public class ManageCourierBranch extends JInternalFrame {
         if (evt.getClickCount() == 2) {
             int selectedRow = resonTable.getSelectedRow();
             if (selectedRow != -1) {
-                selectedBranchId = Integer.parseInt(resonTable.getValueAt(selectedRow, 0).toString()); // Assuming reson_id is the 1st column
-                txtBranchName.setText(resonTable.getValueAt(selectedRow, 1).toString());
-                txtContact.setText(resonTable.getValueAt(selectedRow, 2).toString());
-                cmbCompany.setSelectedItem(resonTable.getValueAt(selectedRow, 3).toString());
-                btnAddBranch.setText("Update Branch");
+                selectedStatusRegId = Integer.parseInt(resonTable.getValueAt(selectedRow, 0).toString()); // Assuming reson_id is the 1st column
+                String resonText = resonTable.getValueAt(selectedRow, 1).toString();
+                txtStatusReg.setText(resonText);
+                btnAddStatusReg.setText("Update Status Reg");
             }
         }
     }//GEN-LAST:event_resonTableMousePressed
@@ -433,13 +360,13 @@ public class ManageCourierBranch extends JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_resonTableMouseClicked
 
-    private void txtBranchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchNameActionPerformed
+    private void txtStatusRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusRegActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBranchNameActionPerformed
+    }//GEN-LAST:event_txtStatusRegActionPerformed
 
-    private void txtBranchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranchNameKeyReleased
+    private void txtStatusRegKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStatusRegKeyReleased
         
-    }//GEN-LAST:event_txtBranchNameKeyReleased
+    }//GEN-LAST:event_txtStatusRegKeyReleased
 
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
         
@@ -448,14 +375,6 @@ public class ManageCourierBranch extends JInternalFrame {
     private void btnNotPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotPaidActionPerformed
         
     }//GEN-LAST:event_btnNotPaidActionPerformed
-
-    private void txtContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContactActionPerformed
-
-    private void txtContactKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContactKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContactKeyReleased
 
     /**
      * @param args the command line arguments
@@ -474,46 +393,14 @@ public class ManageCourierBranch extends JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageCourierBranch.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -550,27 +437,23 @@ public class ManageCourierBranch extends JInternalFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageCourierBranch().setVisible(true);
+                new ManageStatus().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog InquiryOptions;
-    private javax.swing.JButton btnAddBranch;
+    private javax.swing.JButton btnAddStatusReg;
     private javax.swing.JButton btnNotPaid;
     private javax.swing.JButton btnPaid;
-    private javax.swing.JComboBox<String> cmbCompany;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane6;
     private org.jdesktop.swingx.JXTable resonTable;
-    private javax.swing.JTextField txtBranchName;
-    private javax.swing.JTextField txtContact;
+    private javax.swing.JTextField txtStatusReg;
     // End of variables declaration//GEN-END:variables
 
     public javax.swing.JDesktopPane desktopPane;

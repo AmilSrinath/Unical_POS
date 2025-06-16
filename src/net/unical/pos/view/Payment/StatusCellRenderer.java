@@ -23,7 +23,7 @@ public class StatusCellRenderer extends DefaultTableCellRenderer{
 
         JLabel label = new JLabel(value.toString());
         label.setOpaque(true);
-        label.setHorizontalAlignment(LEFT); // Optional: center-align
+        label.setHorizontalAlignment(LEFT);
 
         if (value != null) {
             switch (value.toString()) {

@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.unical.pos.dbConnection.DBCon;
+import net.unical.pos.log.Log;
 import net.unical.pos.model.ResonModel;
 import net.unical.pos.view.main.LogInForm;
 
@@ -25,7 +26,7 @@ import net.unical.pos.view.main.LogInForm;
 public class ResonRepositoryImpl {
 
     public void saveReson(ResonModel resonModel) {
-        String insertQuery = "INSERT INTO unical_pos.pos_config_reson_tb "
+        String insertQuery = "INSERT INTO pos_config_reson_tb "
                 + "(reson, status, created_date, edited_date, user_id) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
@@ -43,6 +44,7 @@ public class ResonRepositoryImpl {
             JOptionPane.showMessageDialog(null, "Inquiry saved successfully.");
         } catch (Exception e) {
             Logger.getLogger(ResonRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
                     "An error occurred while saving the inquiry.",
@@ -54,7 +56,7 @@ public class ResonRepositoryImpl {
     public List<ResonModel> getAllResons() {
         List<ResonModel> resonList = new ArrayList<>();
 
-        String query = "SELECT * FROM unical_pos.pos_config_reson_tb";
+        String query = "SELECT * FROM pos_config_reson_tb";
 
         try (
             Connection conn = DBCon.getDatabaseConnection();
@@ -80,7 +82,7 @@ public class ResonRepositoryImpl {
     }
 
     public void updateResonTextOnly(int resonId, String resonText) {
-        String updateQuery = "UPDATE unical_pos.pos_config_reson_tb SET reson = ?, edited_date = ? WHERE reson_id = ?";
+        String updateQuery = "UPDATE pos_config_reson_tb SET reson = ?, edited_date = ? WHERE reson_id = ?";
 
         try (
             Connection conn = DBCon.getDatabaseConnection(); 
@@ -94,6 +96,7 @@ public class ResonRepositoryImpl {
             JOptionPane.showMessageDialog(null, "Reson updated successfully.");
         } catch (Exception e) {
             Logger.getLogger(ResonRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Reson updated not update");
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
                     "An error occurred while updating the reson.",

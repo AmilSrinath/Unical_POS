@@ -1,1 +1,0 @@
-2023-08-01 06:13:06,196 ERROR error - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Column count doesn't match value count at row 1

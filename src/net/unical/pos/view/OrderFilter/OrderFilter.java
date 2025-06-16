@@ -239,14 +239,14 @@ public class OrderFilter extends JInternalFrame {
 
             },
             new String [] {
-                "", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Status"
+                "", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Date", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -589,7 +589,8 @@ public class OrderFilter extends JInternalFrame {
                     dto.getPhoneOne(), 
                     dto.getPhoneTwo(), 
                     dto.getCod(), 
-                    dto.getGrandTotalPrice(), 
+                    dto.getGrandTotalPrice(),
+                    dto.getCreateDate(),
                     statusText
                 };
                 dtm.addRow(rowData);
@@ -603,10 +604,12 @@ public class OrderFilter extends JInternalFrame {
             }
 
             total_orders_count_txt.setText(String.valueOf(count));
+            Log.info(DeliveryOrders.class, "Test Info");
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(DeliveryOrders.class, "An error occurred in DeliveryOrders", ex);
         }
-        deliveryOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
+        deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
     }
     
     
@@ -622,7 +625,7 @@ public class OrderFilter extends JInternalFrame {
         if (evt.getClickCount() == 2) {
             int selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
-                String status = deliveryOrdersTable.getValueAt(selectedRow, 7).toString();
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
                 
                 switch (status) {
                     case "Pending":

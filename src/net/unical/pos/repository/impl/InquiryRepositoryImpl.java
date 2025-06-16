@@ -51,7 +51,7 @@ public class InquiryRepositoryImpl {
     }
 
     public void saveInquiry(InquiryModel inquiryModel) {
-        String insertQuery = "INSERT INTO unical_pos.pos_inquiry_tb "
+        String insertQuery = "INSERT INTO pos_inquiry_tb "
                 + "(way_bill, customer_id, customer_name, customer_phone_1, customer_phone_2, "
                 + "company, branch, branch_contact, reson, remark, status, created_date, edited_date, user_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -94,7 +94,7 @@ public class InquiryRepositoryImpl {
     }
 
     public void update(String wayBill, int status) {
-        String updateQuery = "UPDATE unical_pos.pos_inquiry_tb SET status = ?, edited_date = ? WHERE way_bill = ?";
+        String updateQuery = "UPDATE pos_inquiry_tb SET status = ?, edited_date = ? WHERE way_bill = ?";
 
         try (
                 Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
@@ -113,7 +113,7 @@ public class InquiryRepositoryImpl {
     public ArrayList<InquiryModel> getAllInquiryDuration(String fromDate, String toDate, int status) {
         ArrayList<InquiryModel> list = new ArrayList<>();
 
-        String baseQuery = "SELECT * FROM unical_pos.pos_inquiry_tb WHERE created_date BETWEEN ? AND ?";
+        String baseQuery = "SELECT * FROM pos_inquiry_tb WHERE created_date BETWEEN ? AND ?";
         // If status is not 0, apply additional filter
         if (status != 0) {
             baseQuery += " AND status = ?";
@@ -160,7 +160,7 @@ public class InquiryRepositoryImpl {
     public ArrayList<InquiryModel> searchInquiryByWayBill(String wayBillPart) {
         ArrayList<InquiryModel> list = new ArrayList<>();
 
-        String query = "SELECT * FROM unical_pos.pos_inquiry_tb WHERE way_bill LIKE ?";
+        String query = "SELECT * FROM pos_inquiry_tb WHERE way_bill LIKE ?";
 
         try (
                 Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {

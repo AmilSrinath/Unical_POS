@@ -219,8 +219,9 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 }
             }
 
+            System.out.println("deliveryOrder.getPaymentTypeId() : "+deliveryOrder.getPaymentTypeId()); // 1 -> Not Paid, 2 -> Paid
             // Add Payment
-            ps = con.prepareStatement("INSERT INTO pos_payment_tb (order_id, customer_id, cod, total_amount, payment_status, created_Date, edited_Date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            ps = con.prepareStatement("INSERT INTO pos_payment_tb (order_id, customer_id, cod, total_amount, payment_status, created_Date, edited_Date, user_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, orderId);
             ps.setInt(2, deliveryOrder.getCustomerId() != null ? deliveryOrder.getCustomerId() : customerId);
             ps.setDouble(3, deliveryOrder.getCod());
@@ -229,6 +230,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             ps.setDate(6, deliveryOrder.getCreateDate());
             ps.setDate(7, deliveryOrder.getEditedDate());
             ps.setInt(8, LogInForm.userID);
+            ps.setInt(9, deliveryOrder.getPaymentTypeId() == 1 ? 9:8);
             ps.executeUpdate();
 
             con.commit();
@@ -373,7 +375,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         try {
             conn = DBCon.getDatabaseConnection();
             StringBuilder sql = new StringBuilder(
-                "SELECT dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
+                "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
                 "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, " +
                 "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, " +
                 "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status " +
@@ -407,6 +409,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
             while (rs.next()) {
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setCreateDate(rs.getDate("created_date"));
                 deliveryOrder.setOrderId(rs.getInt("delivery_id"));
                 deliveryOrder.setOrderCode(rs.getString("order_code"));
                 deliveryOrder.setCustomerName(rs.getString("customer_name"));

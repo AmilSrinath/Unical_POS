@@ -1,1 +1,41 @@
-2023-08-01 06:13:06,196 INFO  info - class net.unical.pos.repository.impl.MainOrderRepositoryImpl	Error in Order java.sql.SQLException: Column count doesn't match value count at row 1
+2025-06-16 09:55:37,726 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12097 Order Save. User ID: 2
+2025-06-16 10:05:05,642 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 10:28:57,597 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12098 Order Save. User ID: 2
+2025-06-16 10:30:16,384 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12099 Order Save. User ID: 2
+2025-06-16 10:31:00,236 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12100 Order Save. User ID: 2
+2025-06-16 10:32:59,114 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12101 Order Save. User ID: 2
+2025-06-16 10:33:44,085 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12102 Order Save. User ID: 2
+2025-06-16 10:35:47,792 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12103 Order Save. User ID: 2
+2025-06-16 10:36:50,183 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12104 Order Save. User ID: 2
+2025-06-16 10:37:34,654 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12105 Order Save. User ID: 2
+2025-06-16 10:40:16,750 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12106 Order Save. User ID: 2
+2025-06-16 10:42:57,893 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12107 Order Save. User ID: 2
+2025-06-16 10:44:27,325 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12108 Order Save. User ID: 2
+2025-06-16 10:54:20,874 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12109 Order Save. User ID: 2
+2025-06-16 10:54:49,439 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12110 Order Save. User ID: 2
+2025-06-16 11:01:50,371 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12111 Order Save. User ID: 2
+2025-06-16 11:02:44,313 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12112 Order Save. User ID: 2
+2025-06-16 11:50:43,417 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 11:55:37,961 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:04:40,702 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:04:55,212 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:09:44,393 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:10:09,937 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:11:50,574 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:15:57,885 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:17:37,740 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:24:58,969 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:25:05,415 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:25:07,654 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:25:09,621 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 12:48:08,400 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12113 Order Save. User ID: 2
+2025-06-16 12:48:54,317 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12114 Order Save. User ID: 2
+2025-06-16 12:50:49,744 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12115 Order Save. User ID: 2
+2025-06-16 12:51:14,491 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	12116 Order Save. User ID: 2
+2025-06-16 12:58:39,789 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:00:12,046 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:01:49,646 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:01:49,903 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:02:05,431 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:02:07,537 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-16 13:02:11,142 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info

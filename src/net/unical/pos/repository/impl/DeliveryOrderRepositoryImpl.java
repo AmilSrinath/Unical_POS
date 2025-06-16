@@ -971,6 +971,52 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         return list;
     }
+
+    public String getOrderCount(String fromDate) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rst = null;
+        String totalOrders = "0";
+
+        try {
+            con = DBCon.getDatabaseConnection();
+            String sql = "SELECT COUNT(*) AS total_orders FROM ( " +
+                         "    SELECT d.order_code " +
+                         "    FROM unical_pos.pos_main_delivery_order_tb d " +
+                         "    JOIN unical_pos.pos_main_customer_tb c ON d.customer_id = c.customer_id " +
+                         "    JOIN unical_pos.pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
+                         "    JOIN ( " +
+                         "        SELECT od.order_id, i.item_id, i.item_name, SUM(od.quantity) AS total_quantity " +
+                         "        FROM unical_pos.pos_main_order_details_tb od " +
+                         "        JOIN unical_pos.pos_main_item_tb i ON od.item_id = i.item_id " +
+                         "        GROUP BY od.order_id, i.item_id, i.item_name " +
+                         "    ) AS item ON o.order_id = item.order_id " +
+                         "    WHERE DATE(d.created_date) = ? " +
+                         "    GROUP BY d.delivery_id " +
+                         ") AS subquery;";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, fromDate); // e.g., '2025-06-16'
+            rst = ps.executeQuery();
+
+            if (rst.next()) {
+                totalOrders = rst.getString("total_orders");
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            try {
+                if (rst != null) rst.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+
+        return totalOrders;
+    }
     
     
 }

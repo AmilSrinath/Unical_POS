@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.model.DeliveryOrder;
@@ -237,6 +238,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Order Save Faild");
             con.rollback();
             return null;
         } finally {
@@ -341,6 +343,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Get All faild");
         }finally {
 
             if (isLocalConnection && con != null) {
@@ -437,6 +440,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Get all duration faild");
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -444,13 +448,12 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (conn != null) conn.close();
             } catch (Exception e) {
                 Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Get all duration faild");
                 e.printStackTrace();
             }
         }
         return deliveryOrders;
     }
-
-
 
     public ArrayList<DeliveryOrder> getDeliveryOrdersByCustomer(Integer customer_id) {
         PreparedStatement ps = null;
@@ -491,24 +494,28 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Delivery Orders By Customer faild");
         }finally {
 
             if (isLocalConnection && con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Log.error(e, "get Delivery Orders By Customer faild");
                 }
             }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Log.error(e, "get Delivery Orders By Customer faild");
                 }
             }
             if (rst != null) {
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Log.error(e, "get Delivery Orders By Customer faild");
                 }
             }
         }
@@ -537,24 +544,28 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "update faild");
         }finally {
 
             if (isLocalConnection && con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Log.error(e, "update faild");
                 }
             }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Log.error(e, "update faild");
                 }
             }
             if (rst != null) {
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Log.error(e, "update faild");
                 }
             }
 
@@ -649,12 +660,14 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Calculation faild");
         } finally {
             try {
                 if (rst != null) rst.close();
                 if (ps != null) ps.close();
                 if (isLocalConnection && con != null) con.close();
             } catch (Exception e) {
+                Log.error(e, "get Calculation faild");
                 e.printStackTrace();
             }
         }
@@ -687,6 +700,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 connection.rollback();
             }
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "update faild");
             throw e;
         } finally {
             if (connection != null) {
@@ -860,12 +874,14 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Order By Id faild");
         } finally {
             if (isLocalConnection && con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
                     Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                    Log.error(e, "get Order By Id faild");
                 }
             }
             if (ps != null) {
@@ -873,6 +889,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     ps.close();
                 } catch (Exception e) {
                     Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                    Log.error(e, "get Order By Id faild");
                 }
             }
             if (rst != null) {
@@ -880,6 +897,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     rst.close();
                 } catch (Exception e) {
                     Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                    Log.error(e, "get Order By Id faild");
                 }
             }
         }
@@ -925,6 +943,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         } catch (SQLException e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Wrapping Order faild");
             e.printStackTrace();
         }
 
@@ -966,6 +985,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         } catch (SQLException e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Daliy Out Of Delivery Order faild");
             e.printStackTrace();
         }
 
@@ -1005,6 +1025,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Order Count faild");
         } finally {
             try {
                 if (rst != null) rst.close();
@@ -1012,6 +1033,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (con != null) con.close();
             } catch (SQLException e) {
                 Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "get Order Count faild");
             }
         }
 

@@ -14,7 +14,13 @@
     c.phone_one AS 'Phone 1',
     c.phone_two AS 'Phone 2',
     d.cod_amount AS 'COD Amount',
-    GROUP_CONCAT(CONCAT(item.item_name, ' (', item.total_quantity, ')') SEPARATOR ', ') AS 'Items'
+    GROUP_CONCAT(
+        CONCAT(
+            item.item_name,
+            CASE WHEN item.total_quantity > 1 THEN CONCAT(' ', item.total_quantity, '') ELSE '' END
+        )
+        SEPARATOR ', '
+    ) AS 'Items'
 FROM
     unical_pos.pos_main_delivery_order_tb d
 JOIN

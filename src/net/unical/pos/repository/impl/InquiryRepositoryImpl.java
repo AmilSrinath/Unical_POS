@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CustomerDataByInquirySearch;
 import net.unical.pos.model.DeliveryOrder;
@@ -45,6 +46,7 @@ public class InquiryRepositoryImpl {
             }
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "getCustomerDataByWayBill faild");
             e.printStackTrace(); // Consider logging instead
         }
         return null;
@@ -77,14 +79,17 @@ public class InquiryRepositoryImpl {
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Inquiry saved successfully.");
+            Log.info(inquiryModel, "Inquiry saved successfully");
         } catch (MySQLIntegrityConstraintViolationException dupEx) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, dupEx);
+            Log.error(dupEx, "saveInquiry faild");
             JOptionPane.showMessageDialog(null,
                     "Waybill '" + inquiryModel.getWayBill() + "' already exists!",
                     "Duplicate Entry",
                     JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "saveInquiry faild");
             e.printStackTrace(); // For debugging
             JOptionPane.showMessageDialog(null,
                     "An error occurred while saving the inquiry.",
@@ -105,6 +110,7 @@ public class InquiryRepositoryImpl {
             int rowsUpdated = stmt.executeUpdate();
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "update inquary faild");
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "An error occurred while updating the inquiry.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -150,6 +156,7 @@ public class InquiryRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "getAllInquiryDuration faild");
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error fetching inquiry records.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -188,6 +195,7 @@ public class InquiryRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "searchInquiryByWayBill faild");
             e.printStackTrace();
         }
 

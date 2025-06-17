@@ -143,15 +143,13 @@ public class ItemReport extends javax.swing.JInternalFrame {
         try {
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePickerFrom.getDate());
-
-            String count = deliveryOrderRepositoryImpl.getOrderCount(fromDate);
             
             JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/ItemReport.jrxml");
             JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
 
             HashMap<String, Object> hm = new HashMap<>();
             hm.put("date", fromDate.toString());
-            hm.put("orderCount", count);
+            hm.put("orderCount", deliveryOrderRepositoryImpl.getOrderCount(fromDate));
             
             
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());

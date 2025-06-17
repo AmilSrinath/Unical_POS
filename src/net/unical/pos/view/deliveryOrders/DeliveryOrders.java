@@ -1745,8 +1745,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             orders = mainOrderRepositoryImpl.getAllOrders();
         } catch (SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "update order error");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "update order error");
         }
     }
 
@@ -1863,14 +1865,17 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "save order error");
         }
         
         try {
             orders = mainOrderRepositoryImpl.getAllOrders();
         } catch (SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "save order error");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "save order error");
         }
         delivery_id = null;
     }
@@ -1907,12 +1912,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 fis = new FileInputStream("config.txt");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Item Remove error");
             }
             Properties props = new Properties();
             try {
                 props.load(fis);
             } catch (IOException ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Item Remove error");
             }
 
                 deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
@@ -1953,8 +1960,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             props.load(fis);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Config file not found", ex);
+            Log.error(ex, "FileNotFoundException error");
         } catch (IOException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Error loading config file", ex);
+            Log.error(ex, "IOException error");
         }
         return props;
     }
@@ -2005,6 +2014,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         
         } catch (JRException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "printAllOrdersBtnActionPerformed error");
         }
     }//GEN-LAST:event_printAllOrdersBtnActionPerformed
 
@@ -2053,6 +2063,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Phone number seleting error");
             }
         }
     }//GEN-LAST:event_phoneTwoCmbActionPerformed
@@ -2105,6 +2116,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 customer_exist=true;
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Phone number seleting error");
             }
         }
     }//GEN-LAST:event_phoneOneCmbActionPerformed
@@ -2131,6 +2143,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 setupTableModel(customer_id);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "This customer not have log!", "Error", JOptionPane.ERROR_MESSAGE);
+                Log.error(e, phoneOneCmb.getSelectedItem()+" This customer not have log!");
                 return;
             }
             
@@ -2295,6 +2308,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid delivery ID: " + deliveryID);
                         JOptionPane.showMessageDialog(this, "Invalid order code");
+                        Log.error(e, "Delivery table error");
                     }
                 } else {
                     System.out.println("Delivery ID is empty");
@@ -2354,6 +2368,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
     }//GEN-LAST:event_btnActiveActionPerformed
@@ -2377,6 +2392,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
     }//GEN-LAST:event_btnWrappingActionPerformed
@@ -2400,6 +2416,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
     }//GEN-LAST:event_btnOutForDeliveryActionPerformed
@@ -2423,6 +2440,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -2446,6 +2464,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
 
@@ -2470,6 +2489,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 order_options.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
             }
         }
     }//GEN-LAST:event_btnDeliverdActionPerformed
@@ -2558,10 +2578,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } catch (NullPointerException e) {
                     phoneTwoCmb.setSelectedItem(null);
                     System.out.println("NullPointerException: " + e.getMessage());
+                    Log.error(e, "Order Edit error");
                 } catch (NumberFormatException e) {
                     System.out.println("NumberFormatException: " + e.getMessage());
+                    Log.error(e, "Order Edit error");
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
+                    Log.error(e, "Order Edit error");
                 }
                 order_options.dispose();
             } else {
@@ -2726,7 +2749,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
             System.out.println(itemWeightList);
         } catch (Exception ex) {
-            
+            Log.error(DeliveryOrder.class, "", ex);
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2745,7 +2768,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(DeliveryOrder.class, "Cannot load Items : ", ex);
+            Log.error(ex, "getPaymentTypes error");
         }
     }
 
@@ -2820,6 +2843,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "getAllOrders error");
         }
         
         // Assuming status is at column index 7 in your table
@@ -2850,6 +2874,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         
         } catch (JRException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "printBill error");
         }
     }
 
@@ -2876,6 +2901,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             autoGenerator.completeText(numbers, phoneOneCmb);
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "getPhone_Number_One error");
         }
     }
     
@@ -2894,6 +2920,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             autoGenerator.completeText(numbers, phoneTwoCmb);
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "getPhone_Number_Two error");
         }
     }
     

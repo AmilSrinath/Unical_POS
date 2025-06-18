@@ -1769,7 +1769,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             orderDetailsDtos.add(dto);
         }
 
-        
         String phoneTwo=null;
         if(phoneTwoCmb.getSelectedItem()!=null){
             phoneTwo=phoneTwoCmb.getSelectedItem().toString();

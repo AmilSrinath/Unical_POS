@@ -1,0 +1,2 @@
+2025-06-17 15:46:46,793 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
+2025-06-17 15:59:54,764 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild

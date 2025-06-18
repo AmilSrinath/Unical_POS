@@ -1,2 +1,5 @@
-2025-06-17 15:46:46,793 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
-2025-06-17 15:59:54,764 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
+2025-06-18 08:51:10,638 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
+2025-06-18 08:55:04,928 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
+2025-06-18 08:56:08,207 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'status_id' in 'field list'	Order Save Faild
+2025-06-18 08:58:09,444 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`petal_pink_pos`.`pos_payment_tb`, CONSTRAINT `pos_payment_tb_pos_status_types_status_id_fk` FOREIGN KEY (`status_id`) REFERENCES `pos_status_types` (`status_id`))	Order Save Faild
+2025-06-18 09:12:20,447 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "customerId" is null	0776907226 This customer not have log!

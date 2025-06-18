@@ -44,6 +44,7 @@ public class ResonRepositoryImpl {
             JOptionPane.showMessageDialog(null, "Inquiry saved successfully.");
         } catch (Exception e) {
             Logger.getLogger(ResonRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            net.unical.pos.configurations.Log.error(e,"save reson error");
             
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
@@ -75,6 +76,7 @@ public class ResonRepositoryImpl {
             }
         } catch (Exception e) {
             Logger.getLogger(ResonRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            net.unical.pos.configurations.Log.error(e,"get All Resons error");
             e.printStackTrace();
         }
 

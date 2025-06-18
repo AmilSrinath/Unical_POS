@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.StatusTypeModel;
 
@@ -45,6 +46,7 @@ public class StatusTypeRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "save Status Type error");
             JOptionPane.showMessageDialog(null, "Error saving status type.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -64,6 +66,7 @@ public class StatusTypeRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "update Status Type error");
             JOptionPane.showMessageDialog(null, "Error updating status type.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -91,6 +94,7 @@ public class StatusTypeRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get all Status Type error");
             JOptionPane.showMessageDialog(null, "Error fetching status types.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 

@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.TestModel;
 
@@ -52,6 +53,7 @@ public class TestClass {
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
+            Log.error(ex, "get customer error");
             throw ex;
         } finally {
             if (rst != null) {

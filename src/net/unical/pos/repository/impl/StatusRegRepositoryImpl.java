@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.StatusRegModel;
 
@@ -42,6 +43,7 @@ public class StatusRegRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusRegRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "save Status Reg error");
             JOptionPane.showMessageDialog(null, "Error saving status registration.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -61,6 +63,7 @@ public class StatusRegRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusRegRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "updaate Status Reg error");
             JOptionPane.showMessageDialog(null, "Error updating status registration.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -86,6 +89,7 @@ public class StatusRegRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusRegRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get all Status Reg error");
             JOptionPane.showMessageDialog(null, "Error fetching status registration records.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -107,6 +111,7 @@ public class StatusRegRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(StatusRegRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "get Status Reg Id ByDes error");
             JOptionPane.showMessageDialog(null, "Error retrieving reg_id by description.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 

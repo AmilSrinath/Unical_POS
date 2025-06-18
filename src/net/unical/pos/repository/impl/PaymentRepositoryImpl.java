@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.repository.custom.PaymentRepository;
@@ -83,6 +84,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
             }
         } catch (Exception e) {
             Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get All Payment Duration error");
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -90,6 +92,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 if (conn != null) conn.close();
             } catch (Exception e) {
                 Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e,"get All Payment Duration error");
             }
         }
         return deliveryOrders;
@@ -110,12 +113,14 @@ public class PaymentRepositoryImpl implements PaymentRepository{
             
         } catch (Exception e) {
             Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get All Payment update error");
         } finally {
             try {
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (Exception e) {
                 Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e,"get All Payment update error");
                 e.printStackTrace();
             }
         }

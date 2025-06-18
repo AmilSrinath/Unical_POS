@@ -14,6 +14,7 @@
         <group>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageReson.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/.idea/modules.xml</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/service/impl/PaymentTypesServiceImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/StatusRegModel.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/ItemReport.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/Daily_Dispatch.java</file>
@@ -25,10 +26,12 @@
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/Reports.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageStatus.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/DurationSales.jrxml</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/controller/PaymentTypesController.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/StatusRegRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/configarations/DeliveryPerson.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/Configuration.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/MainOrderDetailRepositoryImpl.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Inquiry/AddInquiry.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/main/LogInForm.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/configarations/PaymentTypes.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/configurations/Log.java</file>
@@ -39,10 +42,10 @@
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageStatusType.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Configuration/ManageCourierBranch.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/DeliveryOrder.java</file>
+            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/service/custom/PaymentTypesServiceCustom.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/repository/impl/StatusTypeRepositoryImpl.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
             <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/model/StatusTypeModel.java</file>
-            <file>file:/Users/apple/Documents/My/Unical/Unical_POS/src/net/unical/pos/view/Reports/ItemReport.jrxml</file>
         </group>
     </open-files>
 </project-private>

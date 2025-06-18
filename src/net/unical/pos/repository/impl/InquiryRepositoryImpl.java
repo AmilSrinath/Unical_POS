@@ -156,7 +156,7 @@ public class InquiryRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-            Log.error(e, "getAllInquiryDuration faild");
+            Log.error(e, "get All Inquiry Duration faild");
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error fetching inquiry records.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -195,7 +195,7 @@ public class InquiryRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-            Log.error(e, "searchInquiryByWayBill faild");
+            Log.error(e, "search Inquiry By WayBill faild");
             e.printStackTrace();
         }
 

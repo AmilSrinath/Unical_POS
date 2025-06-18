@@ -50,6 +50,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("Connection Error (: " + ex.getMessage());
+            Log.error(ex,"get Order ID By Bill No error");
         } finally {
             try {
                 if (rst != null) {
@@ -64,6 +65,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             } catch (SQLException e) {
                 Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
                 System.out.println("Error closing resources: " + e.getMessage());
+                Log.error(e,"get Order ID By Bill No error");
             }
         }
 
@@ -101,6 +103,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(5, deliveryOrder.getCustomerId());
                 ps.executeUpdate();
 
+                Log.info(DeliveryOrderRepositoryImpl.class, "UPDATE pos_main_customer_tb");
+                
                 // Add Delivery
                 ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
@@ -117,6 +121,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (rst.next()) {
                     deliveryId = rst.getInt(1);
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_delivery_order_tb");
 
                 // Add Order
                 ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -137,6 +143,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (rst.next()) {
                     orderId = rst.getInt(1);
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_order_tb");
 
                 // Add Order Details
                 ArrayList<OrderDetailsDto> orderDetailsDtos = deliveryOrder.getOrderDetailsDtos();
@@ -151,6 +159,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     ps.setInt(7, LogInForm.userID);
                     ps.executeUpdate();
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_order_details_tb");
 
             } else {
                 // Add Customer
@@ -168,6 +178,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (rst.next()) {
                     customerId = rst.getInt(1);
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_customer_tb");
 
                 // Add Delivery
                 ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -184,6 +196,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (rst.next()) {
                     deliveryId = rst.getInt(1);
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_delivery_order_tb");
 
                 // Add Order
                 ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -204,6 +218,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 if (rst.next()) {
                     orderId = rst.getInt(1);
                 }
+                
+                Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_order_tb");
 
                 // Add Order Details
                 ArrayList<OrderDetailsDto> orderDetailsDtos = deliveryOrder.getOrderDetailsDtos();
@@ -235,6 +251,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             ps.executeUpdate();
 
             con.commit();
+            
+            Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_order_tb");
 
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -246,6 +264,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Log.error(e, "Order Save Faild");
                     return null;
                 }
             }
@@ -253,6 +272,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Log.error(e, "Order Save Faild");
                     return null;
                 }
             }
@@ -260,14 +280,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Log.error(e, "Order Save Faild");
                     return null;
                 }
             }
         }
         return deliveryId;
     }
-    
-    
     
     @Override
     public ArrayList<DeliveryOrder> getAll(String date,Integer paymentType) throws Exception {
@@ -350,18 +369,21 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 try {
                     con.close();
                 } catch (Exception e) {
+                    Log.error(e, "Get All faild");
                 }
             }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Log.error(e, "Get All faild");
                 }
             }
             if (rst != null) {
                 try {
                     rst.close();
                 } catch (Exception e) {
+                    Log.error(e, "Get All faild");
                 }
             }
         }
@@ -698,6 +720,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         } catch (SQLException | ClassNotFoundException e) {
             if (connection != null) {
                 connection.rollback();
+                Log.info(e, "connection rollback");
             }
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             Log.error(e, "update faild");

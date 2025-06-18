@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.SubTableLocation;
 import net.unical.pos.repository.custom.SubTableLocationRepositoryCustom;
@@ -34,6 +35,7 @@ public class SubTableLocationRepositoryImpl implements SubTableLocationRepositor
                     subTableLocation.getVisible()) > 0;
         } catch (Exception ex) {
             Logger.getLogger(SubTableLocationRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "save error");
             return false;
         }
     }
@@ -58,6 +60,7 @@ public class SubTableLocationRepositoryImpl implements SubTableLocationRepositor
             return subTableLocations;
         } catch (Exception ex) {
             Logger.getLogger(SubTableLocationRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "get All Sub Tables error");
             return null;
         }
     }

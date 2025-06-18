@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosInvStock;
 import net.unical.pos.repository.custom.StockRepositoryCustom;
@@ -64,6 +65,7 @@ public class StockRepositoryImpl implements StockRepositoryCustom{
             return Statement.executeUpdate("UPDATE pos_inv_stock_tb p SET p.quantity = p.quantity - " + qty + " WHERE p.item_bar_code=" + barCode + "");
         } catch (Exception ex) {
             Logger.getLogger(StockRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "update Qty error");
             return 0;
         }
     }

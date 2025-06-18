@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -48,6 +49,7 @@ public class LoginRepositoryImpl {
 
         } catch (SQLException e) {
             Logger.getLogger(LoginRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,userID+" login error");
             return false;
         } finally {
             try {
@@ -56,6 +58,7 @@ public class LoginRepositoryImpl {
                 if (con != null) con.close();
             } catch (SQLException e) {
                 Logger.getLogger(LoginRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e,"login error");
             }
         }
     }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.configurations.ConfigPropertyReader;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CourierBranchModel;
 import net.unical.pos.view.main.LogInForm;
@@ -45,6 +46,7 @@ public class CourierBranchRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"save Courier Company error");
             e.printStackTrace();
         }
     }
@@ -68,6 +70,7 @@ public class CourierBranchRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"update Courier Company error");
             e.printStackTrace();
         }
     }
@@ -97,6 +100,7 @@ public class CourierBranchRepositoryImpl {
 
         } catch (Exception e) {
             Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get All Courier Branchs error");
             e.printStackTrace();
         }
 
@@ -122,6 +126,7 @@ public class CourierBranchRepositoryImpl {
 
         } catch (SQLException e) {
             Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get Branch By Company Name error");
             e.printStackTrace();
         }
 
@@ -148,6 +153,7 @@ public class CourierBranchRepositoryImpl {
 
         } catch (SQLException e) {
             Logger.getLogger(CourierBranchRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get Branch Contact By Name And Company error");
             e.printStackTrace();
         }
 

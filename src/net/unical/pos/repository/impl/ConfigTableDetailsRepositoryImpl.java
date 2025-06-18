@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.ConfigTableDetails;
 import net.unical.pos.repository.custom.ConfigTableDetailsRepositoryCustom;
@@ -39,6 +40,7 @@ public class ConfigTableDetailsRepositoryImpl implements ConfigTableDetailsRepos
                     configTableDetails.getVisible());
         } catch (Exception ex) {
             Logger.getLogger(ConfigTableRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"Config not save");
             return 0;
         }
     }
@@ -66,6 +68,7 @@ public class ConfigTableDetailsRepositoryImpl implements ConfigTableDetailsRepos
             return configTableDetailses;
         } catch (Exception ex) {
             Logger.getLogger(ConfigTableRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"Config get all error");
             return null;
         }
     }

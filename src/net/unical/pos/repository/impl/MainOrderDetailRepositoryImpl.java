@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.CustomerModel;
@@ -51,6 +52,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
             return mainOrderDetailses;
         } catch (Exception ex) {
             Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"get Order Details error");
             return null;
         }
     }
@@ -88,6 +90,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"get Order Details By Order Id error");
         } finally {
             try {
                 if (rst != null) {
@@ -101,6 +104,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
                 }
             } catch (SQLException e) {
                 Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e,"get Order Details By Order Id error");
             }
         }
 
@@ -164,9 +168,11 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
 
         } catch (SQLException e) {
             Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get Order Details By Customer Id error");
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"get Order Details By Customer Id error");
         } finally {
             // Close the resources
             try {
@@ -175,6 +181,7 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
                 if (conn != null) conn.close();
             } catch (SQLException e) {
                 Logger.getLogger(MainOrderDetailRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e,"get Order Details By Customer Id error");
                 e.printStackTrace();
             }
         }

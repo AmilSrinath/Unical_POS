@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.CustomerModel;
@@ -84,6 +85,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
             
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e,"get Customer error");
         }finally {
 
             if (isLocalConnection && con != null) {
@@ -91,12 +93,14 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                     con.close();
                 } catch (Exception e) {
                     Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                    Log.error(e,"get Customer error");
                 }
             }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (Exception e) {
+                    Log.error(e,"get Customer error");
                 }
             }
             if (rst != null) {
@@ -104,6 +108,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
                     rst.close();
                 } catch (Exception e) {
                     Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                    Log.error(e,"get Customer error");
                 }
             }
         }

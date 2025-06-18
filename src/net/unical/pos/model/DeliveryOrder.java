@@ -6,6 +6,7 @@
 package net.unical.pos.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import net.unical.pos.dto.OrderDetailsDto;
 
@@ -37,8 +38,8 @@ public class DeliveryOrder {
     private Integer isPrint;
     private String customerNumber;
     private Double paidAmount;
-    private Date createDate;
-    private Date editedDate;
+    private Timestamp createDate;
+    private Timestamp editedDate;
     private Integer userID;
 
     private Integer paymentId;
@@ -233,19 +234,19 @@ public class DeliveryOrder {
         this.paidAmount = paidAmount;
     }
 
-    public Date getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
-    public Date getEditedDate() {
+    public Timestamp getEditedDate() {
         return editedDate;
     }
 
-    public void setEditedDate(Date editedDate) {
+    public void setEditedDate(Timestamp editedDate) {
         this.editedDate = editedDate;
     }
 

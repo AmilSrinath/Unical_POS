@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -1696,6 +1697,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
                 deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
                 deliveryOrderDto.setOrderId(orderId);
+                
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                deliveryOrderDto.setEditedDate(now);
 
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -1820,8 +1824,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
                     deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
                     deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
-                    deliveryOrderDto.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
-                    deliveryOrderDto.setEditedDate(new java.sql.Date(System.currentTimeMillis()));
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    deliveryOrderDto.setCreateDate(now);
+                    deliveryOrderDto.setEditedDate(now);
                     deliveryOrderDto.setUserID(1);
                     deliveryOrderDto.setIsExchange(isExch);
 

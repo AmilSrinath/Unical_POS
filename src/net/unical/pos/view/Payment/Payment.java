@@ -564,19 +564,9 @@ public class Payment extends JInternalFrame {
             dtm.addRow(rowData);
 
         } catch (Exception e) {
-            e.printStackTrace(); // At least print the exception!
+            e.printStackTrace();
+            Log.error(e, "Payment Order search error");
         }
-
-//        if (!orderIdText.isEmpty()) {
-//            try {
-//                getOrderById(orderIdText);
-//            } catch (NumberFormatException e) {
-//                Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, e);
-//                Log.error(Payment.class, "Invalid Order ID: ", e);
-//            }
-//        } else {
-//            Logger.getLogger(Payment.class.getName()).log(Level.WARNING, "Order ID is empty");
-//        }
     }//GEN-LAST:event_jTextField1KeyReleased
 
     String orderID=null;

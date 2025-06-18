@@ -244,8 +244,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             ps.setDouble(3, deliveryOrder.getCod());
             ps.setDouble(4, deliveryOrder.getGrandTotalPrice());
             ps.setInt(5, (deliveryOrder.getPaymentTypeId()-1));
-            ps.setDate(6, deliveryOrder.getCreateDate());
-            ps.setDate(7, deliveryOrder.getEditedDate());
+            ps.setTimestamp(6, deliveryOrder.getCreateDate());
+            ps.setTimestamp(7, deliveryOrder.getEditedDate());
             ps.setInt(8, LogInForm.userID);
             ps.setInt(9, deliveryOrder.getPaymentTypeId() == 1 ? 9:8);
             ps.executeUpdate();
@@ -434,7 +434,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
             while (rs.next()) {
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
-                deliveryOrder.setCreateDate(rs.getDate("created_date"));
+                deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
                 deliveryOrder.setOrderId(rs.getInt("delivery_id"));
                 deliveryOrder.setOrderCode(rs.getString("order_code"));
                 deliveryOrder.setCustomerName(rs.getString("customer_name"));
@@ -781,7 +781,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         String updateMainOrderSQL = "UPDATE pos_main_order_tb SET "
                 + "customer_id = ?, sub_total_price = ?, "
                 + "delivery_fee = ?, total_order_price = ?, table_id = ?, "
-                + "remark = ?, edited_by = ?, status = ?, paid_amount = ?, bill_no = ? "
+                + "remark = ?, edited_by = ?, status = ?, paid_amount = ?, bill_no = ?, edited_Date = ? "
                 + "WHERE delivery_order_id = ?";
         
         PreparedStatement mainOrderStatement = null;
@@ -797,7 +797,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         mainOrderStatement.setInt(8, 1);
         mainOrderStatement.setString(9, deliveryOrderDto.getPaidAmount()+"");
         mainOrderStatement.setString(10, deliveryOrderDto.getOrderCode());
-        mainOrderStatement.setString(11, delivery_id);
+        mainOrderStatement.setTimestamp(11, deliveryOrderDto.getEditedDate());
+        mainOrderStatement.setString(12, delivery_id);
 
         return mainOrderStatement.executeUpdate() > 0;
     }

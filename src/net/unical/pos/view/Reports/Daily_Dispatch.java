@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.reports.DailySalesPrinter;
@@ -162,16 +163,19 @@ public class Daily_Dispatch extends javax.swing.JInternalFrame {
             wrapperOrders = deliveryOrderRepositoryImpl.getDaliyOutOfDeliveryOrder(jXDatePickerFrom.getDate(), jXDatePickerTo.getDate());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Daily_Dispatch.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"getDaliyOutOfDeliveryOrdertes error");
         }
         if (!wrapperOrders.isEmpty()) {
             try {
                 generateExcel(wrapperOrders); // method to be created
             } catch (Exception ex) {
                 Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex,"getDaliyOutOfDeliveryOrdertes error");
             }
             JOptionPane.showMessageDialog(this, "Excel file generated successfully.");
         } else {
             JOptionPane.showMessageDialog(this, "No records found for the selected dates.");
+            Log.info(Daily_Dispatch.class,"No records found for the selected dates.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -243,6 +247,7 @@ public class Daily_Dispatch extends javax.swing.JInternalFrame {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.error(e,"generateExcel error");
             JOptionPane.showMessageDialog(null, "Error saving Excel file: " + e.getMessage());
         }
     }

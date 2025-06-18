@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.reports.DailySalesPrinter;
 import net.unical.pos.view.home.Dashboard;
@@ -156,10 +157,13 @@ public class Daily_Income extends javax.swing.JInternalFrame {
             JasperViewer.viewReport(jasperPrint,false);
         } catch (JRException ex) {
             Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"Daily Income report error");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"Daily Income report error");
         } catch (SQLException ex) {
             Logger.getLogger(Daily_Income.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex,"Daily Income report error");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

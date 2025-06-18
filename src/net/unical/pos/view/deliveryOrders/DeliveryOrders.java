@@ -2045,7 +2045,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             try {
                 String number=phoneTwoCmb.getSelectedItem()+"";
                 
-                if(number.endsWith("00")){
+                if(number.startsWith("")){
                     System.out.println("TRUE");
                 }else{
                     List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='"+number+"' OR `phone_two`='"+number+"'");

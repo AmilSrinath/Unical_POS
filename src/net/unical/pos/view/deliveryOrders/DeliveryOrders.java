@@ -1682,7 +1682,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setCustomerName(customerNameTxt.getText());
                 deliveryOrderDto.setAddress(addressTxt.getText());
                 deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
-                deliveryOrderDto.setPhoneOne(phoneOneCmb.getSelectedItem().toString());
+                
+                String phoneNumber = phoneOneCmb.getSelectedItem().toString();
+                phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
+                deliveryOrderDto.setPhoneOne(phoneNumber);
+                
                 deliveryOrderDto.setPhoneTwo(phoneTwo);
                 deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
                 deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
@@ -1803,7 +1807,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setCustomerName(customerNameTxt.getText());
                     deliveryOrderDto.setAddress(addressTxt.getText());
                     deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
-                    deliveryOrderDto.setPhoneOne(phoneOneCmb.getSelectedItem().toString());
+                    
+                    String phoneNumber = phoneOneCmb.getSelectedItem().toString();
+                    phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
+                    deliveryOrderDto.setPhoneOne(phoneNumber);
+                    
                     deliveryOrderDto.setPhoneTwo(phoneTwo);
                     deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
                     deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));

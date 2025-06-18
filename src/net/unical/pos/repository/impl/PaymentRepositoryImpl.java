@@ -104,11 +104,12 @@ public class PaymentRepositoryImpl implements PaymentRepository{
 
         try {
             conn = DBCon.getDatabaseConnection();
-            String sql = "UPDATE pos_payment_tb SET payment_status = ? WHERE order_id = ?";
+            String sql = "UPDATE pos_payment_tb SET payment_status = ?, status_id = ? WHERE order_id = ?";
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, paymentStatus);
-            ps.setString(2, orderID);
+            ps.setInt(2, paymentStatus==0 ? 9:8);
+            ps.setString(3, orderID);
             ps.executeUpdate();
             
         } catch (Exception e) {
@@ -124,6 +125,64 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 e.printStackTrace();
             }
         }
+    }
+
+    public DeliveryOrder getPaymentByOrderId(String orderId) {
+        DeliveryOrder deliveryOrder = null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBCon.getDatabaseConnection();
+            String sql = 
+                "SELECT p.payment_id, p.cod, p.total_amount, p.payment_status, " +
+                "o.order_id, o.customer_id, o.delivery_order_id, o.bill_no, o.sub_total_price, " +
+                "o.delivery_fee, o.total_order_price, o.payment_type_id, " +
+                "o.created_Date, o.remark, o.is_print, " +
+                "d.status_id " +
+                "FROM pos_payment_tb p " +
+                "INNER JOIN pos_main_order_tb o ON p.order_id = o.order_id " +
+                "INNER JOIN pos_main_delivery_order_tb d ON d.delivery_id = o.delivery_order_id " +
+                "WHERE o.order_id = ? " +
+                "AND d.status_id IN (4, 5)";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, orderId);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setPaymentId(rs.getInt("payment_id"));
+                deliveryOrder.setCod(rs.getDouble("cod"));
+                deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
+                deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
+                deliveryOrder.setOrderCode(rs.getString("bill_no"));
+                deliveryOrder.setOrderId(rs.getInt("order_id"));
+                deliveryOrder.setCustomerId(rs.getInt("customer_id"));
+                deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
+                deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
+                deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
+                deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
+                deliveryOrder.setDate(rs.getString("created_Date"));
+                deliveryOrder.setRemark(rs.getString("remark"));
+                deliveryOrder.setIsPrint(rs.getInt("is_print"));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Get Payment by Order ID error");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Get Payment by Order ID error");
+            }
+        }
+        return deliveryOrder;
     }
 
 }

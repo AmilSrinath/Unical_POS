@@ -872,6 +872,11 @@ public class OrderFilter extends JInternalFrame {
                             JOptionPane.showMessageDialog(this, "Excel generation was cancelled or failed.");
                         }
                         // success message is shown inside generateExcel() if successful
+                        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        String fromDate = formatter.format(jXDatePicker1.getDate());
+                        String toDate = formatter.format(jXDatePicker2.getDate());
+
+                        getAllOrders(fromDate, toDate, 0,3);
                     } catch (Exception ex) {
                         Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
                         JOptionPane.showMessageDialog(this, "An error occurred while generating the Excel file.");
@@ -921,7 +926,7 @@ public class OrderFilter extends JInternalFrame {
             row.createCell(7).setCellValue(1);
             row.createCell(8).setCellValue(kilos);
             row.createCell(9).setCellValue(grams);
-            row.createCell(10).setCellValue(order.getCodAmount() + "");
+            row.createCell(10).setCellValue(String.format("%.0f", order.getCodAmount()));
             row.createCell(11).setCellValue(0);
             row.createCell(12).setCellValue(0);
         }

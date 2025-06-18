@@ -1025,13 +1025,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             con = DBCon.getDatabaseConnection();
             String sql = "SELECT COUNT(*) AS total_orders FROM ( " +
                          "    SELECT d.order_code " +
-                         "    FROM unical_pos.pos_main_delivery_order_tb d " +
-                         "    JOIN unical_pos.pos_main_customer_tb c ON d.customer_id = c.customer_id " +
-                         "    JOIN unical_pos.pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
+                         "    FROM pos_main_delivery_order_tb d " +
+                         "    JOIN pos_main_customer_tb c ON d.customer_id = c.customer_id " +
+                         "    JOIN pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
                          "    JOIN ( " +
                          "        SELECT od.order_id, i.item_id, i.item_name, SUM(od.quantity) AS total_quantity " +
-                         "        FROM unical_pos.pos_main_order_details_tb od " +
-                         "        JOIN unical_pos.pos_main_item_tb i ON od.item_id = i.item_id " +
+                         "        FROM pos_main_order_details_tb od " +
+                         "        JOIN pos_main_item_tb i ON od.item_id = i.item_id " +
                          "        GROUP BY od.order_id, i.item_id, i.item_name " +
                          "    ) AS item ON o.order_id = item.order_id " +
                          "    WHERE DATE(d.created_date) = ? " +

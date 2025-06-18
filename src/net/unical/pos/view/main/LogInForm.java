@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.controller.EmployeeManagementController;
 import net.unical.pos.controller.UserAccountManagementController;
 import net.unical.pos.controller.UserRoleController;
@@ -605,8 +606,10 @@ public class LogInForm extends javax.swing.JFrame {
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Please select user", "User Error", JOptionPane.ERROR_MESSAGE);
+            Log.error(e, "Not selected user");
         } catch (IllegalArgumentException exception){
             JOptionPane.showMessageDialog(this, "Please enter password", "Password Error", JOptionPane.ERROR_MESSAGE);
+            Log.error(exception, "password error");
         }
     }
     

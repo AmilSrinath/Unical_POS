@@ -446,6 +446,8 @@ public class Payment extends JInternalFrame {
     try {
         ArrayList<DeliveryOrder> deliveryOrderDtos = paymentRepositoryImpl.getAllPaymentDuration(fromDate, toDate, paymentType, status);
         
+        System.out.println("deliveryOrderDtos count : "+deliveryOrderDtos.size());
+        
         DefaultTableModel dtm = (DefaultTableModel) paymentOrdersTable.getModel();
         dtm.setRowCount(0);
         
@@ -471,7 +473,7 @@ public class Payment extends JInternalFrame {
             
             isPrint = dto.getIsPrint() == 1;
             Object[] rowData = {
-                dto.getAddress(),
+                "",
                 dto.getOrderId(),
                 dto.getOrderCode(),
                 dto.getCustomerId(),
@@ -533,17 +535,48 @@ public class Payment extends JInternalFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String orderIdText = jTextField1.getText();
+        
+        try {
+            DeliveryOrder deliveryOrder = paymentRepositoryImpl.getPaymentByOrderId(orderIdText);
 
-        if (!orderIdText.isEmpty()) {
-            try {
-                getOrderById(orderIdText);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, e);
-                Log.error(Payment.class, "Invalid Order ID: ", e);
+            if (deliveryOrder == null) {
+                System.out.println("No order found for ID: " + orderIdText);
+                return; // Exit early
             }
-        } else {
-            Logger.getLogger(Payment.class.getName()).log(Level.WARNING, "Order ID is empty");
+            
+            System.out.println(deliveryOrder.getOrderId());
+            System.out.println(deliveryOrder.getCustomerId());
+
+            DefaultTableModel dtm = (DefaultTableModel) paymentOrdersTable.getModel();
+            dtm.setRowCount(0);
+
+            String statusText = (deliveryOrder.getPaymentStatus() == 1) ? "Paid" : "Not Paid";
+
+            Object[] rowData = {
+                "",
+                deliveryOrder.getOrderId(),
+                deliveryOrder.getOrderCode(),
+                deliveryOrder.getCustomerId(),
+                deliveryOrder.getCod(),
+                deliveryOrder.getSubTotalPrice(),
+                statusText
+            };
+            dtm.addRow(rowData);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // At least print the exception!
         }
+
+//        if (!orderIdText.isEmpty()) {
+//            try {
+//                getOrderById(orderIdText);
+//            } catch (NumberFormatException e) {
+//                Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, e);
+//                Log.error(Payment.class, "Invalid Order ID: ", e);
+//            }
+//        } else {
+//            Logger.getLogger(Payment.class.getName()).log(Level.WARNING, "Order ID is empty");
+//        }
     }//GEN-LAST:event_jTextField1KeyReleased
 
     String orderID=null;

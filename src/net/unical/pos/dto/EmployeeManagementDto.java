@@ -22,9 +22,11 @@ public class EmployeeManagementDto {
     String email;
     String address;
     String imagePath;
-    Integer status;
+    int status;
     Integer userId;
 
+    public EmployeeManagementDto(){}
+    
     public EmployeeManagementDto(Integer employeeId, String title, String name, String designation, String Prefix, Integer Code, String codePrefix, Integer phone, String email, String address, String imagePath, Integer status, Integer userId) {
         this.employeeId = employeeId;
         this.title = title;

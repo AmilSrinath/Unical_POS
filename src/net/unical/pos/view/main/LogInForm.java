@@ -1027,7 +1027,7 @@ public class LogInForm extends javax.swing.JFrame {
                 userName = userNameTbl.getValueAt(userNameTbl.getSelectedRow(), 1).toString();
                 passwordTxt.requestFocusInWindow();
             }
-        } catch (java.lang.IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Please select user agin", "User selecting error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, e);
         }

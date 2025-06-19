@@ -28,6 +28,7 @@ import net.unical.pos.controller.EmployeeTitleController;
 import net.unical.pos.dto.EmployeeDesignationDto;
 import net.unical.pos.dto.EmployeeManagementDto;
 import net.unical.pos.dto.EmployeeTitleDto;
+import net.unical.pos.log.Log;
 import net.unical.pos.view.home.Dashboard;
 import org.apache.commons.io.FileUtils;
 
@@ -52,6 +53,7 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
     private EmployeeDesignationController employeeDesignationController;
     private EmployeeTitleController employeeTitleController;
     private ConfigTimer configTimer;
+    private int empId = 0;
     
     ArrayList<Integer> designationIds=new ArrayList<>();
     ArrayList<Integer> titleIds=new ArrayList<>();
@@ -76,24 +78,17 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
                     update=false;
                     return;
                 }
-                String imagePath = Dashboard.configValues.get(Configurations.SE_IMAGE_PATH.getConfigValue())
-                        +employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 7);
                 
-                    ImageIcon iconLogo = new ImageIcon(imagePath);
-                    Image image = iconLogo.getImage(); // transform it 
-                    Image newimg = image.getScaledInstance(128, 128, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                    iconLogo = new ImageIcon(newimg);  // transform it back    
-                    iconLbl.setIcon(iconLogo);
-                
-                    titleCmb.setSelectedItem(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 1));
-                    nameTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 2));
-                    DesignationCmb.setSelectedItem(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 3));
-                    prefixTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 4));
-                    codeTxt.setText(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 5).toString());
-                    phoneTxt.setText(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 8).toString());
-                    emailTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 9));
-                    addressTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 10));
-                    isActiveBox.setSelected((boolean) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 11));
+                empId = Integer.parseInt(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 0).toString());
+                titleCmb.setSelectedItem(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 1));
+                nameTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 2));
+                DesignationCmb.setSelectedItem(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 3));
+                prefixTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 4));
+                codeTxt.setText(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 5).toString());
+                phoneTxt.setText(employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 8).toString());
+                emailTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 9));
+                addressTxt.setText((String) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 10));
+                isActiveBox.setSelected((boolean) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 11));
                 update=true;
             }
         });
@@ -130,9 +125,6 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
         isActiveBox = new javax.swing.JCheckBox();
         saveBtn = new org.jdesktop.swingx.JXButton();
         DesignationCmb = new javax.swing.JComboBox<>();
-        iconLbl = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jXButton1 = new org.jdesktop.swingx.JXButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         employeeDetailsTbl = new org.jdesktop.swingx.JXTable();
@@ -146,7 +138,7 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add New Employee", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add New Employee", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jLabel1.setText("Title");
 
@@ -179,17 +171,6 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
         saveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveBtnActionPerformed(evt);
-            }
-        });
-
-        iconLbl.setBorder(javax.swing.BorderFactory.createTitledBorder("Image"));
-
-        jLabel9.setText("Image");
-
-        jXButton1.setText("Choose");
-        jXButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton1ActionPerformed(evt);
             }
         });
 
@@ -236,23 +217,17 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
                                         .addComponent(nameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(titleCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(27, 27, 27)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(isActiveBox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 0, Short.MAX_VALUE))))))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(isActiveBox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(iconLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saveBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 196, Short.MAX_VALUE)
+                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -290,23 +265,16 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(isActiveBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(iconLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(166, 166, 166)
                 .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Employee Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Employee Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        employeeDetailsTbl.setBackground(new java.awt.Color(255, 255, 255));
         employeeDetailsTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -404,105 +372,61 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
             isActive=1;
         }
         
-        EmployeeManagementDto employeeManagementDto=new EmployeeManagementDto(0, titleCmb.getSelectedItem().toString()
-                , nameTxt.getText(), DesignationCmb.getSelectedItem().toString(), 
-                prefixTxt.getText(),Integer.parseInt(codeTxt.getText()), 
-                prefixTxt.getText()+Integer.parseInt(codeTxt.getText()),Integer.parseInt(phoneTxt.getText()), 
-                emailTxt.getText(), addressTxt.getText(),selectedFilePath, isActive,
-                dashboard.CREATED_USER_ID);
-        
+        EmployeeManagementDto employeeManagementDto=new EmployeeManagementDto();
+        employeeManagementDto.setTitle(titleCmb.getSelectedItem().toString());
+        employeeManagementDto.setName(nameTxt.getText());
+        employeeManagementDto.setDesignation(DesignationCmb.getSelectedItem().toString());
+        employeeManagementDto.setPrefix(prefixTxt.getText());
+        employeeManagementDto.setCode(Integer.parseInt(codeTxt.getText()));
+        employeeManagementDto.setCodePrefix(prefixTxt.getText()+Integer.parseInt(codeTxt.getText()));
+        employeeManagementDto.setPhone(Integer.parseInt(phoneTxt.getText()));
+        employeeManagementDto.setEmail(emailTxt.getText());
+        employeeManagementDto.setAddress(addressTxt.getText());
+        employeeManagementDto.setUserId(dashboard.CREATED_USER_ID);
+        employeeManagementDto.setStatus(isActiveBox.isSelected() ? 1:0);
+            
         if(!update){
             try {
                  boolean result=employeeManagementController.saveEmployee(employeeManagementDto);
                  if (result) {
-                    JOptionPane.showMessageDialog(this, "Successfull!");
+                    JOptionPane.showMessageDialog(this, "Employee Save Successfull!");
+                    
+                    titleCmb.setSelectedIndex(0);
+                    nameTxt.setText("");
+                    DesignationCmb.setSelectedIndex(0);
+                    prefixTxt.setText("");
+                    codeTxt.setText("");
+                    phoneTxt.setText("");
+                    emailTxt.setText("");
+                    addressTxt.setText("");
                  } else {
                      
                  }
              } catch (Exception ex) {
                  Logger.getLogger(EmployeeManagement.class.getName()).log(Level.SEVERE, null, ex);
+                 Log.error(ex, "Employee Save Error");
              }
         }else{
             try {
                 if(employeeDetailsTbl.getSelectedRow()==-1){
                     return;
                 }
-                
+                employeeManagementDto.setEmployeeId(empId);
                 employeeManagementDto.setEmployeeId((int) employeeDetailsTbl.getValueAt(employeeDetailsTbl.getSelectedRow(), 0));
                 boolean result=employeeManagementController.updateEmployee(employeeManagementDto);
                 if (result) {
-                    JOptionPane.showMessageDialog(this, "Successfull!");
+                    JOptionPane.showMessageDialog(this, "Employee Update Successfull!");
                  } else {
                     
                  }
 
             } catch (Exception ex) {
                 Logger.getLogger(EmployeeManagement.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Employee Update Error");
             }
         }
         loadAllEmployees();
     }//GEN-LAST:event_saveBtnActionPerformed
-
-    private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
-        FileFilter imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
-        fileChooser.addChoosableFileFilter(imageFilter);
-        
-        int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
-            
-            File file = fileChooser.getSelectedFile();
-
-            String file_name = file.toString();
-
-            Date d = new Date();
-            
-            // select file type 
-            if (file_name.endsWith(".gif")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".gif";
-            } else if (file_name.endsWith(".bmp")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".bmp";
-            } else if (file_name.endsWith(".jpg")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".jpg";
-            } else if (file_name.endsWith(".jpeg")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".jpeg";
-            } else if (file_name.endsWith(".wbmp")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".wbmp";
-            } else if (file_name.endsWith(".png")) {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".png";
-            } else {
-                destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + file_name.substring(file_name.length() - 5, file_name.length());
-            }
-            
-            selectedFilePath = "/imagers/" + destFileName;
-
-            destFileName = Dashboard.configValues.get(Configurations.SE_IMAGE_PATH.getConfigValue()) + "/imagers/" + destFileName;
-            File source = new File(file_name);
-            File dest = new File(destFileName);
-            absoluteFilePath = dest.getAbsolutePath();
-            
-            try {
-                //FileUtils.copyDirectory(source, dest);
-                FileUtils.copyFile(source, dest);
-                // image uploaded. preview image
-                try {
-                    ImageIcon iconLogo = new ImageIcon(destFileName);
-                    Image image = iconLogo.getImage(); // transform it 
-                    Image newimg = image.getScaledInstance(128, 128, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                    iconLogo = new ImageIcon(newimg);  // transform it back                   
-                    iconLbl.setIcon(iconLogo);
-                } catch (Exception e) {
-                    // if system cants find the db value or error set default in source code.
-//                    URL iconURL = getClass().getResource("/com/eideastech/zligger/order/images/comapny_170.png");
-//                    iconLbl.setIcon(new ImageIcon(iconURL));
-                }
-                iconLbl.setText(null);
-                isLogoImageChanged = true;
-            } catch (IOException ex) {
-                // error occurred. alert the user
-                JOptionPane.showMessageDialog(this, "Image loard fail. Please try a diffrent image. Information :" + ex, "Load Fail", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jXButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -546,7 +470,6 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
     private org.jdesktop.swingx.JXTextField emailTxt;
     private org.jdesktop.swingx.JXTable employeeDetailsTbl;
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JLabel iconLbl;
     private javax.swing.JCheckBox isActiveBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -556,13 +479,11 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private org.jdesktop.swingx.JXButton jXButton1;
     private org.jdesktop.swingx.JXTextField nameTxt;
     private org.jdesktop.swingx.JXTextField phoneTxt;
     private org.jdesktop.swingx.JXTextField prefixTxt;
@@ -577,9 +498,8 @@ public class EmployeeManagement extends javax.swing.JInternalFrame {
             DefaultTableModel dtm=(DefaultTableModel) employeeDetailsTbl.getModel();
             dtm.setRowCount(0);
             
-            boolean isActive=false;
-            
             for(EmployeeManagementDto dto: allEmployees){
+                boolean isActive=false;
                 if(dto.getStatus()==1){
                     isActive=true;
                 }

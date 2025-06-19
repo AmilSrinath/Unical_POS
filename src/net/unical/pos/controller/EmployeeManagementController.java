@@ -36,7 +36,6 @@ public class EmployeeManagementController {
     }
     
     public boolean updateEmployee(EmployeeManagementDto employeeManagementDto)throws Exception{
-//        return .updateEmployee(employeeManagementDto);
-    return true;
+        return employeeManagementServiceCustom.updateEmployee(employeeManagementDto);
     }
 }

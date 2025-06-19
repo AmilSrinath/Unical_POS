@@ -40,7 +40,13 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementServiceC
 
     @Override
     public boolean updateEmployee(EmployeeManagementDto employeeManagementDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EmployeeManagementModel employeeManagementModel=new EmployeeManagementModel(employeeManagementDto.getEmployeeId(), employeeManagementDto.getTitle(),
+                employeeManagementDto.getName(), employeeManagementDto.getDesignation(), 
+                employeeManagementDto.getPrefix(),employeeManagementDto.getCode(),employeeManagementDto.getCodePrefix(),
+                employeeManagementDto.getImagePath(), employeeManagementDto.getPhone(), employeeManagementDto.getEmail(), 
+                employeeManagementDto.getAddress(), employeeManagementDto.getStatus(),employeeManagementDto.getUserId(),1);
+        
+        return employeeManagementRepositoryCustom.Update(employeeManagementModel);
     }
 
     @Override

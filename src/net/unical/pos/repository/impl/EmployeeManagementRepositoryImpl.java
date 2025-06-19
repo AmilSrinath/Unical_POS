@@ -42,7 +42,36 @@ public class EmployeeManagementRepositoryImpl implements EmployeeManagementRepos
 
     @Override
     public boolean Update(EmployeeManagementModel entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Statement.executeUpdate("UPDATE pos_emp_employee_management_tb SET "
+                + "employee_title = ?, "
+                + "employee_name = ?, "
+                + "employee_designation = ?, "
+                + "employee_prefix = ?, "
+                + "employee_code = ?, "
+                + "employee_code_prefix = ?, "
+                + "image_path = ?, "
+                + "phone = ?, "
+                + "gmail = ?, "
+                + "addree = ?, "
+                + "status = ?, "
+                + "user_id = ?, "
+                + "visible = ? "
+                + "WHERE employee_id = ?",
+                entity.getTitle(),
+                entity.getName(),
+                entity.getDesignation(),
+                entity.getPrefix(),
+                entity.getCode(),
+                entity.getCodePrefix(),
+                entity.getImagePath(),
+                entity.getPhone(),
+                entity.getEmail(),
+                entity.getAddress(),
+                entity.getStatus(),
+                LogInForm.userID,
+                entity.getVisible(),
+                entity.getEmployeeId()
+        ) > 0;
     }
 
     @Override
@@ -57,7 +86,7 @@ public class EmployeeManagementRepositoryImpl implements EmployeeManagementRepos
 
     @Override
     public ArrayList<EmployeeManagementModel> getAll() throws Exception {
-        ResultSet rst=Statement.executeQuery("Select * from pos_emp_employee_management_tb");
+        ResultSet rst=Statement.executeQuery("Select * from pos_emp_employee_management_tb where status = 1");
         
         ArrayList<EmployeeManagementModel> managementModels=new ArrayList<>();
         while(rst.next()){

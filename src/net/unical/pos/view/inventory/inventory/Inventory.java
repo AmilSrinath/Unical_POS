@@ -7,6 +7,8 @@ package net.unical.pos.view.inventory.inventory;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import net.unical.pos.view.configarations.PaymentTypes;
 import net.unical.pos.view.configarations.PrinterTypes;
@@ -524,7 +526,12 @@ public class Inventory extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemListBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemListBtnActionPerformed
-        ItemList itemList = new ItemList(dashboard);
+        ItemList itemList = null;
+        try {
+            itemList = new ItemList(dashboard);
+        } catch (Exception ex) {
+            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
         dashboard.desktopPane.add(itemList);
         Dimension d = dashboard.desktopPane.getSize();
         itemList.setLayer(JDesktopPane.POPUP_LAYER);

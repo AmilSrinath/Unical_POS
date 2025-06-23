@@ -8,6 +8,7 @@ package net.unical.pos.controller;
 import java.util.ArrayList;
 import net.unical.pos.dto.UserDto;
 import net.unical.pos.factory.ServiceFactory;
+import net.unical.pos.model.PosMainUser;
 import net.unical.pos.service.custom.UserServiceCustom;
 
 /**
@@ -36,6 +37,10 @@ public class UserAccountManagementController {
     
     public UserDto updateUserWithPassword(UserDto userDto)throws Exception{
         return userServiceCustom.updateUserWithPassword(userDto);
+    }
+
+    public PosMainUser getUserByUserID(int userID) throws Exception {
+        return userServiceCustom.findOneUser(userID);
     }
     
 }

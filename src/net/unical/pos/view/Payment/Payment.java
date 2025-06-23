@@ -99,6 +99,7 @@ public class Payment extends JInternalFrame {
         paymentStatusCombo = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
 
+        paymentOptions.setAlwaysOnTop(true);
         paymentOptions.setResizable(false);
 
         btnPaid.setBackground(new java.awt.Color(51, 153, 0));
@@ -160,14 +161,14 @@ public class Payment extends JInternalFrame {
 
             },
             new String [] {
-                "", "Order ID", "Order Code", "Customer ID", "COD", "Total Amount", "Payment Status"
+                "", "Order Code", "Customer ID", "COD", "Total Amount", "Payment Type", "Delivary Charge", "Payment Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false
+                true, false, false, false, false, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -236,7 +237,7 @@ public class Payment extends JInternalFrame {
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Order ID");
+        jLabel18.setText("Order Code");
 
         jLabel20.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
@@ -297,7 +298,7 @@ public class Payment extends JInternalFrame {
                         .addGap(28, 28, 28)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
+                        .addGap(86, 86, 86)
                         .addComponent(jLabel18)))
                 .addGap(80, 80, 80)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,6 +453,7 @@ public class Payment extends JInternalFrame {
         dtm.setRowCount(0);
         
         String statusText = null;
+        String paymentTypeStatus = null;
         boolean isPrint = false;
         
         int count = 0;
@@ -470,15 +472,24 @@ public class Payment extends JInternalFrame {
                     statusText = "Paid";
                     break;
             }
+            switch (dto.getPayment_Type()) {
+                case "1":
+                    paymentTypeStatus = "Card";
+                    break;
+                case "0":
+                    paymentTypeStatus = "Cash";
+                    break;
+            }
             
             isPrint = dto.getIsPrint() == 1;
             Object[] rowData = {
-                "",
                 dto.getOrderId(),
                 dto.getOrderCode(),
                 dto.getCustomerId(),
                 dto.getCod(),
                 dto.getSubTotalPrice(),
+                paymentTypeStatus,
+                dto.getDeliveryFee(),
                 statusText
             };
             dtm.addRow(rowData);
@@ -488,7 +499,7 @@ public class Payment extends JInternalFrame {
     } catch (Exception ex) {
         Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
     }
-    paymentOrdersTable.getColumnModel().getColumn(6).setCellRenderer(new StatusCellRenderer());
+    paymentOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
 }
     
     
@@ -504,8 +515,8 @@ public class Payment extends JInternalFrame {
         if (evt.getClickCount() == 2) {
             int selectedRow = paymentOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
-                orderID = paymentOrdersTable.getValueAt(selectedRow, 1).toString();
-                
+                orderID = paymentOrdersTable.getValueAt(selectedRow, 0).toString();
+                System.out.println("orderID : "+orderID);
                 paymentOptions.setLocationRelativeTo(null);
                 paymentOptions.setSize(240, 110);
                 paymentOptions.setVisible(true);
@@ -536,37 +547,55 @@ public class Payment extends JInternalFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String orderIdText = jTextField1.getText();
         
-        try {
-            DeliveryOrder deliveryOrder = paymentRepositoryImpl.getPaymentByOrderId(orderIdText);
+        if (!orderIdText.isEmpty()) {
+            try {
+                String paymentTypeStatus = null;
+                int count = 0;
+                
+                ArrayList<DeliveryOrder> deliveryOrder = paymentRepositoryImpl.getPaymentByOrderId(orderIdText);
 
-            if (deliveryOrder == null) {
-                System.out.println("No order found for ID: " + orderIdText);
-                return; // Exit early
+                DefaultTableModel dtm = (DefaultTableModel) paymentOrdersTable.getModel();
+                dtm.setRowCount(0);
+                
+                for(DeliveryOrder dto : deliveryOrder){
+                    count++;
+                    String statusText = (dto.getPaymentStatus() == 1) ? "Paid" : "Not Paid";
+
+                    switch (dto.getPaymentStatus()) {
+                        case 1:
+                            paymentTypeStatus = "Card";
+                            break;
+                        case 0:
+                            paymentTypeStatus = "Cash";
+                            break;
+                    }
+
+                    Object[] rowData = {
+                        dto.getOrderId(),
+                        dto.getOrderCode(),
+                        dto.getCustomerId(),
+                        dto.getCod(),
+                        dto.getSubTotalPrice(),
+                        paymentTypeStatus,
+                        dto.getDeliveryFee(),
+                        statusText
+                    };
+                    dtm.addRow(rowData);
+                }
+                total_orders_count_txt.setText(count+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.error(e, "Payment Order search error");
+                throw e;
             }
-            
-            System.out.println(deliveryOrder.getOrderId());
-            System.out.println(deliveryOrder.getCustomerId());
+        }else{
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
 
-            DefaultTableModel dtm = (DefaultTableModel) paymentOrdersTable.getModel();
-            dtm.setRowCount(0);
-
-            String statusText = (deliveryOrder.getPaymentStatus() == 1) ? "Paid" : "Not Paid";
-
-            Object[] rowData = {
-                "",
-                deliveryOrder.getOrderId(),
-                deliveryOrder.getOrderCode(),
-                deliveryOrder.getCustomerId(),
-                deliveryOrder.getCod(),
-                deliveryOrder.getSubTotalPrice(),
-                statusText
-            };
-            dtm.addRow(rowData);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.error(e, "Payment Order search error");
+            getAllOrders(fromDate, toDate, 0, 0);
         }
+        
     }//GEN-LAST:event_jTextField1KeyReleased
 
     String orderID=null;

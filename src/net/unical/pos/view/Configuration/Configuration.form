@@ -74,7 +74,7 @@
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Employee Management">
+                <TitledBorder title="Configuration Management">
                   <Color PropertyName="color" blue="99" green="66" red="0" type="rgb"/>
                 </TitledBorder>
               </Border>
@@ -102,6 +102,7 @@
                           <Component id="btnManageCourierBranch" alignment="0" max="32767" attributes="0"/>
                           <Component id="btnManageStatus" alignment="1" max="32767" attributes="0"/>
                           <Component id="btnManageStatusType" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnManageUserAuth" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -120,7 +121,9 @@
                       <Component id="btnManageStatus" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnManageStatusType" min="-2" pref="40" max="-2" attributes="0"/>
-                      <EmptySpace pref="124" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnManageUserAuth" min="-2" pref="40" max="-2" attributes="0"/>
+                      <EmptySpace pref="66" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -194,6 +197,20 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManageStatusTypeActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="org.jdesktop.swingx.JXButton" name="btnManageUserAuth">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="99" green="66" red="0" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Manage User Auth"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManageUserAuthActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

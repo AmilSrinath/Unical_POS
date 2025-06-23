@@ -19,10 +19,11 @@ public class StatusTypeModel {
     private Timestamp edited_date;
     private int status;
     private int user_id;
+    private String reg_des;
 
     public StatusTypeModel() {}
 
-    public StatusTypeModel(int status_id, int reg_id, String status_type, Timestamp create_date, Timestamp edited_date, int status, int user_id) {
+    public StatusTypeModel(int status_id, int reg_id, String status_type, Timestamp create_date, Timestamp edited_date, int status, int user_id, String reg_des) {
         this.status_id = status_id;
         this.reg_id = reg_id;
         this.status_type = status_type;
@@ -30,6 +31,7 @@ public class StatusTypeModel {
         this.edited_date = edited_date;
         this.status = status;
         this.user_id = user_id;
+        this.reg_des = reg_des;
     }
 
     public int getStatus_id() {
@@ -86,6 +88,14 @@ public class StatusTypeModel {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public String getReg_des() {
+        return reg_des;
+    }
+
+    public void setReg_des(String reg_des) {
+        this.reg_des = reg_des;
     }
     
    

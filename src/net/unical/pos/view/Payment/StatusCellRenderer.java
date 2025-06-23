@@ -18,9 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class StatusCellRenderer extends DefaultTableCellRenderer{
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-           boolean isSelected, boolean hasFocus, int row, int column) {
-
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         JLabel label = new JLabel(value.toString());
         label.setOpaque(true);
         label.setHorizontalAlignment(LEFT);

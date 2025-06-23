@@ -477,6 +477,78 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return deliveryOrders;
     }
 
+    public ArrayList<DeliveryOrder> getAllOrdersByOrderID(String orderID) {
+        ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBCon.getDatabaseConnection();
+            StringBuilder sql = new StringBuilder(
+                "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
+                "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, " +
+                "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, " +
+                "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status " +
+                "FROM pos_main_delivery_order_tb dot " +
+                "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id " +
+                "WHERE dot.status = 1 AND dot.order_code LIKE ?"
+            );
+
+            ps = conn.prepareStatement(sql.toString());
+            ps.setString(1, "%"+orderID+"%");
+            int paramIndex = 3;
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
+                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
+                deliveryOrder.setOrderCode(rs.getString("order_code"));
+                deliveryOrder.setCustomerName(rs.getString("customer_name"));
+                deliveryOrder.setAddress(rs.getString("address"));
+                deliveryOrder.setCod(rs.getDouble("cod_amount"));
+                deliveryOrder.setPhoneOne(rs.getString("phone_one"));
+                deliveryOrder.setPhoneTwo(rs.getString("phone_two"));
+                deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
+                deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
+                deliveryOrder.setStatus(rs.getInt("status"));
+                deliveryOrder.setStatusType(rs.getInt("status_id"));
+                deliveryOrder.setIsReturn(rs.getInt("is_return"));
+                deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
+                deliveryOrder.setRemark(rs.getString("remark"));
+                deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
+                deliveryOrder.setIsPrint(rs.getInt("is_print"));
+
+                // Set the new fields from pos_payment_tb
+                deliveryOrder.setPaymentId(rs.getInt("payment_id"));
+                deliveryOrder.setCodPayment(rs.getDouble("cod_payment"));
+                deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
+                deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
+
+                deliveryOrders.add(deliveryOrder);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Get all duration faild");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Get all duration faild");
+                e.printStackTrace();
+            }
+        }
+        return deliveryOrders;
+    }
+    
     public ArrayList<DeliveryOrder> getDeliveryOrdersByCustomer(Integer customer_id) {
         PreparedStatement ps = null;
         ResultSet rst = null;
@@ -591,6 +663,39 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 }
             }
 
+        }
+    }
+    
+    public void updateWithOrderId(String orderId, int status_id) throws Exception {
+        PreparedStatement ps = null;
+        boolean isLocalConnection = false;
+        Connection con = null;
+
+        try {
+            if (con == null) {
+                con = DBCon.getDatabaseConnection();
+                isLocalConnection = true;
+            }
+
+            System.out.println("order_id : " + orderId);
+            System.err.println("Updating status_id = " + status_id + " for order_id = " + orderId);
+
+            String sql = "UPDATE pos_main_delivery_order_tb dot " +
+                         "JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                         "SET dot.status_id = ? " +
+                         "WHERE ot.order_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, status_id);
+            ps.setString(2, orderId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Update failed");
+        } finally {
+            if (ps != null) try { ps.close(); } catch (Exception e) { Log.error(e, "Close failed"); }
+            if (isLocalConnection && con != null) try { con.close(); } catch (Exception e) { Log.error(e, "Close failed"); }
         }
     }
 
@@ -1062,6 +1167,78 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
 
         return totalOrders;
+    }
+
+    public ArrayList<DeliveryOrder> getAllOrdersByCustomerCode(String customerCode) {
+        ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBCon.getDatabaseConnection();
+            StringBuilder sql = new StringBuilder(
+                "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
+                "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, " +
+                "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, " +
+                "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status " +
+                "FROM pos_main_delivery_order_tb dot " +
+                "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
+                "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
+                "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id " +
+                "WHERE dot.status = 1 AND ct.customer_number LIKE ?"
+            );
+
+            ps = conn.prepareStatement(sql.toString());
+            ps.setString(1, "%"+customerCode + "%");
+            int paramIndex = 3;
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
+                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
+                deliveryOrder.setOrderCode(rs.getString("order_code"));
+                deliveryOrder.setCustomerName(rs.getString("customer_name"));
+                deliveryOrder.setAddress(rs.getString("address"));
+                deliveryOrder.setCod(rs.getDouble("cod_amount"));
+                deliveryOrder.setPhoneOne(rs.getString("phone_one"));
+                deliveryOrder.setPhoneTwo(rs.getString("phone_two"));
+                deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
+                deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
+                deliveryOrder.setStatus(rs.getInt("status"));
+                deliveryOrder.setStatusType(rs.getInt("status_id"));
+                deliveryOrder.setIsReturn(rs.getInt("is_return"));
+                deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
+                deliveryOrder.setRemark(rs.getString("remark"));
+                deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
+                deliveryOrder.setIsPrint(rs.getInt("is_print"));
+
+                // Set the new fields from pos_payment_tb
+                deliveryOrder.setPaymentId(rs.getInt("payment_id"));
+                deliveryOrder.setCodPayment(rs.getDouble("cod_payment"));
+                deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
+                deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
+
+                deliveryOrders.add(deliveryOrder);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Get all duration faild");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Get all duration faild");
+                e.printStackTrace();
+            }
+        }
+        return deliveryOrders;
     }
     
     

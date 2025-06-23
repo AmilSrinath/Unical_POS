@@ -73,7 +73,9 @@ public class StatusTypeRepositoryImpl {
 
     public List<StatusTypeModel> getAllStatusType() {
         List<StatusTypeModel> list = new ArrayList<>();
-        String query = "SELECT * FROM pos_status_types";
+        String query = "SELECT st.*, sr.description AS reg_description " +
+                       "FROM pos_status_types st " +
+                       "LEFT JOIN pos_status_reg sr ON st.reg_id = sr.reg_id";
 
         try (Connection conn = DBCon.getDatabaseConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -88,6 +90,7 @@ public class StatusTypeRepositoryImpl {
                 model.setCreate_date(rs.getTimestamp("create_date"));
                 model.setEdited_date(rs.getTimestamp("edited_date"));
                 model.setStatus(rs.getInt("status"));
+                model.setReg_des(rs.getString("reg_description"));
 
                 list.add(model);
             }

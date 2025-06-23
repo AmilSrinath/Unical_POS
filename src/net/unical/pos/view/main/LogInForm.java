@@ -40,6 +40,7 @@ public class LogInForm extends javax.swing.JFrame {
     
     public static int userID = 0;
     public static String userName = null;
+    public static String userRole = null;
     
     public LogInForm() throws Exception {
         initComponents();
@@ -595,7 +596,11 @@ public class LogInForm extends javax.swing.JFrame {
         }
     }
     
-    private void loginMethod(){
+    public String getUserRole(){
+        return loginRepositoryImpl.getUserRoleByUserID(userID);
+    }
+    
+    private void loginMethod() throws Exception{
         try {
             if (loginRepositoryImpl.login(userID, passwordTxt.getText())) {
                 Dashboard dashboard=new Dashboard();
@@ -614,7 +619,11 @@ public class LogInForm extends javax.swing.JFrame {
     }
     
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
-        loginMethod();
+        try {
+            loginMethod();
+        } catch (Exception ex) {
+            Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void aBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aBtnActionPerformed
@@ -1034,7 +1043,11 @@ public class LogInForm extends javax.swing.JFrame {
     }//GEN-LAST:event_userNameTblMousePressed
 
     private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
-        loginMethod();
+        try {
+            loginMethod();
+        } catch (Exception ex) {
+            Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_passwordTxtActionPerformed
 
     /**

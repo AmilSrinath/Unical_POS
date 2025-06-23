@@ -1,0 +1,180 @@
+2025-06-22 17:38:40,972 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:38:49,755 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 17:38:49,758 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 17:38:49,761 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 17:38:49,763 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 17:38:49,766 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 17:38:50,891 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	130 Order Save. User ID: 1
+2025-06-22 17:38:56,924 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 17:38:56,925 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 17:38:56,926 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 17:38:56,927 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 17:38:56,928 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 17:38:58,242 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	131 Order Save. User ID: 1
+2025-06-22 17:38:58,865 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:39:06,699 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:39:28,228 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:41:36,757 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:42:30,099 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:46:29,880 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:47:21,291 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:47:24,284 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:47:27,341 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:47:29,084 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:47:42,066 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:48:08,282 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:48:10,636 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:49:10,799 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:49:13,888 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:49:16,403 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:49:28,354 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:57:54,542 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:58:26,305 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:58:44,178 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 17:58:56,719 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:00:02,612 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:09,133 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:13,930 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:22,317 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:26,977 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:27,149 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:27,450 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:31,575 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:31,801 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:40,039 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:42,794 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:12:50,282 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:12,332 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:16,129 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:21,589 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:25,180 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:34,599 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:18:49,755 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:02,526 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:25,400 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:26,672 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:27,485 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:29,108 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:43,900 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:46,686 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:19:48,769 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:20:13,491 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:20:14,891 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:20:26,802 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:21:08,723 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:49:23,727 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:49:50,204 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:54:35,352 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 18:54:59,422 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:02:46,764 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:02:50,716 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:02:50,887 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:02:58,268 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:02:58,713 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:03:45,774 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:11:58,427 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 19:11:58,428 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 19:11:58,429 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 19:11:58,430 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 19:11:58,431 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 19:11:59,707 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	132 Order Save. User ID: 1
+2025-06-22 19:30:02,833 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:30:40,994 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 19:30:40,996 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 19:30:40,996 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 19:30:40,997 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 19:30:40,999 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 19:30:42,073 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	133 Order Save. User ID: 1
+2025-06-22 19:41:02,550 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:41:05,546 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:41:44,173 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:43:19,863 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:43:28,534 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:43:31,364 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:52:01,259 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:52:06,105 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:52:06,336 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:52:06,599 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:52:40,845 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:00,804 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:06,411 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:11,650 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:19,905 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:26,555 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:27,097 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:54:30,799 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:55:31,216 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:55:33,310 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:55:38,411 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:55:51,200 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:55:58,621 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:56:08,052 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:56:15,239 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:56:16,304 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:56:28,702 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:57:02,761 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:57:07,789 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:57:11,275 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:26,774 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:27,020 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:27,211 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:32,351 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:42,913 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:43,150 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:58:48,500 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:59:05,659 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:59:33,879 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 19:59:37,975 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:00:30,948 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:00:41,787 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:02:07,400 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:02:42,067 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:02:45,192 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:02:54,746 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:03:44,195 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:03:47,579 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:03:54,481 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:05:11,180 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:05:13,197 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:05:21,350 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:05:26,521 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:06:21,083 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:08:53,178 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:11:55,932 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:14:06,314 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:20:51,552 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:20:54,749 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:20:58,474 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:24:30,672 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:31:13,391 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:31:17,208 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:32:31,489 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 20:53:16,504 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 20:53:16,506 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 20:53:16,507 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 20:53:16,508 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 20:53:16,509 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 20:53:18,192 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	134 Order Save. User ID: 1
+2025-06-22 20:57:40,384 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 20:57:40,386 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 20:57:40,387 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 20:57:40,388 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 20:57:40,389 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 20:57:41,441 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	135 Order Save. User ID: 1
+2025-06-22 21:04:22,543 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
+2025-06-22 21:04:22,545 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-06-22 21:04:22,547 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 21:04:22,548 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
+2025-06-22 21:04:22,549 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-06-22 21:04:24,042 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	136 Order Save. User ID: 1
+2025-06-22 21:07:21,354 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:07:52,690 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:08:01,160 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:09:42,949 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:15,069 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:15,384 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:17,820 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:19,327 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:21,549 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:10:21,715 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-06-22 21:12:18,054 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info

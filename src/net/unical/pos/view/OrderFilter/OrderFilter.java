@@ -124,8 +124,11 @@ public class OrderFilter extends JInternalFrame {
         jLabel16 = new javax.swing.JLabel();
         statusCmb = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
+        txtCustomerCode = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
         btnPrint = new javax.swing.JButton();
 
+        orderOptions.setAlwaysOnTop(true);
         orderOptions.setResizable(false);
 
         btnDeliverd.setBackground(new java.awt.Color(51, 153, 0));
@@ -315,7 +318,7 @@ public class OrderFilter extends JInternalFrame {
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Order ID");
+        jLabel18.setText("Order Code");
 
         jLabel20.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
@@ -366,6 +369,21 @@ public class OrderFilter extends JInternalFrame {
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Status");
 
+        txtCustomerCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCustomerCodeActionPerformed(evt);
+            }
+        });
+        txtCustomerCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCustomerCodeKeyReleased(evt);
+            }
+        });
+
+        jLabel22.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel22.setText("Customer Code");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -373,27 +391,31 @@ public class OrderFilter extends JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addComponent(jLabel18))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(57, 57, 57)
+                        .addGap(34, 34, 34)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel18)
+                        .addGap(30, 30, 30)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCustomerCode, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addGap(21, 21, 21)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(jLabel17))
                     .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
+                        .addGap(93, 93, 93)
                         .addComponent(jLabel19))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                         .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(statusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -423,13 +445,16 @@ public class OrderFilter extends JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel17)
+                                .addComponent(jLabel18)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCustomerCode, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(paymentTypeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(statusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -583,7 +608,7 @@ public class OrderFilter extends JInternalFrame {
 
                 isPrint = dto.getIsPrint() == 1;
                 Object[] rowData = {
-                    dto.getOrderId(), 
+                    dto.getOrderId(),
                     dto.getOrderCode(), 
                     dto.getCustomerName(), 
                     dto.getPhoneOne(), 
@@ -626,6 +651,7 @@ public class OrderFilter extends JInternalFrame {
             int selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
+                System.out.println("status : "+status);
                 
                 switch (status) {
                     case "Pending":
@@ -692,7 +718,9 @@ public class OrderFilter extends JInternalFrame {
                 }
                 
                 if (!status.equals("Delivered")) {
-                    orderCode = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                    orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+                    orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                    System.out.println("orderCode : "+orderCode);
                     orderOptions.setLocationRelativeTo(null);
                     orderOptions.setSize(787, 110);
                     orderOptions.setVisible(true);
@@ -729,22 +757,85 @@ public class OrderFilter extends JInternalFrame {
         if (!orderIdText.isEmpty()) {
             try {
                 String orderId = orderIdText;
-                getOrderById(orderId);
+                ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllOrdersByOrderID(orderIdText);
+                
+                DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
+                dtm.setRowCount(0);
+
+                String statusText = null;
+                boolean isPrint = false;
+
+                int count = 0;
+                double totAmount = 0.00;
+                double totDeliveryFee = 0.00;
+                double totCod = 0.00;
+                double totReturns = 0.00;
+
+                for (DeliveryOrder dto : deliveryOrderDtos) {
+                    count++;
+                    switch (dto.getStatusType()) {
+                        case 1:
+                            statusText = "Active";
+                            break;
+                        case 2:
+                            statusText = "Pending";
+                            break;
+                        case 3:
+                            statusText = "Wrapping";
+                            break;
+                        case 4:
+                            statusText = "Out of Delivery";
+                            break;
+                        case 5:
+                            statusText = "Delivered";
+                            break;
+                        case 6:
+                            statusText = "Return";
+                            break;
+                        case 7:
+                            statusText = "Cancel";
+                            break;
+                        default:
+                            statusText = "Unknown";
+                            break;
+                    }
+
+                    isPrint = dto.getIsPrint() == 1;
+                    Object[] rowData = {
+                        "",
+                        dto.getOrderCode(), 
+                        dto.getCustomerName(), 
+                        dto.getPhoneOne(), 
+                        dto.getPhoneTwo(), 
+                        dto.getCod(), 
+                        dto.getGrandTotalPrice(),
+                        dto.getCreateDate(),
+                        statusText
+                    };
+                    dtm.addRow(rowData);
+                }
+                total_orders_count_txt.setText(count+"");
             } catch (NumberFormatException e) {
                 Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, e);
                 Log.error(OrderFilter.class, "Invalid Order ID: ", e);
             }
         } else {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0, 0);
             Logger.getLogger(OrderFilter.class.getName()).log(Level.WARNING, "Order ID is empty");
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
     String orderCode=null;
+    String orderID=null;
     
     private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
         if (orderCode != null) {
             try {
-                deliveryOrderRepositoryImpl.update(orderCode, 5);
+                deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 5);
 
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -761,7 +852,7 @@ public class OrderFilter extends JInternalFrame {
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         try {
-            deliveryOrderRepositoryImpl.update(orderCode, 6);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 6);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -777,7 +868,7 @@ public class OrderFilter extends JInternalFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         try {
-            deliveryOrderRepositoryImpl.update(orderCode, 7);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 7);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -793,7 +884,7 @@ public class OrderFilter extends JInternalFrame {
 
     private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
         try {
-            deliveryOrderRepositoryImpl.update(orderCode, 4);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 4);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -809,7 +900,7 @@ public class OrderFilter extends JInternalFrame {
 
     private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
         try {
-            deliveryOrderRepositoryImpl.update(orderCode, 1);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 1);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -825,7 +916,7 @@ public class OrderFilter extends JInternalFrame {
 
     private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
         try {
-            deliveryOrderRepositoryImpl.update(orderCode, 3);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 3);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -891,6 +982,87 @@ public class OrderFilter extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Please select payment type as Any");
         }
     }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void txtCustomerCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCustomerCodeActionPerformed
+
+    private void txtCustomerCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerCodeKeyReleased
+        String customerCode = txtCustomerCode.getText();
+
+        if (!customerCode.isEmpty()) {
+            try {
+                ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllOrdersByCustomerCode(customerCode);
+                
+                DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
+                dtm.setRowCount(0);
+
+                String statusText = null;
+                boolean isPrint = false;
+
+                int count = 0;
+                double totAmount = 0.00;
+                double totDeliveryFee = 0.00;
+                double totCod = 0.00;
+                double totReturns = 0.00;
+
+                for (DeliveryOrder dto : deliveryOrderDtos) {
+                    count++;
+                    switch (dto.getStatusType()) {
+                        case 1:
+                            statusText = "Active";
+                            break;
+                        case 2:
+                            statusText = "Pending";
+                            break;
+                        case 3:
+                            statusText = "Wrapping";
+                            break;
+                        case 4:
+                            statusText = "Out of Delivery";
+                            break;
+                        case 5:
+                            statusText = "Delivered";
+                            break;
+                        case 6:
+                            statusText = "Return";
+                            break;
+                        case 7:
+                            statusText = "Cancel";
+                            break;
+                        default:
+                            statusText = "Unknown";
+                            break;
+                    }
+
+                    isPrint = dto.getIsPrint() == 1;
+                    Object[] rowData = {
+                        "", 
+                        dto.getOrderCode(), 
+                        dto.getCustomerName(), 
+                        dto.getPhoneOne(), 
+                        dto.getPhoneTwo(), 
+                        dto.getCod(), 
+                        dto.getGrandTotalPrice(),
+                        dto.getCreateDate(),
+                        statusText
+                    };
+                    dtm.addRow(rowData);
+                }
+                total_orders_count_txt.setText(count+"");
+            } catch (NumberFormatException e) {
+                Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(OrderFilter.class, "Invalid Order ID: ", e);
+            }
+        } else {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0, 0);
+            Logger.getLogger(OrderFilter.class.getName()).log(Level.WARNING, "Order ID is empty");
+        }
+    }//GEN-LAST:event_txtCustomerCodeKeyReleased
 
     public boolean generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
         Workbook workbook = new XSSFWorkbook();
@@ -1024,6 +1196,7 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane6;
@@ -1034,6 +1207,7 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JComboBox<String> paymentTypeCombo1;
     private javax.swing.JComboBox<String> statusCmb;
     private javax.swing.JLabel total_orders_count_txt;
+    private javax.swing.JTextField txtCustomerCode;
     // End of variables declaration//GEN-END:variables
 
     private void getOrderById(String orderId) {
@@ -1062,6 +1236,7 @@ public class OrderFilter extends JInternalFrame {
                 }
 
                 Object[] rowData = {
+                    "",
                     order.getOrderId(),
                     order.getOrderCode(),
                     order.getCustomerName(),

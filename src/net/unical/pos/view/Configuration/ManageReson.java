@@ -145,14 +145,14 @@ public class ManageReson extends JInternalFrame {
 
             },
             new String [] {
-                "", "Reson ID", "Reson"
+                "Reson ID", "Reson"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -184,11 +184,7 @@ public class ManageReson extends JInternalFrame {
         });
         jScrollPane6.setViewportView(resonTable);
         if (resonTable.getColumnModel().getColumnCount() > 0) {
-            resonTable.getColumnModel().getColumn(0).setMinWidth(5);
-            resonTable.getColumnModel().getColumn(0).setMaxWidth(5);
-            resonTable.getColumnModel().getColumn(1).setMinWidth(150);
-            resonTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-            resonTable.getColumnModel().getColumn(1).setMaxWidth(150);
+            resonTable.getColumnModel().getColumn(1).setResizable(false);
         }
         if (resonTable.getColumnModel().getColumnCount() > 0) {
             resonTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -250,12 +246,9 @@ public class ManageReson extends JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane6))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,8 +309,8 @@ public class ManageReson extends JInternalFrame {
     }//GEN-LAST:event_btnAddResonActionPerformed
 
     public void getAllResons() {
-        String[] columnNames = {"Reson ID","Reson"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel dtm = (DefaultTableModel) resonTable.getModel();
+        dtm.setRowCount(0);
 
         List<ResonModel> resonList = resonRepositoryImpl.getAllResons();
         for (ResonModel model : resonList) {
@@ -325,10 +318,10 @@ public class ManageReson extends JInternalFrame {
                 model.getResonId(),
                 model.getReson()
             };
-            tableModel.addRow(row);
+            dtm.addRow(row);
         }
 
-        resonTable.setModel(tableModel);
+        resonTable.setModel(dtm);
     }
 
     

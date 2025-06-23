@@ -1,0 +1,3 @@
+2025-06-19 11:01:53,564 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'emp_id' in 'where clause'	Employee Update Error
+2025-06-19 11:02:19,111 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'title' in 'field list'	Employee Update Error
+2025-06-19 11:03:19,748 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'address' in 'field list'	Employee Update Error

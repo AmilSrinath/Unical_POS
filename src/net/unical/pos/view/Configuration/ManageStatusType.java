@@ -158,14 +158,14 @@ public class ManageStatusType extends JInternalFrame {
 
             },
             new String [] {
-                "", "Status ID", "Reg ID", "Status Type"
+                "", "Reg ID", "Status Type"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -199,9 +199,9 @@ public class ManageStatusType extends JInternalFrame {
         if (StatusTypeTable.getColumnModel().getColumnCount() > 0) {
             StatusTypeTable.getColumnModel().getColumn(0).setMinWidth(5);
             StatusTypeTable.getColumnModel().getColumn(0).setMaxWidth(5);
-            StatusTypeTable.getColumnModel().getColumn(2).setMinWidth(150);
-            StatusTypeTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-            StatusTypeTable.getColumnModel().getColumn(2).setMaxWidth(150);
+            StatusTypeTable.getColumnModel().getColumn(1).setMinWidth(150);
+            StatusTypeTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+            StatusTypeTable.getColumnModel().getColumn(1).setMaxWidth(150);
         }
         if (StatusTypeTable.getColumnModel().getColumnCount() > 0) {
             StatusTypeTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -355,20 +355,20 @@ public class ManageStatusType extends JInternalFrame {
     }
     
     public void getAllStatusType() {
-        String[] columnNames = {"Status ID","Reg ID","Status Type"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-
+        DefaultTableModel dtm = (DefaultTableModel) StatusTypeTable.getModel();
+        dtm.setRowCount(0);
+        
         List<StatusTypeModel> statusTypeModels = statusTypeRepositoryImpl.getAllStatusType();
         for (StatusTypeModel model : statusTypeModels) {
             Object[] row = {
                 model.getStatus_id(),
-                model.getReg_id(),
+                model.getReg_des(),
                 model.getStatus_type()
             };
-            tableModel.addRow(row);
+            dtm.addRow(row);
         }
 
-        StatusTypeTable.setModel(tableModel);
+        StatusTypeTable.setModel(dtm);
     }
     
     private void StatusTypeTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_StatusTypeTableKeyReleased
@@ -384,8 +384,8 @@ public class ManageStatusType extends JInternalFrame {
             int selectedRow = StatusTypeTable.getSelectedRow();
             if (selectedRow != -1) {
                 for (StatusRegModel model : statusRegList) {
-                    int regID = Integer.parseInt(StatusTypeTable.getValueAt(selectedRow, 1).toString());
-                    if (regID == model.getReg_id()) {
+                    String regDes = StatusTypeTable.getValueAt(selectedRow, 1).toString();
+                    if (regDes.equals(model.getDescription())) {
                         cmbStatusReg.setSelectedItem(model.getDescription());
                     }
                 }

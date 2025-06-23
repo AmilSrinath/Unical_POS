@@ -95,6 +95,7 @@ public class ManageCourierBranch extends JInternalFrame {
         cmbCompany = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
 
+        InquiryOptions.setAlwaysOnTop(true);
         InquiryOptions.setResizable(false);
 
         btnPaid.setBackground(new java.awt.Color(51, 153, 0));
@@ -156,14 +157,14 @@ public class ManageCourierBranch extends JInternalFrame {
 
             },
             new String [] {
-                "", "Branch ID", "Branch Name", "Contact", "Company"
+                "", "Branch Name", "Contact", "Company"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -197,9 +198,6 @@ public class ManageCourierBranch extends JInternalFrame {
         if (resonTable.getColumnModel().getColumnCount() > 0) {
             resonTable.getColumnModel().getColumn(0).setMinWidth(5);
             resonTable.getColumnModel().getColumn(0).setMaxWidth(5);
-            resonTable.getColumnModel().getColumn(1).setMinWidth(150);
-            resonTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-            resonTable.getColumnModel().getColumn(1).setMaxWidth(150);
         }
         if (resonTable.getColumnModel().getColumnCount() > 0) {
             resonTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -392,8 +390,8 @@ public class ManageCourierBranch extends JInternalFrame {
     }
     
     public void getAllCourierBranch() {
-        String[] columnNames = {"Branch ID","Branch Name","Contact","Company"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel dtm = (DefaultTableModel) resonTable.getModel();
+        dtm.setRowCount(0);
 
         List<CourierBranchModel> courierBranchModels = courierBranchRepositoryImpl.getAllCourierBranchs();
         for (CourierBranchModel model : courierBranchModels) {
@@ -403,9 +401,9 @@ public class ManageCourierBranch extends JInternalFrame {
                 model.getBranchContact(),
                 model.getCompanyName()
             };
-            tableModel.addRow(row);
+            dtm.addRow(row);
         }
-        resonTable.setModel(tableModel);
+        resonTable.setModel(dtm);
     }
     
     private void resonTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resonTableKeyReleased

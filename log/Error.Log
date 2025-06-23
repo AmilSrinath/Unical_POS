@@ -1,3 +1,5 @@
-2025-06-19 11:01:53,564 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'emp_id' in 'where clause'	Employee Update Error
-2025-06-19 11:02:19,111 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'title' in 'field list'	Employee Update Error
-2025-06-19 11:03:19,748 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'address' in 'field list'	Employee Update Error
+2025-06-23 08:24:52,902 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.status_id FROM pos_payment_tb p INNER JOIN pos_main_order_tb o ON p.order_id = ' at line 1	get All Payment Duration error
+2025-06-23 20:10:46,397 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
+2025-06-23 20:10:47,351 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
+2025-06-23 20:11:43,989 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
+2025-06-23 20:11:44,816 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error

@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserServiceCustom {
     }
 
     @Override
-    public UserDto findOneUser(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PosMainUser findOneUser(Integer id) throws Exception {
+        return userRepositoryCustom.findOneUser(id);
     }
 
     @Override

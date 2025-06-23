@@ -7,22 +7,30 @@ package net.unical.pos.view.home;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import static java.awt.Font.BOLD;
 import static java.awt.Font.DIALOG;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.model.AuthModuleWise;
+import net.unical.pos.repository.impl.ManageUserAuthRepositoryImpl;
 import net.unical.pos.view.Configuration.Configuration;
 import net.unical.pos.view.OrderFilter.OrderFilter;
 import net.unical.pos.view.Payment.Payment;
@@ -46,21 +54,64 @@ public class Dashboard extends javax.swing.JFrame {
     public static int CREATED_USER_ID = 1;
     public static String systemMAC = "";
     public static Map<String, String> configValues = new HashMap();
+    private ManageUserAuthRepositoryImpl manageUserAuthRepositoryImpl;
     
     Integer enterd;
     Integer exit;
-    public Dashboard() {
+    public Dashboard() throws Exception {
         initComponents();
         Dimension fullScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setMinimumSize(fullScreenSize);
         this.setSize(fullScreenSize);
         this.setLocationRelativeTo(null);
+        this.manageUserAuthRepositoryImpl = new ManageUserAuthRepositoryImpl();
         
         setExtendedState(Dashboard.MAXIMIZED_BOTH);
         btnBackgroundExit();
         lblUserName.setText(LogInForm.userName);
         setDateAndTime();
+//        jPanel3.setLayout(new BoxLayout(jPanel3, BoxLayout.Y_AXIS));
+        jPanel3.setLayout(new java.awt.FlowLayout());
+
+        hideButtonByUserRole();
     }
+    
+    private void hideButtonByUserRole() throws Exception {
+        ArrayList<AuthModuleWise> authModuleWises = manageUserAuthRepositoryImpl.getAllModuleWiseByUserID(LogInForm.userID);
+
+        // First hide all (optional, ensures default state)
+        dashboardBtn.setVisible(false);
+        salesBtn.setVisible(false);
+        inventoryBtn.setVisible(false);
+        deliveryOrdersBtn.setVisible(false);
+        configurationsBtn.setVisible(false);
+        banquetBtn.setVisible(false);
+        inquiryBtn.setVisible(false);
+        pmsBtn.setVisible(false);
+        employeeBtn.setVisible(false);
+        propertyBtn.setVisible(false);
+        configurationBtn.setVisible(false);
+
+        // Show buttons based on module_id and status
+        for (AuthModuleWise auth : authModuleWises) {
+            boolean visible = auth.getStatus() == 1;
+
+            switch (auth.getModule_id()) {
+                case 1: dashboardBtn.setVisible(visible); break;
+                case 2: salesBtn.setVisible(visible); break;
+                case 3: inventoryBtn.setVisible(visible); break;
+                case 4: deliveryOrdersBtn.setVisible(visible); break;
+                case 5: configurationsBtn.setVisible(visible); break;
+                case 6: banquetBtn.setVisible(visible); break;
+                case 7: inquiryBtn.setVisible(visible); break;
+                case 8: pmsBtn.setVisible(visible); break;
+                case 9: employeeBtn.setVisible(visible); break;
+                case 10: propertyBtn.setVisible(visible); break;
+                case 11: configurationBtn.setVisible(visible); break;
+            }
+        }
+    }
+
 
     private void setDateAndTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -87,17 +138,17 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         dashboardBtn = new org.jdesktop.swingx.JXButton();
         salesBtn = new org.jdesktop.swingx.JXButton();
-        propertyBtn = new org.jdesktop.swingx.JXButton();
-        reportsBtn = new org.jdesktop.swingx.JXButton();
         inventoryBtn = new org.jdesktop.swingx.JXButton();
-        banquetBtn = new org.jdesktop.swingx.JXButton();
-        pmsBtn = new org.jdesktop.swingx.JXButton();
-        logoutBtn = new org.jdesktop.swingx.JXButton();
-        employeeBtn = new org.jdesktop.swingx.JXButton();
         deliveryOrdersBtn = new org.jdesktop.swingx.JXButton();
         configurationsBtn = new org.jdesktop.swingx.JXButton();
+        banquetBtn = new org.jdesktop.swingx.JXButton();
         inquiryBtn = new org.jdesktop.swingx.JXButton();
+        pmsBtn = new org.jdesktop.swingx.JXButton();
+        employeeBtn = new org.jdesktop.swingx.JXButton();
+        propertyBtn = new org.jdesktop.swingx.JXButton();
+        reportsBtn = new org.jdesktop.swingx.JXButton();
         configurationBtn = new org.jdesktop.swingx.JXButton();
+        logoutBtn = new org.jdesktop.swingx.JXButton();
         navBarPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         lblUserName = new javax.swing.JLabel();
@@ -134,7 +185,7 @@ public class Dashboard extends javax.swing.JFrame {
         dashboardBtn.setBackground(new java.awt.Color(0, 77, 128));
         dashboardBtn.setForeground(new java.awt.Color(255, 255, 255));
         dashboardBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-dashboard-45.png"))); // NOI18N
-        dashboardBtn.setText("Dashboard");
+        dashboardBtn.setText("Dashboard                ");
         dashboardBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         dashboardBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         dashboardBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -158,7 +209,7 @@ public class Dashboard extends javax.swing.JFrame {
         salesBtn.setBackground(new java.awt.Color(0, 77, 128));
         salesBtn.setForeground(new java.awt.Color(255, 255, 255));
         salesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-sales-performance-45.png"))); // NOI18N
-        salesBtn.setText("Sales");
+        salesBtn.setText("Sales                         ");
         salesBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         salesBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         salesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -175,6 +226,153 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(salesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 210, 60));
+
+        inventoryBtn.setBackground(new java.awt.Color(0, 77, 128));
+        inventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        inventoryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/inventory-45.png"))); // NOI18N
+        inventoryBtn.setText("Inventory                 ");
+        inventoryBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        inventoryBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        inventoryBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                inventoryBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                inventoryBtnMouseExited(evt);
+            }
+        });
+        inventoryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inventoryBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(inventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 210, 60));
+
+        deliveryOrdersBtn.setBackground(new java.awt.Color(0, 77, 128));
+        deliveryOrdersBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deliveryOrdersBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Sales/icons8-in-transit-45.png"))); // NOI18N
+        deliveryOrdersBtn.setText("Delivery Orders         ");
+        deliveryOrdersBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        deliveryOrdersBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        deliveryOrdersBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                deliveryOrdersBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                deliveryOrdersBtnMouseExited(evt);
+            }
+        });
+        deliveryOrdersBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deliveryOrdersBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(deliveryOrdersBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 210, 60));
+
+        configurationsBtn.setBackground(new java.awt.Color(0, 77, 128));
+        configurationsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        configurationsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-filter-45.png"))); // NOI18N
+        configurationsBtn.setText("  Filter Order           ");
+        configurationsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        configurationsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        configurationsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                configurationsBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                configurationsBtnMouseExited(evt);
+            }
+        });
+        configurationsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configurationsBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(configurationsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 210, 60));
+
+        banquetBtn.setBackground(new java.awt.Color(0, 77, 128));
+        banquetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        banquetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-payment-35.png"))); // NOI18N
+        banquetBtn.setText("Payment                    ");
+        banquetBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        banquetBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        banquetBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                banquetBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                banquetBtnMouseExited(evt);
+            }
+        });
+        banquetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                banquetBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(banquetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 210, 60));
+
+        inquiryBtn.setBackground(new java.awt.Color(0, 77, 128));
+        inquiryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        inquiryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-inquiry-40.png"))); // NOI18N
+        inquiryBtn.setText("Inquiry                       ");
+        inquiryBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        inquiryBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        inquiryBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                inquiryBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                inquiryBtnMouseExited(evt);
+            }
+        });
+        inquiryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inquiryBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(inquiryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
+
+        pmsBtn.setBackground(new java.awt.Color(0, 77, 128));
+        pmsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        pmsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-hotel-room-key-45.png"))); // NOI18N
+        pmsBtn.setText("PMS                           ");
+        pmsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        pmsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        pmsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pmsBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pmsBtnMouseExited(evt);
+            }
+        });
+        pmsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pmsBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
+
+        employeeBtn.setBackground(new java.awt.Color(0, 77, 128));
+        employeeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        employeeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/employee-45.png"))); // NOI18N
+        employeeBtn.setText("Employee                  ");
+        employeeBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        employeeBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        employeeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                employeeBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                employeeBtnMouseExited(evt);
+            }
+        });
+        employeeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
 
         propertyBtn.setBackground(new java.awt.Color(0, 77, 128));
         propertyBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -200,7 +398,7 @@ public class Dashboard extends javax.swing.JFrame {
         reportsBtn.setBackground(new java.awt.Color(0, 77, 128));
         reportsBtn.setForeground(new java.awt.Color(255, 255, 255));
         reportsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-business-report-45.png"))); // NOI18N
-        reportsBtn.setText("Reports");
+        reportsBtn.setText("Reports                     ");
         reportsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         reportsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         reportsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -218,178 +416,10 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jPanel3.add(reportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 210, 60));
 
-        inventoryBtn.setBackground(new java.awt.Color(0, 77, 128));
-        inventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
-        inventoryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/inventory-45.png"))); // NOI18N
-        inventoryBtn.setText("Inventory");
-        inventoryBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        inventoryBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        inventoryBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                inventoryBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                inventoryBtnMouseExited(evt);
-            }
-        });
-        inventoryBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inventoryBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(inventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 210, 60));
-
-        banquetBtn.setBackground(new java.awt.Color(0, 77, 128));
-        banquetBtn.setForeground(new java.awt.Color(255, 255, 255));
-        banquetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-payment-35.png"))); // NOI18N
-        banquetBtn.setText("Payment");
-        banquetBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        banquetBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        banquetBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                banquetBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                banquetBtnMouseExited(evt);
-            }
-        });
-        banquetBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                banquetBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(banquetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 210, 60));
-
-        pmsBtn.setBackground(new java.awt.Color(0, 77, 128));
-        pmsBtn.setForeground(new java.awt.Color(255, 255, 255));
-        pmsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-hotel-room-key-45.png"))); // NOI18N
-        pmsBtn.setText("PMS");
-        pmsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        pmsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        pmsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pmsBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                pmsBtnMouseExited(evt);
-            }
-        });
-        pmsBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pmsBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(pmsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 210, 60));
-
-        logoutBtn.setBackground(new java.awt.Color(0, 77, 128));
-        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
-        logoutBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-exit-45.png"))); // NOI18N
-        logoutBtn.setText("Logout");
-        logoutBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        logoutBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                logoutBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                logoutBtnMouseExited(evt);
-            }
-        });
-        logoutBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 720, 210, 60));
-
-        employeeBtn.setBackground(new java.awt.Color(0, 77, 128));
-        employeeBtn.setForeground(new java.awt.Color(255, 255, 255));
-        employeeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/employee-45.png"))); // NOI18N
-        employeeBtn.setText("Employee");
-        employeeBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        employeeBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        employeeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                employeeBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                employeeBtnMouseExited(evt);
-            }
-        });
-        employeeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employeeBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(employeeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 210, 60));
-
-        deliveryOrdersBtn.setBackground(new java.awt.Color(0, 77, 128));
-        deliveryOrdersBtn.setForeground(new java.awt.Color(255, 255, 255));
-        deliveryOrdersBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Sales/icons8-in-transit-45.png"))); // NOI18N
-        deliveryOrdersBtn.setText("Delivery Orders");
-        deliveryOrdersBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        deliveryOrdersBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        deliveryOrdersBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                deliveryOrdersBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                deliveryOrdersBtnMouseExited(evt);
-            }
-        });
-        deliveryOrdersBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deliveryOrdersBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(deliveryOrdersBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 210, 60));
-
-        configurationsBtn.setBackground(new java.awt.Color(0, 77, 128));
-        configurationsBtn.setForeground(new java.awt.Color(255, 255, 255));
-        configurationsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-filter-45.png"))); // NOI18N
-        configurationsBtn.setText("  Filter Order");
-        configurationsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        configurationsBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        configurationsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                configurationsBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                configurationsBtnMouseExited(evt);
-            }
-        });
-        configurationsBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configurationsBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(configurationsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 210, 60));
-
-        inquiryBtn.setBackground(new java.awt.Color(0, 77, 128));
-        inquiryBtn.setForeground(new java.awt.Color(255, 255, 255));
-        inquiryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-inquiry-40.png"))); // NOI18N
-        inquiryBtn.setText("Inquiry");
-        inquiryBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        inquiryBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        inquiryBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                inquiryBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                inquiryBtnMouseExited(evt);
-            }
-        });
-        inquiryBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inquiryBtnActionPerformed(evt);
-            }
-        });
-        jPanel3.add(inquiryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 210, 60));
-
         configurationBtn.setBackground(new java.awt.Color(0, 77, 128));
         configurationBtn.setForeground(new java.awt.Color(255, 255, 255));
         configurationBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-configuration-48.png"))); // NOI18N
-        configurationBtn.setText("Configurations");
+        configurationBtn.setText("Configurations           ");
         configurationBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         configurationBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         configurationBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -406,6 +436,27 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(configurationBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 210, 60));
+
+        logoutBtn.setBackground(new java.awt.Color(0, 77, 128));
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        logoutBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-exit-45.png"))); // NOI18N
+        logoutBtn.setText("Logout                       ");
+        logoutBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        logoutBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseExited(evt);
+            }
+        });
+        logoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutBtnActionPerformed(evt);
+            }
+        });
+        jPanel3.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 720, 210, 60));
 
         navBarPanel.setBackground(new java.awt.Color(0, 102, 153));
 

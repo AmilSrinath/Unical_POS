@@ -28,7 +28,7 @@ public class ItemList extends javax.swing.JInternalFrame{
     Dashboard dashboard;
     private MainItemController newItemController;
     
-    public ItemList(Dashboard dashboard) {
+    public ItemList(Dashboard dashboard) throws Exception {
         initComponents();
         
         this.newItemController=new MainItemController();

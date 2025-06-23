@@ -43,7 +43,21 @@ public class UserRepositoryimpl implements UserRepositoryCustom {
 
     @Override
     public PosMainUser findOneUser(Integer id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet resultSet = Statement.executeQuery("SELECT * FROM pos_main_user_tb WHERE user_id = " + id);
+    
+        if (resultSet.next()) {
+            return new PosMainUser(
+                    resultSet.getInt("user_id"),
+                    resultSet.getInt("employee_id"),
+                    resultSet.getInt("role_id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getInt("status"),
+                    resultSet.getInt("visible"),
+                    resultSet.getString("token")
+            );
+        }
+        return null;
     }
 
     @Override

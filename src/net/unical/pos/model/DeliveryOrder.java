@@ -21,6 +21,7 @@ public class DeliveryOrder {
     private Integer customerId;
     private String customerName;
     private String address;
+    private String payment_type;
     private Double cod;
     private String phoneOne;
     private String phoneTwo;
@@ -68,6 +69,14 @@ public class DeliveryOrder {
 
     public String getOrderCode() {
         return orderCode;
+    }
+    
+    public void setPayment_Type(String payment_type) {
+        this.payment_type = payment_type;
+    }
+
+    public String getPayment_Type() {
+        return payment_type;
     }
 
     public void setOrderCode(String orderCode) {

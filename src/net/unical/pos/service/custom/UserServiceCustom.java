@@ -7,6 +7,7 @@ package net.unical.pos.service.custom;
 
 import java.util.ArrayList;
 import net.unical.pos.dto.UserDto;
+import net.unical.pos.model.PosMainUser;
 
 /**
  *
@@ -20,7 +21,7 @@ public interface UserServiceCustom {
 
     boolean deleteUser(Integer id)throws Exception;
 
-    UserDto findOneUser(Integer id)throws Exception;
+    PosMainUser findOneUser(Integer id)throws Exception;
 
     ArrayList<UserDto> getAllUser(String quary)throws Exception;
     

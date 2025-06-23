@@ -34,14 +34,16 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 "SELECT p.payment_id, p.cod, p.total_amount, p.payment_status, " +
                 "o.order_id, o.customer_id, o.delivery_order_id, o.bill_no, o.sub_total_price, " +
                 "o.delivery_fee, o.total_order_price, o.payment_type_id, " +
-                "o.created_Date, o.remark, o.is_print, " +
-                "d.status_id " +
+                "o.created_Date, o.remark, o.is_print, p.status_id, d.order_code, " +
+                "d.status_id, c.customer_number " +  // <-- Added customer_number
                 "FROM pos_payment_tb p " +
                 "INNER JOIN pos_main_order_tb o ON p.order_id = o.order_id " +
                 "INNER JOIN pos_main_delivery_order_tb d ON d.delivery_id = o.delivery_order_id " +
+                "INNER JOIN pos_main_customer_tb c ON o.customer_id = c.customer_id " + // <-- New join
                 "WHERE DATE(o.created_Date) BETWEEN ? AND ? " +
-                "AND d.status_id IN (4, 5) "
+                "AND d.status_id IN (4, 5)"
             );
+
 
             if (paymentType != null && paymentType != 0) {
                 sql.append(" AND o.payment_type_id = ?");
@@ -69,9 +71,9 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 deliveryOrder.setCod(rs.getDouble("cod"));
                 deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
                 deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
-                deliveryOrder.setOrderCode(rs.getString("bill_no"));
+                deliveryOrder.setOrderCode(rs.getString("order_code"));
                 deliveryOrder.setOrderId(rs.getInt("order_id"));
-                deliveryOrder.setCustomerId(rs.getInt("customer_id"));
+                deliveryOrder.setCustomerId(rs.getInt("customer_number"));
                 deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
                 deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
                 deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
@@ -79,6 +81,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 deliveryOrder.setDate(rs.getString("created_Date"));
                 deliveryOrder.setRemark(rs.getString("remark"));
                 deliveryOrder.setIsPrint(rs.getInt("is_print"));
+                deliveryOrder.setPayment_Type(rs.getString("payment_status"));
 
                 deliveryOrders.add(deliveryOrder);
             }
@@ -127,8 +130,8 @@ public class PaymentRepositoryImpl implements PaymentRepository{
         }
     }
 
-    public DeliveryOrder getPaymentByOrderId(String orderId) {
-        DeliveryOrder deliveryOrder = null;
+    public ArrayList<DeliveryOrder> getPaymentByOrderId(String order_code) {
+        ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -144,16 +147,15 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 "FROM pos_payment_tb p " +
                 "INNER JOIN pos_main_order_tb o ON p.order_id = o.order_id " +
                 "INNER JOIN pos_main_delivery_order_tb d ON d.delivery_id = o.delivery_order_id " +
-                "WHERE o.order_id = ? " +
+                "WHERE d.order_code LIKE ? " +
                 "AND d.status_id IN (4, 5)";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1, orderId);
-
+            ps.setString(1, "%"+order_code+"%");
             rs = ps.executeQuery();
 
-            if (rs.next()) {
-                deliveryOrder = new DeliveryOrder();
+            while (rs.next()) {
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
                 deliveryOrder.setPaymentId(rs.getInt("payment_id"));
                 deliveryOrder.setCod(rs.getDouble("cod"));
                 deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
@@ -168,6 +170,8 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 deliveryOrder.setDate(rs.getString("created_Date"));
                 deliveryOrder.setRemark(rs.getString("remark"));
                 deliveryOrder.setIsPrint(rs.getInt("is_print"));
+
+                deliveryOrders.add(deliveryOrder);
             }
         } catch (Exception e) {
             Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -179,10 +183,11 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 if (conn != null) conn.close();
             } catch (Exception e) {
                 Logger.getLogger(PaymentRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-                Log.error(e, "Get Payment by Order ID error");
+                Log.error(e, "Get Payment by Order ID error (closing)");
             }
         }
-        return deliveryOrder;
+
+        return deliveryOrders;
     }
 
 }

@@ -41,7 +41,7 @@ public class PaymentRepositoryImpl implements PaymentRepository{
                 "INNER JOIN pos_main_delivery_order_tb d ON d.delivery_id = o.delivery_order_id " +
                 "INNER JOIN pos_main_customer_tb c ON o.customer_id = c.customer_id " + // <-- New join
                 "WHERE DATE(o.created_Date) BETWEEN ? AND ? " +
-                "AND d.status_id IN (4, 5)"
+                "AND d.status_id IN (5)"
             );
 
 

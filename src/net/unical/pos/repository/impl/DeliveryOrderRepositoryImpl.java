@@ -694,8 +694,16 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             Log.error(e, "Update failed");
         } finally {
-            if (ps != null) try { ps.close(); } catch (Exception e) { Log.error(e, "Close failed"); }
-            if (isLocalConnection && con != null) try { con.close(); } catch (Exception e) { Log.error(e, "Close failed"); }
+            if (ps != null) try { 
+                ps.close(); 
+            } catch (Exception e) { 
+                Log.error(e, "Close failed"); 
+            }
+            if (isLocalConnection && con != null) try { 
+                con.close(); 
+            } catch (Exception e) { 
+                Log.error(e, "Close failed"); 
+            }
         }
     }
 
@@ -713,25 +721,26 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 isLocalConnection = true;
             }
 
-            String sql = "";
-
+            StringBuilder sql = new StringBuilder();
             if (paymentType == 1 || paymentType == 2) {
-                sql = "SELECT dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, ct.phone_one, ct.phone_two, " +
-                      "ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, dot.is_return, ot.total_order_price, dot.remark, " +
-                      "pt.payment_type_id, ot.is_print " +
-                      "FROM pos_main_delivery_order_tb dot " +
-                      "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id " +
-                      "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
-                      "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id " +
-                      "WHERE dot.status = 1 AND DATE(dot.created_date) BETWEEN ? AND ? AND pt.payment_type_id = ?";
+                sql.append("SELECT dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, ")
+                   .append("ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, ")
+                   .append("dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print ")
+                   .append("FROM pos_main_delivery_order_tb dot ")
+                   .append("INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id ")
+                   .append("INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id ")
+                   .append("INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id ")
+                   .append("WHERE dot.status = 1 AND DATE(dot.created_date) BETWEEN ? AND ? ")
+                   .append("AND pt.payment_type_id = ?");
             } else {
-                sql = "SELECT SUM(dot.cod_amount) AS total_cod, SUM(ot.delivery_fee) AS total_delivery_fee, SUM(ot.total_order_price) AS total_amount " +
-                      "FROM pos_main_delivery_order_tb dot " +
-                      "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
-                      "WHERE dot.status_id NOT IN (6) AND DATE(dot.created_date) BETWEEN ? AND ?";
+                sql.append("SELECT SUM(dot.cod_amount) AS total_cod, SUM(ot.delivery_fee) AS total_delivery_fee, ")
+                   .append("SUM(ot.total_order_price) AS total_amount ")
+                   .append("FROM pos_main_delivery_order_tb dot ")
+                   .append("INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id ")
+                   .append("WHERE dot.status_id NOT IN (6, 7) AND DATE(dot.created_date) BETWEEN ? AND ?");
             }
 
-            ps = con.prepareStatement(sql);
+            ps = con.prepareStatement(sql.toString());
             ps.setString(1, fromDate);
             ps.setString(2, toDate);
             if (paymentType == 1 || paymentType == 2) {
@@ -743,10 +752,10 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             while (rst.next()) {
                 DeliveryOrderAmounts deliveryOrder = new DeliveryOrderAmounts();
                 if (paymentType == 1 || paymentType == 2) {
-                    // populate the deliveryOrder object with the necessary data
                     deliveryOrder.setTotalAmount(rst.getDouble("total_order_price"));
                     deliveryOrder.setTotalDeliveryCharge(rst.getDouble("delivery_fee"));
-                    // set other fields as required
+                    deliveryOrder.setTotalCod(rst.getDouble("cod_amount"));
+                    // Add more fields as needed
                 } else {
                     deliveryOrder.setTotalAmount(rst.getDouble("total_amount"));
                     deliveryOrder.setTotalDeliveryCharge(rst.getDouble("total_delivery_fee"));
@@ -758,46 +767,62 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             rst.close();
             ps.close();
 
-            String sql2 = "SELECT SUM(ot.sub_total_price) AS total_returns FROM pos_main_delivery_order_tb dot " +
-                          "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
-                          "WHERE dot.status_id = 5 AND DATE(dot.created_date) BETWEEN ? AND ?";
-
-            ps = con.prepareStatement(sql2);
+            // Calculate returns
+            String sqlReturns = "SELECT SUM(ot.sub_total_price) AS total_returns " +
+                                "FROM pos_main_delivery_order_tb dot " +
+                                "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                                "WHERE dot.status_id = 6 AND DATE(dot.created_date) BETWEEN ? AND ?";
+            ps = con.prepareStatement(sqlReturns);
             ps.setString(1, fromDate);
             ps.setString(2, toDate);
             rst = ps.executeQuery();
             if (rst.next()) {
                 double totalReturns = rst.getDouble("total_returns");
-                deliveryOrdersAmounts.forEach(deliveryOrder -> deliveryOrder.setTotalReturns(totalReturns));
+                deliveryOrdersAmounts.forEach(order -> order.setTotalReturns(totalReturns));
+            }
+            
+            String sqlDelivered = "SELECT SUM(ot.total_order_price) AS total_delivered " +
+                      "FROM pos_main_delivery_order_tb dot " +
+                      "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id " +
+                      "WHERE dot.status_id = 5 AND DATE(dot.created_date) BETWEEN ? AND ?";
+            ps = con.prepareStatement(sqlDelivered);
+            ps.setString(1, fromDate);
+            ps.setString(2, toDate);
+            rst = ps.executeQuery();
+            if (rst.next()) {
+                double totalDelivered = rst.getDouble("total_delivered");
+                deliveryOrdersAmounts.forEach(order -> order.setTotalDeliverds(totalDelivered));
             }
 
             rst.close();
             ps.close();
 
-            String sql3 = "SELECT SUM(cod_amount) AS total_cod FROM pos_main_delivery_order_tb " +
-                          "WHERE status_id NOT IN (5, 6) AND DATE(created_date) BETWEEN ? AND ?";
-
-            ps = con.prepareStatement(sql3);
+            // Calculate total COD (excluding Delivered and Returned)
+            String sqlCOD = "SELECT SUM(cod_amount) AS total_cod " +
+                            "FROM pos_main_delivery_order_tb " +
+                            "WHERE status_id NOT IN (5, 6, 7) AND DATE(created_date) BETWEEN ? AND ?";
+            ps = con.prepareStatement(sqlCOD);
             ps.setString(1, fromDate);
             ps.setString(2, toDate);
             rst = ps.executeQuery();
             if (rst.next()) {
                 double totalCod = rst.getDouble("total_cod");
-                deliveryOrdersAmounts.forEach(deliveryOrder -> deliveryOrder.setTotalCod(totalCod));
+                deliveryOrdersAmounts.forEach(order -> order.setTotalCod(totalCod));
             }
+
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-            Log.error(e, "get Calculation faild");
+            Log.error(e, "get Calculation failed");
         } finally {
             try {
                 if (rst != null) rst.close();
                 if (ps != null) ps.close();
                 if (isLocalConnection && con != null) con.close();
             } catch (Exception e) {
-                Log.error(e, "get Calculation faild");
-                e.printStackTrace();
+                Log.error(e, "Closing resources failed in getCalculation");
             }
         }
+
         return deliveryOrdersAmounts;
     }
 
@@ -809,6 +834,12 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         try {
             connection = DBCon.getDatabaseConnection();
+            
+            if (isOrderCodeExists(connection, deliveryOrderDto.getOrderCode(), delivery_id)) {
+                System.out.println("Duplicate order_code found!");
+                return false;
+            }
+
             connection.setAutoCommit(false);
 
             if (changeItemStatusByOrderID(connection, deliveryOrderDto, orderId) &&
@@ -828,7 +859,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(e, "connection rollback");
             }
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-            Log.error(e, "update faild");
+            Log.error(e, "update failed");
             throw e;
         } finally {
             if (connection != null) {
@@ -838,6 +869,20 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
 
         return success;
+    }
+
+    
+    private boolean isOrderCodeExists(Connection connection, String orderCode, String currentDeliveryId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM pos_main_delivery_order_tb WHERE order_code = ? AND delivery_id != ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, orderCode);
+            ps.setString(2, currentDeliveryId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
     }
 
     private boolean changeItemStatusByOrderID(Connection connection, DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
@@ -1240,6 +1285,59 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
         return deliveryOrders;
     }
+
+    public boolean isLastOrderDelivered(String phoneNumber) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            // Check if customer exists
+            String checkCustomerSQL = "SELECT customer_id FROM pos_main_customer_tb WHERE phone_one = ?";
+            ps = con.prepareStatement(checkCustomerSQL);
+            ps.setString(1, phoneNumber);
+            rs = ps.executeQuery();
+
+            if (!rs.next()) {
+                return true;
+            }
+
+            int customerId = rs.getInt("customer_id");
+            rs.close();
+            ps.close();
+         
+            String checkDeliverySQL = "SELECT COUNT(*) AS undelivered_count " +
+                                      "FROM pos_main_delivery_order_tb " +
+                                      "WHERE customer_id = ? AND status_id != 5";
+            ps = con.prepareStatement(checkDeliverySQL);
+            ps.setInt(1, customerId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("undelivered_count");
+                return count == 0;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Check last order delivered status failed");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed");
+            }
+        }
+
+        return true; // default to allow order in ambiguous cases (e.g., error or no data)
+    }
+
+
     
     
 }

@@ -846,6 +846,7 @@ public class OrderFilter extends JInternalFrame {
                 orderOptions.dispose();
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, ex);
             }
         }
     }//GEN-LAST:event_btnDeliverdActionPerformed
@@ -863,6 +864,7 @@ public class OrderFilter extends JInternalFrame {
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_btnReturnActionPerformed
 
@@ -879,6 +881,7 @@ public class OrderFilter extends JInternalFrame {
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -895,6 +898,7 @@ public class OrderFilter extends JInternalFrame {
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_btnOutForDeliveryActionPerformed
 
@@ -911,6 +915,7 @@ public class OrderFilter extends JInternalFrame {
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_btnActiveActionPerformed
 
@@ -927,6 +932,7 @@ public class OrderFilter extends JInternalFrame {
             orderOptions.dispose();
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_btnWrappingActionPerformed
 
@@ -952,6 +958,7 @@ public class OrderFilter extends JInternalFrame {
                     wrapperOrders = deliveryOrderRepositoryImpl.getWrappingOrder(jXDatePicker1.getDate(), jXDatePicker2.getDate());
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                    Log.error(ex, ex);
                     JOptionPane.showMessageDialog(this, "Error retrieving wrapping orders.");
                     return;
                 }
@@ -970,6 +977,7 @@ public class OrderFilter extends JInternalFrame {
                         getAllOrders(fromDate, toDate, 0,3);
                     } catch (Exception ex) {
                         Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
+                        Log.error(ex, ex);
                         JOptionPane.showMessageDialog(this, "An error occurred while generating the Excel file.");
                     }
                 } else {
@@ -1138,6 +1146,7 @@ public class OrderFilter extends JInternalFrame {
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error saving Excel file: " + e.getMessage());
+            Log.error(e, e);
             return false;
         }
     }

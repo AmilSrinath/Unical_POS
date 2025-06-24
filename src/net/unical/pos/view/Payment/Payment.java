@@ -161,7 +161,7 @@ public class Payment extends JInternalFrame {
 
             },
             new String [] {
-                "", "Order Code", "Customer ID", "COD", "Total Amount", "Payment Type", "Delivary Charge", "Payment Status"
+                "", "Order Code", "Customer Code", "COD", "Total Amount", "Payment Type", "Delivary Charge", "Payment Status"
             }
         ) {
             Class[] types = new Class [] {
@@ -498,6 +498,7 @@ public class Payment extends JInternalFrame {
         total_orders_count_txt.setText(String.valueOf(count));
     } catch (Exception ex) {
         Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+        Log.error(ex, ex);
     }
     paymentOrdersTable.getColumnModel().getColumn(7).setCellRenderer(new StatusCellRenderer());
 }

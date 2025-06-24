@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import java.sql.ResultSet;
 import net.unical.pos.dbConnection.Statement;
 import java.util.ArrayList;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dto.UserDto;
 import net.unical.pos.model.PosMainUser;
 import net.unical.pos.repository.custom.UserRepositoryCustom;
@@ -118,6 +119,7 @@ public class UserRepositoryimpl implements UserRepositoryCustom {
             return updated ? userDto : null;
         } catch (Exception e) {
             e.printStackTrace();
+            Log.error(e, e);
             return null;
         }
     }
@@ -144,6 +146,7 @@ public class UserRepositoryimpl implements UserRepositoryCustom {
             return updated ? userDto : null;
         } catch (Exception e) {
             e.printStackTrace();
+            Log.error(e, e);
             return null;
         }
     }

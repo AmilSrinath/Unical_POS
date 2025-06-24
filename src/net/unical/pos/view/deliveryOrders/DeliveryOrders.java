@@ -8,6 +8,8 @@ package net.unical.pos.view.deliveryOrders;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -150,12 +152,17 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         getPaymentTypes();
         getAllOrders(CURRENT_DATE,CURRENT_DATE,default_paymentType);
         setCurrentDate();
-        
-//        textNull();
-        
-        
-//        AutoCompleteDecorator.decorate(jComboBox1);
-//        getPhone1();
+
+        fr_de_chb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (fr_de_chb.getState()) {
+                    deliveyFeeLbl.setText("0.00");
+                } else {
+                    deliveyFeeLbl.setText("350");
+                }
+                addUpdateTotals();
+            }
+        });
 
         FileInputStream fis = new FileInputStream("config.txt");
         Properties props = new Properties();
@@ -202,7 +209,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 new javax.swing.Timer(10, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        int selectedOrderId = Integer.parseInt(orderIDCmb.getSelectedItem().toString());
+                        String selectedOrderId = orderIDCmb.getSelectedItem().toString();
                         filterOrdersByOrderId(selectedOrderId);
                         ((javax.swing.Timer) evt.getSource()).stop(); // Stop timer after running once
                     }
@@ -1354,47 +1361,46 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel26)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(amountTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120)
+                .addComponent(amountTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deliveriesTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deliveriesTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel28)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(returnsTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(returnsTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deliveryChargeTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deliveryChargeTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel29)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(codTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(codTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
                 .addComponent(printAllOrdersBtn)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         deliveryFormDetailPanelLayout.setVerticalGroup(
             deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, deliveryFormDetailPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(codTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(codTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(printAllOrdersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(amountTotTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(printAllOrdersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(deliveriesTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(deliveryFormDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deliveriesTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(returnsTotTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(deliveryChargeTotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(deliveryChargeTotTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(amountTotTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel29, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1412,7 +1418,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1058, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
-                    .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1576,8 +1582,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             props.load(fis);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Config file not found", ex);
+            Log.error(ex, ex);
         } catch (IOException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Error loading config file", ex);
+            Log.error(ex, ex);
         }
         return props;
     }
@@ -1656,25 +1664,36 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 
 
-    
     private void saveOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtnActionPerformed
         if (!validateInputs()) {
             return;
         }
         
         if (delivery_id == null) {
+            if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(this, "The customer's latest order is still pending delivery.");
+                delivery_id = null;
+                clearText();
+                DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                model.setRowCount(0);
+                return;
+            }
             saveOrder();
             return;
         }
         
         for (OrderModel om : orders) {
             if (om.getDeliveryOrderId() == Integer.parseInt(delivery_id)) {
-                System.out.println("om.getOrderId :"+ om.getOrderId());
                 updateOrder(om.getOrderId(), delivery_id); //orderId --> main order tb
                 delivery_id = null;
                 break;
             }
         }
+        
+        DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+        model.setRowCount(0);
+        delivery_id = null;
+        clearText();
     }//GEN-LAST:event_saveOrderBtnActionPerformed
 
     private void updateOrder(Integer orderId, String delivery_id) { //orderId --> main order tb
@@ -1782,6 +1801,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
 
         try {
@@ -2177,14 +2197,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_phoneOneCmbKeyReleased
 
     private void fr_de_chbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fr_de_chbMouseClicked
-        if (!fr_de_chb.getState()) {
-            //Free shipping
-            deliveyFeeLbl.setText("0.00");
-            addUpdateTotals();
-        }else{
-            deliveyFeeLbl.setText("350");
-            addUpdateTotals();
-        }
+        
     }//GEN-LAST:event_fr_de_chbMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -2228,26 +2241,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         ArrayList<OrderDetails[]> orderDetailsList = mainOrderDetailRepositoryImpl.getOrderDetailsByCustomerId(customer_id);
 
-        Set<Integer> uniqueOrderCodes = new HashSet<>();
+        Set<String> uniqueOrderCodes = new HashSet<>();
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
                 dtm.addRow(orderDetails.toArray());
-                uniqueOrderCodes.add(orderDetails.getOrder_id());
+                uniqueOrderCodes.add(orderDetails.getOrderCode());
             }
         }
         customerOrderDetailsTbl.removeAll();
         customerOrderDetailsTbl.setModel(dtm);
 
         orderIDCmb.removeAllItems();
-        for (Integer orderCode : uniqueOrderCodes) {
+        for (String orderCode : uniqueOrderCodes) {
             orderIDCmb.addItem(orderCode.toString());
         }
     }
 
     
     
-    private void filterOrdersByOrderId(int orderCode) {
+    private void filterOrdersByOrderId(String orderCode) {
         String[] columnNames = {"Item Name", "Quantity", "Per Item Price", "Total Item Price", "Delivery Fee", "Total Order Price","Status"};
         DefaultTableModel dtm = new DefaultTableModel(columnNames, 0);
 
@@ -2257,7 +2270,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         for (OrderDetails[] orderDetailsArray : orderDetailsList) {
             for (OrderDetails orderDetails : orderDetailsArray) {
-                if (orderDetails.getOrder_id() == orderCode) {
+                if (orderDetails.getOrderCode().equals(orderCode)) {
                     dtm.addRow(orderDetails.toArray());
                     netTotal = orderDetails.getTotal_order_price();
                     lblDate.setText(orderDetails.getDate());
@@ -2270,83 +2283,89 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         netTotalLbl.setText(String.format("%.2f", netTotal));
     }
     
-    
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
             int selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
                 
-                System.out.println("status : "+status);
-                
-                switch (status) {
-                    case "Pending":
-                        btnEdit.setEnabled(true);
-                        btnWrapping.setEnabled(true);
-                        btnCancel.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Wrapping":
-                        btnEdit.setEnabled(true);
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Out of Delivery":
-                        btnEdit.setEnabled(false);
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(true);
-                        btnDeliverd.setEnabled(true);
-                        break;
-                        
-                    case "Delivered":
-                        btnEdit.setEnabled(false);
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Return":
-                        btnEdit.setEnabled(false);
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Cancel":
-                        btnEdit.setEnabled(false);
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                    default:
-                        throw new AssertionError();
+                PosMainUser userDto = null;
+                try {
+                    userDto = userAccountManagementController.getUserByUserID(LogInForm.userID);
+                } catch (Exception ex) {
+                    Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
+                if (!(userDto.getRoleId() == 1 || userDto.getRoleId() == 2)) {
+                    switch (status) {
+                        case "Pending":
+                            btnEdit.setEnabled(true);
+                            btnWrapping.setEnabled(true);
+                            btnCancel.setEnabled(true);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(false);
+                            btnDeliverd.setEnabled(false);
+                            break;
+
+                        case "Wrapping":
+                            btnEdit.setEnabled(true);
+                            btnWrapping.setEnabled(false);
+                            btnCancel.setEnabled(true);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(true);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(false);
+                            btnDeliverd.setEnabled(false);
+                            break;
+
+                        case "Out of Delivery":
+                            btnEdit.setEnabled(false);
+                            btnWrapping.setEnabled(false);
+                            btnCancel.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(true);
+                            btnDeliverd.setEnabled(true);
+                            break;
+
+                        case "Delivered":
+                            btnEdit.setEnabled(false);
+                            btnWrapping.setEnabled(false);
+                            btnCancel.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(false);
+                            btnDeliverd.setEnabled(false);
+                            break;
+
+                        case "Return":
+                            btnEdit.setEnabled(false);
+                            btnWrapping.setEnabled(false);
+                            btnCancel.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(false);
+                            btnDeliverd.setEnabled(false);
+                            break;
+
+                        case "Cancel":
+                            btnEdit.setEnabled(false);
+                            btnWrapping.setEnabled(false);
+                            btnCancel.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnOutForDelivery.setEnabled(false);
+                            btnActive.setEnabled(false);
+                            btnReturn.setEnabled(false);
+                            btnDeliverd.setEnabled(false);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
                 }
                
                 String deliveryID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
@@ -2851,6 +2870,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             double totDeliveryFee = 0.00;
             double totCod = 0.00;
             double totReturns = 0.00;
+            double totDeliveries = 0.00;
 
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
@@ -2895,6 +2915,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 totDeliveryFee = amounts.getTotalDeliveryCharge();
                 totCod = amounts.getTotalCod();
                 totReturns = amounts.getTotalReturns();
+                totDeliveries = amounts.getTotalDeliverds();
             }
 
             amountTotTxt.setText(totAmount + "");
@@ -2902,6 +2923,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             codTotTxt.setText(totCod + "");
             returnsTotTxt.setText(totReturns + "");
             total_orders_count_txt.setText(count + "");
+            deliveriesTotTxt.setText(totDeliveries+"");
 
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);

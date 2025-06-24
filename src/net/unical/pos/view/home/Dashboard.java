@@ -29,6 +29,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.model.AuthModuleWise;
 import net.unical.pos.repository.impl.ManageUserAuthRepositoryImpl;
 import net.unical.pos.view.Configuration.Configuration;
@@ -884,8 +885,10 @@ public class Dashboard extends javax.swing.JFrame {
             deliveryOrders.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_deliveryOrdersBtnActionPerformed
 
@@ -909,6 +912,7 @@ public class Dashboard extends javax.swing.JFrame {
             inquiry.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_inquiryBtnActionPerformed
 
@@ -932,6 +936,7 @@ public class Dashboard extends javax.swing.JFrame {
             configuration.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_configurationBtnActionPerformed
 

@@ -78,6 +78,7 @@ public class ResonRepositoryImpl {
             Logger.getLogger(ResonRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
             net.unical.pos.configurations.Log.error(e,"get All Resons error");
             e.printStackTrace();
+            Log.error(e, e);
         }
 
         return resonList;

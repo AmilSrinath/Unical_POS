@@ -454,7 +454,9 @@ public class ViewInquiry extends JInternalFrame {
             total_orders_count_txt.setText(String.valueOf(count));
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
+        paymentOrdersTable.getColumnModel().getColumn(11).setCellRenderer(new StatusCellRenderer());
     }
 
 
@@ -531,6 +533,7 @@ public class ViewInquiry extends JInternalFrame {
             total_orders_count_txt.setText(String.valueOf(count));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.error(e, e);
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 

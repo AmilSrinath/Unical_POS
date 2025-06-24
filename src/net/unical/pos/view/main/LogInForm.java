@@ -1039,6 +1039,7 @@ public class LogInForm extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Please select user agin", "User selecting error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, e);
         }
     }//GEN-LAST:event_userNameTblMousePressed
 
@@ -1047,6 +1048,7 @@ public class LogInForm extends javax.swing.JFrame {
             loginMethod();
         } catch (Exception ex) {
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }//GEN-LAST:event_passwordTxtActionPerformed
 
@@ -1174,6 +1176,7 @@ public class LogInForm extends javax.swing.JFrame {
             }
         } catch (Exception ex) {
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
         }
     }
 

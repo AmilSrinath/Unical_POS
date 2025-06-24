@@ -1,5 +1,2 @@
-2025-06-23 08:24:52,902 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.status_id FROM pos_payment_tb p INNER JOIN pos_main_order_tb o ON p.order_id = ' at line 1	get All Payment Duration error
-2025-06-23 20:10:46,397 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
-2025-06-23 20:10:47,351 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
-2025-06-23 20:11:43,989 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
-2025-06-23 20:11:44,816 ERROR error - java.lang.NullPointerException: Cannot invoke "String.hashCode()" because "<local9>" is null	Payment Order search error
+2025-06-24 08:34:00,180 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "customerId" is null	0763568649 This customer not have log!
+2025-06-24 12:42:39,429 ERROR error - java.lang.IndexOutOfBoundsException: valid viewIndex: 0 <= index < 2 but was: -1	java.lang.IndexOutOfBoundsException: valid viewIndex: 0 <= index < 2 but was: -1

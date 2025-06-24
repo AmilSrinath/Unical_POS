@@ -313,7 +313,7 @@ create table if not exists pos_main_customer_tb
     customer_name   varchar(100)                          null,
     nic             varchar(10)                           null,
     address         varchar(500)                          null,
-    phone_one       varchar(13)                           null,
+    phone_one       varchar(13)                           not null,
     phone_two       varchar(13) default 'None'            null,
     created_Date    timestamp   default CURRENT_TIMESTAMP null,
     is_loyalty      int                                   null,
@@ -322,6 +322,8 @@ create table if not exists pos_main_customer_tb
     user_id         int                                   null,
     visible         int                                   null,
     customer_number varchar(10)                           null,
+    constraint phone_one
+        unique (phone_one),
     constraint pos_main_customer_tb_ibfk_1
         foreign key (user_id) references pos_main_user_tb (user_id)
 );
@@ -442,18 +444,61 @@ create index employee_id
 create index role_id
     on pos_main_user_tb (role_id);
 
+create table if not exists pos_module_tb
+(
+    module_id    int auto_increment
+        primary key,
+    module_name  varchar(200) not null,
+    created_date datetime     null,
+    edited_date  datetime     null,
+    status       int          null
+);
+
+create table if not exists pos_module_wise_tb
+(
+    module_wise_id int auto_increment
+        primary key,
+    module_id      int      not null,
+    user_id        int      not null,
+    created_date   datetime null,
+    edited_date    datetime null,
+    status         int      null,
+    constraint pos_module_wise_tb_pos_main_user_tb_user_id_fk
+        foreign key (user_id) references pos_main_user_tb (user_id),
+    constraint pos_module_wise_tb_pos_module_tb_module_id_fk
+        foreign key (module_id) references pos_module_tb (module_id)
+);
+
+create table if not exists pos_status_reg
+(
+    reg_id      int auto_increment
+        primary key,
+    description varchar(200) not null,
+    create_date datetime     null,
+    edited_date datetime     null,
+    status      int          null,
+    user_id     int          null
+);
+
 create table if not exists pos_status_types
 (
     status_id   int auto_increment
         primary key,
-    status_type varchar(500) null
+    status_type varchar(500) null,
+    reg_id      int          null,
+    user_id     int          null,
+    create_date datetime     null,
+    edited_date datetime     null,
+    status      int          null,
+    constraint pos_status_types_pos_status_reg_reg_id_fk
+        foreign key (reg_id) references pos_status_reg (reg_id)
 );
 
 create table if not exists pos_main_delivery_order_tb
 (
     delivery_id      int auto_increment
         primary key,
-    customer_id      int                                 null,
+    customer_id      int                                 not null,
     order_code       varchar(100)                        null,
     cod_amount       decimal(10, 2)                      null,
     weight           varchar(10)                         null,
@@ -525,9 +570,12 @@ create table if not exists pos_payment_tb
     created_Date   timestamp     null,
     edited_Date    timestamp     null,
     user_id        int           null,
+    status_id      int           null,
     constraint pos_payment_tb_fk1
         foreign key (order_id) references pos_main_order_tb (order_id)
-            on update cascade on delete cascade
+            on update cascade on delete cascade,
+    constraint pos_payment_tb_pos_status_types_status_id_fk
+        foreign key (status_id) references pos_status_types (status_id)
 );
 
 create table if not exists pos_sub_item_category_tb
@@ -728,19 +776,32 @@ create index user_id
 
 
 
-INSERT INTO pos_status_types (status_type) VALUES ('Active');
-INSERT INTO pos_status_types (status_type) VALUES ('Pending');
-INSERT INTO pos_status_types (status_type) VALUES ('Wrapping');
-INSERT INTO pos_status_types (status_type) VALUES ('Out of Delivery');
-INSERT INTO pos_status_types (status_type) VALUES ('Delivered');
-INSERT INTO pos_status_types (status_type) VALUES ('Return');
-INSERT INTO pos_status_types (status_type) VALUES ('Cancel');
+-- Default Data
+INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Ms', 'Super Admin', 'ww', 'S', 1, 'S1', '', '0', 'amilsrinath5@gmail.com', 'Panadura', 1, 1, 1);
+INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (2, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 1, 1, 1);
+INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (3, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 0, 1, 1);
 
-INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 1, 1);
-INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (2, 'Admin', 1, 0, 1);
-INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (3, 'Supevisor', 1, 0, 1);
-INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Super Admin', 'Super Admin', 'System Maintains', 'S', 1, 'S1', '', '0', '', '', 1, 1, 1);
-INSERT INTO pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 1, 'Super Admin', '1234', 1, 1, '');
+INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (1, 'Delivery Status', '2025-06-16 11:52:24', '2025-06-16 11:52:24', 1, 2);
+INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (2, 'Pay Status', '2025-06-16 11:52:32', '2025-06-16 11:52:32', 1, 2);
+
+INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 0, 1);
+INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (2, 'Admin', 1, 1, 1);
+INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (3, 'Supevisor', 1, 0, 1);
+INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (4, 'Order Creator', 1, 0, 1);
+INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (5, 'Wrapping Agent', 1, 0, 1);
+
+INSERT INTO petal_pink_pos.pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 2, 'Amil', '$2a$12$S3zHJlvm5vvNKbxO2RkQeugL/f5aTmez1h2xojo8URZx25mqZYX16', 1, 1, '');
+INSERT INTO petal_pink_pos.pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (2, 2, 3, 'a', '$2a$10$Tmvuc/pB4o47rz5TkVezUugd3CBdvxSaI8wIZHitxWMIiCoZ6nDva', 1, 1, 'AICZWZHINO');
+
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (1, 'Active', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (2, 'Pending', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (3, 'Wrapping', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (4, 'Out of Delivery', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (5, 'Delivered', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (6, 'Return', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (7, 'Cancel', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (8, 'Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (9, 'Not Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
 
 INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (1, 'No Convertion', 1, 1, 1);
 INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (2, 'ml', 1, 1, 1);

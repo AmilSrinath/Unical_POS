@@ -835,9 +835,10 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         try {
             connection = DBCon.getDatabaseConnection();
             
-            if (isOrderCodeExists(connection, deliveryOrderDto.getOrderCode(), delivery_id)) {
-                System.out.println("Duplicate order_code found!");
-                return false;
+            if (!deliveryOrderDto.getOrderCode().isEmpty()) {
+                if (isOrderCodeExists(connection, deliveryOrderDto.getOrderCode(), delivery_id)) {
+                    return false;
+                }
             }
 
             connection.setAutoCommit(false);

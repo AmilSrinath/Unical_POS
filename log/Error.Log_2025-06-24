@@ -1,0 +1,2 @@
+2025-06-24 08:34:00,180 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "customerId" is null	0763568649 This customer not have log!
+2025-06-24 12:42:39,429 ERROR error - java.lang.IndexOutOfBoundsException: valid viewIndex: 0 <= index < 2 but was: -1	java.lang.IndexOutOfBoundsException: valid viewIndex: 0 <= index < 2 but was: -1

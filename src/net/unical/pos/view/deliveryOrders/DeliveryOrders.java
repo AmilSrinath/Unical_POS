@@ -624,7 +624,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(401, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1415,9 +1415,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1058, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)))
                     .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1794,7 +1792,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     
                     itemListTableModel.setRowCount(0);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Update failed");
+                    JOptionPane.showMessageDialog(this, "Update failed.(Duplicate order code found! or another error!)");
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Add Phone Number");
@@ -2209,18 +2207,17 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(e, phoneOneCmb.getSelectedItem()+" This customer not have log!");
                 return;
             }
-            
-            check_customer.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent e) {
-                    customer_id = null;
-                }
-
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    customer_id = null;
-                }
-            });
+//            check_customer.addWindowListener(new java.awt.event.WindowAdapter() {
+//                @Override
+//                public void windowClosed(java.awt.event.WindowEvent e) {
+//                    customer_id = null;
+//                }
+//
+//                @Override
+//                public void windowClosing(java.awt.event.WindowEvent e) {
+//                    customer_id = null;
+//                }
+//            });
             
             check_customer.setLocationRelativeTo(null);
             check_customer.setVisible(true);
@@ -2247,6 +2244,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             for (OrderDetails orderDetails : orderDetailsArray) {
                 dtm.addRow(orderDetails.toArray());
                 uniqueOrderCodes.add(orderDetails.getOrderCode());
+                System.out.println("> : "+orderDetails.getOrderCode().toString());
             }
         }
         customerOrderDetailsTbl.removeAll();
@@ -2451,6 +2449,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnActiveActionPerformed
 
     private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
@@ -2475,6 +2475,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnWrappingActionPerformed
 
     private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
@@ -2499,6 +2501,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnOutForDeliveryActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -2523,6 +2527,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
@@ -2547,7 +2553,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
-
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
@@ -2572,6 +2579,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Log.error(ex, "Status Change error");
             }
         }
+        clearText();
+        delivery_id = null;
     }//GEN-LAST:event_btnDeliverdActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -3016,6 +3025,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         remarkTxt.setText("");
         customerNameTxt.setText("");
         customerNumberTxt.setText("");
+        orderCodeTxt.setText("");
 //        phone2Txt.setText("");
     }
 

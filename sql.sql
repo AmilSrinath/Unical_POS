@@ -777,69 +777,69 @@ create index user_id
 
 
 -- Default Data
-INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Ms', 'Super Admin', 'ww', 'S', 1, 'S1', '', '0', 'amilsrinath5@gmail.com', 'Panadura', 1, 1, 1);
-INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (2, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 1, 1, 1);
-INSERT INTO petal_pink_pos.pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (3, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 0, 1, 1);
+INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (1, 'Ms', 'Super Admin', 'ww', 'S', 1, 'S1', '', '0', 'amilsrinath5@gmail.com', 'Panadura', 1, 1, 1);
+INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (2, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 1, 1, 1);
+INSERT INTO pos_emp_employee_management_tb (employee_id, employee_title, employee_name, employee_designation, employee_prefix, employee_code, employee_code_prefix, image_path, phone, gmail, addree, status, user_id, visible) VALUES (3, 'Mr', 'Amil Srinath', 'aa', 'E', 3, 'E3', null, '5144654', 'dsad', 'fdsafdsa', 0, 1, 1);
 
-INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (1, 'Delivery Status', '2025-06-16 11:52:24', '2025-06-16 11:52:24', 1, 2);
-INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (2, 'Pay Status', '2025-06-16 11:52:32', '2025-06-16 11:52:32', 1, 2);
+INSERT INTO pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (1, 'Delivery Status', '2025-06-16 11:52:24', '2025-06-16 11:52:24', 1, 2);
+INSERT INTO pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (2, 'Pay Status', '2025-06-16 11:52:32', '2025-06-16 11:52:32', 1, 2);
 
-INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 0, 1);
-INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (2, 'Admin', 1, 1, 1);
-INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (3, 'Supevisor', 1, 0, 1);
-INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (4, 'Order Creator', 1, 0, 1);
-INSERT INTO petal_pink_pos.pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (5, 'Wrapping Agent', 1, 0, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (1, 'Super Admin', 1, 0, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (2, 'Admin', 1, 1, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (3, 'Supevisor', 1, 0, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (4, 'Order Creator', 1, 0, 1);
+INSERT INTO pos_main_user_role_tb (role_id, role, status, user_id, visible) VALUES (5, 'Wrapping Agent', 1, 0, 1);
 
-INSERT INTO petal_pink_pos.pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 2, 'Amil', '$2a$12$S3zHJlvm5vvNKbxO2RkQeugL/f5aTmez1h2xojo8URZx25mqZYX16', 1, 1, '');
-INSERT INTO petal_pink_pos.pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (2, 2, 3, 'a', '$2a$10$Tmvuc/pB4o47rz5TkVezUugd3CBdvxSaI8wIZHitxWMIiCoZ6nDva', 1, 1, 'AICZWZHINO');
+INSERT INTO pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (1, 1, 2, 'Amil', '$2a$12$S3zHJlvm5vvNKbxO2RkQeugL/f5aTmez1h2xojo8URZx25mqZYX16', 1, 1, '');
+INSERT INTO pos_main_user_tb (user_id, employee_id, role_id, username, password, status, visible, token) VALUES (2, 2, 3, 'a', '$2a$10$Tmvuc/pB4o47rz5TkVezUugd3CBdvxSaI8wIZHitxWMIiCoZ6nDva', 1, 1, 'AICZWZHINO');
 
-INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (1, 'Delivery Status', '2025-06-16 11:52:24', '2025-06-16 11:52:24', 1, 2);
-INSERT INTO petal_pink_pos.pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (2, 'Pay Status', '2025-06-16 11:52:32', '2025-06-16 11:52:32', 1, 2);
+INSERT INTO pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (1, 'Delivery Status', '2025-06-16 11:52:24', '2025-06-16 11:52:24', 1, 2);
+INSERT INTO pos_status_reg (reg_id, description, create_date, edited_date, status, user_id) VALUES (2, 'Pay Status', '2025-06-16 11:52:32', '2025-06-16 11:52:32', 1, 2);
 
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (1, 'Active', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (2, 'Pending', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (3, 'Wrapping', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (4, 'Out of Delivery', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (5, 'Delivered', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (6, 'Return', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (7, 'Cancel', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (8, 'Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
-INSERT INTO petal_pink_pos.pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (9, 'Not Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (1, 'Active', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (2, 'Pending', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (3, 'Wrapping', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (4, 'Out of Delivery', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (5, 'Delivered', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (6, 'Return', 1, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (7, 'Cancel', 1, 2, '2025-06-16 11:54:09', '2025-06-16 11:54:09', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (8, 'Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
+INSERT INTO pos_status_types (status_id, status_type, reg_id, user_id, create_date, edited_date, status) VALUES (9, 'Not Paid', 2, 2, '2025-06-16 11:54:19', '2025-06-16 11:54:19', 1);
 
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (1, 'Dashboard', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (2, 'Sales', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (3, 'Inventory', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (4, 'Delivery Orders', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (5, 'Filter Order', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (6, 'Payment', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (7, 'Inquiry', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (8, 'PMS', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (9, 'Employee', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (10, 'Property Management', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
-INSERT INTO petal_pink_pos.pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (11, 'Configuration', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (1, 'Dashboard', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (2, 'Sales', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (3, 'Inventory', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (4, 'Delivery Orders', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (5, 'Filter Order', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (6, 'Payment', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (7, 'Inquiry', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (8, 'PMS', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (9, 'Employee', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (10, 'Property Management', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
+INSERT INTO pos_module_tb (module_id, module_name, created_date, edited_date, status) VALUES (11, 'Configuration', '2025-06-19 19:01:53', '2025-06-19 19:01:53', 1);
 
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (144, 1, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (145, 2, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (146, 3, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (147, 4, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (148, 5, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (149, 6, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (150, 7, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (151, 8, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (152, 9, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (153, 10, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (154, 11, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (155, 1, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (156, 2, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (157, 3, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (158, 4, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (159, 5, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (160, 6, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (161, 7, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (162, 8, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (163, 9, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (164, 10, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
-INSERT INTO petal_pink_pos.pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (165, 11, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (144, 1, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (145, 2, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (146, 3, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (147, 4, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (148, 5, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (149, 6, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (150, 7, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (151, 8, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (152, 9, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (153, 10, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (154, 11, 1, '2025-06-22 18:29:22', '2025-06-22 18:29:22', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (155, 1, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (156, 2, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (157, 3, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (158, 4, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (159, 5, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (160, 6, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (161, 7, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 1);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (162, 8, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (163, 9, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (164, 10, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
+INSERT INTO pos_module_wise_tb (module_wise_id, module_id, user_id, created_date, edited_date, status) VALUES (165, 11, 2, '2025-06-24 21:22:17', '2025-06-24 21:22:17', 0);
 
 INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (1, 'No Convertion', 1, 1, 1);
 INSERT INTO pos_main_unit_type_tb (unit_type_id, unit_type, status, user_id, visible) VALUES (2, 'ml', 1, 1, 1);

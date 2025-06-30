@@ -27,9 +27,9 @@ public class ManageUserAuthRepositoryImpl {
         List<UserAuth> userList = new ArrayList<>();
 
         String query = "SELECT u.user_id, u.employee_id, u.role_id, e.employee_name, r.role " +
-                       "FROM petal_pink_pos.pos_main_user_tb u " +
-                       "JOIN petal_pink_pos.pos_emp_employee_management_tb e ON u.employee_id = e.employee_id " +
-                       "JOIN petal_pink_pos.pos_main_user_role_tb r ON u.role_id = r.role_id " +
+                       "FROM pos_main_user_tb u " +
+                       "JOIN pos_emp_employee_management_tb e ON u.employee_id = e.employee_id " +
+                       "JOIN pos_main_user_role_tb r ON u.role_id = r.role_id " +
                        "WHERE u.visible = 1 AND e.visible = 1 AND r.visible = 1";
 
         try (
@@ -57,8 +57,8 @@ public class ManageUserAuthRepositoryImpl {
     }
 
     public boolean saveModuleWise(ArrayList<AuthModuleWise> authModuleWise) {
-        String deleteQuery = "DELETE FROM petal_pink_pos.pos_module_wise_tb WHERE user_id = ?";
-        String insertQuery = "INSERT INTO petal_pink_pos.pos_module_wise_tb " +
+        String deleteQuery = "DELETE FROM pos_module_wise_tb WHERE user_id = ?";
+        String insertQuery = "INSERT INTO pos_module_wise_tb " +
                              "(module_id, user_id, created_date, edited_date, status) " +
                              "VALUES (?, ?, ?, ?, ?)";
 
@@ -122,7 +122,7 @@ public class ManageUserAuthRepositoryImpl {
         ArrayList<AuthModuleWise> authList = new ArrayList<>();
 
         String query = "SELECT module_wise_id, module_id, user_id, created_date, edited_date, status " +
-                       "FROM petal_pink_pos.pos_module_wise_tb " +
+                       "FROM pos_module_wise_tb " +
                        "WHERE user_id = ?";
 
         try (

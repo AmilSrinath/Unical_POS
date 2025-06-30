@@ -128,16 +128,6 @@ public class MainOrderDetailRepositoryImpl implements MainOrderDetailRepositoryC
                "LEFT JOIN pos_main_delivery_order_tb dly ON o.order_id = dly.delivery_id " +
                "WHERE o.customer_id = ? AND d.status = 1";
 
-            /*
-            
-            o pos_main_order_tb
-            d pos_main_order_details_tb
-            i pos_main_item_tb
-            dly pos_main_delivery_order_tb
-            
-            */
-            
-
             ps = conn.prepareStatement(query);
             ps.setInt(1, customerId);
             rs = ps.executeQuery();

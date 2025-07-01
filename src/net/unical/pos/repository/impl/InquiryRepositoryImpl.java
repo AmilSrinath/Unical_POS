@@ -119,8 +119,11 @@ public class InquiryRepositoryImpl {
     public ArrayList<InquiryModel> getAllInquiryDuration(String fromDate, String toDate, int status) {
         ArrayList<InquiryModel> list = new ArrayList<>();
 
-        String baseQuery = "SELECT * FROM pos_inquiry_tb WHERE created_date BETWEEN ? AND ?";
-        // If status is not 0, apply additional filter
+        String baseQuery = "SELECT i.*, c.customer_number " +
+                       "FROM pos_inquiry_tb i " +
+                       "JOIN pos_main_customer_tb c ON i.customer_id = c.customer_id " +
+                       "WHERE i.created_date BETWEEN ? AND ?";
+        
         if (status != 0) {
             baseQuery += " AND status = ?";
         }
@@ -140,7 +143,7 @@ public class InquiryRepositoryImpl {
                 InquiryModel model = new InquiryModel();
 
                 model.setWayBill(rs.getString("way_bill"));
-                model.setCustomerId(String.valueOf(rs.getInt("customer_id")));
+                model.setCustomerId(String.valueOf(rs.getInt("customer_number")));
                 model.setCustomerName(rs.getString("customer_name"));
                 model.setCustomerPhone1(rs.getString("customer_phone_1"));
                 model.setCustomerPhone2(rs.getString("customer_phone_2"));
@@ -150,6 +153,7 @@ public class InquiryRepositoryImpl {
                 model.setReason(rs.getString("reson"));
                 model.setRemark(rs.getString("remark"));
                 model.setStatus(rs.getInt("status"));
+                model.setCreateDate(rs.getDate("created_date"));
 
                 list.add(model);
             }

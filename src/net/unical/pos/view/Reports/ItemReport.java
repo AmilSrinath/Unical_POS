@@ -144,7 +144,7 @@ public class ItemReport extends javax.swing.JInternalFrame {
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePickerFrom.getDate());
             
-            JasperDesign jasDesign = JRXmlLoader.load("src/net/unical/pos/view/Reports/ItemReport.jrxml");
+            JasperDesign jasDesign = JRXmlLoader.load("./reports/ItemReport.jrxml");
             JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
 
             HashMap<String, Object> hm = new HashMap<>();

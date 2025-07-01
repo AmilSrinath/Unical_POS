@@ -166,14 +166,14 @@ public class ViewInquiry extends JInternalFrame {
 
             },
             new String [] {
-                "", "Way Bill", "Customer ID", "Customer Name", "Customer Phone 1", "Customer Phone 2", "Company", "Branch", "Branch Contact", "Reason", "Remark", "Status"
+                "", "Way Bill", "Customer Code", "Customer Name", "Customer Phone 1", "Customer Phone 2", "Company", "Branch", "Branch Contact", "Created Date", "Reason", "Remark", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -444,6 +444,7 @@ public class ViewInquiry extends JInternalFrame {
                     dto.getCompany(),
                     dto.getBranch(),
                     dto.getBranchContact(),
+                    dto.getCreateDate(),
                     dto.getReason(),
                     dto.getRemark(),
                     statusText
@@ -456,7 +457,7 @@ public class ViewInquiry extends JInternalFrame {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, ex);
         }
-        paymentOrdersTable.getColumnModel().getColumn(11).setCellRenderer(new StatusCellRenderer());
+        paymentOrdersTable.getColumnModel().getColumn(12).setCellRenderer(new StatusCellRenderer());
     }
 
 

@@ -857,11 +857,17 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_configurationsBtnActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        int dialogResult = JOptionPane.showConfirmDialog(this, Configurations.SYS_EXIT_BUTTON_CONFIRMATION.getConfigValue(), Configurations.SYS_EXIT_BUTTON_CONFIRMATION_TITLE.getConfigValue(), JOptionPane.YES_NO_OPTION);
-        if (dialogResult == 0) {
+        int dialogResult = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to exit?",
+        "Exit Confirmation",
+        JOptionPane.YES_NO_OPTION
+        );
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
             System.exit(0);
         } else {
-            // do nothing
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         }
     }//GEN-LAST:event_formWindowClosing
 

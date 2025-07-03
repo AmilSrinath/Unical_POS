@@ -841,6 +841,9 @@ public class OrderFilter extends JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
+                Date now = new Date();
+                deliveryOrderRepositoryImpl.addDeliveredDateWithOrderID(orderID,now);
+                
                 getAllOrders(fromDate, toDate, 0,0);
 
                 orderOptions.dispose();

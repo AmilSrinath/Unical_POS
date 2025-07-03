@@ -5,6 +5,17 @@
  */
 package net.unical.pos.view.employee;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.view.home.Dashboard;
 
 /**
@@ -12,12 +23,15 @@ import net.unical.pos.view.home.Dashboard;
  * @author Sanjuka
  */
 public class CalculateCommissionAndBonus extends javax.swing.JInternalFrame {
-
+    private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
+    
+    
     /**
      * Creates new form CalculateCommissionAndBonus
      */
     public CalculateCommissionAndBonus(Dashboard dashboard) {
         initComponents();
+        this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
     }
 
     /**
@@ -29,21 +43,161 @@ public class CalculateCommissionAndBonus extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        salaryTbl = new org.jdesktop.swingx.JXTable();
+        jButton1 = new javax.swing.JButton();
+        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel19 = new javax.swing.JLabel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        salaryTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Orders", "Per Order", "Sub Total"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(salaryTbl);
+
+        jButton1.setText("Calculate Salary");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel19.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel19.setText("To");
+
+        jLabel17.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel17.setText("From");
+
+        jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel18.setText("Total :");
+
+        jLabel20.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel20.setText("XXXXXXXX");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(174, 174, 174)
+                            .addComponent(jLabel18)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(640, 640, 640))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19)
+                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(jLabel20))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String fromDate = formatter.format(jXDatePicker1.getDate());
+        String toDate = formatter.format(jXDatePicker2.getDate());
+
+        List<String> orderList = deliveryOrderRepositoryImpl.getOrders(fromDate, toDate);
+
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream("config.txt")) {
+            props.load(fis);
+        } catch (IOException ex) {
+            Logger.getLogger(CalculateCommissionAndBonus.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        int[][] ranges = {
+            {0, 5000},
+            {5001, 10000},
+            {10001, 20000},
+            {20001, 50000}
+        };
+        String[] keys = {
+            "0TO5000",
+            "5001TO10000",
+            "10001TO20000",
+            "20001TO50000"
+        };
+
+        int[] counts = new int[ranges.length];
+
+        for (String priceStr : orderList) {
+            try {
+                double price = Double.parseDouble(priceStr);
+                for (int i = 0; i < ranges.length; i++) {
+                    if (price >= ranges[i][0] && price <= ranges[i][1]) {
+                        counts[i]++;
+                        break;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid sub_total_price: " + priceStr);
+            }
+        }
+
+        DefaultTableModel dtm = (DefaultTableModel) salaryTbl.getModel();
+        dtm.setRowCount(0);
+        int netTotal = 0;
+
+        for (int i = 0; i < ranges.length; i++) {
+            int rate = Integer.parseInt(props.getProperty(keys[i], "0"));
+            int amount = counts[i] * rate;
+            Object[] row = { counts[i], rate, amount };
+            dtm.addRow(row);
+            netTotal += amount;
+        }
+
+        jLabel20.setText(String.valueOf(netTotal));
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -81,5 +235,14 @@ public class CalculateCommissionAndBonus extends javax.swing.JInternalFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
+    private org.jdesktop.swingx.JXTable salaryTbl;
     // End of variables declaration//GEN-END:variables
 }

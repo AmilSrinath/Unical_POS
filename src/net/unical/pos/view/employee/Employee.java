@@ -205,7 +205,12 @@ public class Employee extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jXButton5ActionPerformed
 
     private void jXButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton4ActionPerformed
-        // TODO add your handling code here:
+        CalculateCommissionAndBonus calculateCommissionAndBonus = new CalculateCommissionAndBonus(dashboard);
+        dashboard.desktopPane.add(calculateCommissionAndBonus);
+        Dimension d = dashboard.desktopPane.getSize();
+        calculateCommissionAndBonus.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        calculateCommissionAndBonus.setSize(d);
+        calculateCommissionAndBonus.setVisible(true);
     }//GEN-LAST:event_jXButton4ActionPerformed
 
     private void jXButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton6ActionPerformed

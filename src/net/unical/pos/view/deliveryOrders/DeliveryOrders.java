@@ -2565,6 +2565,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
+                
+                Date now = new Date();
+                deliveryOrderRepositoryImpl.addDeliveredDate(delivery_id,now);
 
                 int index = 0;
                 if (paymentTypeCombo2.getSelectedIndex() != 0) {
@@ -2883,6 +2886,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
+                
+                System.out.println("dto.getStatusType() : "+dto.getStatusType());
 
                 if (dto.getStatusType() == 1) {
                     status = "Active";

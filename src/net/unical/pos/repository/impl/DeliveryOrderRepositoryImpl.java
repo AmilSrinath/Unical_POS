@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.configurations.Log;
@@ -1336,6 +1337,110 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
 
         return true; // default to allow order in ambiguous cases (e.g., error or no data)
+    }
+
+    public void addDeliveredDate(String delivery_id, java.util.Date today) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "UPDATE pos_main_delivery_order_tb SET delivered_date = ? WHERE delivery_id = ?";
+            ps = con.prepareStatement(sql);
+            ps.setTimestamp(1, new java.sql.Timestamp(today.getTime())); // use Timestamp for precise datetime
+            ps.setString(2, delivery_id);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to update delivered_date");
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in addDeliveredDate");
+            }
+        }
+    }
+
+    public void addDeliveredDateWithOrderID(String orderID, Date now) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "UPDATE pos_main_delivery_order_tb d " +
+                         "JOIN pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
+                         "SET d.delivered_date = ? " +
+                         "WHERE o.order_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setTimestamp(1, new java.sql.Timestamp(now.getTime())); // convert Date to Timestamp
+            ps.setString(2, orderID);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to update delivered_date using order_id");
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in addDeliveredDateWithOrderID");
+            }
+        }
+    }
+
+    public List<String> getOrders(String fromDate, String toDate) {
+        List<String> subTotalPrices = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "SELECT ot.sub_total_price " +
+                         "FROM pos_main_delivery_order_tb AS dot " +
+                         "INNER JOIN pos_main_order_tb AS ot ON dot.delivery_id = ot.delivery_order_id " +
+                         "INNER JOIN pos_main_customer_tb AS ct ON dot.customer_id = ct.customer_id " +
+                         "WHERE dot.status = 1 " +
+                         "AND dot.status_id = 5 " +
+                         "AND DATE(dot.delivered_date) BETWEEN ? AND ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, fromDate); // e.g., "2025-07-01"
+            ps.setString(2, toDate);   // e.g., "2025-07-31"
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                subTotalPrices.add(rs.getString("sub_total_price"));
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "getOrders query failed");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "getOrders resource closing failed");
+            }
+        }
+
+        return subTotalPrices;
     }
 
 

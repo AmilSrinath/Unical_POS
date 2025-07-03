@@ -1,0 +1,8 @@
+2025-06-25 12:55:02,758 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "customerId" is null	0771428333 This customer not have log!
+2025-06-25 12:55:05,222 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "customerId" is null	0771428333 This customer not have log!
+2025-06-25 13:05:01,645 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild
+2025-06-25 13:06:01,292 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild
+2025-06-25 13:06:18,591 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild
+2025-06-25 13:24:43,084 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild
+2025-06-25 13:27:51,248 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild
+2025-06-25 13:45:01,062 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '0771428333' for key 'phone_one'	Order Save Faild

@@ -2886,8 +2886,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
-                
-                System.out.println("dto.getStatusType() : "+dto.getStatusType());
 
                 if (dto.getStatusType() == 1) {
                     status = "Active";

@@ -66,6 +66,7 @@ import net.unical.pos.model.PosMainItem;
 import net.unical.pos.model.PosMainOrder;
 import net.unical.pos.model.PosMainOrderDetails;
 import net.unical.pos.model.PosMainUser;
+import net.unical.pos.model.StatusTypeModel;
 import net.unical.pos.model.TestModel;
 import net.unical.pos.repository.custom.MainItemCategoryRepositoryCustom;
 import net.unical.pos.repository.impl.CustomerRepositoryImpl;
@@ -73,6 +74,7 @@ import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.repository.impl.MainItemRepositoryImpl;
 import net.unical.pos.repository.impl.MainOrderDetailRepositoryImpl;
 import net.unical.pos.repository.impl.MainOrderRepositoryImpl;
+import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.repository.impl.TestClass;
 import net.unical.pos.service.impl.CustomerServiceImpl;
 import net.unical.pos.view.home.Dashboard;
@@ -102,12 +104,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private ArrayList<Double> itemWeightList=new ArrayList<>();
     private ArrayList<PosMainItem> posMainItems;
     private ArrayList<OrderModel> orders = new ArrayList<>();
+    public static List<StatusTypeModel> statusTypes = new ArrayList<>();
     
     private MainOrderRepositoryImpl mainOrderRepositoryImpl;
     private MainItemRepositoryImpl mainItemRepositoryImpl;
     private MainOrderDetailRepositoryImpl mainOrderDetailRepositoryImpl;
     private DeliveryOrderController deliveryOrderController;
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
+    private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
+    
+    
     private CustomerController customerController;
     private UserAccountManagementController userAccountManagementController;
     CustomerRepositoryImpl customerRepositoryImpl=new CustomerRepositoryImpl();
@@ -136,6 +142,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         this.mainOrderDetailRepositoryImpl = new MainOrderDetailRepositoryImpl();
         this.mainItemRepositoryImpl = new MainItemRepositoryImpl();
         this.userAccountManagementController=new UserAccountManagementController();
+        this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         
         itemListTableModel=(DefaultTableModel) itemListTable.getModel();
         orderListTableModel=(DefaultTableModel) deliveryOrdersTable.getModel();
@@ -150,6 +157,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         getOrderCode();
         getItems();
         getPaymentTypes();
+        statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
         getAllOrders(CURRENT_DATE,CURRENT_DATE,default_paymentType);
         setCurrentDate();
 
@@ -268,6 +276,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         btnOutForDelivery = new javax.swing.JButton();
         btnWrapping = new javax.swing.JButton();
         btnActive = new javax.swing.JButton();
+        btnWrapping1 = new javax.swing.JButton();
+        btnReturn1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         orderCodeTxt = new javax.swing.JTextField();
@@ -558,7 +568,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         btnReturn.setBackground(new java.awt.Color(255, 153, 0));
         btnReturn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Return");
+        btnReturn.setText("Returned");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReturnActionPerformed(evt);
@@ -605,6 +615,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        btnWrapping1.setBackground(new java.awt.Color(153, 153, 153));
+        btnWrapping1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnWrapping1.setForeground(new java.awt.Color(255, 255, 255));
+        btnWrapping1.setText("Checking");
+        btnWrapping1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnWrapping1ActionPerformed(evt);
+            }
+        });
+
+        btnReturn1.setBackground(new java.awt.Color(204, 102, 255));
+        btnReturn1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnReturn1.setForeground(new java.awt.Color(255, 255, 255));
+        btnReturn1.setText("Returning");
+        btnReturn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturn1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -617,6 +647,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReturn1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOutForDelivery)
@@ -624,7 +656,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(401, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnWrapping1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -633,12 +667,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(btnDeliverd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnReturn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCancel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnOutForDelivery, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActive, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnWrapping, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnWrapping, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnWrapping1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturn1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnOutForDelivery, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout order_optionsLayout = new javax.swing.GroupLayout(order_options.getContentPane());
@@ -647,8 +683,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             order_optionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(order_optionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(494, Short.MAX_VALUE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         order_optionsLayout.setVerticalGroup(
             order_optionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2371,7 +2407,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     try {
                         delivery_id = deliveryID;
                         order_options.setLocationRelativeTo(null);
-                        order_options.setSize(935, 115);
+                        order_options.setSize(1190, 115);
                         order_options.setTitle("Actions");
                         
                         // Add a window listener to reset delivery_id when closed
@@ -2689,6 +2725,58 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         updateTotals();
     }//GEN-LAST:event_btnEditActionPerformed
 
+    private void btnWrapping1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrapping1ActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 13);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
+            }
+        }
+        clearText();
+        delivery_id = null;
+    }//GEN-LAST:event_btnWrapping1ActionPerformed
+
+    private void btnReturn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturn1ActionPerformed
+        if(delivery_id!=null){
+            try {
+                deliveryOrderRepositoryImpl.update(delivery_id, 12);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                int index=0;
+                if(paymentTypeCombo2.getSelectedIndex()!=0){
+                    index=paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
+                }else{
+                    getAllOrders(fromDate,toDate,0);
+                }
+                order_options.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "Status Change error");
+            }
+        }
+        clearText();
+        delivery_id = null;
+    }//GEN-LAST:event_btnReturn1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2739,7 +2827,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnOutForDelivery;
     private javax.swing.JButton btnReturn;
+    private javax.swing.JButton btnReturn1;
     private javax.swing.JButton btnWrapping;
+    private javax.swing.JButton btnWrapping1;
     private javax.swing.JDialog check_customer;
     private javax.swing.JLabel codTotTxt;
     private javax.swing.JTextField codTxt;
@@ -2887,20 +2977,24 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
 
-                if (dto.getStatusType() == 1) {
-                    status = "Active";
-                } else if (dto.getStatusType() == 2) {
-                    status = "Pending";
-                } else if (dto.getStatusType() == 3) {
-                    status = "Wrapping";
-                } else if (dto.getStatusType() == 4) {
-                    status = "Out of Delivery";
-                } else if (dto.getStatusType() == 5) {
-                    status = "Delivered";
-                } else if (dto.getStatusType() == 6) {
-                    status = "Return";
-                } else {
-                    status = "Cancel";
+                if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                    status = statusTypes.get(0).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
+                    status = statusTypes.get(1).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(2).getStatus_id()) { //Wrapping
+                    status = statusTypes.get(2).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(3).getStatus_id()) { //Out of Delivery
+                    status = statusTypes.get(3).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(4).getStatus_id()) { //Delivered
+                    status = statusTypes.get(4).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(5).getStatus_id()) { //Retured
+                    status = statusTypes.get(5).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(6).getStatus_id()) { //Cancel
+                    status = statusTypes.get(6).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(7).getStatus_id()) { //Returning
+                    status = statusTypes.get(7).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(8).getStatus_id()) { //Checking
+                    status = statusTypes.get(8).getStatus_type();
                 }
 
                 isPrint = dto.getIsPrint() == 1;

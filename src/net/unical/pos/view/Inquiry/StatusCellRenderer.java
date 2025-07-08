@@ -23,18 +23,19 @@ public class StatusCellRenderer extends DefaultTableCellRenderer{
         JLabel label = new JLabel(value.toString());
         label.setOpaque(true);
         label.setHorizontalAlignment(LEFT);
-
+        
         if (value != null) {
-            switch (value.toString()) {
-                case "Not Done":
-                    // Default look (no color set)
-                    label.setBackground(Color.RED);
-                    label.setForeground(Color.BLACK);
-                    break;
-                case "Done":
-                    label.setBackground(Color.GREEN);
-                    label.setForeground(Color.BLACK);
-                    break;
+            String status = value.toString();
+
+            String deliveredStatus = ViewInquiry.statusTypes.get(0).getStatus_type();
+            String notDeliveredStatus = ViewInquiry.statusTypes.get(1).getStatus_type();
+
+            if (status.equals(deliveredStatus)) {
+                label.setBackground(new Color(198, 239, 206)); // green
+                label.setForeground(new Color(0, 97, 0));       // dark green
+            } else if (status.equals(notDeliveredStatus)) {
+                label.setBackground(new Color(255, 204, 204)); // light red
+                label.setForeground(new Color(178, 34, 34));   // dark red
             }
         }
 

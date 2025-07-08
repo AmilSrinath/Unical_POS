@@ -402,7 +402,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             conn = DBCon.getDatabaseConnection();
             StringBuilder sql = new StringBuilder(
                 "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, " +
-                "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, " +
+                "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, " +
                 "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, " +
                 "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status " +
                 "FROM pos_main_delivery_order_tb dot " +
@@ -452,6 +452,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 deliveryOrder.setRemark(rs.getString("remark"));
                 deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
                 deliveryOrder.setIsPrint(rs.getInt("is_print"));
+                deliveryOrder.setStatusID(rs.getInt("status_id"));
 
                 // Set the new fields from pos_payment_tb
                 deliveryOrder.setPaymentId(rs.getInt("payment_id"));

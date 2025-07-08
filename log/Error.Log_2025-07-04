@@ -1,0 +1,2 @@
+2025-07-04 12:48:37,464 ERROR error - java.sql.SQLException: Column 'statusId' not found.	get All Inquiry Duration faild
+2025-07-04 13:43:36,499 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'reg_id' in where clause is ambiguous	get all Status Type error

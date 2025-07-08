@@ -42,6 +42,7 @@ public class DeliveryOrder {
     private Timestamp createDate;
     private Timestamp editedDate;
     private Integer userID;
+    private Integer statusID;
 
     private Integer paymentId;
     private Double codPayment;
@@ -305,6 +306,14 @@ public class DeliveryOrder {
 
     public void setOrderDetailsDtos(ArrayList<OrderDetailsDto> orderDetailsDtos) {
         this.orderDetailsDtos = orderDetailsDtos;
+    }
+
+    public Integer getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(Integer statusID) {
+        this.statusID = statusID;
     }
 
     

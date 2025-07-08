@@ -26,6 +26,7 @@ public class InquiryModel {
     private int userId;
     private Date createDate;
     private Date editedDate;
+    private int statusId;
     
     public InquiryModel(){}
 
@@ -156,6 +157,14 @@ public class InquiryModel {
 
     public void setEditedDate(Date editedDate) {
         this.editedDate = editedDate;
+    }
+
+    public int getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
     
     

@@ -99,7 +99,7 @@ public class InquiryRepositoryImpl {
     }
 
     public void update(String wayBill, int status) {
-        String updateQuery = "UPDATE pos_inquiry_tb SET status = ?, edited_date = ? WHERE way_bill = ?";
+        String updateQuery = "UPDATE pos_inquiry_tb SET status_id = ?, edited_date = ? WHERE way_bill = ?";
 
         try (
                 Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
@@ -153,6 +153,7 @@ public class InquiryRepositoryImpl {
                 model.setReason(rs.getString("reson"));
                 model.setRemark(rs.getString("remark"));
                 model.setStatus(rs.getInt("status"));
+                model.setStatusId(rs.getInt("status_id"));
                 model.setCreateDate(rs.getDate("created_date"));
 
                 list.add(model);

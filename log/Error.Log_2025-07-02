@@ -1,0 +1,1 @@
+2025-07-02 21:10:08,520 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC9907' for key 'way_bill'	saveInquiry faild

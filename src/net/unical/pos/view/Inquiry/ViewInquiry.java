@@ -12,6 +12,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.view.home.Dashboard;
@@ -25,10 +26,13 @@ import net.unical.pos.log.Log;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
 import net.unical.pos.model.InquiryModel;
+import net.unical.pos.model.StatusTypeModel;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
 import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.PaymentRepositoryImpl;
+import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import static net.unical.pos.view.deliveryOrders.DeliveryOrders.statusTypes;
 
 /**
  *
@@ -40,6 +44,8 @@ public class ViewInquiry extends JInternalFrame {
     private PaymentTypesController paymentTypesController;
     private ArrayList<Integer> paymentTypeIds_2 = new ArrayList<>();
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
+    private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
+    public static List<StatusTypeModel> statusTypes = new ArrayList<>();
 
     private InquiryRepositoryImpl inquiryRepositoryImpl;
 
@@ -65,6 +71,7 @@ public class ViewInquiry extends JInternalFrame {
         this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
         this.paymentTypesController = new PaymentTypesController();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
+        this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
 
         setCurrentDate();
         getPaymentTypes();
@@ -74,6 +81,7 @@ public class ViewInquiry extends JInternalFrame {
         String toDate = formatter.format(jXDatePicker2.getDate());
 
         getAllInquiry(fromDate, toDate, 0);
+        statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(3);
     }
 
     /**
@@ -110,7 +118,7 @@ public class ViewInquiry extends JInternalFrame {
         btnPaid.setBackground(new java.awt.Color(51, 153, 0));
         btnPaid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnPaid.setForeground(new java.awt.Color(255, 255, 255));
-        btnPaid.setText("Done");
+        btnPaid.setText("Delivered");
         btnPaid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPaidActionPerformed(evt);
@@ -120,7 +128,7 @@ public class ViewInquiry extends JInternalFrame {
         btnNotPaid.setBackground(new java.awt.Color(255, 0, 51));
         btnNotPaid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNotPaid.setForeground(new java.awt.Color(255, 255, 255));
-        btnNotPaid.setText("Not Done");
+        btnNotPaid.setText("Not Delivered");
         btnNotPaid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNotPaidActionPerformed(evt);
@@ -136,21 +144,21 @@ public class ViewInquiry extends JInternalFrame {
             InquiryOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InquiryOptionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNotPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnPaid, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnNotPaid)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InquiryOptionsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(97, 97, 97))
+                .addGap(119, 119, 119))
         );
         InquiryOptionsLayout.setVerticalGroup(
             InquiryOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InquiryOptionsLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(InquiryOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnPaid, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(btnNotPaid, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -425,13 +433,11 @@ public class ViewInquiry extends JInternalFrame {
 
             for (InquiryModel dto : inquiryModels) {
                 count++;
-                switch (dto.getStatus()) {
-                    case 0:
-                        statusText = "Not Done";
-                        break;
-                    case 1:
-                        statusText = "Done";
-                        break;
+                
+                if (dto.getStatusId() == statusTypes.get(0).getStatus_id()) { //Delivered
+                    statusText = statusTypes.get(0).getStatus_type();
+                } else if (dto.getStatusId() == statusTypes.get(1).getStatus_id()) { //Not Delivered
+                    statusText = statusTypes.get(1).getStatus_type();
                 }
 
                 Object[] rowData = {
@@ -503,15 +509,11 @@ public class ViewInquiry extends JInternalFrame {
 
             for (InquiryModel dto : inquiryModels) {
                 count++;
-                switch (dto.getStatus()) {
-                    case 0:
-                        statusText = "Not Done";
-                        break;
-                    case 1:
-                        statusText = "Done";
-                        break;
-                    default:
-                        statusText = "Unknown";
+                
+                if (dto.getStatusId()== statusTypes.get(9).getStatus_id()) { //Delivered
+                    statusText = statusTypes.get(9).getStatus_type();
+                } else if (dto.getStatusId() == statusTypes.get(10).getStatus_id()) { //Not Delivered
+                    statusText = statusTypes.get(10).getStatus_type();
                 }
 
                 Object[] rowData = {
@@ -542,7 +544,7 @@ public class ViewInquiry extends JInternalFrame {
 
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
         if (wayBill != null) {
-            inquiryRepositoryImpl.update(wayBill, 1);
+            inquiryRepositoryImpl.update(wayBill, 10);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -556,7 +558,7 @@ public class ViewInquiry extends JInternalFrame {
 
     private void btnNotPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotPaidActionPerformed
         if (wayBill != null) {
-            inquiryRepositoryImpl.update(wayBill, 0);
+            inquiryRepositoryImpl.update(wayBill, 11);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());

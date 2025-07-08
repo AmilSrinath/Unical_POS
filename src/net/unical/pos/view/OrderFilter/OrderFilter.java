@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -38,10 +39,13 @@ import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
+import net.unical.pos.model.StatusTypeModel;
 import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.view.Reports.Daily_Income;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import static net.unical.pos.view.deliveryOrders.DeliveryOrders.statusTypes;
 import net.unical.pos.view.deliveryOrders.StatusCellRenderer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -59,6 +63,7 @@ public class OrderFilter extends JInternalFrame {
     private PaymentTypesController paymentTypesController;
     private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
+    private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
 
     /**
      * Creates new form OrderFilter
@@ -79,6 +84,7 @@ public class OrderFilter extends JInternalFrame {
         this();dashboard = dashboard;
         this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
         this.paymentTypesController=new PaymentTypesController();
+        this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         setCurrentDate();
         getPaymentTypes();
         
@@ -87,6 +93,7 @@ public class OrderFilter extends JInternalFrame {
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
         
+        statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
         getAllOrders(fromDate, toDate, 0, 0);
     }
 
@@ -107,6 +114,8 @@ public class OrderFilter extends JInternalFrame {
         btnActive = new javax.swing.JButton();
         btnWrapping = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnReturning = new javax.swing.JButton();
+        btnChecking = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
@@ -144,7 +153,7 @@ public class OrderFilter extends JInternalFrame {
         btnReturn.setBackground(new java.awt.Color(255, 153, 0));
         btnReturn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Return");
+        btnReturn.setText("Returned");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReturnActionPerformed(evt);
@@ -194,28 +203,53 @@ public class OrderFilter extends JInternalFrame {
         jLabel1.setForeground(new java.awt.Color(0, 51, 255));
         jLabel1.setText("Action");
 
+        btnReturning.setBackground(new java.awt.Color(204, 102, 255));
+        btnReturning.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnReturning.setForeground(new java.awt.Color(255, 255, 255));
+        btnReturning.setText("Returning");
+        btnReturning.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturningActionPerformed(evt);
+            }
+        });
+
+        btnChecking.setBackground(new java.awt.Color(153, 153, 153));
+        btnChecking.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnChecking.setForeground(new java.awt.Color(255, 255, 255));
+        btnChecking.setText("Checking");
+        btnChecking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout orderOptionsLayout = new javax.swing.GroupLayout(orderOptions.getContentPane());
         orderOptions.getContentPane().setLayout(orderOptionsLayout);
         orderOptionsLayout.setHorizontalGroup(
             orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(orderOptionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnDeliverd, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOutForDelivery)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderOptionsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(370, 370, 370))
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(orderOptionsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnDeliverd, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReturning, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnOutForDelivery)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnChecking, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(orderOptionsLayout.createSequentialGroup()
+                        .addGap(501, 501, 501)
+                        .addComponent(jLabel1)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         orderOptionsLayout.setVerticalGroup(
             orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,11 +259,13 @@ public class OrderFilter extends JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnDeliverd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnReturn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCancel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnOutForDelivery, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActive, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnWrapping, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnWrapping, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReturning, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnChecking, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
         );
 
@@ -579,31 +615,25 @@ public class OrderFilter extends JInternalFrame {
 
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
-                switch (dto.getStatusType()) {
-                    case 1:
-                        statusText = "Active";
-                        break;
-                    case 2:
-                        statusText = "Pending";
-                        break;
-                    case 3:
-                        statusText = "Wrapping";
-                        break;
-                    case 4:
-                        statusText = "Out of Delivery";
-                        break;
-                    case 5:
-                        statusText = "Delivered";
-                        break;
-                    case 6:
-                        statusText = "Return";
-                        break;
-                    case 7:
-                        statusText = "Cancel";
-                        break;
-                    default:
-                        statusText = "Unknown";
-                        break;
+                
+                if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                    statusText = statusTypes.get(0).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
+                    statusText = statusTypes.get(1).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(2).getStatus_id()) { //Wrapping
+                    statusText = statusTypes.get(2).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(3).getStatus_id()) { //Out of Delivery
+                    statusText = statusTypes.get(3).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(4).getStatus_id()) { //Delivered
+                    statusText = statusTypes.get(4).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(5).getStatus_id()) { //Retured
+                    statusText = statusTypes.get(5).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(6).getStatus_id()) { //Cancel
+                    statusText = statusTypes.get(6).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(7).getStatus_id()) { //Returning
+                    statusText = statusTypes.get(7).getStatus_type();
+                } else if (dto.getStatusID() == statusTypes.get(8).getStatus_id()) { //Checking
+                    statusText = statusTypes.get(8).getStatus_type();
                 }
 
                 isPrint = dto.getIsPrint() == 1;
@@ -651,70 +681,38 @@ public class OrderFilter extends JInternalFrame {
             int selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
-                System.out.println("status : "+status);
                 
-                switch (status) {
-                    case "Pending":
-                        btnWrapping.setEnabled(true);
-                        btnCancel.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Wrapping":
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(true);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Out of Delivery":
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(true);
-                        btnDeliverd.setEnabled(true);
-                        break;
-                        
-                    case "Delivered":
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Return":
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                        
-                    case "Cancel":
-                        btnWrapping.setEnabled(false);
-                        btnCancel.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnOutForDelivery.setEnabled(false);
-                        btnActive.setEnabled(false);
-                        btnReturn.setEnabled(false);
-                        btnDeliverd.setEnabled(false);
-                        break;
-                    default:
-                        throw new AssertionError();
+                // Disable all buttons by default
+                btnWrapping.setEnabled(false);
+                btnCancel.setEnabled(false);
+                btnActive.setEnabled(false);
+                btnOutForDelivery.setEnabled(false);
+                btnReturn.setEnabled(false);
+                btnDeliverd.setEnabled(false);
+                btnReturning.setEnabled(false);
+                btnChecking.setEnabled(false);
+
+                // Enable buttons based on status
+                if (statusTypes.get(0).getStatus_type().equals(status) || statusTypes.get(1).getStatus_type().equals(status)) {
+                    btnWrapping.setEnabled(true);
+                    btnCancel.setEnabled(true);
+                } else if (statusTypes.get(2).getStatus_type().equals(status)) {
+                    btnWrapping.setEnabled(false);
+                    btnCancel.setEnabled(true);
+                    btnOutForDelivery.setEnabled(true);
+                } else if (statusTypes.get(3).getStatus_type().equals(status)) {
+                    btnReturning.setEnabled(true);
+                    btnDeliverd.setEnabled(true);
+                } else if (statusTypes.get(7).getStatus_type().equals(status)) {
+                    btnReturn.setEnabled(true);
+                } else if (statusTypes.get(4).getStatus_type().equals(status) ||
+                           statusTypes.get(5).getStatus_type().equals(status) ||
+                           statusTypes.get(6).getStatus_type().equals(status) ||
+                           statusTypes.get(7).getStatus_type().equals(status) ||
+                           statusTypes.get(8).getStatus_type().equals(status)) {
+                    // All buttons remain disabled
+                } else {
+                    throw new AssertionError("Unknown status: " + status);
                 }
                 
                 if (!status.equals("Delivered")) {
@@ -722,7 +720,7 @@ public class OrderFilter extends JInternalFrame {
                     orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     System.out.println("orderCode : "+orderCode);
                     orderOptions.setLocationRelativeTo(null);
-                    orderOptions.setSize(787, 110);
+                    orderOptions.setSize(1050, 110);
                     orderOptions.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "This order has already been delivered and cannot be changed.");
@@ -773,31 +771,25 @@ public class OrderFilter extends JInternalFrame {
 
                 for (DeliveryOrder dto : deliveryOrderDtos) {
                     count++;
-                    switch (dto.getStatusType()) {
-                        case 1:
-                            statusText = "Active";
-                            break;
-                        case 2:
-                            statusText = "Pending";
-                            break;
-                        case 3:
-                            statusText = "Wrapping";
-                            break;
-                        case 4:
-                            statusText = "Out of Delivery";
-                            break;
-                        case 5:
-                            statusText = "Delivered";
-                            break;
-                        case 6:
-                            statusText = "Return";
-                            break;
-                        case 7:
-                            statusText = "Cancel";
-                            break;
-                        default:
-                            statusText = "Unknown";
-                            break;
+                    
+                    if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                        statusText = statusTypes.get(0).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
+                        statusText = statusTypes.get(1).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(2).getStatus_id()) { //Wrapping
+                        statusText = statusTypes.get(2).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(3).getStatus_id()) { //Out of Delivery
+                        statusText = statusTypes.get(3).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(4).getStatus_id()) { //Delivered
+                        statusText = statusTypes.get(4).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(5).getStatus_id()) { //Retured
+                        statusText = statusTypes.get(5).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(6).getStatus_id()) { //Cancel
+                        statusText = statusTypes.get(6).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(7).getStatus_id()) { //Returning
+                        statusText = statusTypes.get(7).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(8).getStatus_id()) { //Checking
+                        statusText = statusTypes.get(8).getStatus_type();
                     }
 
                     isPrint = dto.getIsPrint() == 1;
@@ -1019,31 +1011,25 @@ public class OrderFilter extends JInternalFrame {
 
                 for (DeliveryOrder dto : deliveryOrderDtos) {
                     count++;
-                    switch (dto.getStatusType()) {
-                        case 1:
-                            statusText = "Active";
-                            break;
-                        case 2:
-                            statusText = "Pending";
-                            break;
-                        case 3:
-                            statusText = "Wrapping";
-                            break;
-                        case 4:
-                            statusText = "Out of Delivery";
-                            break;
-                        case 5:
-                            statusText = "Delivered";
-                            break;
-                        case 6:
-                            statusText = "Return";
-                            break;
-                        case 7:
-                            statusText = "Cancel";
-                            break;
-                        default:
-                            statusText = "Unknown";
-                            break;
+                    
+                    if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                        statusText = statusTypes.get(0).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
+                        statusText = statusTypes.get(1).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(2).getStatus_id()) { //Wrapping
+                        statusText = statusTypes.get(2).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(3).getStatus_id()) { //Out of Delivery
+                        statusText = statusTypes.get(3).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(4).getStatus_id()) { //Delivered
+                        statusText = statusTypes.get(4).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(5).getStatus_id()) { //Retured
+                        statusText = statusTypes.get(5).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(6).getStatus_id()) { //Cancel
+                        statusText = statusTypes.get(6).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(7).getStatus_id()) { //Returning
+                        statusText = statusTypes.get(7).getStatus_type();
+                    } else if (dto.getStatusID() == statusTypes.get(8).getStatus_id()) { //Checking
+                        statusText = statusTypes.get(8).getStatus_type();
                     }
 
                     isPrint = dto.getIsPrint() == 1;
@@ -1074,6 +1060,40 @@ public class OrderFilter extends JInternalFrame {
             Logger.getLogger(OrderFilter.class.getName()).log(Level.WARNING, "Order ID is empty");
         }
     }//GEN-LAST:event_txtCustomerCodeKeyReleased
+
+    private void btnReturningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturningActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 12);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnReturningActionPerformed
+
+    private void btnCheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckingActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 13);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnCheckingActionPerformed
 
     public boolean generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
         Workbook workbook = new XSSFWorkbook();
@@ -1194,10 +1214,12 @@ public class OrderFilter extends JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActive;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnChecking;
     private javax.swing.JButton btnDeliverd;
     private javax.swing.JButton btnOutForDelivery;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnReturn;
+    private javax.swing.JButton btnReturning;
     private javax.swing.JButton btnWrapping;
     private org.jdesktop.swingx.JXTable deliveryOrdersTable;
     private javax.swing.JButton jButton1;
@@ -1231,20 +1253,25 @@ public class OrderFilter extends JInternalFrame {
 
             if (order != null) {
                 String status = null;
-                if (order.getStatusType() == 1) {
-                    status = "Active";
-                } else if (order.getStatusType() == 2) {
-                    status = "Pending";
-                } else if (order.getStatusType() == 3) {
-                    status = "Wrapping";
-                } else if (order.getStatusType() == 4) {
-                    status = "Out of Delivery";
-                } else if (order.getStatusType() == 5) {
-                    status = "Delivered";
-                } else if (order.getStatusType() == 6) {
-                    status = "Return";
-                } else {
-                    status = "Cancel";
+                
+                if (order.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                    status = statusTypes.get(0).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
+                    status = statusTypes.get(1).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(2).getStatus_id()) { //Wrapping
+                    status = statusTypes.get(2).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(3).getStatus_id()) { //Out of Delivery
+                    status = statusTypes.get(3).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(4).getStatus_id()) { //Delivered
+                    status = statusTypes.get(4).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(5).getStatus_id()) { //Retured
+                    status = statusTypes.get(5).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(6).getStatus_id()) { //Cancel
+                    status = statusTypes.get(6).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(7).getStatus_id()) { //Returning
+                    status = statusTypes.get(7).getStatus_type();
+                } else if (order.getStatusID() == statusTypes.get(8).getStatus_id()) { //Checking
+                    status = statusTypes.get(8).getStatus_type();
                 }
 
                 Object[] rowData = {

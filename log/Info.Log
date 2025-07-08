@@ -1,20 +1,6 @@
-2025-07-03 07:23:49,004 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:04,938 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:08,184 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:11,945 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:15,056 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:16,987 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:00:34,920 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:05:26,360 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:05:34,171 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:05:41,778 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:06:02,606 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:06:04,704 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 08:06:06,736 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 18:57:43,962 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
-2025-07-03 18:57:50,744 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	UPDATE pos_main_customer_tb
-2025-07-03 18:57:50,745 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
-2025-07-03 18:57:50,746 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
-2025-07-03 18:57:50,747 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_details_tb
-2025-07-03 18:57:50,749 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
-2025-07-03 18:57:51,802 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	168 Order Save. User ID: 1
+2025-07-07 19:43:59,288 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-07 19:44:55,465 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-07 19:44:59,567 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-07 19:45:11,604 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-07 19:45:16,151 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-07 19:46:24,517 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info

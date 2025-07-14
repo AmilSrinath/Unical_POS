@@ -47,7 +47,7 @@ public class ManageReson extends JInternalFrame {
      */
     public ManageReson() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage Reson");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

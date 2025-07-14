@@ -51,7 +51,7 @@ public class ManageStatus extends JInternalFrame {
      */
     public ManageStatus() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage Status");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

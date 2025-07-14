@@ -49,7 +49,7 @@ public class ManageCourierCompany extends JInternalFrame {
      */
     public ManageCourierCompany() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage Courier Company");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

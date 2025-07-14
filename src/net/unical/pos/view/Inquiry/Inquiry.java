@@ -53,7 +53,7 @@ public class Inquiry extends javax.swing.JInternalFrame {
 
         jXButton1.setBackground(new java.awt.Color(0, 102, 153));
         jXButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton1.setText("View Inquiry");
+        jXButton1.setText("Check Inquiry");
         jXButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton1ActionPerformed(evt);

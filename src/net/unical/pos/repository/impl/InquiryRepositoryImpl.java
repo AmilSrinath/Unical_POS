@@ -18,6 +18,7 @@ import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.model.CustomerDataByInquirySearch;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.InquiryModel;
+import net.unical.pos.view.main.LogInForm;
 
 /**
  *
@@ -69,7 +70,7 @@ public class InquiryRepositoryImpl {
             stmt.setString(8, inquiryModel.getBranchContact());
             stmt.setString(9, inquiryModel.getReason());
             stmt.setString(10, inquiryModel.getRemark());
-            stmt.setInt(11, 0);
+            stmt.setInt(11, LogInForm.userID);
 
             java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
             stmt.setDate(12, currentDate); // created_date
@@ -118,6 +119,8 @@ public class InquiryRepositoryImpl {
 
     public ArrayList<InquiryModel> getAllInquiryDuration(String fromDate, String toDate, int status) {
         ArrayList<InquiryModel> list = new ArrayList<>();
+        
+        System.out.println("status : "+status);
 
         String baseQuery = "SELECT i.*, c.customer_number " +
                        "FROM pos_inquiry_tb i " +
@@ -125,7 +128,7 @@ public class InquiryRepositoryImpl {
                        "WHERE i.created_date BETWEEN ? AND ?";
         
         if (status != 0) {
-            baseQuery += " AND status = ?";
+            baseQuery += " AND status_id = ?";
         }
 
         try (
@@ -134,7 +137,7 @@ public class InquiryRepositoryImpl {
             stmt.setDate(2, java.sql.Date.valueOf(toDate));
 
             if (status != 0) {
-                stmt.setInt(3, (status - 1));
+                stmt.setInt(3, status);
             }
 
             ResultSet rs = stmt.executeQuery();
@@ -193,7 +196,7 @@ public class InquiryRepositoryImpl {
                 model.setBranchContact(rs.getString("branch_contact"));
                 model.setReason(rs.getString("reson"));
                 model.setRemark(rs.getString("remark"));
-                model.setStatus(rs.getInt("status"));
+                model.setStatusId(rs.getInt("status_id"));
 
                 list.add(model);
             }
@@ -205,6 +208,58 @@ public class InquiryRepositoryImpl {
         }
 
         return list;
+    }
+
+    public void updateInquiry(InquiryModel inquiry) {
+        String updateQuery = "UPDATE pos_inquiry_tb SET "
+                + "customer_id = ?, "
+                + "customer_name = ?, "
+                + "customer_phone_1 = ?, "
+                + "customer_phone_2 = ?, "
+                + "company = ?, "
+                + "branch = ?, "
+                + "branch_contact = ?, "
+                + "reson = ?, "
+                + "remark = ?, "
+                + "edited_date = ?, "
+                + "user_id = ? "
+                + "WHERE way_bill = ?";
+
+        try (
+            Connection conn = DBCon.getDatabaseConnection();
+            PreparedStatement stmt = conn.prepareStatement(updateQuery)
+        ) {
+            stmt.setInt(1, Integer.parseInt(inquiry.getCustomerId()));
+            stmt.setString(2, inquiry.getCustomerName());
+            stmt.setString(3, inquiry.getCustomerPhone1());
+            stmt.setString(4, inquiry.getCustomerPhone2());
+            stmt.setString(5, inquiry.getCompany());
+            stmt.setString(6, inquiry.getBranch());
+            stmt.setString(7, inquiry.getBranchContact());
+            stmt.setString(8, inquiry.getReason());
+            stmt.setString(9, inquiry.getRemark());
+
+            java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+            stmt.setDate(10, currentDate); // edited_date
+
+            stmt.setInt(11, LogInForm.userID); // user_id (set dynamically if needed)
+            stmt.setString(12, inquiry.getWayBill());
+
+            System.out.println("inquiry.getWayBill() : "+inquiry.getWayBill());
+            
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(null, "Inquiry updated successfully.");
+                Log.info(inquiry, "Inquiry updated successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "No inquiry found with the given way bill.");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(InquiryRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "updateInquiry failed");
+            JOptionPane.showMessageDialog(null, "An error occurred while updating the inquiry.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }

@@ -26,7 +26,7 @@ public class StatusTypeRepositoryImpl {
 
     public void saveStatusType(StatusTypeModel statusTypeModel) {
         String insertQuery = "INSERT INTO pos_status_types "
-                           + "(reg_id, status_type, user_id, create_date, edited_date, status) "
+                           + "(reg_id, status_type, user_id, created_date, edited_date, status) "
                            + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBCon.getDatabaseConnection();
@@ -87,7 +87,7 @@ public class StatusTypeRepositoryImpl {
                 model.setReg_id(rs.getInt("reg_id"));
                 model.setStatus_type(rs.getString("status_type"));
                 model.setUser_id(rs.getInt("user_id"));
-                model.setCreate_date(rs.getTimestamp("create_date"));
+                model.setCreate_date(rs.getTimestamp("created_date"));
                 model.setEdited_date(rs.getTimestamp("edited_date"));
                 model.setStatus(rs.getInt("status"));
                 model.setReg_des(rs.getString("reg_description"));
@@ -120,7 +120,7 @@ public class StatusTypeRepositoryImpl {
                 model.setReg_id(rs.getInt("reg_id"));
                 model.setStatus_type(rs.getString("status_type"));
                 model.setUser_id(rs.getInt("user_id"));
-                model.setCreate_date(rs.getTimestamp("create_date"));
+                model.setCreate_date(rs.getTimestamp("created_date"));
                 model.setEdited_date(rs.getTimestamp("edited_date"));
                 model.setStatus(rs.getInt("status"));
                 model.setReg_des(rs.getString("reg_description"));

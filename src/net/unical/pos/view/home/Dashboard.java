@@ -187,7 +187,7 @@ public class Dashboard extends javax.swing.JFrame {
         dashboardBtn.setForeground(new java.awt.Color(255, 255, 255));
         dashboardBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-dashboard-45.png"))); // NOI18N
         dashboardBtn.setText("Dashboard                ");
-        dashboardBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        dashboardBtn.setFont(new java.awt.Font("Poppins Light", 0, 15)); // NOI18N
         dashboardBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         dashboardBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -211,7 +211,7 @@ public class Dashboard extends javax.swing.JFrame {
         salesBtn.setForeground(new java.awt.Color(255, 255, 255));
         salesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Dashboard/icons8-sales-performance-45.png"))); // NOI18N
         salesBtn.setText("Sales                         ");
-        salesBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        salesBtn.setFont(new java.awt.Font("Poppins Light", 1, 15)); // NOI18N
         salesBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         salesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -461,28 +461,29 @@ public class Dashboard extends javax.swing.JFrame {
 
         navBarPanel.setBackground(new java.awt.Color(0, 102, 153));
 
+        jLabel11.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         lblUserName.setBackground(new java.awt.Color(204, 204, 204));
-        lblUserName.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblUserName.setFont(new java.awt.Font("Poppins Light", 1, 14)); // NOI18N
         lblUserName.setForeground(new java.awt.Color(255, 255, 255));
         lblUserName.setText("User Name");
 
         lblDate.setBackground(new java.awt.Color(204, 204, 204));
-        lblDate.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblDate.setFont(new java.awt.Font("Poppins Light", 1, 14)); // NOI18N
         lblDate.setForeground(new java.awt.Color(255, 255, 255));
         lblDate.setText("March / 31");
 
         lblTime.setBackground(new java.awt.Color(255, 255, 255));
-        lblTime.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblTime.setFont(new java.awt.Font("Poppins Light", 1, 14)); // NOI18N
         lblTime.setForeground(new java.awt.Color(255, 255, 255));
         lblTime.setText("18.00 PM");
 
         jLabel13.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel13.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Poppins ExtraBold", 1, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(204, 204, 0));
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("UNICAL");
+        jLabel13.setText("Petal Pink");
         jLabel13.setOpaque(true);
 
         javax.swing.GroupLayout navBarPanelLayout = new javax.swing.GroupLayout(navBarPanel);
@@ -530,12 +531,12 @@ public class Dashboard extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 153));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Poppins Light", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Processing");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Poppins Light", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("0");
 
@@ -554,7 +555,7 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addGap(23, 23, 23))
@@ -562,12 +563,12 @@ public class Dashboard extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(153, 0, 0));
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Poppins Light", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Fail to deliver");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Poppins Light", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("0");
 
@@ -601,7 +602,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,7 +611,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(693, Short.MAX_VALUE))
+                .addContainerGap(688, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel1, java.awt.BorderLayout.CENTER);

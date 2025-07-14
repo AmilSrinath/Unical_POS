@@ -1,52 +1,16 @@
-2025-07-05 19:26:41,516 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	getAllOrders error
-2025-07-05 19:27:46,983 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	getAllOrders error
-2025-07-05 19:36:35,349 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	getAllOrders error
-2025-07-05 19:37:26,868 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	getAllOrders error
-2025-07-05 19:50:31,125 ERROR error - class net.unical.pos.view.deliveryOrders.DeliveryOrders	An error occurred in DeliveryOrders
-java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
-	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:100)
-	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:106)
-	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:302)
-	at java.base/java.util.Objects.checkIndex(Objects.java:385)
-	at java.base/java.util.ArrayList.get(ArrayList.java:427)
-	at net.unical.pos.view.OrderFilter.OrderFilter.getAllOrders(OrderFilter.java:590)
-	at net.unical.pos.view.OrderFilter.OrderFilter.<init>(OrderFilter.java:96)
-	at net.unical.pos.view.home.Dashboard.configurationsBtnActionPerformed(Dashboard.java:848)
-	at net.unical.pos.view.home.Dashboard.access$1700(Dashboard.java:49)
-	at net.unical.pos.view.home.Dashboard$11.actionPerformed(Dashboard.java:289)
-	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
-	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2313)
-	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
-	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
-	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
-	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
-	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6620)
-	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
-	at java.desktop/java.awt.Component.processEvent(Component.java:6385)
-	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
-	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4995)
-	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
-	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4827)
-	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
-	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
-	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
-	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
-	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
-	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4827)
-	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
-	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
-	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97)
-	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
-	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
-	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
-	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
-	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
-	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
-	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
-	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-07-14 11:06:48,448 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:07:00,345 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:07:19,813 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:11:23,822 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:12:31,701 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:16:27,345 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:27,689 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:28,101 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:28,364 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:29,031 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:29,244 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:39,355 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:39,592 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:52,082 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:53,229 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:17:59,539 ERROR error - java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 2

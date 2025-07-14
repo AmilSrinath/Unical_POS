@@ -6,6 +6,7 @@
 package net.unical.pos.view.main;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,27 @@ public class LogInForm extends javax.swing.JFrame {
     
     public LogInForm() throws Exception {
         initComponents();
+        
+        // Styling the button
+        jXButton1.setText("Sign In");
+        jXButton1.setBorder(new RoundedBorder(20));
+        jXButton1.setBackground(new Color(0, 123, 255)); // Bootstrap primary blue
+        jXButton1.setForeground(Color.WHITE);
+        jXButton1.setFocusPainted(false);
+        jXButton1.setContentAreaFilled(true);
+        jXButton1.setOpaque(true);
+        jXButton1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Hover effect
+        jXButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jXButton1.setBackground(new Color(0, 105, 217)); // Darker blue on hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jXButton1.setBackground(new Color(0, 123, 255)); // Original color
+            }
+        });
+        
         this.setLocationRelativeTo(null);
         
         this.userAccountManagementController=new UserAccountManagementController();
@@ -144,14 +166,21 @@ public class LogInForm extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/background/istockphoto-843510116-170667a.jpg"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 610, 190));
+        jLabel3.setIcon(new javax.swing.ImageIcon("/Users/apple/Downloads/Untitled design (7).png")); // NOI18N
+        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel3.setInheritsPopupMenu(false);
+        jLabel3.setMaximumSize(new java.awt.Dimension(500, 500));
+        jLabel3.setMinimumSize(new java.awt.Dimension(500, 500));
+        jLabel3.setPreferredSize(new java.awt.Dimension(100, 100));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 290, 250));
 
         jLabel1.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel1.setFont(new java.awt.Font("Poppins Light", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Password : ");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, -1, 30));
+        jLabel1.setText("Password");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 240, -1, 30));
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 102));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -551,23 +580,24 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 50, 50));
 
-        jXButton1.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton1.setBorder(null);
-        jXButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jXButton1.setBackground(new java.awt.Color(51, 204, 255));
+        jXButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jXButton1.setText("Sign In");
+        jXButton1.setFont(new java.awt.Font("Poppins Light", 0, 18)); // NOI18N
         jXButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jXButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 80, -1));
+        jPanel1.add(jXButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 180, 30));
 
+        passwordTxt.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         passwordTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordTxtActionPerformed(evt);
             }
         });
-        jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 130, 30));
+        jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 180, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 822, 574));
 

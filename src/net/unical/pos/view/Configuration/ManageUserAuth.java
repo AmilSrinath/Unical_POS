@@ -52,7 +52,7 @@ public class ManageUserAuth extends JInternalFrame {
      */
     public ManageUserAuth() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage User Auth");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

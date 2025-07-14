@@ -56,7 +56,7 @@ public class ManageStatusType extends JInternalFrame {
      */
     public ManageStatusType() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage Status Type");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

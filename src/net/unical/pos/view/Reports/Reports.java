@@ -45,6 +45,7 @@ public class Reports extends javax.swing.JInternalFrame {
         saveOrderBtn = new javax.swing.JButton();
         saveOrderBtn1 = new javax.swing.JButton();
         saveOrderBtn2 = new javax.swing.JButton();
+        btnItemWiseSalesReport = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -81,6 +82,15 @@ public class Reports extends javax.swing.JInternalFrame {
             }
         });
 
+        btnItemWiseSalesReport.setBackground(new java.awt.Color(0, 102, 153));
+        btnItemWiseSalesReport.setForeground(new java.awt.Color(255, 255, 255));
+        btnItemWiseSalesReport.setText("Item Wise Sales Report");
+        btnItemWiseSalesReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnItemWiseSalesReportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -92,7 +102,9 @@ public class Reports extends javax.swing.JInternalFrame {
                 .addComponent(saveOrderBtn1)
                 .addGap(18, 18, 18)
                 .addComponent(saveOrderBtn2)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnItemWiseSalesReport)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +113,8 @@ public class Reports extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveOrderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveOrderBtn2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveOrderBtn2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnItemWiseSalesReport, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(394, Short.MAX_VALUE))
         );
 
@@ -148,6 +161,15 @@ public class Reports extends javax.swing.JInternalFrame {
         itemReport.setVisible(true);      
     }//GEN-LAST:event_saveOrderBtn2ActionPerformed
 
+    private void btnItemWiseSalesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItemWiseSalesReportActionPerformed
+        ItemWiseSalesReport itemWiseSalesReport = new ItemWiseSalesReport(dashboard);
+        dashboard.desktopPane.add(itemWiseSalesReport);
+        Dimension d = dashboard.desktopPane.getSize();
+        itemWiseSalesReport.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        itemWiseSalesReport.setSize(d);
+        itemWiseSalesReport.setVisible(true);
+    }//GEN-LAST:event_btnItemWiseSalesReportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -184,6 +206,7 @@ public class Reports extends javax.swing.JInternalFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnItemWiseSalesReport;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton saveOrderBtn;
     private javax.swing.JButton saveOrderBtn1;

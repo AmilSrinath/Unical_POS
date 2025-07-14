@@ -4,6 +4,7 @@
  */
 package net.unical.pos.view.Inquiry;
 
+import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import net.unical.pos.view.Inquiry.*;
@@ -42,6 +43,7 @@ import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.PaymentRepositoryImpl;
 import net.unical.pos.repository.impl.ResonRepositoryImpl;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
+import org.apache.commons.compress.harmony.unpack200.bytecode.forms.ThisFieldRefForm;
 /**
  *
  * @author apple
@@ -69,10 +71,13 @@ public class AddInquiry extends JInternalFrame {
         pack();
     }
     
+    private InquiryModel inquiryModel;
+    
     Dashboard dashboard;
     
     public AddInquiry(Dashboard dashboard){
-        this();dashboard = dashboard;
+        this();
+        this.dashboard = dashboard;
         this.paymentTypesController=new PaymentTypesController();
         this.resonRepositoryImpl = new ResonRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
@@ -83,6 +88,45 @@ public class AddInquiry extends JInternalFrame {
         preloadBranches(cmbBranch);
         cmbBranch.setEnabled(false);
         loadDataCmbCompany();
+    }
+    
+    String fromDate = null;
+    String toDate = null;
+    int status = -1;
+
+    //This is inquary edit option
+    AddInquiry(Dashboard dashboard, InquiryModel inquiryModel, String fromDate, String toDate, int status) {
+        this.inquiryModel = inquiryModel;
+        this.paymentTypesController=new PaymentTypesController();
+        this.resonRepositoryImpl = new ResonRepositoryImpl();
+        this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
+        this.courierCompanyRepositoryImpl = new CourierCompanyRepositoryImpl();
+        this.courierBranchRepositoryImpl = new CourierBranchRepositoryImpl();
+        
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.status = status;
+        
+        initComponents();
+        new AddInquiry(dashboard);
+        this.dashboard = dashboard;
+        loadReasonsToComboBox();
+        preloadBranches(cmbBranch);
+        cmbBranch.setEnabled(false);
+        loadDataCmbCompany();
+        
+        txtCustomerName.setText(inquiryModel.getCustomerName());
+        txtCustomerContact1.setText(inquiryModel.getCustomerPhone1());
+        txtCustomerContact2.setText(inquiryModel.getCustomerPhone2());
+        txtCustomerName.setText(inquiryModel.getCustomerName());
+        cmbCompany.setSelectedItem(inquiryModel.getCompany());
+        cmbBranch.setSelectedItem(inquiryModel.getBranch());
+        txtBranchContact.setText(inquiryModel.getBranchContact());
+        cmbReason.setSelectedItem(inquiryModel.getReason());
+        txtRemark.setText(inquiryModel.getRemark());
+        
+        btnAddInquiry.setText("Update Inquiry");
+        jPanel4.hide();
     }
 
     /**
@@ -370,29 +414,54 @@ public class AddInquiry extends JInternalFrame {
     }//GEN-LAST:event_btnNotPaidActionPerformed
 
     private void btnAddInquiryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInquiryActionPerformed
-        InquiryModel inquiryModel = new InquiryModel();
-        inquiryModel.setWayBill(txtWayBill.getText());
-        inquiryModel.setCustomerId(searchCustomerID+"");
-        inquiryModel.setCustomerName(txtCustomerName.getText());
-        inquiryModel.setCustomerPhone1(txtCustomerContact1.getText());
-        inquiryModel.setCustomerPhone2(txtCustomerContact2.getText());
-        inquiryModel.setCompany(cmbCompany.getSelectedItem().toString());
-        inquiryModel.setBranch(cmbBranch.getSelectedItem().toString());
-        inquiryModel.setBranchContact(txtBranchContact.getText());
-        inquiryModel.setReason(cmbReason.getSelectedItem().toString());
-        inquiryModel.setRemark(txtRemark.getText());
+        InquiryModel inquiry = new InquiryModel();
         
-        inquiryRepositoryImpl.saveInquiry(inquiryModel);
-        
-        txtWayBill.setText("");
-        txtCustomerName.setText("");
-        txtCustomerContact1.setText("");
-        txtCustomerContact2.setText("");
-        txtBranchContact.setText("");
-        cmbReason.setSelectedIndex(0);
-        txtRemark.setText("");
-        cmbBranch.setSelectedIndex(0);
-        cmbCompany.setSelectedIndex(0);
+        if (btnAddInquiry.getText().equals("Add Inquiry")) {
+            //Add Inquiry
+            inquiry.setWayBill(txtWayBill.getText());
+            inquiry.setCustomerId(searchCustomerID+"");
+            inquiry.setCustomerName(txtCustomerName.getText());
+            inquiry.setCustomerPhone1(txtCustomerContact1.getText());
+            inquiry.setCustomerPhone2(txtCustomerContact2.getText());
+            inquiry.setCompany(cmbCompany.getSelectedItem().toString());
+            inquiry.setBranch(cmbBranch.getSelectedItem().toString());
+            inquiry.setBranchContact(txtBranchContact.getText());
+            inquiry.setReason(cmbReason.getSelectedItem().toString());
+            inquiry.setRemark(txtRemark.getText());
+
+            inquiryRepositoryImpl.saveInquiry(inquiry);
+
+            txtWayBill.setText("");
+            txtCustomerName.setText("");
+            txtCustomerContact1.setText("");
+            txtCustomerContact2.setText("");
+            txtBranchContact.setText("");
+            cmbReason.setSelectedIndex(0);
+            txtRemark.setText("");
+            cmbBranch.setSelectedIndex(0);
+            cmbCompany.setSelectedIndex(0);
+        } else{
+            //Update Inquiry
+            inquiry.setWayBill(inquiryModel.getWayBill());
+            inquiry.setCustomerId(inquiryRepositoryImpl.getCustomerDataByWayBill(inquiryModel.getWayBill()).getCustomerId()+"");
+            inquiry.setCustomerName(txtCustomerName.getText());
+            inquiry.setCustomerPhone1(txtCustomerContact1.getText());
+            inquiry.setCustomerPhone2(txtCustomerContact2.getText());
+            inquiry.setCompany(cmbCompany.getSelectedItem().toString());
+            inquiry.setBranch(cmbBranch.getSelectedItem().toString());
+            inquiry.setBranchContact(txtBranchContact.getText());
+            inquiry.setReason(cmbReason.getSelectedItem().toString());
+            inquiry.setRemark(txtRemark.getText());
+            
+            inquiryRepositoryImpl.updateInquiry(inquiry);
+            
+            ViewInquiry viewInquiry = new ViewInquiry(dashboard,fromDate, toDate, status);
+            dashboard.desktopPane.add(viewInquiry);
+            Dimension d = dashboard.desktopPane.getSize();
+            viewInquiry.setLayer(dashboard.desktopPane.POPUP_LAYER);
+            viewInquiry.setSize(d);
+            viewInquiry.setVisible(true);
+        }
     }//GEN-LAST:event_btnAddInquiryActionPerformed
 
     private void loadReasonsToComboBox() {

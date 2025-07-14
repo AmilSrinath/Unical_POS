@@ -41,7 +41,7 @@ public class Payment extends JInternalFrame {
      */
     public Payment() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Payment");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

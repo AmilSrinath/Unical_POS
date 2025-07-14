@@ -46,6 +46,7 @@ public class ViewInquiry extends JInternalFrame {
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     public static List<StatusTypeModel> statusTypes = new ArrayList<>();
+    public InquiryModel inquiryModel;
 
     private InquiryRepositoryImpl inquiryRepositoryImpl;
 
@@ -67,7 +68,7 @@ public class ViewInquiry extends JInternalFrame {
 
     public ViewInquiry(Dashboard dashboard) {
         this();
-        dashboard = dashboard;
+        this.dashboard=dashboard;
         this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
         this.paymentTypesController = new PaymentTypesController();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
@@ -80,8 +81,34 @@ public class ViewInquiry extends JInternalFrame {
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
 
-        getAllInquiry(fromDate, toDate, 0);
         statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(3);
+        
+        StatusCombo.addItem("Any");
+        for(StatusTypeModel stm:statusTypes){
+            StatusCombo.addItem(stm.getStatus_type());
+        }
+        
+        getAllInquiry(fromDate, toDate, 0);
+    }
+    
+    ViewInquiry(Dashboard dashboard, String fromDate, String toDate, int status) {
+        this();
+        this.dashboard=dashboard;
+        this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
+        this.paymentTypesController = new PaymentTypesController();
+        this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
+        this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
+
+        setCurrentDate();
+        getPaymentTypes();
+
+        statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(3);
+        
+        StatusCombo.addItem("Any");
+        for(StatusTypeModel stm:statusTypes){
+            StatusCombo.addItem(stm.getStatus_type());
+        }
+        getAllInquiry(fromDate, toDate, status);
     }
 
     /**
@@ -112,6 +139,7 @@ public class ViewInquiry extends JInternalFrame {
         total_orders_count_txt = new javax.swing.JLabel();
         StatusCombo = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         InquiryOptions.setResizable(false);
 
@@ -256,7 +284,6 @@ public class ViewInquiry extends JInternalFrame {
         total_orders_count_txt.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         total_orders_count_txt.setForeground(new java.awt.Color(255, 255, 255));
 
-        StatusCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Any", "Not Done", "Done" }));
         StatusCombo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 StatusComboMouseClicked(evt);
@@ -352,15 +379,26 @@ public class ViewInquiry extends JInternalFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        jButton2.setBackground(new java.awt.Color(255, 204, 0));
+        jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane6))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -368,8 +406,10 @@ public class ViewInquiry extends JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addGap(16, 16, 16))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -394,8 +434,15 @@ public class ViewInquiry extends JInternalFrame {
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
         
-        int status = StatusCombo.getSelectedIndex();
-        getAllInquiry(fromDate, toDate, status);
+        int statusIndex = 0;
+        
+        for(StatusTypeModel stm:statusTypes){
+            if (StatusCombo.getSelectedItem().equals(stm.getStatus_type())) {
+                statusIndex = stm.getStatus_id();
+            }
+        }
+        
+        getAllInquiry(fromDate, toDate, statusIndex);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void setCurrentDate() {
@@ -479,12 +526,48 @@ public class ViewInquiry extends JInternalFrame {
         if (evt.getClickCount() == 2) {
             int selectedRow = paymentOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
-                wayBill = paymentOrdersTable.getValueAt(selectedRow, 1).toString();
+                Object wayBillVal = paymentOrdersTable.getValueAt(selectedRow, 1);
+                wayBill = wayBillVal != null ? wayBillVal.toString() : "";
 
                 InquiryOptions.setLocationRelativeTo(null);
                 InquiryOptions.setSize(240, 110);
                 InquiryOptions.setVisible(true);
             }
+        } else {
+            int selectedRow = paymentOrdersTable.getSelectedRow();
+            inquiryModel = new InquiryModel();
+
+            Object value;
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 1);
+            inquiryModel.setWayBill(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 2);
+            inquiryModel.setCustomerId(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 3);
+            inquiryModel.setCustomerName(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 4);
+            inquiryModel.setCustomerPhone1(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 5);
+            inquiryModel.setCustomerPhone2(value != null ? value.toString() : "Select Company");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 6);
+            inquiryModel.setCompany(value != null ? value.toString() : "Select Company");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 7);
+            inquiryModel.setBranch(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 8);
+            inquiryModel.setBranchContact(value != null ? value.toString() : "");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 10);
+            inquiryModel.setReason(value != null ? value.toString() : "Select Reason");
+
+            value = paymentOrdersTable.getValueAt(selectedRow, 11);
+            inquiryModel.setRemark(value != null ? value.toString() : "");
         }
     }//GEN-LAST:event_paymentOrdersTableMousePressed
 
@@ -509,12 +592,14 @@ public class ViewInquiry extends JInternalFrame {
 
             for (InquiryModel dto : inquiryModels) {
                 count++;
-                
-                if (dto.getStatusId()== statusTypes.get(9).getStatus_id()) { //Delivered
-                    statusText = statusTypes.get(9).getStatus_type();
-                } else if (dto.getStatusId() == statusTypes.get(10).getStatus_id()) { //Not Delivered
-                    statusText = statusTypes.get(10).getStatus_type();
+                                
+                if (dto.getStatusId() == statusTypes.get(0).getStatus_id()) { //Delivered
+                    statusText = statusTypes.get(0).getStatus_type();
+                } else if (dto.getStatusId() == statusTypes.get(1).getStatus_id()) { //Not Delivered
+                    statusText = statusTypes.get(1).getStatus_type();
                 }
+                
+                System.out.println("statusText : "+statusText);
 
                 Object[] rowData = {
                     "",
@@ -526,6 +611,7 @@ public class ViewInquiry extends JInternalFrame {
                     dto.getCompany(),
                     dto.getBranch(),
                     dto.getBranchContact(),
+                    dto.getCreateDate(),
                     dto.getReason(),
                     dto.getRemark(),
                     statusText
@@ -582,6 +668,23 @@ public class ViewInquiry extends JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_StatusComboKeyReleased
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (!inquiryModel.getWayBill().isEmpty()) {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+            
+            int status = StatusCombo.getSelectedIndex();
+            
+            AddInquiry addInquiry = new AddInquiry(dashboard, inquiryModel,fromDate, toDate, status);
+            dashboard.desktopPane.add(addInquiry);
+            Dimension d = dashboard.desktopPane.getSize();
+            addInquiry.setLayer(dashboard.desktopPane.POPUP_LAYER);
+            addInquiry.setSize(d);
+            addInquiry.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -630,6 +733,7 @@ public class ViewInquiry extends JInternalFrame {
     private javax.swing.JButton btnNotPaid;
     private javax.swing.JButton btnPaid;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;

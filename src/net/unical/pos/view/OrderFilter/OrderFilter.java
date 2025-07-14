@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import net.unical.pos.view.home.Dashboard;
 import javax.swing.JInternalFrame;
@@ -37,11 +38,14 @@ import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.log.Log;
+import net.unical.pos.model.CustomerDataByInquirySearch;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
+import net.unical.pos.model.InquiryModel;
 import net.unical.pos.model.StatusTypeModel;
 import net.unical.pos.model.WrapperOrder;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.repository.impl.InquiryRepositoryImpl;
 import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.view.Reports.Daily_Income;
 import net.unical.pos.view.deliveryOrders.DeliveryOrders;
@@ -64,6 +68,7 @@ public class OrderFilter extends JInternalFrame {
     private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
+    private InquiryRepositoryImpl inquiryRepositoryImpl;
 
     /**
      * Creates new form OrderFilter
@@ -85,6 +90,7 @@ public class OrderFilter extends JInternalFrame {
         this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
         this.paymentTypesController=new PaymentTypesController();
         this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
+        this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
         setCurrentDate();
         getPaymentTypes();
         
@@ -95,6 +101,11 @@ public class OrderFilter extends JInternalFrame {
         
         statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
         getAllOrders(fromDate, toDate, 0, 0);
+        
+        statusCmb.addItem("Any");
+        for(StatusTypeModel stm:statusTypes){
+            statusCmb.addItem(stm.getStatus_type());
+        }
     }
 
     /**
@@ -116,6 +127,11 @@ public class OrderFilter extends JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnReturning = new javax.swing.JButton();
         btnChecking = new javax.swing.JButton();
+        btnSpecialNote = new javax.swing.JButton();
+        remark = new javax.swing.JDialog();
+        btnSaveRemark = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtRemark = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
@@ -173,7 +189,7 @@ public class OrderFilter extends JInternalFrame {
         btnOutForDelivery.setBackground(new java.awt.Color(51, 51, 255));
         btnOutForDelivery.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnOutForDelivery.setForeground(new java.awt.Color(255, 255, 255));
-        btnOutForDelivery.setText("Out for delivery");
+        btnOutForDelivery.setText("Despatch");
         btnOutForDelivery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOutForDeliveryActionPerformed(evt);
@@ -223,50 +239,111 @@ public class OrderFilter extends JInternalFrame {
             }
         });
 
+        btnSpecialNote.setBackground(new java.awt.Color(255, 204, 255));
+        btnSpecialNote.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSpecialNote.setForeground(new java.awt.Color(255, 255, 255));
+        btnSpecialNote.setText("Special Note");
+        btnSpecialNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpecialNoteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout orderOptionsLayout = new javax.swing.GroupLayout(orderOptions.getContentPane());
         orderOptions.getContentPane().setLayout(orderOptionsLayout);
         orderOptionsLayout.setHorizontalGroup(
             orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(orderOptionsLayout.createSequentialGroup()
-                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnActive, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeliverd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnWrapping, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturn, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnReturning, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                    .addComponent(btnChecking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(orderOptionsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnDeliverd, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnReturning, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOutForDelivery)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnActive, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnWrapping, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnChecking, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(orderOptionsLayout.createSequentialGroup()
-                        .addGap(501, 501, 501)
-                        .addComponent(jLabel1)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(btnOutForDelivery))
+                    .addComponent(btnSpecialNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderOptionsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(269, 269, 269))
         );
         orderOptionsLayout.setVerticalGroup(
             orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderOptionsLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnDeliverd, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(btnReturn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnOutForDelivery, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnDeliverd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCancel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnOutForDelivery, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnActive, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnWrapping, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReturning, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnReturn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnChecking, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(14, 14, 14))
+                .addGroup(orderOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSpecialNote, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnActive, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnWrapping, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnChecking, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        remark.setAlwaysOnTop(true);
+        remark.setResizable(false);
+
+        btnSaveRemark.setBackground(new java.awt.Color(51, 153, 0));
+        btnSaveRemark.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSaveRemark.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveRemark.setText("Save");
+        btnSaveRemark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveRemarkActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel2.setText("Enter Special Note");
+
+        javax.swing.GroupLayout remarkLayout = new javax.swing.GroupLayout(remark.getContentPane());
+        remark.getContentPane().setLayout(remarkLayout);
+        remarkLayout.setHorizontalGroup(
+            remarkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(remarkLayout.createSequentialGroup()
+                .addGroup(remarkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(remarkLayout.createSequentialGroup()
+                        .addGap(239, 239, 239)
+                        .addGroup(remarkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, remarkLayout.createSequentialGroup()
+                                .addComponent(btnSaveRemark, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(16, 16, 16))))
+                    .addGroup(remarkLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(txtRemark, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        remarkLayout.setVerticalGroup(
+            remarkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, remarkLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(txtRemark, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSaveRemark)
+                .addGap(11, 11, 11))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -384,7 +461,6 @@ public class OrderFilter extends JInternalFrame {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Payment Type");
 
-        statusCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Any", "Active", "Pending", "Wrapping", "Out of Delivery", "Delivered", "Return", "Cancel" }));
         statusCmb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 statusCmbMouseClicked(evt);
@@ -566,8 +642,16 @@ public class OrderFilter extends JInternalFrame {
         int paymentTypeIndex = paymentTypeCombo1.getSelectedIndex();
         int paymentType = paymentTypeIndex != 0 ? paymentTypeIds_2.get(paymentTypeIndex - 1) : 0;
 
-        int statusIndex = statusCmb.getSelectedIndex();
-
+        int statusIndex = 0;
+        
+        for(StatusTypeModel stm:statusTypes){
+            if (statusCmb.getSelectedItem().equals(stm.getStatus_type())) {
+                statusIndex = stm.getStatus_id();
+            }
+        }
+        
+        System.out.println("statusIndex : "+statusIndex);
+        
         getAllOrders(fromDate, toDate, paymentType, statusIndex);
     }//GEN-LAST:event_jButton1ActionPerformed
     
@@ -675,11 +759,14 @@ public class OrderFilter extends JInternalFrame {
     private void deliveryOrdersTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_deliveryOrdersTablePropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_deliveryOrdersTablePropertyChange
-
+    
+    int selectedRow = -1;
+    
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
-            int selectedRow = deliveryOrdersTable.getSelectedRow();
+            selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
+                txtRemark.setText("");
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
                 
                 // Disable all buttons by default
@@ -703,8 +790,12 @@ public class OrderFilter extends JInternalFrame {
                 } else if (statusTypes.get(3).getStatus_type().equals(status)) {
                     btnReturning.setEnabled(true);
                     btnDeliverd.setEnabled(true);
+                    btnChecking.setEnabled(true);
                 } else if (statusTypes.get(7).getStatus_type().equals(status)) {
                     btnReturn.setEnabled(true);
+                } else if (statusTypes.get(8).getStatus_type().equals(status)) {
+                    btnReturning.setEnabled(true);
+                    btnDeliverd.setEnabled(true);
                 } else if (statusTypes.get(4).getStatus_type().equals(status) ||
                            statusTypes.get(5).getStatus_type().equals(status) ||
                            statusTypes.get(6).getStatus_type().equals(status) ||
@@ -720,7 +811,7 @@ public class OrderFilter extends JInternalFrame {
                     orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     System.out.println("orderCode : "+orderCode);
                     orderOptions.setLocationRelativeTo(null);
-                    orderOptions.setSize(1050, 110);
+                    orderOptions.setSize(590, 150);
                     orderOptions.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "This order has already been delivered and cannot be changed.");
@@ -824,113 +915,6 @@ public class OrderFilter extends JInternalFrame {
     String orderCode=null;
     String orderID=null;
     
-    private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
-        if (orderCode != null) {
-            try {
-                deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 5);
-
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String fromDate = formatter.format(jXDatePicker1.getDate());
-                String toDate = formatter.format(jXDatePicker2.getDate());
-
-                Date now = new Date();
-                deliveryOrderRepositoryImpl.addDeliveredDateWithOrderID(orderID,now);
-                
-                getAllOrders(fromDate, toDate, 0,0);
-
-                orderOptions.dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-                Log.error(ex, ex);
-            }
-        }
-    }//GEN-LAST:event_btnDeliverdActionPerformed
-
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 6);
-
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePicker1.getDate());
-            String toDate = formatter.format(jXDatePicker2.getDate());
-
-            getAllOrders(fromDate, toDate, 0,0);
-
-            orderOptions.dispose();
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, ex);
-        }
-    }//GEN-LAST:event_btnReturnActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 7);
-
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePicker1.getDate());
-            String toDate = formatter.format(jXDatePicker2.getDate());
-
-            getAllOrders(fromDate, toDate, 0,0);
-
-            orderOptions.dispose();
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, ex);
-        }
-    }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
-        try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 4);
-
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePicker1.getDate());
-            String toDate = formatter.format(jXDatePicker2.getDate());
-
-            getAllOrders(fromDate, toDate, 0,0);
-
-            orderOptions.dispose();
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, ex);
-        }
-    }//GEN-LAST:event_btnOutForDeliveryActionPerformed
-
-    private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
-        try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 1);
-
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePicker1.getDate());
-            String toDate = formatter.format(jXDatePicker2.getDate());
-
-            getAllOrders(fromDate, toDate, 0,0);
-
-            orderOptions.dispose();
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, ex);
-        }
-    }//GEN-LAST:event_btnActiveActionPerformed
-
-    private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
-        try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 3);
-
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String fromDate = formatter.format(jXDatePicker1.getDate());
-            String toDate = formatter.format(jXDatePicker2.getDate());
-
-            getAllOrders(fromDate, toDate, 0,0);
-
-            orderOptions.dispose();
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, ex);
-        }
-    }//GEN-LAST:event_btnWrappingActionPerformed
-
     private void statusCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statusCmbMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_statusCmbMouseClicked
@@ -1061,6 +1045,52 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_txtCustomerCodeKeyReleased
 
+    private void btnSpecialNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialNoteActionPerformed
+        remark.setLocationRelativeTo(null);
+        remark.setSize(590, 150);
+        remark.setVisible(true);
+        orderOptions.dispose();
+        
+        txtRemark.setText(deliveryOrderRepositoryImpl.getRemark(orderID));
+    }//GEN-LAST:event_btnSpecialNoteActionPerformed
+
+    private void btnCheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckingActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 13);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+
+            CustomerDataByInquirySearch customerDataByInquirySearch = inquiryRepositoryImpl.getCustomerDataByWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
+
+            //Save as inquary
+            InquiryModel inquiryModel = new InquiryModel();
+
+            inquiryModel.setWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
+            inquiryModel.setCustomerId(customerDataByInquirySearch.getCustomerId()+"");
+            inquiryModel.setCustomerName(deliveryOrdersTable.getValueAt(selectedRow, 2).toString());
+            inquiryModel.setCustomerPhone1(deliveryOrdersTable.getValueAt(selectedRow, 3).toString());
+            inquiryModel.setCustomerPhone2(deliveryOrdersTable.getValueAt(selectedRow, 4).toString());
+            //            inquiryModel.setCompany(cmbCompany.getSelectedItem().toString());
+            //            inquiryModel.setBranch(cmbBranch.getSelectedItem().toString());
+            //            inquiryModel.setBranchContact(txtBranchContact.getText());
+            //            inquiryModel.setReason(cmbReason.getSelectedItem().toString());
+            //            inquiryModel.setRemark(txtRemark.getText());
+            inquiryModel.setStatusId(11);
+
+            inquiryRepositoryImpl.saveInquiry(inquiryModel);
+
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnCheckingActionPerformed
+
     private void btnReturningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturningActionPerformed
         try {
             deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 12);
@@ -1078,9 +1108,9 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_btnReturningActionPerformed
 
-    private void btnCheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckingActionPerformed
+    private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
         try {
-            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 13);
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 3);
 
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fromDate = formatter.format(jXDatePicker1.getDate());
@@ -1093,7 +1123,116 @@ public class OrderFilter extends JInternalFrame {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, ex);
         }
-    }//GEN-LAST:event_btnCheckingActionPerformed
+    }//GEN-LAST:event_btnWrappingActionPerformed
+
+    private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 1);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnActiveActionPerformed
+
+    private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 4);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnOutForDeliveryActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 7);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        try {
+            deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 6);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllOrders(fromDate, toDate, 0,0);
+
+            orderOptions.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex);
+        }
+    }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnDeliverdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeliverdActionPerformed
+        if (orderID != null) {
+            try {
+                deliveryOrderRepositoryImpl.updateWithOrderId(orderID, 5);
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                Date now = new Date();
+                deliveryOrderRepositoryImpl.addDeliveredDateWithOrderID(orderID,now);
+
+                getAllOrders(fromDate, toDate, 0,0);
+
+                orderOptions.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, ex);
+            }
+        }
+    }//GEN-LAST:event_btnDeliverdActionPerformed
+
+    private void btnSaveRemarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveRemarkActionPerformed
+        if (orderID != null) {
+            try {
+                deliveryOrderRepositoryImpl.updateOrderRemark(orderID, txtRemark.getText());
+
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String fromDate = formatter.format(jXDatePicker1.getDate());
+                String toDate = formatter.format(jXDatePicker2.getDate());
+
+                getAllOrders(fromDate, toDate, 0,0);
+
+                remark.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, ex);
+            }
+        }
+    }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
     public boolean generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
         Workbook workbook = new XSSFWorkbook();
@@ -1220,6 +1359,8 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnReturn;
     private javax.swing.JButton btnReturning;
+    private javax.swing.JButton btnSaveRemark;
+    private javax.swing.JButton btnSpecialNote;
     private javax.swing.JButton btnWrapping;
     private org.jdesktop.swingx.JXTable deliveryOrdersTable;
     private javax.swing.JButton jButton1;
@@ -1228,6 +1369,7 @@ public class OrderFilter extends JInternalFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -1239,9 +1381,11 @@ public class OrderFilter extends JInternalFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JDialog orderOptions;
     private javax.swing.JComboBox<String> paymentTypeCombo1;
+    private javax.swing.JDialog remark;
     private javax.swing.JComboBox<String> statusCmb;
     private javax.swing.JLabel total_orders_count_txt;
     private javax.swing.JTextField txtCustomerCode;
+    private javax.swing.JTextField txtRemark;
     // End of variables declaration//GEN-END:variables
 
     private void getOrderById(String orderId) {

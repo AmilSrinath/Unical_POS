@@ -52,7 +52,7 @@ public class ManageCourierBranch extends JInternalFrame {
      */
     public ManageCourierBranch() {
         initComponents();
-        setTitle("Order Filter");
+        setTitle("Manage Courier Branch");
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);

@@ -1444,6 +1444,144 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return subTotalPrices;
     }
 
+    public void updateOrderRemark(String orderID, String text) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "UPDATE pos_main_delivery_order_tb d " +
+                         "JOIN pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
+                         "SET d.remark = ? " +
+                         "WHERE o.order_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, text);
+            ps.setString(2, orderID);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to update remark using order_id");
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in updateOrderRemark");
+            }
+        }
+    }
+
+    public String getRemark(String orderID) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String remark = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "SELECT d.remark " +
+                         "FROM pos_main_delivery_order_tb d " +
+                         "JOIN pos_main_order_tb o ON d.delivery_id = o.delivery_order_id " +
+                         "WHERE o.order_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, orderID);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                remark = rs.getString("remark");
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to get remark using order_id");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in getRemark");
+            }
+        }
+
+        return remark;
+    }
+
+    public String getRemarkWithDeliveryId(String delivery_id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String remark = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "SELECT remark FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, delivery_id);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                remark = rs.getString("remark");
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to get remark using delivery_id");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in getRemarkWithDeliveryId");
+            }
+        }
+
+        return remark;
+    }
+
+    public void updateOrderRemarkWithDeliveryId(String delivery_id, String text) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBCon.getDatabaseConnection();
+
+            String sql = "UPDATE pos_main_delivery_order_tb SET remark = ? WHERE delivery_id = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, text);
+            ps.setString(2, delivery_id);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Failed to update remark using delivery_id");
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+                Log.error(e, "Resource closing failed in updateOrderRemarkWithDeliveryId");
+            }
+        }
+    }
+
 
     
     

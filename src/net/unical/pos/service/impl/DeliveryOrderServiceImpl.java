@@ -7,6 +7,7 @@ package net.unical.pos.service.impl;
 
 import java.util.ArrayList;
 import net.unical.pos.dto.DeliveryOrderDto;
+import net.unical.pos.dto.DiscountDto;
 import net.unical.pos.factory.RepositoryFactory;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.repository.custom.DeliveryOrderRepositoryCustom;
@@ -97,4 +98,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
         }
         return deliveryOrderDtos;
     }
+
+    
 }

@@ -9,6 +9,7 @@ import net.unical.pos.repository.impl.ConfigTableDetailsRepositoryImpl;
 import net.unical.pos.repository.impl.ConfigTableRepositoryImpl;
 import net.unical.pos.repository.impl.CustomerRepositoryImpl;
 import net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl;
+import net.unical.pos.repository.impl.DiscountRepositoryImpl;
 import net.unical.pos.repository.impl.EmployeeDesignationRepositoryImpl;
 import net.unical.pos.repository.impl.EmployeeManagementRepositoryImpl;
 import net.unical.pos.repository.impl.EmployeeTitleRepositoryImpl;
@@ -62,7 +63,7 @@ public class RepositoryFactory {
         EMPLOYEE_MANAGEMENT,
         MAIN_ORDER,
         ORDER,
-        CUSTOMER, DELIVERY_ORDER;
+        CUSTOMER, DELIVERY_ORDER,DISCOUNT;
     }
 
     public RepositoryFactory() {
@@ -127,6 +128,8 @@ public class RepositoryFactory {
                 return (T)new OrderRepo();
             case DELIVERY_ORDER:
                 return (T)new DeliveryOrderRepositoryImpl();
+            case DISCOUNT:
+                return (T)new DiscountRepositoryImpl();
             default:
                 return null;
         }

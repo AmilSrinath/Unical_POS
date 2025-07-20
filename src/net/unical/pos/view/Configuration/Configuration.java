@@ -44,6 +44,7 @@ public class Configuration extends javax.swing.JInternalFrame {
         btnManageStatus = new org.jdesktop.swingx.JXButton();
         btnManageStatusType = new org.jdesktop.swingx.JXButton();
         btnManageUserAuth = new org.jdesktop.swingx.JXButton();
+        btnManageDiscount = new org.jdesktop.swingx.JXButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -53,7 +54,7 @@ public class Configuration extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Management", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Management", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
         jPanel2.setFocusable(false);
 
         jXButton1.setBackground(new java.awt.Color(0, 102, 153));
@@ -110,6 +111,15 @@ public class Configuration extends javax.swing.JInternalFrame {
             }
         });
 
+        btnManageDiscount.setBackground(new java.awt.Color(0, 102, 153));
+        btnManageDiscount.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageDiscount.setText("Manage User Auth");
+        btnManageDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageDiscountActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -125,7 +135,8 @@ public class Configuration extends javax.swing.JInternalFrame {
                     .addComponent(btnManageCourierBranch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnManageStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnManageStatusType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnManageUserAuth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnManageUserAuth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnManageDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -143,7 +154,9 @@ public class Configuration extends javax.swing.JInternalFrame {
                 .addComponent(btnManageStatusType, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnManageUserAuth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnManageDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -236,6 +249,17 @@ public class Configuration extends javax.swing.JInternalFrame {
         manageUserAuth.setVisible(true);
     }//GEN-LAST:event_btnManageUserAuthActionPerformed
 
+    private void btnManageDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageDiscountActionPerformed
+        // TODO add your handling code here:
+        ManageDiscounts manageDiscounts = new ManageDiscounts();
+        dashboard.desktopPane.add(manageDiscounts);
+         Dimension d = dashboard.desktopPane.getSize();
+//        manageDiscounts.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        manageDiscounts.setSize(d);
+        manageDiscounts.setVisible(true);
+        
+    }//GEN-LAST:event_btnManageDiscountActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -274,6 +298,7 @@ public class Configuration extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXButton btnManageCourierBranch;
     private org.jdesktop.swingx.JXButton btnManageCourierCompany;
+    private org.jdesktop.swingx.JXButton btnManageDiscount;
     private org.jdesktop.swingx.JXButton btnManageStatus;
     private org.jdesktop.swingx.JXButton btnManageStatusType;
     private org.jdesktop.swingx.JXButton btnManageUserAuth;

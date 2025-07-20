@@ -1,0 +1,21 @@
+2025-07-14 10:31:06,646 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_customer_tb
+2025-07-14 10:31:06,649 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-07-14 10:31:06,650 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-07-14 10:31:06,655 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-07-14 10:31:07,835 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	857 Order Save. User ID: 1
+2025-07-14 10:33:11,229 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-14 10:48:01,519 INFO  info - net.unical.pos.model.InquiryModel@3953649e	Inquiry updated successfully
+2025-07-14 10:52:30,155 INFO  info - net.unical.pos.model.InquiryModel@5241e71d	Inquiry updated successfully
+2025-07-14 10:53:48,206 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-14 10:54:00,644 INFO  info - net.unical.pos.model.InquiryModel@650a7cfe	Inquiry updated successfully
+2025-07-14 10:54:59,154 INFO  info - net.unical.pos.model.InquiryModel@228177c3	Inquiry updated successfully
+2025-07-14 10:56:31,005 INFO  info - net.unical.pos.model.InquiryModel@6d1ce96f	Inquiry updated successfully
+2025-07-14 10:59:48,613 INFO  info - net.unical.pos.model.InquiryModel@5177a965	Inquiry updated successfully
+2025-07-14 11:06:39,883 INFO  info - net.unical.pos.model.InquiryModel@417bf0aa	Inquiry updated successfully
+2025-07-14 11:18:30,290 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	Test Info
+2025-07-14 11:56:17,567 INFO  info - net.unical.pos.model.InquiryModel@3f7241d4	Inquiry updated successfully
+2025-07-19 22:38:52,089 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_customer_tb
+2025-07-19 22:38:52,089 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_delivery_order_tb
+2025-07-19 22:38:52,105 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-07-19 22:38:52,123 INFO  info - class net.unical.pos.repository.impl.DeliveryOrderRepositoryImpl	INSERT INTO pos_main_order_tb
+2025-07-19 22:38:53,803 INFO  info - class net.unical.pos.view.deliveryOrders.DeliveryOrders	1073 Order Save. User ID: 1

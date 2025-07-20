@@ -7,6 +7,7 @@ package net.unical.pos.controller;
 
 import java.util.ArrayList;
 import net.unical.pos.dto.DeliveryOrderDto;
+import net.unical.pos.dto.DiscountDto;
 import net.unical.pos.factory.ServiceFactory;
 import net.unical.pos.service.custom.DeliveryOrderServiceCustom;
 
@@ -33,5 +34,6 @@ public class DeliveryOrderController {
     public ArrayList<DeliveryOrderDto> getAllDurationOrders(String fromDate,String toDate,Integer paymentType) throws Exception{
         return deliveryOrderCustom.getAllDurationOrders(fromDate,toDate,paymentType);
     }
+
     
 }

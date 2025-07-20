@@ -126,7 +126,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_delivery_order_tb");
 
                 // Add Order
-                ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount, total_discount_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setInt(2, deliveryId);
                 ps.setString(3, deliveryOrder.getOrderCode());
@@ -139,6 +139,12 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(10, 1);
                 ps.setInt(11, 1);
                 ps.setDouble(12, deliveryOrder.getPaidAmount());
+                
+                Double totalDiscount = 0.0;
+                for (OrderDetailsDto order : deliveryOrder.getOrderDetailsDtos() ) {
+                    totalDiscount += order.getTotalDiscountPrice();
+                }
+                ps.setDouble(13, totalDiscount);
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
                 if (rst.next()) {
@@ -150,14 +156,15 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 // Add Order Details
                 ArrayList<OrderDetailsDto> orderDetailsDtos = deliveryOrder.getOrderDetailsDtos();
                 for (OrderDetailsDto detailsDto : orderDetailsDtos) {
-                    ps = con.prepareStatement("INSERT INTO pos_main_order_details_tb (order_id, item_id, quantity, per_item_price, total_item_price, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    ps = con.prepareStatement("INSERT INTO pos_main_order_details_tb (order_id, item_id, quantity, per_item_price, total_discount_price, total_item_price, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                     ps.setInt(1, orderId);
                     ps.setInt(2, detailsDto.getItemId());
                     ps.setDouble(3, detailsDto.getQty());
                     ps.setDouble(4, detailsDto.getPerItemPrice());
-                    ps.setDouble(5, detailsDto.getTotalItemPrice());
-                    ps.setInt(6, 1);
-                    ps.setInt(7, LogInForm.userID);
+                    ps.setDouble(5, detailsDto.getTotalDiscountPrice());
+                    ps.setDouble(6, detailsDto.getTotalItemPrice());
+                    ps.setInt(7, 1);
+                    ps.setInt(8, LogInForm.userID);
                     ps.executeUpdate();
                 }
                 

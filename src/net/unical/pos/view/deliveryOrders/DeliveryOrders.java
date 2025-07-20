@@ -6,6 +6,7 @@
 package net.unical.pos.view.deliveryOrders;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -35,6 +36,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import jdk.jshell.spi.ExecutionControl;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -45,12 +47,14 @@ import net.sf.jasperreports.view.JasperViewer;
 import net.unical.pos.configurations.AutoGenerator;
 import net.unical.pos.controller.CustomerController;
 import net.unical.pos.controller.DeliveryOrderController;
+import net.unical.pos.controller.DiscountController;
 import net.unical.pos.controller.MainItemController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.controller.UserAccountManagementController;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dto.CustomerDto;
 import net.unical.pos.dto.DeliveryOrderDto;
+import net.unical.pos.dto.DiscountDto;
 import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.dto.OrderDto;
@@ -116,6 +120,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
+    private DiscountController discountController = new DiscountController();
     
     
     private CustomerController customerController;
@@ -130,6 +135,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     String delivery_id = null;
     Integer customer_id=null;
     boolean customer_exist=false;
+    private double discount = 0.0;
     
     
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
@@ -173,7 +179,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     deliveyFeeLbl.setText("350");
                 }
-                addUpdateTotals();
+                addUpdateTotals(discount);
             }
         });
 
@@ -289,6 +295,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         btnSaveRemark = new javax.swing.JButton();
         jLabel35 = new javax.swing.JLabel();
         txtRemark = new javax.swing.JTextField();
+        discountInfo = new javax.swing.JDialog();
+        cmbDiscount = new javax.swing.JComboBox<>();
+        lblDiscountSelected = new javax.swing.JLabel();
+        txtCustomeDiscount = new javax.swing.JTextField();
+        cmbSymbol = new javax.swing.JComboBox<>();
+        lblIsCustom = new javax.swing.JLabel();
+        cancelBtn = new javax.swing.JButton();
+        applyBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         orderCodeTxt = new javax.swing.JTextField();
@@ -313,6 +327,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         removeBtn = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         itemListTable = new org.jdesktop.swingx.JXTable();
+        btnDiscount = new javax.swing.JButton();
         paymentTypeCombo = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -335,6 +350,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         totAmountLbl = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        discountLabel = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
@@ -774,6 +791,96 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGap(11, 11, 11))
         );
 
+        discountInfo.setMinimumSize(new java.awt.Dimension(650, 160));
+        discountInfo.setPreferredSize(new java.awt.Dimension(650, 160));
+
+        cmbDiscount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choose a discount" }));
+        cmbDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDiscountActionPerformed(evt);
+            }
+        });
+
+        txtCustomeDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCustomeDiscount.setText("0.00");
+        txtCustomeDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCustomeDiscountActionPerformed(evt);
+            }
+        });
+
+        cmbSymbol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choos a symbol" }));
+        cmbSymbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSymbolActionPerformed(evt);
+            }
+        });
+
+        cancelBtn.setBackground(new java.awt.Color(204, 0, 51));
+        cancelBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cancelBtn.setForeground(new java.awt.Color(255, 255, 255));
+        cancelBtn.setText("Cancel");
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBtnActionPerformed(evt);
+            }
+        });
+
+        applyBtn.setBackground(new java.awt.Color(51, 153, 0));
+        applyBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        applyBtn.setForeground(new java.awt.Color(255, 255, 255));
+        applyBtn.setText("Apply");
+        applyBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout discountInfoLayout = new javax.swing.GroupLayout(discountInfo.getContentPane());
+        discountInfo.getContentPane().setLayout(discountInfoLayout);
+        discountInfoLayout.setHorizontalGroup(
+            discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(discountInfoLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(applyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addComponent(cmbDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDiscountSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(59, 59, 59)
+                .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cmbSymbol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(lblIsCustom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+        discountInfoLayout.setVerticalGroup(
+            discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(discountInfoLayout.createSequentialGroup()
+                .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, discountInfoLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(cmbSymbol)
+                            .addComponent(lblIsCustom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDiscountSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelBtn)
+                    .addComponent(applyBtn))
+                .addContainerGap(54, Short.MAX_VALUE))
+        );
+
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
@@ -873,14 +980,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Item Name", "Item Price", "Qty", "Amount"
+                "ID", "Item Name", "Item Price", "Qty", "Discount", "Amount"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, false
+                false, false, true, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -912,6 +1019,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             itemListTable.getColumnModel().getColumn(2).setMaxWidth(0);
         }
 
+        btnDiscount.setBackground(new java.awt.Color(153, 153, 153));
+        btnDiscount.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
+        btnDiscount.setForeground(new java.awt.Color(255, 255, 255));
+        btnDiscount.setText("Discount");
+        btnDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscountActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -920,16 +1037,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(168, 168, 168)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -939,11 +1061,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
-                    .addComponent(removeBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                    .addComponent(removeBtn)
+                    .addComponent(btnDiscount))
+                .addGap(7, 7, 7)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1102,6 +1227,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         totAmountLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         totAmountLbl.setText("0.00");
 
+        jLabel36.setFont(new java.awt.Font("Poppins SemiBold", 1, 15)); // NOI18N
+        jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel36.setText("Discount");
+
+        discountLabel.setFont(new java.awt.Font("Poppins SemiBold", 1, 15)); // NOI18N
+        discountLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        discountLabel.setText("0.00");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1175,11 +1308,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(saveOrderBtn)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(jLabel10)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(totAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(totAmountLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(jLabel13)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1187,7 +1320,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(jLabel11)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel36)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(5, 5, 5)))
                 .addContainerGap())
         );
@@ -1241,7 +1378,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1252,7 +1389,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(subTotAmountLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel36)
+                    .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deliveyFeeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1262,7 +1403,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saveOrderBtn)
-                .addGap(124, 124, 124))
+                .addGap(45, 45, 45))
         );
 
         deliveryOrdersTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1541,15 +1682,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane6))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1560,7 +1701,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -1588,8 +1731,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Integer itemId = itemIds.get(itemIndex);
         Double itemPrice = itemPriceList.get(itemIndex);
         Double itemWeight = itemWeightList.get(itemIndex);
+        Double discount = itemPrice * this.discount/100;
 
-        Double amount = itemPrice * qty;
+        Double amount = (itemPrice - discount) * qty;
         boolean itemFound = false;
 
         for (int i = 0; i < itemListTableModel.getRowCount(); i++) {
@@ -1599,9 +1743,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Double existingQty = existingQtyValue.doubleValue();
                 Double newQty = existingQty + qty;
                 Double newAmount = itemPrice * newQty;
-
+                
                 itemListTableModel.setValueAt(newQty, i, 3);
-                itemListTableModel.setValueAt(newAmount, i, 4);
+                itemListTableModel.setValueAt(newAmount, i, 5);
 
                 itemFound = true;
                 break;
@@ -1610,27 +1754,29 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
 
         if (!itemFound) {
-            Object itemData[] = {itemId, itemName, itemPrice, qty, amount};
-            itemListTableModel.addRow(itemData);
+                Object itemData[] = {itemId, itemName, itemPrice, qty, discount, amount};
+                itemListTableModel.addRow(itemData);
         }
 
-        addUpdateTotals();
+        addUpdateTotals(discount);
         
         Properties props = loadProperties();
         if (props != null) {
             calculateDeliveryFee(props);
         }
         
-        addUpdateTotals();
+        addUpdateTotals(discount);
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void updateTotals() {
         double totalAmount = 0.0;
         double totalWeight = 0.0;
+        double totalDiscount = 0.0;
 
         if (itemListTable.getRowCount() == 0) {
             subTotAmountLbl.setText("0.00");
             totAmountLbl.setText("0.00");
+            discountLabel.setText("0.00");
             weightTxt.setText("0");
         } else {
             for (int i = 0; i < itemListTable.getRowCount(); i++) {
@@ -1638,31 +1784,36 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
                 int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
-
+                double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
                 double weight = itemWeightList.get(itemIds.indexOf(itemId));
 
-                totalAmount += price * qty;
+                totalAmount += (price * qty) ;
                 totalWeight += weight * qty;
+                totalDiscount += discount * qty;
             }
 
-            subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+            subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
 
             double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
-            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
 
-            //codTxt.setText(totAmountLbl.getText());
+            codTxt.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
+            
+            discountLabel.setText(String.format("-%.2f", totalDiscount));
             
             weightTxt.setText(String.format("%.2f", totalWeight));
         }
     }
     
-    private void addUpdateTotals() {
+    private void addUpdateTotals(Double discount1) {
         double totalAmount = 0.0;
         double totalWeight = 0.0;
+        double totalDiscount = 0.0;
 
         if (itemListTable.getRowCount() == 0) {
             subTotAmountLbl.setText("0.00");
             totAmountLbl.setText("0.00");
+            discountLabel.setText("0.00");
             weightTxt.setText("0");
         } else {
             for (int i = 0; i < itemListTable.getRowCount(); i++) {
@@ -1670,23 +1821,28 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
                 int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
+                double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
 
                 double weight = itemWeightList.get(itemIds.indexOf(itemId));
 
                 totalAmount += price * qty;
                 totalWeight += weight * qty;
+                totalDiscount += discount * qty;
             }
 
-            subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+            subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
 
             double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
+
             
-            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+            
+            discountLabel.setText(String.format("-%.2f", totalDiscount));
             
             if (paymentTypeCombo.getSelectedItem().equals("Card")) {
-                PaidAmountTxt.setText(totAmountLbl.getText());
+                PaidAmountTxt.setText(String.format("%.2f", totalAmount - totalDiscount));
             }else {
-                codTxt.setText(totAmountLbl.getText());
+               codTxt.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
             }
             
             weightTxt.setText(String.format("%.2f", totalWeight));
@@ -1940,12 +2096,22 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
 
             Number priceValue = (Number) itemListTable.getValueAt(i, 2);
-            Double price = priceValue.doubleValue();
+            
+            Number discountValue = (Number) itemListTable.getValueAt(i, 4);
+            Double applyDiscount = discountValue.doubleValue();
+            
+            Double perItemPrice = priceValue.doubleValue();
+            
+            Double price = priceValue.doubleValue() - applyDiscount;
 
             Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
             Integer qty = qtyValue.intValue();
+            
+            
+            
+            
 
-            OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, price, 0.00, price * qty, "", 1, 1);
+            OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, perItemPrice, applyDiscount, price * qty, "", 1, 1);
             orderDetailsDtos.add(dto);
         }
 
@@ -2115,6 +2281,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         subTotAmountLbl.setText(String.format("%.2f", totalAmount));
         codTxt.setText(totAmountLbl.getText());
         weightTxt.setText(String.format("%.2f", totalWeight));
+        setDiscount();
     }//GEN-LAST:event_removeBtnActionPerformed
 
     private Double calculateDeliveryFee(Double totalWeight) {
@@ -2253,7 +2420,37 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_phoneTwoCmbActionPerformed
 
     private void paymentTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentTypeComboActionPerformed
-        
+        Double delivery_fee = 0.0;
+        Properties props = new Properties();
+
+        try {
+            FileInputStream fis = new FileInputStream("config.txt");
+            props.load(fis);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(paymentTypeCombo.getSelectedItem().toString().equals("Card")){
+            codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
+            totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
+            deliveyFeeLbl.setText(props.getProperty("CARD_FEE"));
+            
+       } else {
+
+            if(deliveyFeeLbl.getText().equals("0.00")){
+                delivery_fee = Double.valueOf(props.getProperty("DELIVERY_FEE"));
+                codTxt.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
+                totAmountLbl.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
+                deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
+            } else {
+                codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
+                totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
+                
+            }
+            
+        }
     }//GEN-LAST:event_paymentTypeComboActionPerformed
 
     private void paymentTypeComboKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentTypeComboKeyReleased
@@ -2954,6 +3151,52 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
+    private void btnDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountActionPerformed
+        discountInfo.setLocationRelativeTo(null);
+        discountInfo.setMaximumSize(new Dimension(650,160));
+        discountInfo.setVisible(true);
+        
+        setDiscountCmb();
+    }//GEN-LAST:event_btnDiscountActionPerformed
+
+    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        cmbDiscount.removeAllItems();
+        this.discountInfo.dispose();
+    }//GEN-LAST:event_cancelBtnActionPerformed
+
+    private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
+      
+       if(!txtCustomeDiscount.getText().equals("0.00")){
+           discount = Double.parseDouble(txtCustomeDiscount.getText());
+//           System.out.println("Discount " + discount);
+//           setDiscount();
+           discountInfo.dispose();
+       } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")){
+           System.out.println("Come to this");
+           discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString());
+//           System.out.println("Discount " + discount);
+//           setDiscount();
+           discountInfo.dispose();
+       } else {
+           Log.error(new Logger("Exception", "Please Choose an option before apply") {
+           }, evt, new RuntimeException("Please Choose an option before apply"));
+       }
+    }//GEN-LAST:event_applyBtnActionPerformed
+
+    private void cmbDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbDiscountActionPerformed
+
+    private void cmbSymbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSymbolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSymbolActionPerformed
+
+    private void txtCustomeDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomeDiscountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCustomeDiscountActionPerformed
+    
+ 
+    
     /**
      * @param args the command line arguments
      */
@@ -2998,10 +3241,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton addBtn;
     private javax.swing.JTextArea addressTxt;
     private javax.swing.JLabel amountTotTxt;
+    private javax.swing.JButton applyBtn;
     private javax.swing.JButton btnActive;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnChecking;
     private javax.swing.JButton btnDeliverd;
+    private javax.swing.JButton btnDiscount;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnOutForDelivery;
     private javax.swing.JButton btnReturn;
@@ -3009,7 +3254,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSaveRemark;
     private javax.swing.JButton btnSpecialNote;
     private javax.swing.JButton btnWrapping;
+    private javax.swing.JButton cancelBtn;
     private javax.swing.JDialog check_customer;
+    private javax.swing.JComboBox<String> cmbDiscount;
+    private javax.swing.JComboBox<String> cmbSymbol;
     private javax.swing.JLabel codTotTxt;
     private javax.swing.JTextField codTxt;
     private javax.swing.JTextField customerNameTxt;
@@ -3020,6 +3268,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private java.awt.Panel deliveryFormDetailPanel;
     private org.jdesktop.swingx.JXTable deliveryOrdersTable;
     private javax.swing.JLabel deliveyFeeLbl;
+    private javax.swing.JDialog discountInfo;
+    private javax.swing.JLabel discountLabel;
     private javax.swing.Box.Filler filler1;
     private java.awt.Checkbox fr_de_chb;
     private javax.swing.JComboBox<String> itemCombo;
@@ -3057,6 +3307,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
@@ -3076,6 +3327,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDiscountSelected;
+    private javax.swing.JLabel lblIsCustom;
     private javax.swing.JLabel netTotalLbl;
     private javax.swing.JTextField orderCodeTxt;
     private javax.swing.JComboBox<String> orderIDCmb;
@@ -3096,6 +3349,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel subTotAmountLbl;
     private javax.swing.JLabel totAmountLbl;
     private javax.swing.JLabel total_orders_count_txt;
+    private javax.swing.JTextField txtCustomeDiscount;
     private javax.swing.JTextField txtRemark;
     private javax.swing.JTextField weightTxt;
     // End of variables declaration//GEN-END:variables
@@ -3304,6 +3558,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         customerNameTxt.setText("");
         customerNumberTxt.setText("");
         orderCodeTxt.setText("");
+        discountLabel.setText(" ");
 //        phone2Txt.setText("");
     }
 
@@ -3334,5 +3589,31 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //    private void textNull() {
 //        phone2Txt.setText(null);
 //    }
+
+    private void setDiscountCmb() {
+        ArrayList<DiscountDto> discounts = discountController.getAllDiscounts();
+        cmbDiscount.removeAllItems();
+        cmbDiscount.addItem("Choose a discount");
+        for (DiscountDto discount : discounts) {
+            cmbDiscount.addItem(String.valueOf(discount.getPercentage()));
+        }
+        String[] symbols = {"Rs", "%"};
+        for (String symbol : symbols) {
+            cmbSymbol.addItem(symbol);
+        }
+    }
+
+    private void setDiscount() {
+        double discount =Double.parseDouble(subTotAmountLbl.getText()) * this.discount/100;
+        discountLabel.setText("-" + String.valueOf(discount));
+        
+        double subTot = (Double.parseDouble(subTotAmountLbl.getText())) - discount;
+        subTotAmountLbl.setText(String.valueOf(subTot));
+        
+        double grandTot = subTot + Double.parseDouble(deliveyFeeLbl.getText());
+        totAmountLbl.setText(String.valueOf(grandTot));
+        codTxt.setText(String.valueOf(grandTot));
+        
+    }
     
 }

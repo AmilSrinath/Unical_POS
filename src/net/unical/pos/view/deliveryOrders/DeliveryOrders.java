@@ -136,10 +136,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     Integer customer_id=null;
     boolean customer_exist=false;
     private double discount = 0.0;
+    private String symbol = "%";
     
     
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
         initComponents();
+        setDiscountCmb();
         
         this.dashboard=dashboard;
         
@@ -792,7 +794,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         );
 
         discountInfo.setMinimumSize(new java.awt.Dimension(650, 160));
-        discountInfo.setPreferredSize(new java.awt.Dimension(650, 160));
 
         cmbDiscount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choose a discount" }));
         cmbDiscount.addActionListener(new java.awt.event.ActionListener() {
@@ -954,6 +955,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         qtyTxt.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
         qtyTxt.setText("1");
+        qtyTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qtyTxtActionPerformed(evt);
+            }
+        });
 
         addBtn.setBackground(new java.awt.Color(51, 153, 0));
         addBtn.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
@@ -1731,9 +1737,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Integer itemId = itemIds.get(itemIndex);
         Double itemPrice = itemPriceList.get(itemIndex);
         Double itemWeight = itemWeightList.get(itemIndex);
-        Double discount = itemPrice * this.discount/100;
-
-        Double amount = (itemPrice - discount) * qty;
+        
+        Double discounts = 0.0;
+        if (symbol.equals("%")){
+            discounts = itemPrice * this.discount/100;
+        } else {
+            discounts =  this.discount;
+        }
+            
+       
+        Double amount = (itemPrice - discounts) * qty;
         boolean itemFound = false;
 
         for (int i = 0; i < itemListTableModel.getRowCount(); i++) {
@@ -1743,8 +1756,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Double existingQty = existingQtyValue.doubleValue();
                 Double newQty = existingQty + qty;
                 Double newAmount = itemPrice * newQty;
+                Double newDiscount = discounts * newQty;
                 
                 itemListTableModel.setValueAt(newQty, i, 3);
+                itemListTableModel.setValueAt(newDiscount, i, 4);
                 itemListTableModel.setValueAt(newAmount, i, 5);
 
                 itemFound = true;
@@ -1754,18 +1769,18 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
 
         if (!itemFound) {
-                Object itemData[] = {itemId, itemName, itemPrice, qty, discount, amount};
+                Object itemData[] = {itemId, itemName, itemPrice, qty, discounts, amount};
                 itemListTableModel.addRow(itemData);
         }
 
-        addUpdateTotals(discount);
+        addUpdateTotals(discounts);
         
         Properties props = loadProperties();
         if (props != null) {
             calculateDeliveryFee(props);
         }
         
-        addUpdateTotals(discount);
+        addUpdateTotals(discounts);
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void updateTotals() {
@@ -3155,13 +3170,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         discountInfo.setLocationRelativeTo(null);
         discountInfo.setMaximumSize(new Dimension(650,160));
         discountInfo.setVisible(true);
-        
-        setDiscountCmb();
+      
     }//GEN-LAST:event_btnDiscountActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        cmbDiscount.removeAllItems();
         this.discountInfo.dispose();
+        
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
@@ -3172,7 +3186,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //           setDiscount();
            discountInfo.dispose();
        } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")){
-           System.out.println("Come to this");
            discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString());
 //           System.out.println("Discount " + discount);
 //           setDiscount();
@@ -3180,7 +3193,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
        } else {
            Log.error(new Logger("Exception", "Please Choose an option before apply") {
            }, evt, new RuntimeException("Please Choose an option before apply"));
-       }
+       } 
     }//GEN-LAST:event_applyBtnActionPerformed
 
     private void cmbDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountActionPerformed
@@ -3188,12 +3201,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cmbDiscountActionPerformed
 
     private void cmbSymbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSymbolActionPerformed
-        // TODO add your handling code here:
+        symbol = cmbSymbol.getSelectedItem().toString();
     }//GEN-LAST:event_cmbSymbolActionPerformed
 
     private void txtCustomeDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomeDiscountActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCustomeDiscountActionPerformed
+
+    private void qtyTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtyTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_qtyTxtActionPerformed
     
  
     
@@ -3592,8 +3609,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void setDiscountCmb() {
         ArrayList<DiscountDto> discounts = discountController.getAllDiscounts();
-        cmbDiscount.removeAllItems();
-        cmbDiscount.addItem("Choose a discount");
         for (DiscountDto discount : discounts) {
             cmbDiscount.addItem(String.valueOf(discount.getPercentage()));
         }

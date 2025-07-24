@@ -7,7 +7,10 @@ package net.unical.pos.view.main;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -649,8 +652,17 @@ public class LogInForm extends javax.swing.JFrame {
     }
     
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
+        Properties props = new Properties();
         try {
+            FileInputStream fs = new FileInputStream("config.txt");
+            props.load(fs);
+            if (props.getProperty("DEVELOPMENT_PC").equals("1")) {
+                Dashboard dashboard=new Dashboard();
+                dashboard.setVisible(true);
+                this.dispose();
+            } else {
             loginMethod();
+            }
         } catch (Exception ex) {
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
         }

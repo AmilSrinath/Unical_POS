@@ -5,6 +5,7 @@
  */
 package net.unical.pos.view.deliveryOrders;
 
+import com.sun.java.accessibility.util.SwingEventMonitor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -33,6 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -137,11 +141,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     boolean customer_exist=false;
     private double discount = 0.0;
     private String symbol = "%";
+    private boolean isDoublePressedItemTable = false; 
+    private Double clickedItemPrice = 0.0;
+    private int row = -1;
+    private boolean isOrder = false;
     
     
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
         initComponents();
         setDiscountCmb();
+        addTableChangeLisener();
         
         this.dashboard=dashboard;
         
@@ -181,7 +190,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     deliveyFeeLbl.setText("350");
                 }
-                addUpdateTotals(discount);
+                addUpdateTotals();
             }
         });
 
@@ -305,6 +314,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         lblIsCustom = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         applyBtn = new javax.swing.JButton();
+        isDiscountForOrder = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         orderCodeTxt = new javax.swing.JTextField();
@@ -330,6 +340,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         itemListTable = new org.jdesktop.swingx.JXTable();
         btnDiscount = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
         paymentTypeCombo = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -837,6 +848,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        isDiscountForOrder.setSelected(true);
+        isDiscountForOrder.setText("discount for order");
+        isDiscountForOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isDiscountForOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout discountInfoLayout = new javax.swing.GroupLayout(discountInfo.getContentPane());
         discountInfo.getContentPane().setLayout(discountInfoLayout);
         discountInfoLayout.setHorizontalGroup(
@@ -853,12 +872,17 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblDiscountSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(59, 59, 59)
-                .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cmbSymbol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addComponent(lblIsCustom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbSymbol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addComponent(lblIsCustom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17))
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addComponent(isDiscountForOrder)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         discountInfoLayout.setVerticalGroup(
             discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -878,7 +902,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn)
-                    .addComponent(applyBtn))
+                    .addComponent(applyBtn)
+                    .addComponent(isDiscountForOrder))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
 
@@ -993,7 +1018,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 java.lang.Integer.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, false, false
+                false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1005,6 +1030,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
         itemListTable.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
+        itemListTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemListTableMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                itemListTableMousePressed(evt);
+            }
+        });
         itemListTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 itemListTablePropertyChange(evt);
@@ -1035,6 +1068,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
+        jLabel9.setText("Qty :");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1050,14 +1086,17 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(20, 20, 20))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(168, 168, 168)))
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(121, 121, 121)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1067,8 +1106,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(removeBtn)
@@ -1366,11 +1406,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(jButton7)
                             .addComponent(jButton8)
                             .addComponent(jButton2))))
-                .addGap(39, 39, 39)
+                .addGap(33, 33, 33)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addGap(33, 33, 33)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
@@ -1380,11 +1420,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(PaidAmountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1737,15 +1777,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Integer itemId = itemIds.get(itemIndex);
         Double itemPrice = itemPriceList.get(itemIndex);
         Double itemWeight = itemWeightList.get(itemIndex);
-        
-        Double discounts = 0.0;
-        if (symbol.equals("%")){
-            discounts = itemPrice * this.discount/100;
-        } else {
-            discounts =  this.discount;
+        Double discounts =  0.0;
+        if(isDoublePressedItemTable){
+            discounts = setDiscount(itemPrice);
         }
-            
-       
+        
         Double amount = (itemPrice - discounts) * qty;
         boolean itemFound = false;
 
@@ -1771,23 +1807,32 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         if (!itemFound) {
                 Object itemData[] = {itemId, itemName, itemPrice, qty, discounts, amount};
                 itemListTableModel.addRow(itemData);
+                int newRow = itemListTable.getRowCount() - 1;
+                itemListTable.setValueAt(0.0, newRow, 4);
+                addUpdateTotals();
         }
-
-        addUpdateTotals(discounts);
-        
         Properties props = loadProperties();
         if (props != null) {
             calculateDeliveryFee(props);
         }
-        
-        addUpdateTotals(discounts);
+        addUpdateTotals();
     }//GEN-LAST:event_addBtnActionPerformed
-
+    
+    private Double setDiscount(Double itemPrice){
+        Double discounts = 0.0; 
+        if (symbol.equals("%")){
+            discounts = itemPrice * this.discount/100;
+            return discounts;
+        } else {
+            discounts =  this.discount;
+            return discounts;
+        }
+    }
     private void updateTotals() {
         double totalAmount = 0.0;
         double totalWeight = 0.0;
         double totalDiscount = 0.0;
-
+        
         if (itemListTable.getRowCount() == 0) {
             subTotAmountLbl.setText("0.00");
             totAmountLbl.setText("0.00");
@@ -1799,12 +1844,19 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
                 int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
-                double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
+                if(isDoublePressedItemTable){
+                    double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
+                    totalDiscount += discount * qty;
+                }
                 double weight = itemWeightList.get(itemIds.indexOf(itemId));
 
                 totalAmount += (price * qty) ;
                 totalWeight += weight * qty;
-                totalDiscount += discount * qty;
+                if(!isDoublePressedItemTable){
+                    System.out.println("Call this");
+                    totalDiscount = setDiscount(totalAmount);
+                }
+                
             }
 
             subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
@@ -1820,7 +1872,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }
     
-    private void addUpdateTotals(Double discount1) {
+    private void addUpdateTotals() {
         double totalAmount = 0.0;
         double totalWeight = 0.0;
         double totalDiscount = 0.0;
@@ -1836,15 +1888,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
                 int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
-                double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
-
+                double  discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
+                System.out.println("discounts: "+discount);
+                System.out.println("qty "+qty );
                 double weight = itemWeightList.get(itemIds.indexOf(itemId));
 
                 totalAmount += price * qty;
                 totalWeight += weight * qty;
                 totalDiscount += discount * qty;
             }
-
+            
+            if (!isDoublePressedItemTable) {
+                totalDiscount = setDiscount(Double.valueOf(subTotAmountLbl.getText()));
+                
+            }
+            System.out.println("totalDiscount "+ totalDiscount);
             subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
 
             double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
@@ -1959,12 +2017,24 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         
         if (delivery_id == null) {
             if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
-                JOptionPane.showMessageDialog(this, "The customer's latest order is still pending delivery.");
-                delivery_id = null;
-                clearText();
-                DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
-                model.setRowCount(0);
-                return;
+                int result = JOptionPane.showConfirmDialog(this, "The customer's latest order is still pending delivery.Do you want add another order");
+                if(result == JOptionPane.YES_OPTION) {
+                    saveOrder();
+                    return;
+                } else if (result == JOptionPane.NO_OPTION) {
+                    delivery_id = null;
+                    clearText();
+                    DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                    model.setRowCount(0);
+                    return;
+                } else if (result == JOptionPane.CANCEL_OPTION) {
+                    delivery_id = null;
+                    clearText();
+                    DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                    model.setRowCount(0);
+                    return;
+                }
+                
             }
             saveOrder();
             return;
@@ -1995,8 +2065,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
             Integer qty = qtyValue.intValue();
-
-            OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, price, 0.00, price * qty, "", 1, 1);
+            
+            Number discountValue =  (Number) itemListTable.getValueAt(i, 4);
+            Double discount = discountValue.doubleValue();
+            
+            OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, price, discount, (price * qty) - discount, "", 1, 1);
+            System.out.println("OrderDto : "+ dto);
             orderDetailsDtos.add(dto);
         }
 
@@ -2046,6 +2120,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                 deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
+                if (isOrder) {
+                    System.out.println("Come to this");
+                     deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));
+                } else {
+                     deliveryOrderDto.setDiscountId(null);
+                }
 
                 // Assuming there is a method in the repository to update the order
                 boolean isUpdated = deliveryOrderRepositoryImpl.update(deliveryOrderDto, orderId, delivery_id);
@@ -2113,8 +2193,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Number priceValue = (Number) itemListTable.getValueAt(i, 2);
             
             Number discountValue = (Number) itemListTable.getValueAt(i, 4);
-            Double applyDiscount = discountValue.doubleValue();
-            
+            Double applyDiscount;
+            if (isOrder) {
+                applyDiscount = Double.valueOf(discountLabel.getText().replace("-", ""));
+            } else {
+                applyDiscount = discountValue.doubleValue();
+            }
             Double perItemPrice = priceValue.doubleValue();
             
             Double price = priceValue.doubleValue() - applyDiscount;
@@ -2186,7 +2270,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                     deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
-                    orderId=deliveryOrderRepositoryImpl.save(deliveryOrderDto);
+                    if (!isOrder) {
+                        System.out.println("Come to this"+ discount);
+                        deliveryOrderDto.setDiscountId(1);
+                    }
+                    deliveryOrderDto.setDiscountId(1);
+                    orderId=deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
                     
                     System.out.println("paymentTypeIds.get(index) : "+paymentTypeIds.get(index));
                 }else{
@@ -2333,11 +2422,27 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         return props;
     }
-    
+//    
     private void itemListTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_itemListTablePropertyChange
-
+        
     }//GEN-LAST:event_itemListTablePropertyChange
-
+    private void addTableChangeLisener(){
+        DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                System.out.println("Table changed");
+                if (e.getType() ==  TableModelEvent.UPDATE){
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    Double discount = (Double) itemListTable.getValueAt(row, column);
+                    addUpdateTotals();
+                    updateTotals();
+                }
+            }
+            
+        });
+    }
     private void itemListTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemListTableKeyReleased
         
     }//GEN-LAST:event_itemListTableKeyReleased
@@ -3004,7 +3109,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                     // Additional logic for updating totals and other details...
                     double subTot = totalAmount - Double.parseDouble(deliveyFeeLbl.getText());
-                    subTotAmountLbl.setText(String.format("%.2f", subTot));
 
                     String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_ID);
@@ -3016,31 +3120,33 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         itemListTableModel.setRowCount(0);
 
                         double totalWeight = 0.00;
-
+                        double discountPrice = 0.00;
                         for (PosMainOrderDetails p : orderDetails) {
                             for (PosMainItem posMainItem : posMainItems) {
                                 if (p.getItemId() == posMainItem.getItemId()) {
                                     double qty = p.getQuantity();
                                     double itemWeight = itemWeightList.get(itemIds.indexOf(p.getItemId()));
                                     totalWeight += itemWeight * qty;
-
                                     itemListTableModel.addRow(new Object[]{
                                         p.getItemId(),
                                         posMainItem.getItemName(),
                                         p.getPerItemPrice(),
                                         qty,
-                                        p.getPerItemDiscountPrice(),
                                         p.getTotalDiscountPrice(),
                                         p.getTotalPrice()
                                     });
                                 }
                             }
                         }
-
+                       
+                        for(int i = 0; i < itemListTable.getRowCount();i++){
+                            discountPrice += Double.parseDouble(itemListTable.getValueAt(i, 4).toString());
+                        }
+                        subTotAmountLbl.setText(String.format("%.2f", subTot));
                         double deliveryFee = calculateDeliveryFee(totalWeight);
                         deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
                         totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
-
+                        discountLabel.setText(String.format("-%.2f", discountPrice));
                     } else {
                         System.out.println("Order ID not found for the given bill number.");
                     }
@@ -3063,7 +3169,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             System.out.println("No row selected.");
         }
 
-        updateTotals();
+//        updateTotals();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnCheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckingActionPerformed
@@ -3167,33 +3273,65 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
     private void btnDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountActionPerformed
-        discountInfo.setLocationRelativeTo(null);
-        discountInfo.setMaximumSize(new Dimension(650,160));
-        discountInfo.setVisible(true);
+        
+        openDIscountInfo();
       
     }//GEN-LAST:event_btnDiscountActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        isDoublePressedItemTable = false;
         this.discountInfo.dispose();
         
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
-      
+       
+        if(isDoublePressedItemTable){
+           if(!txtCustomeDiscount.getText().equals("0.00")){
+                discount = Double.parseDouble(txtCustomeDiscount.getText());
+           } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")) {
+                discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
+           }
+           Double discounts = setDiscount(clickedItemPrice);
+           System.out.println("Discount "+ discounts);
+           
+           itemListTable.setValueAt(discounts, row, 4);
+           
+           Double newItemPrice = clickedItemPrice - discounts;
+           itemListTable.setValueAt(newItemPrice, row, 5);
+           
+           ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 4);
+           ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 5);
+
+           
+           updateTotals();
+           addUpdateTotals();
+           isDoublePressedItemTable = false;
+           discount = 0.0;
+           discountInfo.dispose();
+           return;
+       }
+       isDoublePressedItemTable = false;
        if(!txtCustomeDiscount.getText().equals("0.00")){
            discount = Double.parseDouble(txtCustomeDiscount.getText());
+           if(subTotAmountLbl.getText() != null){
+                updateTotals();
+           }
 //           System.out.println("Discount " + discount);
 //           setDiscount();
            discountInfo.dispose();
        } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")){
-           discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString());
+           discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
+           if(subTotAmountLbl.getText() != null){
+                updateTotals();
+           }
 //           System.out.println("Discount " + discount);
 //           setDiscount();
            discountInfo.dispose();
        } else {
            Log.error(new Logger("Exception", "Please Choose an option before apply") {
            }, evt, new RuntimeException("Please Choose an option before apply"));
-       } 
+       }
     }//GEN-LAST:event_applyBtnActionPerformed
 
     private void cmbDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountActionPerformed
@@ -3211,7 +3349,31 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private void qtyTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtyTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_qtyTxtActionPerformed
-    
+
+    private void itemListTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListTableMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_itemListTableMouseClicked
+
+    private void itemListTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListTableMousePressed
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 2) {
+            this.row = itemListTable.getSelectedRow();
+            this.clickedItemPrice = Double.valueOf(itemListTable.getValueAt(row, 2).toString());
+            isDoublePressedItemTable = true;
+            openDIscountInfo();
+        }
+    }//GEN-LAST:event_itemListTableMousePressed
+
+    private void isDiscountForOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isDiscountForOrderActionPerformed
+        // TODO add your handling code here:
+        if(isDiscountForOrder.isSelected()){
+            isOrder = true;
+        } else {
+            isOrder = false;
+        }
+    }//GEN-LAST:event_isDiscountForOrderActionPerformed
+   
  
     
     /**
@@ -3289,6 +3451,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel discountLabel;
     private javax.swing.Box.Filler filler1;
     private java.awt.Checkbox fr_de_chb;
+    private javax.swing.JCheckBox isDiscountForOrder;
     private javax.swing.JComboBox<String> itemCombo;
     private org.jdesktop.swingx.JXTable itemListTable;
     private javax.swing.JButton jButton1;
@@ -3329,6 +3492,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -3610,7 +3774,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private void setDiscountCmb() {
         ArrayList<DiscountDto> discounts = discountController.getAllDiscounts();
         for (DiscountDto discount : discounts) {
-            cmbDiscount.addItem(String.valueOf(discount.getPercentage()));
+            cmbDiscount.addItem(String.valueOf(discount.getPercentage()) + "%");
         }
         String[] symbols = {"Rs", "%"};
         for (String symbol : symbols) {
@@ -3629,6 +3793,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         totAmountLbl.setText(String.valueOf(grandTot));
         codTxt.setText(String.valueOf(grandTot));
         
+    }
+
+    private void openDIscountInfo() {
+        discountInfo.setLocationRelativeTo(null);
+        discountInfo.setMaximumSize(new Dimension(650,160));
+        discountInfo.setVisible(true);
     }
     
 }

@@ -13,7 +13,7 @@ import net.unical.pos.model.DeliveryOrder;
  * @author Sanjuka
  */
 public interface DeliveryOrderRepositoryCustom {
-    public Integer save(DeliveryOrder deliveryOrder)throws Exception;
+    public Integer save(DeliveryOrder deliveryOrder, boolean isOrder)throws Exception;
 
     public ArrayList<DeliveryOrder> getAll(String date,Integer paymentType)throws Exception;
 

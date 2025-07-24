@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
+import net.unical.pos.dto.DeliveryOrderDto;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.DeliveryOrderAmounts;
@@ -74,7 +75,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     }
 
     @Override
-    public Integer save(DeliveryOrder deliveryOrder) throws Exception {
+    public Integer save(DeliveryOrder deliveryOrder, boolean isOrder) throws Exception {
         System.err.println(deliveryOrder.getPaidAmount());
         PreparedStatement ps = null;
         ResultSet rst = null;
@@ -126,30 +127,60 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_delivery_order_tb");
 
                 // Add Order
-                ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount, total_discount_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, deliveryOrder.getCustomerId());
-                ps.setInt(2, deliveryId);
-                ps.setString(3, deliveryOrder.getOrderCode());
-                ps.setDouble(4, deliveryOrder.getSubTotalPrice());
-                ps.setDouble(5, deliveryOrder.getDeliveryFee());
-                ps.setDouble(6, deliveryOrder.getGrandTotalPrice());
-                ps.setInt(7, deliveryOrder.getPaymentTypeId());
-                ps.setString(8, deliveryOrder.getRemark());
-                ps.setInt(9, LogInForm.userID);
-                ps.setInt(10, 1);
-                ps.setInt(11, 1);
-                ps.setDouble(12, deliveryOrder.getPaidAmount());
+                if (isOrder) {
+                    ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount, total_discount_price, discount_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, deliveryOrder.getCustomerId());
+                    ps.setInt(2, deliveryId);
+                    ps.setString(3, deliveryOrder.getOrderCode());
+                    ps.setDouble(4, deliveryOrder.getSubTotalPrice());
+                    ps.setDouble(5, deliveryOrder.getDeliveryFee());
+                    ps.setDouble(6, deliveryOrder.getGrandTotalPrice());
+                    ps.setInt(7, deliveryOrder.getPaymentTypeId());
+                    ps.setString(8, deliveryOrder.getRemark());
+                    ps.setInt(9, LogInForm.userID);
+                    ps.setInt(10, 1);
+                    ps.setInt(11, 1);
+                    ps.setDouble(12, deliveryOrder.getPaidAmount());
                 
-                Double totalDiscount = 0.0;
-                for (OrderDetailsDto order : deliveryOrder.getOrderDetailsDtos() ) {
-                    totalDiscount += order.getTotalDiscountPrice();
+                    Double totalDiscount = 0.0;
+                    for (OrderDetailsDto order : deliveryOrder.getOrderDetailsDtos() ) {
+                        totalDiscount += order.getTotalDiscountPrice();
+                    }
+                    ps.setDouble(13, totalDiscount);
+                    ps.setInt(14, deliveryOrder.getDiscountId());
+                    ps.executeUpdate();
+                    rst = ps.getGeneratedKeys();
+                    if (rst.next()) {
+                        orderId = rst.getInt(1);
+                    }
+                } else {
+                    ps = con.prepareStatement("INSERT INTO pos_main_order_tb (customer_id, delivery_order_id, bill_no, sub_total_price, delivery_fee, total_order_price, payment_type_id, remark, user_id, status, visible, paid_amount, total_discount_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, deliveryOrder.getCustomerId());
+                    ps.setInt(2, deliveryId);
+                    ps.setString(3, deliveryOrder.getOrderCode());
+                    ps.setDouble(4, deliveryOrder.getSubTotalPrice());
+                    ps.setDouble(5, deliveryOrder.getDeliveryFee());
+                    ps.setDouble(6, deliveryOrder.getGrandTotalPrice());
+                    ps.setInt(7, deliveryOrder.getPaymentTypeId());
+                    ps.setString(8, deliveryOrder.getRemark());
+                    ps.setInt(9, LogInForm.userID);
+                    ps.setInt(10, 1);
+                    ps.setInt(11, 1);
+                    ps.setDouble(12, deliveryOrder.getPaidAmount());
+                
+                    Double totalDiscount = 0.0;
+                    for (OrderDetailsDto order : deliveryOrder.getOrderDetailsDtos() ) {
+                        totalDiscount += order.getTotalDiscountPrice();
+                    }
+                    ps.setDouble(13, totalDiscount);
+                    ps.executeUpdate();
+                    rst = ps.getGeneratedKeys();
+                    if (rst.next()) {
+                        orderId = rst.getInt(1);
+                    }
+                
                 }
-                ps.setDouble(13, totalDiscount);
-                ps.executeUpdate();
-                rst = ps.getGeneratedKeys();
-                if (rst.next()) {
-                    orderId = rst.getInt(1);
-                }
+                
                 
                 Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_order_tb");
 
@@ -941,7 +972,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         String updateMainOrderSQL = "UPDATE pos_main_order_tb SET "
                 + "customer_id = ?, sub_total_price = ?, "
                 + "delivery_fee = ?, total_order_price = ?, table_id = ?, "
-                + "remark = ?, edited_by = ?, status = ?, paid_amount = ?, bill_no = ?, edited_Date = ? "
+                + "remark = ?, edited_by = ?, status = ?, paid_amount = ?, bill_no = ?, edited_Date = ?, discount_id = ? "
                 + "WHERE delivery_order_id = ?";
         
         PreparedStatement mainOrderStatement = null;
@@ -958,7 +989,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         mainOrderStatement.setString(9, deliveryOrderDto.getPaidAmount()+"");
         mainOrderStatement.setString(10, deliveryOrderDto.getOrderCode());
         mainOrderStatement.setTimestamp(11, deliveryOrderDto.getEditedDate());
-        mainOrderStatement.setString(12, delivery_id);
+        mainOrderStatement.setInt(12, 1);
+        mainOrderStatement.setString(13, delivery_id);
 
         return mainOrderStatement.executeUpdate() > 0;
     }
@@ -984,7 +1016,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
     private boolean updateOrderDetails(Connection connection, DeliveryOrder deliveryOrderDto, Integer orderId) throws SQLException, ClassNotFoundException {
         System.out.println("Start updateOrderDetails");
-        String insertOrderDetailsSQL = "INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id) VALUES(?,?,?,?,?,?,?)";
+        String insertOrderDetailsSQL = "INSERT INTO pos_main_order_details_tb(order_id,item_id,quantity,per_item_price,total_item_price,status,user_id, total_discount_price) VALUES(?,?,?,?,?,?,?,?)";
         
         PreparedStatement insertOrderDetailsStatement = null;
         
@@ -998,6 +1030,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             insertOrderDetailsStatement.setDouble(5, detail.getTotalItemPrice());
             insertOrderDetailsStatement.setInt(6, 1);
             insertOrderDetailsStatement.setInt(7, 1);
+            insertOrderDetailsStatement.setDouble(8, detail.getTotalDiscountPrice());
             
             if(insertOrderDetailsStatement.executeUpdate() < 0){
                 return false;

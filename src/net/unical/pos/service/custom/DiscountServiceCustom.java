@@ -16,6 +16,8 @@ public interface DiscountServiceCustom {
     public ArrayList<DiscountDto> getAllDiscounts();
 
     public boolean addDiscount(DiscountDto discountDto);
+
+    public Integer getDiscountId(double percentage);
    
     
 }

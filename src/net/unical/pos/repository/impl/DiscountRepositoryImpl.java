@@ -71,5 +71,22 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom{
         }
         return false;
     }
-    
+
+    @Override
+    public Integer getDiscountId(double percentage) {
+        System.out.println("percentage "+ percentage);
+        String sql = "SELECT discount_id FROM "+ TABLE + " WHERE percentage = ?";
+        try {
+            PreparedStatement ps = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            ps.setDouble(1, percentage);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                System.out.println("come to this");
+                return rs.getInt("discount_id");
+            }
+        } catch(Exception e){
+            Logger.getLogger("Something sql error");
+        }
+        return null;
+    }
 }

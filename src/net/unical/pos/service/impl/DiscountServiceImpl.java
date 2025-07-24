@@ -39,4 +39,9 @@ public class DiscountServiceImpl implements DiscountServiceCustom{
     public boolean addDiscount(DiscountDto discountDto) {
         return discountRepositoryCustom.addDiscount(discountDto);
     }
+
+    @Override
+    public Integer getDiscountId(double percentage) {
+        return discountRepositoryCustom.getDiscountId(percentage);
+    }
 }

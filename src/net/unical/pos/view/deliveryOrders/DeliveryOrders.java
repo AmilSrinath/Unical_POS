@@ -145,6 +145,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private Double clickedItemPrice = 0.0;
     private int row = -1;
     private boolean isOrder = false;
+    private boolean isChooseComboDiscount = false;
     
     
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
@@ -315,6 +316,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         cancelBtn = new javax.swing.JButton();
         applyBtn = new javax.swing.JButton();
         isDiscountForOrder = new javax.swing.JCheckBox();
+        clearBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         orderCodeTxt = new javax.swing.JTextField();
@@ -717,7 +719,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(278, 278, 278)
                         .addComponent(jLabel34)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -815,6 +817,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         txtCustomeDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCustomeDiscount.setText("0.00");
+        txtCustomeDiscount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtCustomeDiscountMouseClicked(evt);
+            }
+        });
         txtCustomeDiscount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCustomeDiscountActionPerformed(evt);
@@ -856,6 +863,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        clearBtn.setBackground(new java.awt.Color(153, 153, 153));
+        clearBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        clearBtn.setForeground(new java.awt.Color(255, 255, 255));
+        clearBtn.setText("Clear");
+        clearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout discountInfoLayout = new javax.swing.GroupLayout(discountInfo.getContentPane());
         discountInfo.getContentPane().setLayout(discountInfoLayout);
         discountInfoLayout.setHorizontalGroup(
@@ -864,14 +881,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGap(12, 12, 12)
                 .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(discountInfoLayout.createSequentialGroup()
-                        .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(applyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(discountInfoLayout.createSequentialGroup()
                         .addComponent(cmbDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDiscountSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(59, 59, 59)
+                        .addComponent(lblDiscountSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(discountInfoLayout.createSequentialGroup()
+                        .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(applyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(9, 9, 9)
                 .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(discountInfoLayout.createSequentialGroup()
                         .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -903,7 +922,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addGroup(discountInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn)
                     .addComponent(applyBtn)
-                    .addComponent(isDiscountForOrder))
+                    .addComponent(isDiscountForOrder)
+                    .addComponent(clearBtn))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
 
@@ -1820,7 +1840,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     
     private Double setDiscount(Double itemPrice){
         Double discounts = 0.0; 
-        if (symbol.equals("%")){
+        if (symbol.equals("%") || isChooseComboDiscount){
             discounts = itemPrice * this.discount/100;
             return discounts;
         } else {
@@ -2123,12 +2143,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 if (isOrder) {
                     System.out.println("Come to this");
                      deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));
-                } else {
-                     deliveryOrderDto.setDiscountId(null);
                 }
 
                 // Assuming there is a method in the repository to update the order
-                boolean isUpdated = deliveryOrderRepositoryImpl.update(deliveryOrderDto, orderId, delivery_id);
+                boolean isUpdated = deliveryOrderRepositoryImpl.update(deliveryOrderDto, orderId, delivery_id, isOrder);
                 if (isUpdated) {
                     JOptionPane.showMessageDialog(this, "Order updated successfully");
 
@@ -3273,20 +3291,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
     private void btnDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountActionPerformed
-        
+        isOrder = true;
+        isDiscountForOrder.setEnabled(false);
+        isDoublePressedItemTable = false;
         openDIscountInfo();
       
     }//GEN-LAST:event_btnDiscountActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         isDoublePressedItemTable = false;
+        isOrder = false;
+        setDefault();
+        isDiscountForOrder.setSelected(true);
+        isChooseComboDiscount = false;
         this.discountInfo.dispose();
         
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
-       
-        if(isDoublePressedItemTable){
+       try{
+       if(isDoublePressedItemTable){
            if(!txtCustomeDiscount.getText().equals("0.00")){
                 discount = Double.parseDouble(txtCustomeDiscount.getText());
            } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")) {
@@ -3314,6 +3338,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
        isDoublePressedItemTable = false;
        if(!txtCustomeDiscount.getText().equals("0.00")){
            discount = Double.parseDouble(txtCustomeDiscount.getText());
+           updateTotals();
            if(subTotAmountLbl.getText() != null){
                 updateTotals();
            }
@@ -3321,7 +3346,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //           setDiscount();
            discountInfo.dispose();
        } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")){
+           
            discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
+           updateTotals();
            if(subTotAmountLbl.getText() != null){
                 updateTotals();
            }
@@ -3332,10 +3359,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
            Log.error(new Logger("Exception", "Please Choose an option before apply") {
            }, evt, new RuntimeException("Please Choose an option before apply"));
        }
+       }catch(Exception e){
+       
+       }finally{
+       
+           isDiscountForOrder.setSelected(true);
+           isChooseComboDiscount = false;
+           setDefault();
+       }
+        
     }//GEN-LAST:event_applyBtnActionPerformed
 
     private void cmbDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountActionPerformed
         // TODO add your handling code here:
+        isChooseComboDiscount = true;
+        
     }//GEN-LAST:event_cmbDiscountActionPerformed
 
     private void cmbSymbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSymbolActionPerformed
@@ -3361,6 +3399,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             this.row = itemListTable.getSelectedRow();
             this.clickedItemPrice = Double.valueOf(itemListTable.getValueAt(row, 2).toString());
             isDoublePressedItemTable = true;
+            isDiscountForOrder.setSelected(false);
+            isDiscountForOrder.setEnabled(false);
+            isOrder = false;
             openDIscountInfo();
         }
     }//GEN-LAST:event_itemListTableMousePressed
@@ -3373,6 +3414,20 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             isOrder = false;
         }
     }//GEN-LAST:event_isDiscountForOrderActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+        setDefault();
+        isChooseComboDiscount = false;
+    }//GEN-LAST:event_clearBtnActionPerformed
+
+    private void txtCustomeDiscountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomeDiscountMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 1){
+            setDefault();
+            isChooseComboDiscount = false;
+        }
+    }//GEN-LAST:event_txtCustomeDiscountMouseClicked
    
  
     
@@ -3435,6 +3490,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnWrapping;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JDialog check_customer;
+    private javax.swing.JButton clearBtn;
     private javax.swing.JComboBox<String> cmbDiscount;
     private javax.swing.JComboBox<String> cmbSymbol;
     private javax.swing.JLabel codTotTxt;
@@ -3799,6 +3855,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         discountInfo.setLocationRelativeTo(null);
         discountInfo.setMaximumSize(new Dimension(650,160));
         discountInfo.setVisible(true);
+    }
+
+    private void setDefault() {
+        txtCustomeDiscount.setText("0.00");
+        cmbDiscount.setSelectedIndex(0);
+        cmbSymbol.setSelectedIndex(0);
     }
     
 }

@@ -49,6 +49,15 @@ public class DeliveryOrder {
     private Double totalAmount;
     private Integer paymentStatus;
     private Integer isExchange;
+    private Integer discountId;
+
+    public Integer getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(Integer discountId) {
+        this.discountId = discountId;
+    }
 
     private ArrayList<OrderDetailsDto> orderDetailsDtos;
 

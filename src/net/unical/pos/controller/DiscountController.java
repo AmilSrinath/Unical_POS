@@ -24,5 +24,9 @@ public class DiscountController {
     public boolean addDiscount(DiscountDto discountDto) {
        return discountServiceCustom.addDiscount(discountDto);
     }
+
+    public Integer getDiscountId(double percentage) {
+        return discountServiceCustom.getDiscountId(percentage); 
+    }
     
 }

@@ -101,22 +101,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     /**
      * Creates new form DeliveryOrders
      */
-    
     Dashboard dashboard;
-    
+
     private MainItemController newItemController;
     private PaymentTypesController paymentTypesController;
-    
-    private ArrayList<Integer> itemIds=new ArrayList<>();
-    private ArrayList<Double> itemPriceList=new ArrayList<>();
-    private ArrayList<Integer> paymentTypeIds=new ArrayList<>();
-    private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
-    private ArrayList<Integer> customersList=new ArrayList<>();
-    private ArrayList<Double> itemWeightList=new ArrayList<>();
+
+    private ArrayList<Integer> itemIds = new ArrayList<>();
+    private ArrayList<Double> itemPriceList = new ArrayList<>();
+    private ArrayList<Integer> paymentTypeIds = new ArrayList<>();
+    private ArrayList<Integer> paymentTypeIds_2 = new ArrayList<>();
+    private ArrayList<Integer> customersList = new ArrayList<>();
+    private ArrayList<Double> itemWeightList = new ArrayList<>();
     private ArrayList<PosMainItem> posMainItems;
     private ArrayList<OrderModel> orders = new ArrayList<>();
     public static List<StatusTypeModel> statusTypes = new ArrayList<>();
-    
+
     private MainOrderRepositoryImpl mainOrderRepositoryImpl;
     private MainItemRepositoryImpl mainItemRepositoryImpl;
     private MainOrderDetailRepositoryImpl mainOrderDetailRepositoryImpl;
@@ -125,94 +124,94 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
     private DiscountController discountController = new DiscountController();
-    
-    
+
     private CustomerController customerController;
     private UserAccountManagementController userAccountManagementController;
-    CustomerRepositoryImpl customerRepositoryImpl=new CustomerRepositoryImpl();
-    TestClass testClass=new TestClass();
-    
-    DefaultTableModel itemListTableModel=null;
-    DefaultTableModel orderListTableModel=null;
-    int default_paymentType=0;
+    CustomerRepositoryImpl customerRepositoryImpl = new CustomerRepositoryImpl();
+    TestClass testClass = new TestClass();
+
+    DefaultTableModel itemListTableModel = null;
+    DefaultTableModel orderListTableModel = null;
+    int default_paymentType = 0;
     String orderCode = null;
     String delivery_id = null;
-    Integer customer_id=null;
-    boolean customer_exist=false;
+    Integer customer_id = null;
+    boolean customer_exist = false;
     private double discount = 0.0;
     private String symbol = "%";
-    private boolean isDoublePressedItemTable = false; 
+    private boolean isDoublePressedItemTable = false;
     private Double clickedItemPrice = 0.0;
     private int row = -1;
     private boolean isOrder = false;
     private boolean isChooseComboDiscount = false;
-    
-    
+    private boolean hasRowLevelDiscount = false;
+    private boolean comboSelected = false;
+
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
         initComponents();
         setDiscountCmb();
         addTableChangeLisener();
-        
-        this.dashboard=dashboard;
-        
+
+        this.dashboard = dashboard;
+
         this.mainOrderRepositoryImpl = new MainOrderRepositoryImpl();
-        this.newItemController=new MainItemController();
-        this.paymentTypesController=new PaymentTypesController();
-        this.deliveryOrderController=new DeliveryOrderController();
-        this.customerController=new CustomerController();
-        this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
+        this.newItemController = new MainItemController();
+        this.paymentTypesController = new PaymentTypesController();
+        this.deliveryOrderController = new DeliveryOrderController();
+        this.customerController = new CustomerController();
+        this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
         this.mainOrderDetailRepositoryImpl = new MainOrderDetailRepositoryImpl();
         this.mainItemRepositoryImpl = new MainItemRepositoryImpl();
-        this.userAccountManagementController=new UserAccountManagementController();
+        this.userAccountManagementController = new UserAccountManagementController();
         this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
-        
-        itemListTableModel=(DefaultTableModel) itemListTable.getModel();
-        orderListTableModel=(DefaultTableModel) deliveryOrdersTable.getModel();
-        
+
+        itemListTableModel = (DefaultTableModel) itemListTable.getModel();
+        orderListTableModel = (DefaultTableModel) deliveryOrdersTable.getModel();
+
         instalGUI();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date current_date = new Date();
-        String CURRENT_DATE=dateFormat.format(current_date);
-        
+        String CURRENT_DATE = dateFormat.format(current_date);
+
         getPhone_Number_One();
         getPhone_Number_Two();
         getOrderCode();
         getItems();
         getPaymentTypes();
         statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
-        getAllOrders(CURRENT_DATE,CURRENT_DATE,default_paymentType);
+        getAllOrders(CURRENT_DATE, CURRENT_DATE, default_paymentType);
         setCurrentDate();
 
         fr_de_chb.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
+
                 if (fr_de_chb.getState()) {
+                    System.out.println("Check eka hari nam mekata enava");
                     deliveyFeeLbl.setText("0.00");
                 } else {
+                    System.out.println("Check eka empty nam mekata enava");
                     deliveyFeeLbl.setText("350");
                 }
                 addUpdateTotals();
             }
         });
-
         FileInputStream fis = new FileInputStream("config.txt");
         Properties props = new Properties();
         props.load(fis);
-        
+
         deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
         weightTxt.setText("0");
-        
-        
+
         posMainItems = mainItemRepositoryImpl.getAllItems("");
-        
-        
+
         //Load All Orders to orders Array
         orders = mainOrderRepositoryImpl.getAllOrders();
-        
+
         paymentTypeCombo.addActionListener(new ActionListener() {
-            
+
             private String previousPaymentType = null;
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedPaymentType = (String) paymentTypeCombo.getSelectedItem();
@@ -231,9 +230,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 }
             }
         });
-        
+
         PaidAmountTxt.setText("0");
-        
+
         orderIDCmb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -247,14 +246,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 }).start();
             }
         });
-        
-        System.out.println("userRole : "+LogInForm.userID);        
-        
+
+        System.out.println("userRole : " + LogInForm.userID);
+
         PosMainUser userDto = userAccountManagementController.getUserByUserID(LogInForm.userID);
-        
+
         if (userDto.getRoleId() == 1 || userDto.getRoleId() == 2) {
             deliveryFormDetailPanel.setVisible(true);
-        }else{
+        } else {
             deliveryFormDetailPanel.setVisible(false);
         }
 
@@ -828,7 +827,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             }
         });
 
-        cmbSymbol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choos a symbol" }));
         cmbSymbol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbSymbolActionPerformed(evt);
@@ -896,7 +894,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addComponent(txtCustomeDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cmbSymbol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                         .addComponent(lblIsCustom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17))
                     .addGroup(discountInfoLayout.createSequentialGroup()
@@ -1038,7 +1036,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 java.lang.Integer.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1782,166 +1780,256 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
 
-        Double totalAmount = 0.00;
-        Double totalWeight = 0.00;
+        double totalAmount = 0.0;
+        double totalWeight = 0.0;
 
+        // Validate quantity
         if (qtyTxt.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "QTY..?");
+            JOptionPane.showMessageDialog(this, "Please enter quantity (QTY)");
             return;
         }
 
-        Integer itemIndex = itemCombo.getSelectedIndex();
-        Double qty = Double.parseDouble(qtyTxt.getText());
-
-        String itemName = (String) itemCombo.getSelectedItem();
-        Integer itemId = itemIds.get(itemIndex);
-        Double itemPrice = itemPriceList.get(itemIndex);
-        Double itemWeight = itemWeightList.get(itemIndex);
-        Double discounts =  0.0;
-        if(isDoublePressedItemTable){
-            discounts = setDiscount(itemPrice);
+        int itemIndex = itemCombo.getSelectedIndex();
+        if (itemIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an item");
+            return;
         }
-        
-        Double amount = (itemPrice - discounts) * qty;
+
+        double qty = Double.parseDouble(qtyTxt.getText());
+
+        // Get item details
+        String itemName = (String) itemCombo.getSelectedItem();
+        int itemId = itemIds.get(itemIndex);
+        double itemPrice = itemPriceList.get(itemIndex);
+        double itemWeight = itemWeightList.get(itemIndex);
+
+        // Apply discount only if item row was double-clicked
+        double discount = isDoublePressedItemTable ? setDiscount(itemPrice) : 0.0;
+        double totalDiscount = discount * qty;
+        double amount = (itemPrice * qty) - totalDiscount;
+
         boolean itemFound = false;
 
+        // Check if item already exists in the table
         for (int i = 0; i < itemListTableModel.getRowCount(); i++) {
-            Integer existingItemId = (Integer) itemListTableModel.getValueAt(i, 0);
-            if (existingItemId.equals(itemId)) {
-                Number existingQtyValue = (Number) itemListTableModel.getValueAt(i, 3); // Use Number to avoid ClassCastException
-                Double existingQty = existingQtyValue.doubleValue();
-                Double newQty = existingQty + qty;
-                Double newAmount = itemPrice * newQty;
-                Double newDiscount = discounts * newQty;
-                
-                itemListTableModel.setValueAt(newQty, i, 3);
-                itemListTableModel.setValueAt(newDiscount, i, 4);
-                itemListTableModel.setValueAt(newAmount, i, 5);
+            int existingItemId = (Integer) itemListTableModel.getValueAt(i, 0);
+            if (existingItemId == itemId) {
+                // Merge quantities
+                double existingQty = ((Number) itemListTableModel.getValueAt(i, 3)).doubleValue();
+                double newQty = existingQty + qty;
+
+                double existingDiscount = ((Number) itemListTableModel.getValueAt(i, 4)).doubleValue();
+                double newDiscount = existingDiscount + totalDiscount;
+
+                double newAmount = (itemPrice * newQty) - newDiscount;
+
+                itemListTableModel.setValueAt(newQty, i, 3);       // Qty
+                itemListTableModel.setValueAt(newDiscount, i, 4);  // Total Discount
+                itemListTableModel.setValueAt(newAmount, i, 5);    // Final Amount
 
                 itemFound = true;
                 break;
             }
         }
 
-
         if (!itemFound) {
-                Object itemData[] = {itemId, itemName, itemPrice, qty, discounts, amount};
-                itemListTableModel.addRow(itemData);
-                int newRow = itemListTable.getRowCount() - 1;
-                itemListTable.setValueAt(0.0, newRow, 4);
-                addUpdateTotals();
+            // New item row
+            Object[] itemRow = {
+                itemId,
+                itemName,
+                itemPrice,
+                qty,
+                totalDiscount,
+                amount
+            };
+            itemListTableModel.addRow(itemRow);
         }
+
+        // Refresh delivery fee and totals
         Properties props = loadProperties();
         if (props != null) {
             calculateDeliveryFee(props);
         }
-        addUpdateTotals();
+        System.out.println("add update call wenna calin :" + isChooseComboDiscount);
+        addUpdateTotals(); // Final recalculation
+
+        // Reset double-click flag
+        isDoublePressedItemTable = false;
     }//GEN-LAST:event_addBtnActionPerformed
-    
-    private Double setDiscount(Double itemPrice){
-        Double discounts = 0.0; 
-        if (symbol.equals("%") || isChooseComboDiscount){
-            discounts = itemPrice * this.discount/100;
+
+    private Double setDiscount(Double itemPrice) {
+        System.out.println("symbol : " + symbol);
+        Double discounts = 0.0;
+        if (isChooseComboDiscount || cmbSymbol.getSelectedItem().equals("%")) {
+            System.out.println("Symbol" + symbol);
+            System.out.println("Mekata envnm waradi");
+            discounts = itemPrice * this.discount / 100;
+            return discounts;
+        } else if (cmbSymbol.getSelectedItem().equals("Rs")) {
+            System.out.println("Mekata thamai enne");
+            discounts = this.discount;
             return discounts;
         } else {
-            discounts =  this.discount;
+            discounts = itemPrice * this.discount / 100;
             return discounts;
         }
     }
+
     private void updateTotals() {
         double totalAmount = 0.0;
         double totalWeight = 0.0;
         double totalDiscount = 0.0;
-        
-        if (itemListTable.getRowCount() == 0) {
+
+        int rowCount = itemListTable.getRowCount();
+
+        if (rowCount == 0) {
             subTotAmountLbl.setText("0.00");
             totAmountLbl.setText("0.00");
             discountLabel.setText("0.00");
-            weightTxt.setText("0");
-        } else {
-            for (int i = 0; i < itemListTable.getRowCount(); i++) {
-                int itemId = (Integer) itemListTable.getValueAt(i, 0);
+            weightTxt.setText("0.00");
+            codTxt.setText("0.00");
+            return;
+        }
 
-                double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
-                int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
-                if(isDoublePressedItemTable){
-                    double discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
-                    totalDiscount += discount * qty;
-                }
-                double weight = itemWeightList.get(itemIds.indexOf(itemId));
-
-                totalAmount += (price * qty) ;
-                totalWeight += weight * qty;
-                if(!isDoublePressedItemTable){
-                    System.out.println("Call this");
-                    totalDiscount = setDiscount(totalAmount);
-                }
-                
+        for (int i = 0; i < rowCount; i++) {
+            // Make sure itemId column (0) is castable to Integer
+            int itemId;
+            try {
+                itemId = (Integer) itemListTable.getValueAt(i, 0);
+            } catch (Exception e) {
+                System.err.println("Invalid item ID at row " + i);
+                continue;
             }
 
-            subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
+            double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
+            int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
 
-            double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
-            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
+            // Calculate total price
+            totalAmount += price * qty;
 
-            codTxt.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
-            
-            discountLabel.setText(String.format("-%.2f", totalDiscount));
-            
-            weightTxt.setText(String.format("%.2f", totalWeight));
+            // Per-item discount (if applied)
+            if (isDoublePressedItemTable) {
+                double rowDiscount = ((Number) itemListTable.getValueAt(i, 4)).doubleValue();
+                totalDiscount += rowDiscount;
+            }
+
+            // Weight calculation (safe index check)
+            int weightIndex = itemIds.indexOf(itemId);
+            if (weightIndex >= 0 && weightIndex < itemWeightList.size()) {
+                double itemWeight = itemWeightList.get(weightIndex);
+                totalWeight += itemWeight * qty;
+            } else {
+                System.err.println("Item weight not found for item ID: " + itemId);
+            }
         }
+
+        // If full-order discount is used
+        if (!isDoublePressedItemTable) {
+            System.out.println("Calculating full order discount...");
+            totalDiscount = setDiscount(totalAmount);
+            if (totalDiscount > totalAmount) {
+                totalDiscount = totalAmount; // safety check
+            }
+            System.out.println("Full order discount : " + totalDiscount);
+        }
+
+        // Parse delivery fee
+        double deliveryFee = 0.0;
+        try {
+            deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid delivery fee format, defaulting to 0.");
+        }
+
+        // Final calculations
+        double subTotal = totalAmount - totalDiscount;
+        double grandTotal = totalAmount + deliveryFee - totalDiscount;
+
+        if (grandTotal < 0) {
+            grandTotal = 0;
+        }
+
+        // Set values to labels
+        subTotAmountLbl.setText(String.format("%.2f", subTotal));
+        discountLabel.setText(String.format("-%.2f", totalDiscount));
+        totAmountLbl.setText(String.format("%.2f", grandTotal));
+        weightTxt.setText(String.format("%.2f", totalWeight));
+        codTxt.setText(String.format("%.2f", grandTotal));
     }
-    
+
     private void addUpdateTotals() {
+
         double totalAmount = 0.0;
         double totalWeight = 0.0;
         double totalDiscount = 0.0;
 
-        if (itemListTable.getRowCount() == 0) {
-            subTotAmountLbl.setText("0.00");
-            totAmountLbl.setText("0.00");
-            discountLabel.setText("0.00");
-            weightTxt.setText("0");
+        int rowCount = itemListTable.getRowCount();
+
+//        if (rowCount == 0) {
+//            subTotAmountLbl.setText("0.00");
+//            totAmountLbl.setText("0.00");
+//            discountLabel.setText("0.00");
+//            weightTxt.setText("0");
+//            PaidAmountTxt.setText("0.00");
+//            codTxt.setText("0.00");
+//            return;
+//        }
+        hasRowLevelDiscount = false;
+
+        for (int i = 0; i < rowCount; i++) {
+            int itemId = ((Number) itemListTable.getValueAt(i, 0)).intValue();
+            double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
+            double qty = ((Number) itemListTable.getValueAt(i, 3)).doubleValue();
+            double disc = ((Number) itemListTable.getValueAt(i, 4)).doubleValue(); // total discount for that row
+
+            double weight = itemWeightList.get(itemIds.indexOf(itemId));
+
+            totalAmount += price * qty;
+            totalWeight += weight * qty;
+
+            if (disc > 0) {
+                hasRowLevelDiscount = true;
+            }
+            totalDiscount += disc;
+        }
+
+        // Only apply order-wide discount if no row-level discounts
+        if (!isDoublePressedItemTable && !hasRowLevelDiscount) {
+            System.out.println("Mekata enne nadda ethota");
+            double orderDiscount = setDiscount(totalAmount);
+
+            // Safety check to avoid over-discounting
+            if (orderDiscount > totalAmount) {
+                orderDiscount = totalAmount;
+            }
+
+            totalDiscount = orderDiscount;
+        }
+
+        // Calculate totals
+        double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
+        double grandTotal = totalAmount + deliveryFee - totalDiscount;
+
+        // Prevent negative grand total
+        if (grandTotal < 0) {
+            grandTotal = 0;
+        }
+
+        // Set values to labels
+        subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));               // before discount
+        discountLabel.setText(String.format("-%.2f", totalDiscount));             // for display
+        totAmountLbl.setText(String.format("%.2f", grandTotal));
+        weightTxt.setText(String.format("%.2f", totalWeight));
+
+        if ("Card".equals(paymentTypeCombo.getSelectedItem())) {
+            PaidAmountTxt.setText(String.format("%.2f", grandTotal));
+            codTxt.setText("0.00");
         } else {
-            for (int i = 0; i < itemListTable.getRowCount(); i++) {
-                int itemId = (Integer) itemListTable.getValueAt(i, 0);
-
-                double price = ((Number) itemListTable.getValueAt(i, 2)).doubleValue();
-                int qty = ((Number) itemListTable.getValueAt(i, 3)).intValue();
-                double  discount = ((Number) itemListTable.getValueAt(i, 4)).intValue();
-                System.out.println("discounts: "+discount);
-                System.out.println("qty "+qty );
-                double weight = itemWeightList.get(itemIds.indexOf(itemId));
-
-                totalAmount += price * qty;
-                totalWeight += weight * qty;
-                totalDiscount += discount * qty;
-            }
-            
-            if (!isDoublePressedItemTable) {
-                totalDiscount = setDiscount(Double.valueOf(subTotAmountLbl.getText()));
-                
-            }
-            System.out.println("totalDiscount "+ totalDiscount);
-            subTotAmountLbl.setText(String.format("%.2f", totalAmount - totalDiscount));
-
-            double deliveryFee = Double.parseDouble(deliveyFeeLbl.getText());
-            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
-
-            
-            
-            discountLabel.setText(String.format("-%.2f", totalDiscount));
-            
-            if (paymentTypeCombo.getSelectedItem().equals("Card")) {
-                PaidAmountTxt.setText(String.format("%.2f", totalAmount - totalDiscount));
-            }else {
-               codTxt.setText(String.format("%.2f", totalAmount + deliveryFee - totalDiscount));
-            }
-            
-            weightTxt.setText(String.format("%.2f", totalWeight));
+            codTxt.setText(String.format("%.2f", grandTotal));
+            PaidAmountTxt.setText("0.00");
         }
     }
-    
+
     private Properties loadProperties() {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream("config.txt")) {
@@ -1973,8 +2061,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         System.out.println(deliveyFeeLbl.getText());
     }
-    
-    
+
     private boolean validateInputs() {
 //        if (orderCodeTxt.getText().trim().isEmpty()) {
 //            JOptionPane.showMessageDialog(this, "Order code cannot be empty", "Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -2034,11 +2121,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         if (!validateInputs()) {
             return;
         }
-        
+
         if (delivery_id == null) {
             if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
                 int result = JOptionPane.showConfirmDialog(this, "The customer's latest order is still pending delivery.Do you want add another order");
-                if(result == JOptionPane.YES_OPTION) {
+                if (result == JOptionPane.YES_OPTION) {
                     saveOrder();
                     return;
                 } else if (result == JOptionPane.NO_OPTION) {
@@ -2054,12 +2141,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     model.setRowCount(0);
                     return;
                 }
-                
+
             }
             saveOrder();
             return;
         }
-        
+
         for (OrderModel om : orders) {
             if (om.getDeliveryOrderId() == Integer.parseInt(delivery_id)) {
                 updateOrder(om.getOrderId(), delivery_id); //orderId --> main order tb
@@ -2067,7 +2154,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 break;
             }
         }
-        
+
         DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
         model.setRowCount(0);
         delivery_id = null;
@@ -2085,12 +2172,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
             Integer qty = qtyValue.intValue();
-            
-            Number discountValue =  (Number) itemListTable.getValueAt(i, 4);
+
+            Number discountValue = (Number) itemListTable.getValueAt(i, 4);
             Double discount = discountValue.doubleValue();
-            
+
             OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, price, discount, (price * qty) - discount, "", 1, 1);
-            System.out.println("OrderDto : "+ dto);
+            System.out.println("OrderDto : " + dto);
             orderDetailsDtos.add(dto);
         }
 
@@ -2119,11 +2206,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setCustomerName(customerNameTxt.getText());
                 deliveryOrderDto.setAddress(addressTxt.getText());
                 deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
-                
+
                 String phoneNumber = phoneOneCmb.getSelectedItem().toString();
                 phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
                 deliveryOrderDto.setPhoneOne(phoneNumber);
-                
+
                 deliveryOrderDto.setPhoneTwo(phoneTwo);
                 deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
                 deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
@@ -2133,7 +2220,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
                 deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
                 deliveryOrderDto.setOrderId(orderId);
-                
+
                 Timestamp now = new Timestamp(System.currentTimeMillis());
                 deliveryOrderDto.setEditedDate(now);
 
@@ -2142,7 +2229,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
                 if (isOrder) {
                     System.out.println("Come to this");
-                     deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));
+                    deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));
                 }
 
                 // Assuming there is a method in the repository to update the order
@@ -2167,7 +2254,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     FileInputStream fis = new FileInputStream("config.txt");
                     Properties props = new Properties();
                     props.load(fis);
-                    
+
                     customerNameTxt.setText("");
                     addressTxt.setText("");
                     codTxt.setText("");
@@ -2177,7 +2264,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     remarkTxt.setText("");
                     orderCodeTxt.setText("");
                     PaidAmountTxt.setText("0");
-                    
+
                     itemListTableModel.setRowCount(0);
                 } else {
                     JOptionPane.showMessageDialog(this, "Update failed.(Duplicate order code found! or another error!)");
@@ -2201,15 +2288,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }
 
-    
-    private void saveOrder(){
-        ArrayList<OrderDetailsDto> orderDetailsDtos=new ArrayList<>();
-        
+    private void saveOrder() {
+        ArrayList<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
+
         for (int i = 0; i < itemListTable.getRowCount(); i++) {
             Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
 
             Number priceValue = (Number) itemListTable.getValueAt(i, 2);
-            
+
             Number discountValue = (Number) itemListTable.getValueAt(i, 4);
             Double applyDiscount;
             if (isOrder) {
@@ -2218,128 +2304,123 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 applyDiscount = discountValue.doubleValue();
             }
             Double perItemPrice = priceValue.doubleValue();
-            
+
             Double price = priceValue.doubleValue() - applyDiscount;
 
             Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
             Integer qty = qtyValue.intValue();
-            
-            
-            
-            
 
             OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, perItemPrice, applyDiscount, price * qty, "", 1, 1);
             orderDetailsDtos.add(dto);
         }
 
-        String phoneTwo=null;
-        if(phoneTwoCmb.getSelectedItem()!=null){
-            phoneTwo=phoneTwoCmb.getSelectedItem().toString();
-            
+        String phoneTwo = null;
+        if (phoneTwoCmb.getSelectedItem() != null) {
+            phoneTwo = phoneTwoCmb.getSelectedItem().toString();
+
         }
-        
-        int index=paymentTypeCombo.getSelectedIndex();
-        Integer orderId=null;
-        
-        Boolean free_shiping_check=fr_de_chb.getState();
-        
-        int free_ship=0;
-        if(free_shiping_check){
-            free_ship=1;
+
+        int index = paymentTypeCombo.getSelectedIndex();
+        Integer orderId = null;
+
+        Boolean free_shiping_check = fr_de_chb.getState();
+
+        int free_ship = 0;
+        if (free_shiping_check) {
+            free_ship = 1;
         }
-        
+
         int isExch = 0;
         Boolean isExchange = radioExchange.getState();
         if (isExchange) {
             isExch = 1;
         }
-        
-        try {
-                if(phoneOneCmb.getSelectedItem()!=null){
-                    DeliveryOrder deliveryOrderDto=new DeliveryOrder();
-                    deliveryOrderDto.setOrderCode(orderCodeTxt.getText());
-                    if(customer_exist){
-                        deliveryOrderDto.setCustomerId(customer_id);
-                    }else{
-                        deliveryOrderDto.setCustomerId(null);
-                    }
-                    deliveryOrderDto.setCustomerName(customerNameTxt.getText());
-                    deliveryOrderDto.setAddress(addressTxt.getText());
-                    deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
-                    
-                    String phoneNumber = phoneOneCmb.getSelectedItem().toString();
-                    phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
-                    deliveryOrderDto.setPhoneOne(phoneNumber);
-                    
-                    deliveryOrderDto.setPhoneTwo(phoneTwo);
-                    deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
-                    deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
-                    deliveryOrderDto.setWeight(weightTxt.getText().toString());
-                    deliveryOrderDto.setFreeShip(free_ship);
-                    deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
-                    deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
-                    deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
-                    Timestamp now = new Timestamp(System.currentTimeMillis());
-                    deliveryOrderDto.setCreateDate(now);
-                    deliveryOrderDto.setEditedDate(now);
-                    deliveryOrderDto.setUserID(1);
-                    deliveryOrderDto.setIsExchange(isExch);
 
-                    deliveryOrderDto.setRemark(remarkTxt.getText());
-                    deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
-                    deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
-                    if (!isOrder) {
-                        System.out.println("Come to this"+ discount);
-                        deliveryOrderDto.setDiscountId(1);
-                    }
-                    deliveryOrderDto.setDiscountId(1);
-                    orderId=deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
-                    
-                    System.out.println("paymentTypeIds.get(index) : "+paymentTypeIds.get(index));
-                }else{
-                    JOptionPane.showMessageDialog(this, "Add Phone Number");
+        try {
+            if (phoneOneCmb.getSelectedItem() != null) {
+                DeliveryOrder deliveryOrderDto = new DeliveryOrder();
+                deliveryOrderDto.setOrderCode(orderCodeTxt.getText());
+                if (customer_exist) {
+                    deliveryOrderDto.setCustomerId(customer_id);
+                } else {
+                    deliveryOrderDto.setCustomerId(null);
                 }
-            
-        
-            if(orderId!=null){
+                deliveryOrderDto.setCustomerName(customerNameTxt.getText());
+                deliveryOrderDto.setAddress(addressTxt.getText());
+                deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
+
+                String phoneNumber = phoneOneCmb.getSelectedItem().toString();
+                phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
+                deliveryOrderDto.setPhoneOne(phoneNumber);
+
+                deliveryOrderDto.setPhoneTwo(phoneTwo);
+                deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
+                deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
+                deliveryOrderDto.setWeight(weightTxt.getText().toString());
+                deliveryOrderDto.setFreeShip(free_ship);
+                deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
+                deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
+                deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                deliveryOrderDto.setCreateDate(now);
+                deliveryOrderDto.setEditedDate(now);
+                deliveryOrderDto.setUserID(1);
+                deliveryOrderDto.setIsExchange(isExch);
+
+                deliveryOrderDto.setRemark(remarkTxt.getText());
+                deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
+                deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
+                if (!isOrder) {
+                    System.out.println("Come to this" + discount);
+                    deliveryOrderDto.setDiscountId(1);
+                }
+                deliveryOrderDto.setDiscountId(1);
+                orderId = deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
+
+                System.out.println("paymentTypeIds.get(index) : " + paymentTypeIds.get(index));
+            } else {
+                JOptionPane.showMessageDialog(this, "Add Phone Number");
+            }
+
+            if (orderId != null) {
                 JOptionPane.showMessageDialog(this, "Order saved sucessfully");
-                
+
                 //Bill print
 //                printBill(orderId);
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
-                getAllOrders(fromDate,toDate,default_paymentType);
+                getAllOrders(fromDate, toDate, default_paymentType);
                 getPhone_Number_One();
                 getPhone_Number_Two();
                 clearText();
                 phoneOneCmb.requestFocus();
-                customer_exist=false;
-                
+                customer_exist = false;
+
                 FileInputStream fis = new FileInputStream("config.txt");
                 Properties props = new Properties();
                 props.load(fis);
-                
+
                 customerNameTxt.setText("");
                 addressTxt.setText("");
                 customerNumberTxt.setText("");
                 remarkTxt.setText("");
                 orderCodeTxt.setText("");
-                Log.info(DeliveryOrders.class, orderId+" Order Save. User ID: "+LogInForm.userID);
-                
+                Log.info(DeliveryOrders.class, orderId + " Order Save. User ID: " + LogInForm.userID);
+
                 subTotAmountLbl.setText("0.00");
                 totAmountLbl.setText("0.00");
                 itemListTableModel.setRowCount(0);
                 codTxt.setText("");
                 PaidAmountTxt.setText("0");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Save fail..");
             }
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "save order error");
         }
-        
+
         try {
             orders = mainOrderRepositoryImpl.getAllOrders();
         } catch (SQLException ex) {
@@ -2351,59 +2432,107 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         delivery_id = null;
     }
-    
+
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
         int row = itemListTable.getSelectedRow();
         if (row != -1) {
             itemListTableModel.removeRow(row);
         }
 
-        Double totalAmount = 0.00;
-        Double totalWeight = 0.00;
+        double totalAmount = 0.0;
+        double totalWeight = 0.0;
+        double totalDiscount = 0.0;
 
-        if (itemListTable != null && itemListTable.getRowCount() > 0) {
-            for (int i = 0; i < itemListTable.getRowCount(); i++) {
-                Number priceValue = (Number) itemListTable.getValueAt(i, 2);
-                Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
-                Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
-                Double weight = itemWeightList.get(itemIds.indexOf(itemId));
+        int rowCount = itemListTable.getRowCount();
 
-                Double price = priceValue.doubleValue();
-                Double qty = qtyValue.doubleValue();
+        if (rowCount > 0) {
+            for (int i = 0; i < rowCount; i++) {
+                try {
+                    Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
+                    Number priceValue = (Number) itemListTable.getValueAt(i, 2);
+                    Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
+                    Double discountValue = (Double) itemListTable.getValueAt(i, 4);
 
-                totalAmount += price * qty;
-                totalWeight += weight * qty;
+                    if (priceValue == null || qtyValue == null || discountValue == null || itemId == null) {
+                        continue;
+                    }
+
+                    double price = priceValue.doubleValue();
+                    double qty = qtyValue.doubleValue();
+                    double discount = discountValue;
+
+                    // Accumulate amount
+                    totalAmount += price * qty;
+
+                    // Weight
+                    int weightIndex = itemIds.indexOf(itemId);
+                    if (weightIndex != -1 && weightIndex < itemWeightList.size()) {
+                        double weight = itemWeightList.get(weightIndex);
+                        totalWeight += weight * qty;
+                    }
+
+                    // Apply row discount only in row-level discount mode
+                    if (isDoublePressedItemTable) {
+                        totalDiscount += discount;
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
-            Double deliveryFee = calculateDeliveryFee(totalWeight);
-            deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
-            totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
-        } else {
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream("config.txt");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-                Log.error(ex, "Item Remove error");
-            }
-            Properties props = new Properties();
-            try {
-                props.load(fis);
-            } catch (IOException ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-                Log.error(ex, "Item Remove error");
+            // Full-order discount (only if not in row-discount mode)
+            if (!isDoublePressedItemTable) {
+                totalDiscount = setDiscount(totalAmount);
+                if (totalDiscount > totalAmount) {
+                    totalDiscount = totalAmount; // safety
+                }
             }
 
-                deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
-            
-            
-            totAmountLbl.setText(String.format("%.2f", 0.00));
+            // Recalculate delivery fee
+            double deliveryFee = 0.0;
+            if (!fr_de_chb.getState()) {
+                deliveryFee = calculateDeliveryFee(totalWeight);
+                deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
+            }
+
+            // Update labels
+            subTotAmountLbl.setText(String.format("%.2f", totalAmount));
+            discountLabel.setText(String.format("-%.2f", totalDiscount));
+            weightTxt.setText(String.format("%.2f", totalWeight));
+
+            double grandTotal = totalAmount + deliveryFee - totalDiscount;
+            if (grandTotal < 0) {
+                grandTotal = 0;
+            }
+            totAmountLbl.setText(String.format("%.2f", grandTotal));
+            codTxt.setText(String.format("%.2f", grandTotal));
+
+            System.out.println("Total Discount: " + totalDiscount);
+            System.out.println("Total Weight: " + totalWeight);
+            System.out.println("Total Amount: " + totalAmount);
+            System.out.println("Delivery Fee: " + deliveryFee);
+        } else if (isOrder) {
+            // When table is empty but it's an order edit, clear discount
+            double removedDiscount = setDiscount(0.0);
+            discountLabel.setText(String.format("-%.2f", removedDiscount));
+        } else if (isDoublePressedItemTable) {
+            boolean freeSippingCheck = fr_de_chb.getState();
+            if (freeSippingCheck) {
+                System.out.println("mekata envada");
+            }
+
+        }
+        if (itemListTable.getRowCount() == 0) {
+            discountLabel.setText("0.00");
+            subTotAmountLbl.setText("0.00");
+            totAmountLbl.setText("0.00");
+            weightTxt.setText("0.00");
+            codTxt.setText("0.00");
         }
 
-        subTotAmountLbl.setText(String.format("%.2f", totalAmount));
-        codTxt.setText(totAmountLbl.getText());
-        weightTxt.setText(String.format("%.2f", totalWeight));
-        setDiscount();
+
     }//GEN-LAST:event_removeBtnActionPerformed
 
     private Double calculateDeliveryFee(Double totalWeight) {
@@ -2442,15 +2571,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 //    
     private void itemListTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_itemListTablePropertyChange
-        
+
     }//GEN-LAST:event_itemListTablePropertyChange
-    private void addTableChangeLisener(){
+    private void addTableChangeLisener() {
         DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
         model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
                 System.out.println("Table changed");
-                if (e.getType() ==  TableModelEvent.UPDATE){
+                if (e.getType() == TableModelEvent.UPDATE) {
                     int row = e.getFirstRow();
                     int column = e.getColumn();
                     Double discount = (Double) itemListTable.getValueAt(row, column);
@@ -2458,11 +2587,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     updateTotals();
                 }
             }
-            
+
         });
     }
     private void itemListTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemListTableKeyReleased
-        
+
     }//GEN-LAST:event_itemListTableKeyReleased
 
     private void deliveryOrdersTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_deliveryOrdersTablePropertyChange
@@ -2474,33 +2603,31 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_deliveryOrdersTableKeyReleased
 
     private void printAllOrdersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printAllOrdersBtnActionPerformed
-        Integer row=deliveryOrdersTable.getSelectedRow();
-        Integer orderId=(Integer) deliveryOrdersTable.getValueAt(row, 0);
-        String orderCode=(String) deliveryOrdersTable.getValueAt(row, 1);
-        Double cod=(Double) deliveryOrdersTable.getValueAt(row, 3);
-        Double totalPrice=(Double) deliveryOrdersTable.getValueAt(row, 4);
-        Double paidAmount=totalPrice-cod;
-        
+        Integer row = deliveryOrdersTable.getSelectedRow();
+        Integer orderId = (Integer) deliveryOrdersTable.getValueAt(row, 0);
+        String orderCode = (String) deliveryOrdersTable.getValueAt(row, 1);
+        Double cod = (Double) deliveryOrdersTable.getValueAt(row, 3);
+        Double totalPrice = (Double) deliveryOrdersTable.getValueAt(row, 4);
+        Double paidAmount = totalPrice - cod;
+
         try {
             HashMap<String, Object> hm = new HashMap<>();
-            
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
             Date date = new Date();
-            
-            
-            
+
             hm.put("DATE", formatter.format(date));
             hm.put("PAID_AMOUNT", paidAmount);
             hm.put("ORDER_ID", orderId);
-            
+
             JasperReport jr = JasperCompileManager.compileReport("D:/Unical/Unical-Pos-System/src/net/unical/pos/reports/DeliveryOrderBill.jrxml");
             JasperPrint jp = JasperFillManager.fillReport(jr, hm, DBCon.getDatabaseConnection());
 //            JasperViewer view = new JasperViewer(jp, false);
 //            view.setVisible(true);
-            String path="C:/Users/Sanjuka/Documents/Petal Pink/Payment recepts/"+orderCode+".pdf";
+            String path = "C:/Users/Sanjuka/Documents/Petal Pink/Payment recepts/" + orderCode + ".pdf";
             System.out.println(path);
-            JasperExportManager.exportReportToPdfFile(jp,path);
-        
+            JasperExportManager.exportReportToPdfFile(jp, path);
+
         } catch (JRException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "printAllOrdersBtnActionPerformed error");
@@ -2508,48 +2635,47 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_printAllOrdersBtnActionPerformed
 
     private void saveOrderBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOrderBtn1ActionPerformed
-        Double amount=Double.parseDouble(PaidAmountTxt.getText());
-        Double total=Double.parseDouble(totAmountLbl.getText());
-        
-        Double cod=total-amount;
-        codTxt.setText(cod+"");
+        Double amount = Double.parseDouble(PaidAmountTxt.getText());
+        Double total = Double.parseDouble(totAmountLbl.getText());
+
+        Double cod = total - amount;
+        codTxt.setText(cod + "");
     }//GEN-LAST:event_saveOrderBtn1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
-        
-        int index=0;
-        if(paymentTypeCombo2.getSelectedIndex()!=0){
-            index=paymentTypeCombo2.getSelectedIndex();
-            getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-        }else{
-            getAllOrders(fromDate,toDate,0);
+
+        int index = 0;
+        if (paymentTypeCombo2.getSelectedIndex() != 0) {
+            index = paymentTypeCombo2.getSelectedIndex();
+            getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+        } else {
+            getAllOrders(fromDate, toDate, 0);
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void phoneTwoCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTwoCmbActionPerformed
-        if(phoneTwoCmb.getSelectedIndex()!=-1){
+        if (phoneTwoCmb.getSelectedIndex() != -1) {
             try {
-                String number=phoneTwoCmb.getSelectedItem()+"";
-                
-                if(number.startsWith("")){
+                String number = phoneTwoCmb.getSelectedItem() + "";
+
+                if (number.startsWith("")) {
                     System.out.println("TRUE");
-                }else{
-                    List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='"+number+"' OR `phone_two`='"+number+"'");
+                } else {
+                    List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='" + number + "' OR `phone_two`='" + number + "'");
                     for (CustomerDto customerDto : customerDtos) {
-                        phoneOneCmb.setSelectedItem("0"+customerDto.getPhoneOne());
-                        phoneTwoCmb.setSelectedItem("0"+customerDto.getPhoneTwo());
+                        phoneOneCmb.setSelectedItem("0" + customerDto.getPhoneOne());
+                        phoneTwoCmb.setSelectedItem("0" + customerDto.getPhoneTwo());
                         customerNameTxt.setText(customerDto.getCustomerName());
                         addressTxt.setText(customerDto.getAddress());
-                        customer_id=customerDto.getCustomerId();
+                        customer_id = customerDto.getCustomerId();
                     }
-                    customer_exist=true;
+                    customer_exist = true;
                 }
-                
-                
+
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Phone number seleting error");
@@ -2570,14 +2696,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if(paymentTypeCombo.getSelectedItem().toString().equals("Card")){
+        if (paymentTypeCombo.getSelectedItem().toString().equals("Card")) {
             codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
             totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
             deliveyFeeLbl.setText(props.getProperty("CARD_FEE"));
-            
-       } else {
 
-            if(deliveyFeeLbl.getText().equals("0.00")){
+        } else {
+
+            if (deliveyFeeLbl.getText().equals("0.00")) {
                 delivery_fee = Double.valueOf(props.getProperty("DELIVERY_FEE"));
                 codTxt.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
                 totAmountLbl.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
@@ -2585,14 +2711,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             } else {
                 codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
                 totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
-                
+
             }
-            
+
         }
     }//GEN-LAST:event_paymentTypeComboActionPerformed
 
     private void paymentTypeComboKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentTypeComboKeyReleased
-        
+
     }//GEN-LAST:event_paymentTypeComboKeyReleased
 
     private void paymentTypeComboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paymentTypeComboMouseClicked
@@ -2613,26 +2739,26 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_paymentTypeCombo2KeyReleased
 
     private void phoneOneCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneOneCmbActionPerformed
-        if(phoneOneCmb.getSelectedIndex()!=-1){
+        if (phoneOneCmb.getSelectedIndex() != -1) {
             try {
-                String number=phoneOneCmb.getSelectedItem()+"";
-                
-                List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='"+number+"' OR `phone_two`='"+number+"'");
+                String number = phoneOneCmb.getSelectedItem() + "";
+
+                List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='" + number + "' OR `phone_two`='" + number + "'");
                 for (CustomerDto customerDto : customerDtos) {
-                    phoneOneCmb.setSelectedItem("0"+customerDto.getPhoneOne());
-                    
+                    phoneOneCmb.setSelectedItem("0" + customerDto.getPhoneOne());
+
                     if (customerDto.getPhoneTwo() == 0) {
                         phoneTwoCmb.setSelectedItem("");
-                    }else {
-                        phoneTwoCmb.setSelectedItem("0"+customerDto.getPhoneTwo());
+                    } else {
+                        phoneTwoCmb.setSelectedItem("0" + customerDto.getPhoneTwo());
                     }
                     customerNameTxt.setText(customerDto.getCustomerName());
                     addressTxt.setText(customerDto.getAddress());
-                    customer_id=customerDto.getCustomerId();
+                    customer_id = customerDto.getCustomerId();
                     customerNumberTxt.setText(customerDto.getCustomerNumber());
                 }
-                
-                customer_exist=true;
+
+                customer_exist = true;
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Phone number seleting error");
@@ -2641,15 +2767,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_phoneOneCmbActionPerformed
 
     private void phoneOneCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_phoneOneCmbMouseClicked
-        
+
     }//GEN-LAST:event_phoneOneCmbMouseClicked
 
     private void phoneOneCmbKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneOneCmbKeyReleased
-        
+
     }//GEN-LAST:event_phoneOneCmbKeyReleased
 
     private void fr_de_chbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fr_de_chbMouseClicked
-        
+
     }//GEN-LAST:event_fr_de_chbMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -2658,7 +2784,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 setupTableModel(customer_id);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "This customer not have log!", "Error", JOptionPane.ERROR_MESSAGE);
-                Log.error(e, phoneOneCmb.getSelectedItem()+" This customer not have log!");
+                Log.error(e, phoneOneCmb.getSelectedItem() + " This customer not have log!");
                 return;
             }
 //            check_customer.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -2672,7 +2798,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //                    customer_id = null;
 //                }
 //            });
-            
+
             check_customer.setLocationRelativeTo(null);
             check_customer.setVisible(true);
             check_customer.repaint();
@@ -2681,7 +2807,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Phone2Label.setText((String) phoneTwoCmb.getSelectedItem());
             NameLabel.setText(customerNameTxt.getText());
             AddressLabel.setText(addressTxt.getText());
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Please select mobile number", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -2698,7 +2824,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             for (OrderDetails orderDetails : orderDetailsArray) {
                 dtm.addRow(orderDetails.toArray());
                 uniqueOrderCodes.add(orderDetails.getOrderCode());
-                System.out.println("> : "+orderDetails.getOrderCode().toString());
+                System.out.println("> : " + orderDetails.getOrderCode().toString());
             }
         }
         customerOrderDetailsTbl.removeAll();
@@ -2710,10 +2836,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }
 
-    
-    
     private void filterOrdersByOrderId(String orderCode) {
-        String[] columnNames = {"Item Name", "Quantity", "Per Item Price", "Total Item Price", "Delivery Fee", "Total Order Price","Status"};
+        String[] columnNames = {"Item Name", "Quantity", "Per Item Price", "Total Item Price", "Delivery Fee", "Total Order Price", "Status"};
         DefaultTableModel dtm = new DefaultTableModel(columnNames, 0);
 
         ArrayList<OrderDetails[]> orderDetailsList = mainOrderDetailRepositoryImpl.getOrderDetailsByCustomerId(customer_id);
@@ -2734,22 +2858,22 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         customerOrderDetailsTbl.setModel(dtm);
         netTotalLbl.setText(String.format("%.2f", netTotal));
     }
-    
+
     int selectedRow = -1;
-    
+
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
-                
+
                 PosMainUser userDto = null;
                 try {
                     userDto = userAccountManagementController.getUserByUserID(LogInForm.userID);
                 } catch (Exception ex) {
                     Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        
+
                 if (!(userDto.getRoleId() == 1 || userDto.getRoleId() == 2)) {
 //                    switch (status) {
 //                        case "Pending":
@@ -2820,7 +2944,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //                        default:
 //                            throw new AssertionError();
 //                    }
-                
+
                     // Disable all buttons by default
                     btnWrapping.setEnabled(false);
                     btnCancel.setEnabled(false);
@@ -2850,11 +2974,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     } else if (statusTypes.get(8).getStatus_type().equals(status)) {
                         btnReturning.setEnabled(true);
                         btnDeliverd.setEnabled(true);
-                    } else if (statusTypes.get(4).getStatus_type().equals(status) ||
-                               statusTypes.get(5).getStatus_type().equals(status) ||
-                               statusTypes.get(6).getStatus_type().equals(status) ||
-                               statusTypes.get(7).getStatus_type().equals(status) ||
-                               statusTypes.get(8).getStatus_type().equals(status)) {
+                    } else if (statusTypes.get(4).getStatus_type().equals(status)
+                            || statusTypes.get(5).getStatus_type().equals(status)
+                            || statusTypes.get(6).getStatus_type().equals(status)
+                            || statusTypes.get(7).getStatus_type().equals(status)
+                            || statusTypes.get(8).getStatus_type().equals(status)) {
                         // All buttons remain disabled
                     } else {
                         throw new AssertionError("Unknown status: " + status);
@@ -2865,7 +2989,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         return;
                     }
                 }
-               
+
                 String deliveryID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                 if (!deliveryID.isEmpty()) {
                     try {
@@ -2873,7 +2997,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         order_options.setLocationRelativeTo(null);
                         order_options.setSize(620, 160);
                         order_options.setTitle("Actions");
-                        
+
                         // Add a window listener to reset delivery_id when closed
                         order_options.addWindowListener(new java.awt.event.WindowAdapter() {
                             @Override
@@ -2882,7 +3006,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 System.out.println("Window closed. delivery_id reset to null");
                             }
                         });
-                        
+
                         order_options.setVisible(true);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid delivery ID: " + deliveryID);
@@ -2900,7 +3024,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_deliveryOrdersTableMousePressed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -2928,7 +3052,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_radioExchangeMouseClicked
 
     private void btnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActiveActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 1);
 
@@ -2936,12 +3060,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -2954,7 +3078,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnActiveActionPerformed
 
     private void btnWrappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWrappingActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 3);
 
@@ -2962,12 +3086,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -2980,7 +3104,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnWrappingActionPerformed
 
     private void btnOutForDeliveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutForDeliveryActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 4);
 
@@ -2988,12 +3112,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -3006,7 +3130,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnOutForDeliveryActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 7);
 
@@ -3014,12 +3138,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -3032,7 +3156,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 6);
 
@@ -3040,12 +3164,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -3065,9 +3189,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
-                
+
                 Date now = new Date();
-                deliveryOrderRepositoryImpl.addDeliveredDate(delivery_id,now);
+                deliveryOrderRepositoryImpl.addDeliveredDate(delivery_id, now);
 
                 int index = 0;
                 if (paymentTypeCombo2.getSelectedIndex() != 0) {
@@ -3094,8 +3218,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             String orderCodeStr = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
             if (deliveryID != null && !deliveryID.isEmpty()) {
                 orderCode = orderCodeStr;
-                System.out.println("orderCode : "+orderCode);
-                System.out.println("deliveryID : "+deliveryID);
+                System.out.println("orderCode : " + orderCode);
+                System.out.println("deliveryID : " + deliveryID);
                 delivery_id = deliveryID;
 
                 try {
@@ -3122,7 +3246,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         paymentTypeCombo.setSelectedIndex(0);
                         double remainingAmount = totalAmount - cod;
                         PaidAmountTxt.setText(Double.toString(remainingAmount));
-                        codTxt.setText(cod+"");
+                        codTxt.setText(cod + "");
                     }
 
                     // Additional logic for updating totals and other details...
@@ -3156,8 +3280,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 }
                             }
                         }
-                       
-                        for(int i = 0; i < itemListTable.getRowCount();i++){
+
+                        for (int i = 0; i < itemListTable.getRowCount(); i++) {
                             discountPrice += Double.parseDouble(itemListTable.getValueAt(i, 4).toString());
                         }
                         subTotAmountLbl.setText(String.format("%.2f", subTot));
@@ -3191,7 +3315,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnCheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckingActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 13);
 
@@ -3199,34 +3323,34 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
-                
+
                 CustomerDataByInquirySearch customerDataByInquirySearch = inquiryRepositoryImpl.getCustomerDataByWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
-            
-            //Save as inquary
-            InquiryModel inquiryModel = new InquiryModel();
-            
-            inquiryModel.setWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
-            inquiryModel.setCustomerId(customerDataByInquirySearch.getCustomerId()+"");
-            inquiryModel.setCustomerName(deliveryOrdersTable.getValueAt(selectedRow, 2).toString());
-            inquiryModel.setCustomerPhone1(deliveryOrdersTable.getValueAt(selectedRow, 3).toString());
-            inquiryModel.setCustomerPhone2(deliveryOrdersTable.getValueAt(selectedRow, 4).toString());
+
+                //Save as inquary
+                InquiryModel inquiryModel = new InquiryModel();
+
+                inquiryModel.setWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
+                inquiryModel.setCustomerId(customerDataByInquirySearch.getCustomerId() + "");
+                inquiryModel.setCustomerName(deliveryOrdersTable.getValueAt(selectedRow, 2).toString());
+                inquiryModel.setCustomerPhone1(deliveryOrdersTable.getValueAt(selectedRow, 3).toString());
+                inquiryModel.setCustomerPhone2(deliveryOrdersTable.getValueAt(selectedRow, 4).toString());
 //            inquiryModel.setCompany(cmbCompany.getSelectedItem().toString());
 //            inquiryModel.setBranch(cmbBranch.getSelectedItem().toString());
 //            inquiryModel.setBranchContact(txtBranchContact.getText());
 //            inquiryModel.setReason(cmbReason.getSelectedItem().toString());
 //            inquiryModel.setRemark(txtRemark.getText());
-            inquiryModel.setStatusId(11);
+                inquiryModel.setStatusId(11);
 
-            inquiryRepositoryImpl.saveInquiry(inquiryModel);
-                
+                inquiryRepositoryImpl.saveInquiry(inquiryModel);
+
             } catch (Exception ex) {
                 Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
@@ -3237,7 +3361,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCheckingActionPerformed
 
     private void btnReturningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturningActionPerformed
-        if(delivery_id!=null){
+        if (delivery_id != null) {
             try {
                 deliveryOrderRepositoryImpl.update(delivery_id, 12);
 
@@ -3245,12 +3369,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                int index=0;
-                if(paymentTypeCombo2.getSelectedIndex()!=0){
-                    index=paymentTypeCombo2.getSelectedIndex();
-                    getAllOrders(fromDate,toDate,paymentTypeIds_2.get(index-1));
-                }else{
-                    getAllOrders(fromDate,toDate,0);
+                int index = 0;
+                if (paymentTypeCombo2.getSelectedIndex() != 0) {
+                    index = paymentTypeCombo2.getSelectedIndex();
+                    getAllOrders(fromDate, toDate, paymentTypeIds_2.get(index - 1));
+                } else {
+                    getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
             } catch (Exception ex) {
@@ -3280,7 +3404,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                getAllOrders(fromDate, toDate,0);
+                getAllOrders(fromDate, toDate, 0);
 
                 remark.dispose();
             } catch (Exception ex) {
@@ -3291,97 +3415,206 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
     private void btnDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountActionPerformed
-        isOrder = true;
-        isDiscountForOrder.setEnabled(false);
-        isDoublePressedItemTable = false;
-        openDIscountInfo();
-      
+        if (hasRowLevelDiscount) {
+            int confimation = JOptionPane.showConfirmDialog(this, "You allready choose a discount option.Do you want reset?");
+            switch (confimation) {
+                case 0:
+                    setDefault();
+                    subTotAmountLbl.setText("0.00");
+                    totAmountLbl.setText("0.00");
+                    discountLabel.setText("0.00");
+                    weightTxt.setText("0.00");
+                    codTxt.setText("0.00");
+                    discountLabel.setText("0.00");
+                    hasRowLevelDiscount = false;
+                    DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                    model.setRowCount(0);
+                    this.discount = 0;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        } else {
+            isOrder = true;
+            isDiscountForOrder.setSelected(true);
+            isDiscountForOrder.setEnabled(false);
+            isDoublePressedItemTable = false;
+            openDIscountInfo();
+        }
+
     }//GEN-LAST:event_btnDiscountActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         isDoublePressedItemTable = false;
         isOrder = false;
         setDefault();
-        isDiscountForOrder.setSelected(true);
+        isDiscountForOrder.setSelected(false);
         isChooseComboDiscount = false;
         this.discountInfo.dispose();
-        
+
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
-       try{
-       if(isDoublePressedItemTable){
-           if(!txtCustomeDiscount.getText().equals("0.00")){
-                discount = Double.parseDouble(txtCustomeDiscount.getText());
-           } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")) {
-                discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
-           }
-           Double discounts = setDiscount(clickedItemPrice);
-           System.out.println("Discount "+ discounts);
-           
-           itemListTable.setValueAt(discounts, row, 4);
-           
-           Double newItemPrice = clickedItemPrice - discounts;
-           itemListTable.setValueAt(newItemPrice, row, 5);
-           
-           ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 4);
-           ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 5);
+        System.out.println("combo selected : "+ isChooseComboDiscount);
+        try {
+            // Edge case: if subtotal is 0.00
+            if (subTotAmountLbl.getText().equals("0.00")) {
+                if (isChooseComboDiscount) {
+                    discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
+                } else {
+                    discount = Double.parseDouble(txtCustomeDiscount.getText());
+                }
+            }
 
-           
-           updateTotals();
-           addUpdateTotals();
-           isDoublePressedItemTable = false;
-           discount = 0.0;
-           discountInfo.dispose();
-           return;
-       }
-       isDoublePressedItemTable = false;
-       if(!txtCustomeDiscount.getText().equals("0.00")){
-           discount = Double.parseDouble(txtCustomeDiscount.getText());
-           updateTotals();
-           if(subTotAmountLbl.getText() != null){
-                updateTotals();
-           }
-//           System.out.println("Discount " + discount);
-//           setDiscount();
-           discountInfo.dispose();
-       } else if (!cmbDiscount.getSelectedItem().equals("Choose a discount")){
-           
-           discount = Double.parseDouble(cmbDiscount.getSelectedItem().toString().replace("%", ""));
-           updateTotals();
-           if(subTotAmountLbl.getText() != null){
-                updateTotals();
-           }
-//           System.out.println("Discount " + discount);
-//           setDiscount();
-           discountInfo.dispose();
-       } else {
-           Log.error(new Logger("Exception", "Please Choose an option before apply") {
-           }, evt, new RuntimeException("Please Choose an option before apply"));
-       }
-       }catch(Exception e){
-       
-       }finally{
-       
-           isDiscountForOrder.setSelected(true);
-           isChooseComboDiscount = false;
-           setDefault();
-       }
-        
+            // Item-level discount (when row in table is double-clicked)
+            if (isDoublePressedItemTable) {
+                String customDiscountText = txtCustomeDiscount.getText().trim();
+                String customDiscountType = cmbSymbol.getSelectedItem() != null
+                        ? cmbSymbol.getSelectedItem().toString().trim()
+                        : "";
+                String comboDiscount = cmbDiscount.getSelectedItem() != null
+                        ? cmbDiscount.getSelectedItem().toString().trim()
+                        : "";
+
+                if (!"0.00".equals(customDiscountText) && !customDiscountText.isEmpty()) {
+                    try {
+                        discount = Double.parseDouble(customDiscountText);
+                        if ("Rs".equals(customDiscountType)) {
+                            isChooseComboDiscount = false;
+                        } else if ("%".equals(customDiscountType)) {
+                            isChooseComboDiscount = true;
+                        } else {
+                            Log.error(new Logger("Exception", "Invalid discount type selected") {
+                            }, evt,
+                                    new RuntimeException("Invalid discount type"));
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        Log.error(new Logger("Exception", "Invalid custom discount format") {
+                        }, evt, e);
+                        return;
+                    }
+                } else if (!"Choose a discount".equals(comboDiscount)) {
+                    try {
+                        if (comboDiscount.contains("%")) {
+                            discount = Double.parseDouble(comboDiscount.replace("%", "").trim());
+                            isChooseComboDiscount = true;
+                        } else {
+                            discount = Double.parseDouble(comboDiscount.trim());
+                            isChooseComboDiscount = false;
+                        }
+                    } catch (NumberFormatException e) {
+                        Log.error(new Logger("Exception", "Invalid combo discount format") {
+                        }, evt, e);
+                        return;
+                    }
+                } else {
+                    Log.error(new Logger("Exception", "Please Choose an option before apply") {
+                    }, evt,
+                            new RuntimeException("Please Choose an option before apply"));
+                    return;
+                }
+
+                // Apply to item
+                Double discountAmount = setDiscount(clickedItemPrice);
+                System.out.println("Item-level Discount applied: " + discountAmount);
+
+                itemListTableModel.setValueAt(discountAmount, row, 4);
+                Double newItemPrice = clickedItemPrice - discountAmount;
+                if (newItemPrice < 0) {
+                    newItemPrice = 0.0;
+                }
+                itemListTableModel.setValueAt(newItemPrice, row, 5);
+
+                ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 4);
+                ((AbstractTableModel) itemListTable.getModel()).fireTableCellUpdated(row, 5);
+
+                addUpdateTotals();
+                discountInfo.dispose();
+                discount = 0.0;
+                return;
+            }
+
+            // ----- Order-Level Discount -----
+            String customDiscountText = txtCustomeDiscount.getText().trim();
+            String customDiscountType = cmbSymbol.getSelectedItem() != null
+                    ? cmbSymbol.getSelectedItem().toString().trim()
+                    : "";
+            String comboDiscount = cmbDiscount.getSelectedItem() != null
+                    ? cmbDiscount.getSelectedItem().toString().trim()
+                    : "";
+
+            if (!"0.00".equals(customDiscountText) && !customDiscountText.isEmpty()) {
+                try {
+                    discount = Double.parseDouble(customDiscountText);
+                    if ("Rs".equals(customDiscountType)) {
+                        isChooseComboDiscount = false;
+                    } else if ("%".equals(customDiscountType)) {
+                        isChooseComboDiscount = true;
+                    } else {
+                        Log.error(new Logger("Exception", "Invalid discount type selected") {
+                        }, evt,
+                                new RuntimeException("Invalid discount type"));
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Log.error(new Logger("Exception", "Invalid custom discount format") {
+                    }, evt, e);
+                    return;
+                }
+            } else if (!"Choose a discount".equals(comboDiscount)) {
+                try {
+                    if (comboDiscount.contains("%")) {
+                        discount = Double.parseDouble(comboDiscount.replace("%", "").trim());
+                        isChooseComboDiscount = true;
+                    } else {
+                        discount = Double.parseDouble(comboDiscount.trim());
+                        isChooseComboDiscount = false;
+                    }
+                } catch (NumberFormatException e) {
+                    Log.error(new Logger("Exception", "Invalid combo discount format") {
+                    }, evt, e);
+                    return;
+                }
+            } else {
+                Log.error(new Logger("Exception", "Please Choose an option before apply") {
+                }, evt,
+                        new RuntimeException("Please Choose an option before apply"));
+                return;
+            }
+
+            // ✅ FIX: Apply discount to the subtotal instead of clicked item
+            Double subTotal = Double.parseDouble(subTotAmountLbl.getText());  // get total
+            Double discountAmount = setDiscount(subTotal);  // apply discount on subtotal
+
+            System.out.println("Order-level Discount applied: " + discountAmount);
+            addUpdateTotals();
+            discountInfo.dispose();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            isDiscountForOrder.setSelected(true);
+//            isChooseComboDiscount = false;
+            comboSelected = false;
+            setDefault();
+        }
     }//GEN-LAST:event_applyBtnActionPerformed
 
     private void cmbDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountActionPerformed
         // TODO add your handling code here:
         isChooseComboDiscount = true;
-        
+
     }//GEN-LAST:event_cmbDiscountActionPerformed
 
     private void cmbSymbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSymbolActionPerformed
-        symbol = cmbSymbol.getSelectedItem().toString();
+//        symbol = cmbSymbol.getSelectedItem().toString();
     }//GEN-LAST:event_cmbSymbolActionPerformed
 
     private void txtCustomeDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomeDiscountActionPerformed
         // TODO add your handling code here:
+
+
     }//GEN-LAST:event_txtCustomeDiscountActionPerformed
 
     private void qtyTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtyTxtActionPerformed
@@ -3390,25 +3623,47 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void itemListTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListTableMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_itemListTableMouseClicked
 
     private void itemListTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListTableMousePressed
         // TODO add your handling code here:
-        if(evt.getClickCount() == 2) {
-            this.row = itemListTable.getSelectedRow();
-            this.clickedItemPrice = Double.valueOf(itemListTable.getValueAt(row, 2).toString());
-            isDoublePressedItemTable = true;
-            isDiscountForOrder.setSelected(false);
-            isDiscountForOrder.setEnabled(false);
-            isOrder = false;
-            openDIscountInfo();
+        if (evt.getClickCount() == 2) {
+            if (isOrder) {
+                int confimation = JOptionPane.showConfirmDialog(this, "You allready choose a discount option.Do you want reset?");
+                switch (confimation) {
+                    case 0:
+                        setDefault();
+                        subTotAmountLbl.setText("0.00");
+                        totAmountLbl.setText("0.00");
+                        discountLabel.setText("0.00");
+                        weightTxt.setText("0.00");
+                        codTxt.setText("0.00");
+                        discountLabel.setText("0.00");
+                        DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                        model.setRowCount(0);
+                        isOrder = false;
+                        isDoublePressedItemTable = false;
+                        this.discount = 0;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+            } else {
+                this.row = itemListTable.getSelectedRow();
+                this.clickedItemPrice = Double.valueOf(itemListTable.getValueAt(row, 2).toString());
+                isDoublePressedItemTable = true;
+                isDiscountForOrder.setSelected(false);
+                isDiscountForOrder.setEnabled(false);
+                isOrder = false;
+                openDIscountInfo();
+            }
         }
     }//GEN-LAST:event_itemListTableMousePressed
 
     private void isDiscountForOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isDiscountForOrderActionPerformed
         // TODO add your handling code here:
-        if(isDiscountForOrder.isSelected()){
+        if (isDiscountForOrder.isSelected()) {
             isOrder = true;
         } else {
             isOrder = false;
@@ -3419,27 +3674,27 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         setDefault();
         isChooseComboDiscount = false;
+        discount = 0;
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void txtCustomeDiscountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomeDiscountMouseClicked
         // TODO add your handling code here:
-        if(evt.getClickCount() == 1){
+        if (evt.getClickCount() == 1) {
             setDefault();
             isChooseComboDiscount = false;
+
         }
     }//GEN-LAST:event_txtCustomeDiscountMouseClicked
-   
- 
-    
+
     /**
      * @param args the command line arguments
      */
 //    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+     */
 //        try {
 //            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 //                if ("Nimbus".equals(info.getName())) {
@@ -3456,9 +3711,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
 //            java.util.logging.Logger.getLogger(DeliveryOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
-        //</editor-fold>
+    //</editor-fold>
 
-        /* Create and display the form */
+    /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
 //                new DeliveryOrders().setVisible(true);
@@ -3593,10 +3848,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getItems() {
         try {
-            String quary="WHERE visible=1 AND status=1";
-            ArrayList<MainItemDto> itemList=newItemController.getAllItems(quary);
-            
-            for(MainItemDto mainItem:itemList){
+            String quary = "WHERE visible=1 AND status=1";
+            ArrayList<MainItemDto> itemList = newItemController.getAllItems(quary);
+
+            for (MainItemDto mainItem : itemList) {
                 itemCombo.addItem(mainItem.getItemName());
                 itemIds.add(mainItem.getItemId());
                 itemPriceList.add(mainItem.getUnitPrice());
@@ -3611,16 +3866,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getPaymentTypes() {
         try {
-            String quary="WHERE visible=1 AND status=1";
-            ArrayList<PaymentTypeDto> paymentTypes=paymentTypesController.getPaymentTypes(quary);
-            
-            for(PaymentTypeDto typeDto:paymentTypes){
+            String quary = "WHERE visible=1 AND status=1";
+            ArrayList<PaymentTypeDto> paymentTypes = paymentTypesController.getPaymentTypes(quary);
+
+            for (PaymentTypeDto typeDto : paymentTypes) {
                 paymentTypeCombo.addItem(typeDto.getName());
                 paymentTypeIds.add(typeDto.getPaymentTypeId());
                 paymentTypeCombo2.addItem(typeDto.getName());
-                 paymentTypeIds_2.add(typeDto.getPaymentTypeId());
+                paymentTypeIds_2.add(typeDto.getPaymentTypeId());
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getPaymentTypes error");
@@ -3701,39 +3956,38 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             codTotTxt.setText(totCod + "");
             returnsTotTxt.setText(totReturns + "");
             total_orders_count_txt.setText(count + "");
-            deliveriesTotTxt.setText(totDeliveries+"");
+            deliveriesTotTxt.setText(totDeliveries + "");
 
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getAllOrders error");
         }
-        
+
         // Assuming status is at column index 7 in your table
         deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
     }
 
-
     private void printBill(Integer orderId) {
         try {
             HashMap<String, Object> hm = new HashMap<>();
-            
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
             Date date = new Date();
-            Double paidAmount=Double.parseDouble(weightTxt.getText());
-            
-            String orderCode=orderCodeTxt.getText();
+            Double paidAmount = Double.parseDouble(weightTxt.getText());
+
+            String orderCode = orderCodeTxt.getText();
             hm.put("DATE", formatter.format(date));
             hm.put("PAID_AMOUNT", paidAmount);
             hm.put("ORDER_ID", orderId);
             hm.put("WEIGHT", weightTxt.getText());
-            
+
             JasperReport jr = JasperCompileManager.compileReport("D:/Unical/Unical-Pos-System/reports/Delivery_Receipt.jrxml");
             JasperPrint jp = JasperFillManager.fillReport(jr, hm, DBCon.getDatabaseConnection());
 //            JasperViewer view = new JasperViewer(jp, false);
 //            view.setVisible(true);
 
-            JasperExportManager.exportReportToPdfFile(jp,"C:/Users/Sanjuka/Documents/Petal Pink/Payment recepts/"+orderCode+".pdf");
-        
+            JasperExportManager.exportReportToPdfFile(jp, "C:/Users/Sanjuka/Documents/Petal Pink/Payment recepts/" + orderCode + ".pdf");
+
         } catch (JRException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "printBill error");
@@ -3749,16 +4003,16 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getPhone_Number_One() {
         try {
-            Vector<String> numbers=new Stack<>();
-            
+            Vector<String> numbers = new Stack<>();
+
             List<CustomerDto> customerDtos = customerController.getCustomer("");
-            
+
             for (CustomerDto customerDto : customerDtos) {
-               numbers.add("0"+customerDto.getPhoneOne());
-               numbers.add("0"+customerDto.getPhoneTwo());
-               customersList.add(customerDto.getCustomerId());
+                numbers.add("0" + customerDto.getPhoneOne());
+                numbers.add("0" + customerDto.getPhoneTwo());
+                customersList.add(customerDto.getCustomerId());
             }
-            
+
             AutoGenerator autoGenerator = new AutoGenerator();
             autoGenerator.completeText(numbers, phoneOneCmb);
         } catch (Exception ex) {
@@ -3766,18 +4020,18 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Log.error(ex, "getPhone_Number_One error");
         }
     }
-    
+
     private void getPhone_Number_Two() {
         try {
-            Vector<String> numbers=new Stack<>();
-            
+            Vector<String> numbers = new Stack<>();
+
             List<CustomerDto> customerDtos = customerController.getCustomer("");
-            
+
             for (CustomerDto customerDto : customerDtos) {
-               numbers.add("0"+customerDto.getPhoneOne());
-               numbers.add("0"+customerDto.getPhoneTwo());
+                numbers.add("0" + customerDto.getPhoneOne());
+                numbers.add("0" + customerDto.getPhoneTwo());
             }
-            
+
             AutoGenerator autoGenerator = new AutoGenerator();
             autoGenerator.completeText(numbers, phoneTwoCmb);
         } catch (Exception ex) {
@@ -3785,7 +4039,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             Log.error(ex, "getPhone_Number_Two error");
         }
     }
-    
 
     private void clearText() {
         phoneOneCmb.setSelectedIndex(-1);
@@ -3826,7 +4079,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 //    private void textNull() {
 //        phone2Txt.setText(null);
 //    }
-
     private void setDiscountCmb() {
         ArrayList<DiscountDto> discounts = discountController.getAllDiscounts();
         for (DiscountDto discount : discounts) {
@@ -3838,29 +4090,18 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }
 
-    private void setDiscount() {
-        double discount =Double.parseDouble(subTotAmountLbl.getText()) * this.discount/100;
-        discountLabel.setText("-" + String.valueOf(discount));
-        
-        double subTot = (Double.parseDouble(subTotAmountLbl.getText())) - discount;
-        subTotAmountLbl.setText(String.valueOf(subTot));
-        
-        double grandTot = subTot + Double.parseDouble(deliveyFeeLbl.getText());
-        totAmountLbl.setText(String.valueOf(grandTot));
-        codTxt.setText(String.valueOf(grandTot));
-        
-    }
-
     private void openDIscountInfo() {
         discountInfo.setLocationRelativeTo(null);
-        discountInfo.setMaximumSize(new Dimension(650,160));
+        discountInfo.setMaximumSize(new Dimension(650, 160));
         discountInfo.setVisible(true);
+        isChooseComboDiscount = false;
     }
 
     private void setDefault() {
         txtCustomeDiscount.setText("0.00");
         cmbDiscount.setSelectedIndex(0);
         cmbSymbol.setSelectedIndex(0);
+
     }
-    
+
 }

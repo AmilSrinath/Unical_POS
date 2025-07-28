@@ -2684,37 +2684,37 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_phoneTwoCmbActionPerformed
 
     private void paymentTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentTypeComboActionPerformed
-        Double delivery_fee = 0.0;
-        Properties props = new Properties();
-
-        try {
-            FileInputStream fis = new FileInputStream("config.txt");
-            props.load(fis);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (paymentTypeCombo.getSelectedItem().toString().equals("Card")) {
-            codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
-            totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
-            deliveyFeeLbl.setText(props.getProperty("CARD_FEE"));
-
-        } else {
-
-            if (deliveyFeeLbl.getText().equals("0.00")) {
-                delivery_fee = Double.valueOf(props.getProperty("DELIVERY_FEE"));
-                codTxt.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
-                totAmountLbl.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
-                deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
-            } else {
-                codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
-                totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
-
-            }
-
-        }
+//        Double delivery_fee = 0.0;
+//        Properties props = new Properties();
+//
+//        try {
+//            FileInputStream fis = new FileInputStream("config.txt");
+//            props.load(fis);
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        if (paymentTypeCombo.getSelectedItem().toString().equals("Card")) {
+//            codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
+//            totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText()) - Double.parseDouble(deliveyFeeLbl.getText())));
+//            deliveyFeeLbl.setText(props.getProperty("CARD_FEE"));
+//
+//        } else {
+//
+//            if (deliveyFeeLbl.getText().equals("0.00")) {
+//                delivery_fee = Double.valueOf(props.getProperty("DELIVERY_FEE"));
+//                codTxt.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
+//                totAmountLbl.setText(String.valueOf(Double.valueOf(totAmountLbl.getText()) + delivery_fee));
+//                deliveyFeeLbl.setText(props.getProperty("DELIVERY_FEE"));
+//            } else {
+//                codTxt.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
+//                totAmountLbl.setText(String.valueOf(Double.parseDouble(totAmountLbl.getText())));
+//
+//            }
+//
+//        }
     }//GEN-LAST:event_paymentTypeComboActionPerformed
 
     private void paymentTypeComboKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentTypeComboKeyReleased
@@ -3246,7 +3246,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         paymentTypeCombo.setSelectedIndex(0);
                         double remainingAmount = totalAmount - cod;
                         PaidAmountTxt.setText(Double.toString(remainingAmount));
-                        codTxt.setText(cod + "");
+                        codTxt.setText(
+                                "0");
                     }
 
                     // Additional logic for updating totals and other details...

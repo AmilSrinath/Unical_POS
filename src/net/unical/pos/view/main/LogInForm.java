@@ -36,19 +36,18 @@ public class LogInForm extends javax.swing.JFrame {
     /**
      * Creates new form LogInForm
      */
-    
     private UserAccountManagementController userAccountManagementController;
     private LoginRepositoryImpl loginRepositoryImpl;
     private UserRoleController userRoleController;
     private EmployeeManagementController employeeManagementController;
-    
+
     public static int userID = 0;
     public static String userName = null;
     public static String userRole = null;
-    
+
     public LogInForm() throws Exception {
         initComponents();
-        
+
         // Styling the button
         jXButton1.setText("Sign In");
         jXButton1.setBorder(new RoundedBorder(20));
@@ -64,18 +63,19 @@ public class LogInForm extends javax.swing.JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jXButton1.setBackground(new Color(0, 105, 217)); // Darker blue on hover
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jXButton1.setBackground(new Color(0, 123, 255)); // Original color
             }
         });
-        
+
         this.setLocationRelativeTo(null);
-        
-        this.userAccountManagementController=new UserAccountManagementController();
+
+        this.userAccountManagementController = new UserAccountManagementController();
         this.loginRepositoryImpl = new LoginRepositoryImpl();
         this.userRoleController = new UserRoleController();
         this.employeeManagementController = new EmployeeManagementController();
-        
+
         setDefaulUser();
         loadAllUsers();
         lowerCaseCharacters();
@@ -609,67 +609,62 @@ public class LogInForm extends javax.swing.JFrame {
 
     private void setDefaulUser() throws Exception {
         if (userRoleController.isEmpty()) {
-            boolean isSaveUser=userRoleController.saveUserRole(
-                new UserRoleDto(0,"Super Admin",1,1,1)
+            boolean isSaveUser = userRoleController.saveUserRole(
+                    new UserRoleDto(0, "Super Admin", 1, 1, 1)
             );
 
-            boolean isSaveEmployee=employeeManagementController.saveEmployee(
-                    new EmployeeManagementDto(0, "Mr", "Super Admin", "System Maintains","",1,"",0,"","","",1,1)
+            boolean isSaveEmployee = employeeManagementController.saveEmployee(
+                    new EmployeeManagementDto(0, "Mr", "Super Admin", "System Maintains", "", 1, "", 0, "", "", "", 1, 1)
             );
 
-            UserDto saveUser = userAccountManagementController.saveUser(new UserDto(0, 1,1, "Super Admin", "1234",1,1,""));
+            UserDto saveUser = userAccountManagementController.saveUser(new UserDto(0, 1, 1, "Super Admin", "1234", 1, 1, ""));
 
-            if (isSaveEmployee && isSaveUser && saveUser!=null) {
+            if (isSaveEmployee && isSaveUser && saveUser != null) {
                 JOptionPane.showMessageDialog(this, "Super Admin save successfully.");
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(this, "Please try agin", "User saving error", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
+        } else {
             return;
         }
     }
-    
-    public String getUserRole(){
+
+    public String getUserRole() {
         return loginRepositoryImpl.getUserRoleByUserID(userID);
     }
-    
-    private void loginMethod() throws Exception{
+
+    private void loginMethod() throws Exception {
         FileInputStream fs = new FileInputStream("config.txt");
         Properties props = new Properties();
         props.load(fs);
         try {
-            if(props.getProperty("DEVELOPMENT_PC").equals("1")){
-                Dashboard dashboard=new Dashboard();
-                dashboard.setVisible(true);
-                this.dispose();
-            }
             if (loginRepositoryImpl.login(userID, passwordTxt.getText())) {
-                Dashboard dashboard=new Dashboard();
+                Dashboard dashboard = new Dashboard();
                 dashboard.setVisible(true);
                 this.dispose();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Please Check password", "Password Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Please select user", "User Error", JOptionPane.ERROR_MESSAGE);
             Log.error(e, "Not selected user");
-        } catch (IllegalArgumentException exception){
+        } catch (IllegalArgumentException exception) {
             JOptionPane.showMessageDialog(this, "Please enter password", "Password Error", JOptionPane.ERROR_MESSAGE);
             Log.error(exception, "password error");
         }
     }
-    
+
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
         Properties props = new Properties();
         try {
             FileInputStream fs = new FileInputStream("config.txt");
             props.load(fs);
             if (props.getProperty("DEVELOPMENT_PC").equals("1")) {
-                Dashboard dashboard=new Dashboard();
+                Dashboard dashboard = new Dashboard();
                 dashboard.setVisible(true);
                 this.dispose();
             } else {
-            loginMethod();
+                loginMethod();
             }
         } catch (Exception ex) {
             Logger.getLogger(LogInForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -677,406 +672,406 @@ public class LogInForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void aBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"A");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"a");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "A");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "a");
         }
     }//GEN-LAST:event_aBtnActionPerformed
 
     private void capsLockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_capsLockBtnActionPerformed
-        if(capsLockBtn.isSelected()){
+        if (capsLockBtn.isSelected()) {
             capsLockBtn.setBackground(Color.red);
             capsLockBtn.setForeground(Color.white);
-            
+
             upperCaseCharacters();
-            
-        }else{
-            capsLockBtn.setBackground(new Color(60,63,65));
-            capsLockBtn.setForeground(new Color(187,187,187));
-            
+
+        } else {
+            capsLockBtn.setBackground(new Color(60, 63, 65));
+            capsLockBtn.setForeground(new Color(187, 187, 187));
+
             lowerCaseCharacters();
         }
     }//GEN-LAST:event_capsLockBtnActionPerformed
 
     private void oneBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"1");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"1");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "1");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "1");
         }
     }//GEN-LAST:event_oneBtnActionPerformed
 
     private void twoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twoBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"2");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"2");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "2");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "2");
         }
     }//GEN-LAST:event_twoBtnActionPerformed
 
     private void threeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_threeBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"3");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"3");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "3");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "3");
         }
     }//GEN-LAST:event_threeBtnActionPerformed
 
     private void fourBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"4");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"4");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "4");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "4");
         }
     }//GEN-LAST:event_fourBtnActionPerformed
 
     private void fiveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fiveBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"5");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"5");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "5");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "5");
         }
     }//GEN-LAST:event_fiveBtnActionPerformed
 
     private void sixBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"6");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"6");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "6");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "6");
         }
     }//GEN-LAST:event_sixBtnActionPerformed
 
     private void sevenBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sevenBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"7");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"7");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "7");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "7");
         }
     }//GEN-LAST:event_sevenBtnActionPerformed
 
     private void eightBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eightBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"8");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"8");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "8");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "8");
         }
     }//GEN-LAST:event_eightBtnActionPerformed
 
     private void nineBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nineBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"9");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"9");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "9");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "9");
         }
     }//GEN-LAST:event_nineBtnActionPerformed
 
     private void zeroBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zeroBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"0");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"0");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "0");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "0");
         }
     }//GEN-LAST:event_zeroBtnActionPerformed
 
     private void qBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"Q");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"q");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "Q");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "q");
         }
     }//GEN-LAST:event_qBtnActionPerformed
 
     private void wBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"W");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"w");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "W");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "w");
         }
     }//GEN-LAST:event_wBtnActionPerformed
 
     private void eBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"E");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"e");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "E");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "e");
         }
     }//GEN-LAST:event_eBtnActionPerformed
 
     private void rBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"R");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"r");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "R");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "r");
         }
     }//GEN-LAST:event_rBtnActionPerformed
 
     private void tBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"T");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"t");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "T");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "t");
         }
     }//GEN-LAST:event_tBtnActionPerformed
 
     private void yBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"Y");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"y");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "Y");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "y");
         }
     }//GEN-LAST:event_yBtnActionPerformed
 
     private void uBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"U");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"u");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "U");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "u");
         }
     }//GEN-LAST:event_uBtnActionPerformed
 
     private void iBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"I");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"i");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "I");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "i");
         }
     }//GEN-LAST:event_iBtnActionPerformed
 
     private void oBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"O");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"o");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "O");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "o");
         }
     }//GEN-LAST:event_oBtnActionPerformed
 
     private void pBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"P");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"p");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "P");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "p");
         }
     }//GEN-LAST:event_pBtnActionPerformed
 
     private void sBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"S");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"s");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "S");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "s");
         }
     }//GEN-LAST:event_sBtnActionPerformed
 
     private void dBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"D");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"d");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "D");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "d");
         }
     }//GEN-LAST:event_dBtnActionPerformed
 
     private void fBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"F");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"f");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "F");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "f");
         }
     }//GEN-LAST:event_fBtnActionPerformed
 
     private void gBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"G");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"g");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "G");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "g");
         }
     }//GEN-LAST:event_gBtnActionPerformed
 
     private void hBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"H");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"h");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "H");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "h");
         }
     }//GEN-LAST:event_hBtnActionPerformed
 
     private void jBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"J");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"j");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "J");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "j");
         }
     }//GEN-LAST:event_jBtnActionPerformed
 
     private void kBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"K");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"k");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "K");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "k");
         }
     }//GEN-LAST:event_kBtnActionPerformed
 
     private void lBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"L");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"l");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "L");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "l");
         }
     }//GEN-LAST:event_lBtnActionPerformed
 
     private void zBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"Z");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"z");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "Z");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "z");
         }
     }//GEN-LAST:event_zBtnActionPerformed
 
     private void xBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"X");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"x");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "X");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "x");
         }
     }//GEN-LAST:event_xBtnActionPerformed
 
     private void cBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"C");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"c");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "C");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "c");
         }
     }//GEN-LAST:event_cBtnActionPerformed
 
     private void vBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"V");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"v");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "V");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "v");
         }
     }//GEN-LAST:event_vBtnActionPerformed
 
     private void bBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"B");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"b");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "B");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "b");
         }
     }//GEN-LAST:event_bBtnActionPerformed
 
     private void nBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"N");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"n");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "N");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "n");
         }
     }//GEN-LAST:event_nBtnActionPerformed
 
     private void mBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"M");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"m");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "M");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "m");
         }
     }//GEN-LAST:event_mBtnActionPerformed
 
     private void atBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"@");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+"@");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "@");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + "@");
         }
     }//GEN-LAST:event_atBtnActionPerformed
 
     private void dotBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dotBtnActionPerformed
-        if(capsLockBtn.isSelected()){
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+".");
-        }else{
-            String text=passwordTxt.getText();
-            passwordTxt.setText(text+".");
+        if (capsLockBtn.isSelected()) {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + ".");
+        } else {
+            String text = passwordTxt.getText();
+            passwordTxt.setText(text + ".");
         }
     }//GEN-LAST:event_dotBtnActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        
+
     }//GEN-LAST:event_formWindowClosed
 
     private void userNameTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameTblMouseClicked
-        
+
     }//GEN-LAST:event_userNameTblMouseClicked
 
     private void userNameTblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameTblMousePressed
@@ -1206,18 +1201,18 @@ public class LogInForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     ArrayList<UserDto> userDtos = null;
-            
+
     private void loadAllUsers() {
         try {
-            String quary="WHERE status=1 and visible=1";
+            String quary = "WHERE status=1 and visible=1";
             userDtos = new ArrayList<>();
-            userDtos=userAccountManagementController.getAllUsers(quary);
-            
-            DefaultTableModel dtm=(DefaultTableModel) userNameTbl.getModel();
+            userDtos = userAccountManagementController.getAllUsers(quary);
+
+            DefaultTableModel dtm = (DefaultTableModel) userNameTbl.getModel();
             dtm.setRowCount(0);
-            
-            for(UserDto userDto:userDtos){
-                Object[] rowDate={
+
+            for (UserDto userDto : userDtos) {
+                Object[] rowDate = {
                     userDto.getUserId(),
                     userDto.getUserName(),
                     userDto.getToken()

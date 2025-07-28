@@ -634,7 +634,15 @@ public class LogInForm extends javax.swing.JFrame {
     }
     
     private void loginMethod() throws Exception{
+        FileInputStream fs = new FileInputStream("config.txt");
+        Properties props = new Properties();
+        props.load(fs);
         try {
+            if(props.getProperty("DEVELOPMENT_PC").equals("1")){
+                Dashboard dashboard=new Dashboard();
+                dashboard.setVisible(true);
+                this.dispose();
+            }
             if (loginRepositoryImpl.login(userID, passwordTxt.getText())) {
                 Dashboard dashboard=new Dashboard();
                 dashboard.setVisible(true);

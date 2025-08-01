@@ -20,4 +20,6 @@ public interface DeliveryOrderRepositoryCustom {
     public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType, int status);
     
     public String getOrderIDByBillNo(String billNo);
+
+    public Double getSpecificWaight(Integer id);
 }

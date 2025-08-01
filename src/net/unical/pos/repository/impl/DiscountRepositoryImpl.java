@@ -19,7 +19,8 @@ import net.unical.pos.repository.custom.DiscountRepositoryCustom;
  *
  * @author Dhanujaya(Dhanu)
  */
-public class DiscountRepositoryImpl implements DiscountRepositoryCustom{
+public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
+
     private String TABLE = "pos_main_discount_tb";
 
     @Override
@@ -28,21 +29,18 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom{
         ArrayList<DiscountModel> discounts = new ArrayList<>();
         try {
             ResultSet rs = DBConnection.getInstance().getConnection().prepareStatement(sql).executeQuery();
-            if(rs.next()){
-                while (rs.next()) {
-                    discounts.add(
+            while (rs.next()) {
+                discounts.add(
                         new DiscountModel(
-                            rs.getInt("discount_id"),
-                            rs.getString("discount_name"),
-                            rs.getDouble("percentage"),
-                            rs.getDouble("amount"),
-                            rs.getInt("status")
+                                rs.getInt("discount_id"),
+                                rs.getString("discount_name"),
+                                rs.getDouble("percentage"),
+                                rs.getDouble("amount"),
+                                rs.getInt("status")
                         )
-                     );
-                }
-            } else {
-               throw new RuntimeException("SQL ERROR");
+                );
             }
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -74,17 +72,17 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom{
 
     @Override
     public Integer getDiscountId(double percentage) {
-        System.out.println("percentage "+ percentage);
-        String sql = "SELECT discount_id FROM "+ TABLE + " WHERE percentage = ?";
+        System.out.println("percentage " + percentage);
+        String sql = "SELECT discount_id FROM " + TABLE + " WHERE percentage = ?";
         try {
             PreparedStatement ps = DBConnection.getInstance().getConnection().prepareStatement(sql);
             ps.setDouble(1, percentage);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 System.out.println("come to this");
                 return rs.getInt("discount_id");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             Logger.getLogger("Something sql error");
         }
         return null;

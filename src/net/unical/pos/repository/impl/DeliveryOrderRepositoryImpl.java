@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
+import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dto.DeliveryOrderDto;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.model.DeliveryOrder;
@@ -108,7 +109,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(DeliveryOrderRepositoryImpl.class, "UPDATE pos_main_customer_tb");
 
                 // Add Delivery
-                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange, order_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -118,6 +119,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(7, deliveryOrder.getFreeShip());
                 ps.setInt(8, LogInForm.userID);
                 ps.setInt(9, deliveryOrder.getIsExchange());
+                ps.setString(10, deliveryOrder.getOrderType());
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
                 if (rst.next()) {
@@ -957,7 +959,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
         String updateOrderSQL = "UPDATE pos_main_delivery_order_tb SET "
                 + "customer_id = ?, cod_amount = ?, weight = ?, remark = ?, "
-                + "status_id = ?, is_free_delivery = ?, is_return = ?, user_id = ?, order_code = ? "
+                + "status_id = ?, is_free_delivery = ?, is_return = ?, user_id = ?, order_code = ?, order_type = ? "
                 + "WHERE delivery_id = ?";
 
         PreparedStatement orderStatement = null;
@@ -972,7 +974,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         orderStatement.setInt(7, 0);
         orderStatement.setInt(8, 1);
         orderStatement.setString(9, deliveryOrderDto.getOrderCode());
-        orderStatement.setString(10, delivery_id);
+        orderStatement.setString(10, deliveryOrderDto.getOrderType());
+        orderStatement.setString(11, delivery_id);
 
         return orderStatement.executeUpdate() > 0;
     }
@@ -1708,6 +1711,25 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.error(e, "Resource closing failed in updateOrderRemarkWithDeliveryId");
             }
         }
+    }
+
+    @Override
+    public Double getSpecificWaight(Integer id) {
+        String sql = "SELECT weight FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
+                
+        try {
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, id);
+            ResultSet rst = pstm.executeQuery();
+            if(rst.next()){
+                return rst.getDouble("weight");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0.0;
     }
 
 }

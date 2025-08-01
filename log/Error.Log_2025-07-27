@@ -1,0 +1,18 @@
+2025-07-14 11:06:48,448 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:07:00,345 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:07:19,813 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:11:23,822 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:12:31,701 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'status' in where clause is ambiguous	get All Inquiry Duration faild
+2025-07-14 11:16:27,345 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:27,689 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:28,101 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:28,364 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:29,031 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:29,244 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:39,355 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:39,592 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:52,082 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:16:53,229 ERROR error - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2025-07-14 11:17:59,539 ERROR error - java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 2	java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 2
+2025-07-27 19:58:14,882 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.unical.pos.model.DeliveryOrder.getDiscountId()" is null	java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.unical.pos.model.DeliveryOrder.getDiscountId()" is null
+2025-07-27 19:58:43,959 ERROR error - java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.unical.pos.model.DeliveryOrder.getDiscountId()" is null	java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.unical.pos.model.DeliveryOrder.getDiscountId()" is null

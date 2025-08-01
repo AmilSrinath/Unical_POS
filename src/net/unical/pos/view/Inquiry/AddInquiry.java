@@ -417,6 +417,22 @@ public class AddInquiry extends JInternalFrame {
         InquiryModel inquiry = new InquiryModel();
         
         if (btnAddInquiry.getText().equals("Add Inquiry")) {
+            if(txtWayBill.getText().equals("")){
+                JOptionPane.showMessageDialog(this, "Please enter the Tracking Number!");
+                return;
+            } else if(cmbCompany.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Company!");
+                return;
+            } else if(cmbBranch.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Branch!");
+                return;
+            } else if(txtBranchContact.getText().equals("")){
+                JOptionPane.showMessageDialog(this, "Please enter the Branch Contact!");
+                return;
+            } else if(cmbReason.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Reason!");
+                return;
+            }
             //Add Inquiry
             inquiry.setWayBill(txtWayBill.getText());
             inquiry.setCustomerId(searchCustomerID+"");
@@ -442,6 +458,19 @@ public class AddInquiry extends JInternalFrame {
             cmbCompany.setSelectedIndex(0);
         } else{
             //Update Inquiry
+            if(cmbCompany.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Company!");
+                return;
+            } else if(cmbBranch.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Branch!");
+                return;
+            } else if(txtBranchContact.getText().equals("")){
+                JOptionPane.showMessageDialog(this, "Please enter the Branch Contact!");
+                return;
+            } else if(cmbReason.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select the Reason!");
+                return;
+            }
             inquiry.setWayBill(inquiryModel.getWayBill());
             inquiry.setCustomerId(inquiryRepositoryImpl.getCustomerDataByWayBill(inquiryModel.getWayBill()).getCustomerId()+"");
             inquiry.setCustomerName(txtCustomerName.getText());

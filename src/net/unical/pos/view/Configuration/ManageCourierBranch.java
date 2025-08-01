@@ -148,8 +148,6 @@ public class ManageCourierBranch extends JInternalFrame {
                 .addGap(14, 14, 14))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         resonTable.setModel(new javax.swing.table.DefaultTableModel(

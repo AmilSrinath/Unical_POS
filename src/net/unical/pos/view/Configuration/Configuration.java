@@ -44,7 +44,7 @@ public class Configuration extends javax.swing.JInternalFrame {
         btnManageStatus = new org.jdesktop.swingx.JXButton();
         btnManageStatusType = new org.jdesktop.swingx.JXButton();
         btnManageUserAuth = new org.jdesktop.swingx.JXButton();
-        btnManageDiscount = new org.jdesktop.swingx.JXButton();
+        btnManageOrderType = new org.jdesktop.swingx.JXButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -111,12 +111,12 @@ public class Configuration extends javax.swing.JInternalFrame {
             }
         });
 
-        btnManageDiscount.setBackground(new java.awt.Color(0, 102, 153));
-        btnManageDiscount.setForeground(new java.awt.Color(255, 255, 255));
-        btnManageDiscount.setText("Manage User Auth");
-        btnManageDiscount.addActionListener(new java.awt.event.ActionListener() {
+        btnManageOrderType.setBackground(new java.awt.Color(0, 102, 153));
+        btnManageOrderType.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageOrderType.setText("Manage Order Type");
+        btnManageOrderType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnManageDiscountActionPerformed(evt);
+                btnManageOrderTypeActionPerformed(evt);
             }
         });
 
@@ -136,7 +136,7 @@ public class Configuration extends javax.swing.JInternalFrame {
                     .addComponent(btnManageStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnManageStatusType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnManageUserAuth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnManageDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnManageOrderType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -155,7 +155,7 @@ public class Configuration extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnManageUserAuth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnManageDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnManageOrderType, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
@@ -249,16 +249,16 @@ public class Configuration extends javax.swing.JInternalFrame {
         manageUserAuth.setVisible(true);
     }//GEN-LAST:event_btnManageUserAuthActionPerformed
 
-    private void btnManageDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageDiscountActionPerformed
+    private void btnManageOrderTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageOrderTypeActionPerformed
         // TODO add your handling code here:
-        ManageDiscounts manageDiscounts = new ManageDiscounts();
-        dashboard.desktopPane.add(manageDiscounts);
+        ManageOrderType manageOrderType = new ManageOrderType();
+        dashboard.desktopPane.add(manageOrderType);
          Dimension d = dashboard.desktopPane.getSize();
-//        manageDiscounts.setLayer(dashboard.desktopPane.POPUP_LAYER);
-        manageDiscounts.setSize(d);
-        manageDiscounts.setVisible(true);
+        manageOrderType.setLayer(dashboard.desktopPane.POPUP_LAYER);
+        manageOrderType.setSize(d);
+        manageOrderType.setVisible(true);
         
-    }//GEN-LAST:event_btnManageDiscountActionPerformed
+    }//GEN-LAST:event_btnManageOrderTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,7 +298,7 @@ public class Configuration extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXButton btnManageCourierBranch;
     private org.jdesktop.swingx.JXButton btnManageCourierCompany;
-    private org.jdesktop.swingx.JXButton btnManageDiscount;
+    private org.jdesktop.swingx.JXButton btnManageOrderType;
     private org.jdesktop.swingx.JXButton btnManageStatus;
     private org.jdesktop.swingx.JXButton btnManageStatusType;
     private org.jdesktop.swingx.JXButton btnManageUserAuth;

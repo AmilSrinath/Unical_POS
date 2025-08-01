@@ -49,7 +49,6 @@ public class ManageDiscounts extends javax.swing.JFrame {
         tblDiscountList = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1449, 797));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -293,56 +292,16 @@ public class ManageDiscounts extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddCompany;
-    private javax.swing.JButton btnAddCompany1;
-    private javax.swing.JButton btnAddCompany2;
-    private javax.swing.JButton btnAddCompany3;
     private javax.swing.JButton btnAddDiscount;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDiscountList;
-    private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtAddress1;
-    private javax.swing.JTextField txtAddress2;
-    private javax.swing.JTextField txtAddress3;
     private javax.swing.JTextField txtAmount;
-    private javax.swing.JTextField txtCompanyName;
-    private javax.swing.JTextField txtCompanyName1;
-    private javax.swing.JTextField txtCompanyName2;
-    private javax.swing.JTextField txtCompanyName3;
-    private javax.swing.JTextField txtContact;
-    private javax.swing.JTextField txtContact1;
-    private javax.swing.JTextField txtContact2;
-    private javax.swing.JTextField txtContact3;
     private javax.swing.JTextField txtDiscountName;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtEmail1;
-    private javax.swing.JTextField txtEmail2;
-    private javax.swing.JTextField txtEmail3;
     private javax.swing.JTextField txtPercentage;
     // End of variables declaration//GEN-END:variables
 }

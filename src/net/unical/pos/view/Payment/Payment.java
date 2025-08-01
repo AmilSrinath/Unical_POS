@@ -161,14 +161,14 @@ public class Payment extends JInternalFrame {
 
             },
             new String [] {
-                "", "Order Code", "Customer Code", "COD", "Total Amount", "Payment Type", "Delivary Charge", "Payment Status"
+                "", "Order Code", "Customer Code", "COD", "Total Amount", "Payment Type", "Delivary Charge", "Payment Status", "Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, true, true, false
+                true, false, false, false, false, true, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -579,7 +579,8 @@ public class Payment extends JInternalFrame {
                         dto.getSubTotalPrice(),
                         paymentTypeStatus,
                         dto.getDeliveryFee(),
-                        statusText
+                        statusText,
+                        dto.getDate()
                     };
                     dtm.addRow(rowData);
                 }

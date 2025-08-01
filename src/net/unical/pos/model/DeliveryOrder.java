@@ -50,6 +50,23 @@ public class DeliveryOrder {
     private Integer paymentStatus;
     private Integer isExchange;
     private Integer discountId;
+    private String orderType;
+
+    public String getPayment_type() {
+        return payment_type;
+    }
+
+    public void setPayment_type(String payment_type) {
+        this.payment_type = payment_type;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
 
     public Integer getDiscountId() {
         return discountId;

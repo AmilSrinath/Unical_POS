@@ -18,5 +18,7 @@ public interface DeliveryOrderServiceCustom {
     public ArrayList<DeliveryOrderDto> getAllOrders(String date,Integer paymentType)throws Exception;
 
     public ArrayList<DeliveryOrderDto> getAllDurationOrders(String fromDate, String toDate, Integer paymentType);
+
+    public Double getSpecificWaight(Integer id);
     
 }

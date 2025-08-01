@@ -99,5 +99,10 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
         return deliveryOrderDtos;
     }
 
+    @Override
+    public Double getSpecificWaight(Integer id) {
+        return deliveryOrderRepositoryCustom.getSpecificWaight(id);
+    }
+
     
 }

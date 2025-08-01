@@ -35,5 +35,9 @@ public class DeliveryOrderController {
         return deliveryOrderCustom.getAllDurationOrders(fromDate,toDate,paymentType);
     }
 
+    public Double getSpecificWaight(Integer id) {
+        return deliveryOrderCustom.getSpecificWaight(id);
+    }
+
     
 }

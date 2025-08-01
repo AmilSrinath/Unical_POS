@@ -19,6 +19,7 @@ import net.unical.pos.service.impl.MainItemCategoryServiceImpl;
 import net.unical.pos.service.impl.MainItemServiceImpl;
 import net.unical.pos.service.impl.MainOrderServiceImpl;
 import net.unical.pos.service.impl.MainTableLocationServiceImpl;
+import net.unical.pos.service.impl.OrderTypeServiceImpl;
 import net.unical.pos.service.impl.PaymentTypesServiceImpl;
 import net.unical.pos.service.impl.PrinterTypesServiceImpl;
 import net.unical.pos.service.impl.PurchaseOrderDetailsServiceImpl;
@@ -60,7 +61,7 @@ public class ServiceFactory {
         UNIT_TYPE,
         PRINTER_TYPE,
         EMPLOYEE_MANAGEMENT,
-        CUSTOMER, DELIVERY_ORDER, DISCOUNT;
+        CUSTOMER, DELIVERY_ORDER, DISCOUNT, ORDER_TYPE;
     }
 
     public ServiceFactory() {
@@ -124,6 +125,8 @@ public class ServiceFactory {
                 return (T)new DeliveryOrderServiceImpl();
             case DISCOUNT:
                 return (T)new DiscountServiceImpl();
+            case ORDER_TYPE:
+                return (T)new OrderTypeServiceImpl();
             default:
                 return null;
         }

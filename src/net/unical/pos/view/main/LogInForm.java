@@ -171,13 +171,14 @@ public class LogInForm extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon("/Users/apple/Downloads/Untitled design (7).png")); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/unical/pos/imagers/Untitled design (7).png"))); // NOI18N
+        jLabel3.setToolTipText("");
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel3.setInheritsPopupMenu(false);
         jLabel3.setMaximumSize(new java.awt.Dimension(500, 500));
         jLabel3.setMinimumSize(new java.awt.Dimension(500, 500));
         jLabel3.setPreferredSize(new java.awt.Dimension(100, 100));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 290, 250));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 280, 260));
 
         jLabel1.setBackground(new java.awt.Color(51, 51, 51));
         jLabel1.setFont(new java.awt.Font("Poppins Light", 0, 18)); // NOI18N

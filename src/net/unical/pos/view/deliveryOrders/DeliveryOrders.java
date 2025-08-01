@@ -53,6 +53,7 @@ import net.unical.pos.controller.CustomerController;
 import net.unical.pos.controller.DeliveryOrderController;
 import net.unical.pos.controller.DiscountController;
 import net.unical.pos.controller.MainItemController;
+import net.unical.pos.controller.OrderTypeController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.controller.UserAccountManagementController;
 import net.unical.pos.dbConnection.DBCon;
@@ -62,6 +63,7 @@ import net.unical.pos.dto.DiscountDto;
 import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.OrderDetailsDto;
 import net.unical.pos.dto.OrderDto;
+import net.unical.pos.dto.OrderTypeDto;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.dto.UserDto;
 import net.unical.pos.log.Log;
@@ -124,6 +126,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
     private DiscountController discountController = new DiscountController();
+    private OrderTypeController orderTypeController = new OrderTypeController();
 
     private CustomerController customerController;
     private UserAccountManagementController userAccountManagementController;
@@ -146,6 +149,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private boolean isChooseComboDiscount = false;
     private boolean hasRowLevelDiscount = false;
     private boolean comboSelected = false;
+    private boolean comboOrderType = false;
 
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
         initComponents();
@@ -366,6 +370,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         totAmountLbl = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         discountLabel = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        cmbOrderType = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
         deliveryOrdersTable = new org.jdesktop.swingx.JXTable();
         jPanel4 = new javax.swing.JPanel();
@@ -1299,33 +1305,34 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         discountLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         discountLabel.setText("0.00");
 
+        jLabel37.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
+        jLabel37.setText("Order Type      :");
+
+        cmbOrderType.setFont(new java.awt.Font("Poppins Light", 0, 13)); // NOI18N
+        cmbOrderType.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbOrderTypeMouseClicked(evt);
+            }
+        });
+        cmbOrderType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOrderTypeActionPerformed(evt);
+            }
+        });
+        cmbOrderType.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmbOrderTypeKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(customerNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(phoneOneCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(orderCodeTxt))
-                            .addComponent(phoneTwoCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel30)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1346,28 +1353,19 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(PaidAmountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(codTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8))
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1389,7 +1387,41 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel36)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(5, 5, 5)))
+                        .addGap(5, 5, 5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbOrderType, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(customerNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(phoneOneCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(orderCodeTxt))
+                                    .addComponent(phoneTwoCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -1428,11 +1460,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel37)
+                            .addComponent(cmbOrderType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paymentTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
-                        .addGap(5, 5, 5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PaidAmountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1442,7 +1478,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1752,7 +1788,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane6))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -2223,7 +2259,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 Timestamp now = new Timestamp(System.currentTimeMillis());
                 deliveryOrderDto.setEditedDate(now);
-
+                deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                 deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
@@ -2366,6 +2402,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setEditedDate(now);
                 deliveryOrderDto.setUserID(1);
                 deliveryOrderDto.setIsExchange(isExch);
+                deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
 
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -3289,7 +3326,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         double deliveryFee = calculateDeliveryFee(totalWeight);
                         deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
                         totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+                        Integer id = Integer.valueOf(deliveryOrdersTable.getValueAt(selectedRow, 0).toString());
+                        Double weight = deliveryOrderController.getSpecificWaight(id);
                         discountLabel.setText(String.format("-%.2f", discountPrice));
+                        weightTxt.setText(String.valueOf(weight));
                     } else {
                         System.out.println("Order ID not found for the given bill number.");
                     }
@@ -3456,7 +3496,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
-        System.out.println("combo selected : "+ isChooseComboDiscount);
+        
         try {
             // Edge case: if subtotal is 0.00
             if (subTotAmountLbl.getText().equals("0.00")) {
@@ -3578,6 +3618,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     return;
                 }
             } else {
+                JOptionPane.showMessageDialog( this, "Please choose a discount option");
                 Log.error(new Logger("Exception", "Please Choose an option before apply") {
                 }, evt,
                         new RuntimeException("Please Choose an option before apply"));
@@ -3687,6 +3728,21 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtCustomeDiscountMouseClicked
 
+    private void cmbOrderTypeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbOrderTypeMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 0){
+            this.comboOrderType = true;
+        }
+    }//GEN-LAST:event_cmbOrderTypeMouseClicked
+
+    private void cmbOrderTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrderTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbOrderTypeActionPerformed
+
+    private void cmbOrderTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbOrderTypeKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbOrderTypeKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -3748,6 +3804,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JDialog check_customer;
     private javax.swing.JButton clearBtn;
     private javax.swing.JComboBox<String> cmbDiscount;
+    private javax.swing.JComboBox<String> cmbOrderType;
     private javax.swing.JComboBox<String> cmbSymbol;
     private javax.swing.JLabel codTotTxt;
     private javax.swing.JTextField codTxt;
@@ -3800,6 +3857,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
@@ -4089,6 +4147,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         for (String symbol : symbols) {
             cmbSymbol.addItem(symbol);
         }
+        
+        ArrayList<OrderTypeDto> orderTypes = orderTypeController.getAllOrderType();
+        for (OrderTypeDto orderType : orderTypes) {
+            cmbOrderType.addItem(orderType.getType());
+        }
     }
 
     private void openDIscountInfo() {
@@ -4096,6 +4159,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         discountInfo.setMaximumSize(new Dimension(650, 160));
         discountInfo.setVisible(true);
         isChooseComboDiscount = false;
+        txtCustomeDiscount.requestFocus();
     }
 
     private void setDefault() {

@@ -100,6 +100,7 @@ public class OrderFilter extends JInternalFrame {
         String toDate = formatter.format(jXDatePicker2.getDate());
         
         statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
+        System.out.println("Status Types :" + statusTypes.get(0).getStatus_id());
         getAllOrders(fromDate, toDate, 0, 0);
         
         statusCmb.addItem("Any");
@@ -976,11 +977,10 @@ public class OrderFilter extends JInternalFrame {
 
     private void txtCustomerCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerCodeKeyReleased
         String customerCode = txtCustomerCode.getText();
-
         if (!customerCode.isEmpty()) {
             try {
                 ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllOrdersByCustomerCode(customerCode);
-                
+                System.out.println("ArrayList :" + deliveryOrderDtos.size());
                 DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
                 dtm.setRowCount(0);
 
@@ -994,9 +994,12 @@ public class OrderFilter extends JInternalFrame {
                 double totReturns = 0.00;
 
                 for (DeliveryOrder dto : deliveryOrderDtos) {
+                    System.out.println("Size :" + deliveryOrderDtos.size());
+                    System.out.println("Value: " + dto.getStatusID());
                     count++;
-                    
+                    System.out.println("StatusType2: " + statusTypes.get(0).getStatus_type() + "Dto value: "+ dto.getStatusID());
                     if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
+                        System.out.println("Meka true venava");
                         statusText = statusTypes.get(0).getStatus_type();
                     } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
                         statusText = statusTypes.get(1).getStatus_type();
@@ -1034,6 +1037,8 @@ public class OrderFilter extends JInternalFrame {
             } catch (NumberFormatException e) {
                 Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, e);
                 Log.error(OrderFilter.class, "Invalid Order ID: ", e);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");

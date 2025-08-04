@@ -524,6 +524,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     }
 
     public ArrayList<DeliveryOrder> getAllOrdersByOrderID(String orderID) {
+        System.out.println("Order Id: " + orderID);
         ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -563,7 +564,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
                 deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
                 deliveryOrder.setStatus(rs.getInt("status"));
-                deliveryOrder.setStatusType(rs.getInt("status_id"));
+                deliveryOrder.setStatusID(rs.getInt("status_id"));
                 deliveryOrder.setIsReturn(rs.getInt("is_return"));
                 deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
                 deliveryOrder.setRemark(rs.getString("remark"));
@@ -1302,16 +1303,23 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return totalOrders;
     }
 
-    public ArrayList<DeliveryOrder> getAllOrdersByCustomerCode(String customerCode) {
-        ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
+    public ArrayList<DeliveryOrder> getAllOrdersByCustomerCode(String customerCode) throws SQLException {
+        ArrayList<DeliveryOrder> deliveryOrdersList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            conn = DBCon.getDatabaseConnection();
-            StringBuilder sql = new StringBuilder(
-                    "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, "
+            System.out.println("Fetching orders for customerCode: " + customerCode);
+
+            // Get connection
+            conn = DBConnection.getInstance().getConnection();
+
+            if (conn == null || conn.isClosed()) {
+                throw new SQLException("Database connection is null or already closed.");
+            }
+
+            String sql = "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, "
                     + "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, "
                     + "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, "
                     + "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status "
@@ -1320,64 +1328,64 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     + "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id "
                     + "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id "
                     + "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id "
-                    + "WHERE dot.status = 1 AND ct.customer_number LIKE ?"
-            );
+                    + "WHERE dot.status = 1 AND ct.customer_number LIKE ?";
 
-            ps = conn.prepareStatement(sql.toString());
+            ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + customerCode + "%");
-            int paramIndex = 3;
 
             rs = ps.executeQuery();
+            int rowCount = 0;
 
             while (rs.next()) {
-                DeliveryOrder deliveryOrder = new DeliveryOrder();
-                deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
-                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
-                deliveryOrder.setOrderCode(rs.getString("order_code"));
-                deliveryOrder.setCustomerName(rs.getString("customer_name"));
-                deliveryOrder.setAddress(rs.getString("address"));
-                deliveryOrder.setCod(rs.getDouble("cod_amount"));
-                deliveryOrder.setPhoneOne(rs.getString("phone_one"));
-                deliveryOrder.setPhoneTwo(rs.getString("phone_two"));
-                deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
-                deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
-                deliveryOrder.setStatus(rs.getInt("status"));
-                deliveryOrder.setStatusType(rs.getInt("status_id"));
-                deliveryOrder.setIsReturn(rs.getInt("is_return"));
-                deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
-                deliveryOrder.setRemark(rs.getString("remark"));
-                deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
-                deliveryOrder.setIsPrint(rs.getInt("is_print"));
+                try {
+                    DeliveryOrder deliveryOrder = new DeliveryOrder();
+                    deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
+                    deliveryOrder.setOrderId(rs.getInt("delivery_id"));
+                    deliveryOrder.setOrderCode(rs.getString("order_code"));
+                    deliveryOrder.setCustomerName(rs.getString("customer_name"));
+                    deliveryOrder.setAddress(rs.getString("address"));
+                    deliveryOrder.setCod(rs.getDouble("cod_amount"));
+                    deliveryOrder.setPhoneOne(rs.getString("phone_one"));
+                    deliveryOrder.setPhoneTwo(rs.getString("phone_two"));
+                    deliveryOrder.setSubTotalPrice(rs.getDouble("sub_total_price"));
+                    deliveryOrder.setDeliveryFee(rs.getDouble("delivery_fee"));
+                    deliveryOrder.setStatus(rs.getInt("status"));
+                    deliveryOrder.setStatusID(rs.getInt("status_id"));
+                    deliveryOrder.setIsReturn(rs.getInt("is_return"));
+                    deliveryOrder.setGrandTotalPrice(rs.getDouble("total_order_price"));
+                    deliveryOrder.setRemark(rs.getString("remark"));
+                    deliveryOrder.setPaymentTypeId(rs.getInt("payment_type_id"));
+                    deliveryOrder.setIsPrint(rs.getInt("is_print"));
 
-                // Set the new fields from pos_payment_tb
-                deliveryOrder.setPaymentId(rs.getInt("payment_id"));
-                deliveryOrder.setCodPayment(rs.getDouble("cod_payment"));
-                deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
-                deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
+                    // Payment table
+                    deliveryOrder.setPaymentId(rs.getInt("payment_id"));
+                    deliveryOrder.setCodPayment(rs.getDouble("cod_payment"));
+                    deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
+                    deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
 
-                deliveryOrders.add(deliveryOrder);
+                    deliveryOrdersList.add(deliveryOrder);
+                    rowCount++;
+                } catch (Exception rowEx) {
+                    Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, "SQL Error", rowEx);
+                    Log.error(rowEx, "SQL exception in resultset while getAllOrdersByCustomerCode");
+                }
             }
+
+            System.out.println("Total orders found: " + rowCount);
+
+        } catch (SQLException e) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, "SQL Error", e);
+            Log.error(e, "SQL exception in getAllOrdersByCustomerCode");
+            throw e; // Re-throw for upstream handling
         } catch (Exception e) {
-            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-            Log.error(e, "Get all duration faild");
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, "General Error", e);
+            Log.error(e, "Unexpected error in getAllOrdersByCustomerCode");
+            e.printStackTrace();
         } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (Exception e) {
-                Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
-                Log.error(e, "Get all duration faild");
-                e.printStackTrace();
-            }
+
         }
-        return deliveryOrders;
+
+        return deliveryOrdersList;
     }
 
     public boolean isLastOrderDelivered(String phoneNumber) {
@@ -1716,12 +1724,12 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     @Override
     public Double getSpecificWaight(Integer id) {
         String sql = "SELECT weight FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
-                
+
         try {
             PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
             pstm.setInt(1, id);
             ResultSet rst = pstm.executeQuery();
-            if(rst.next()){
+            if (rst.next()) {
                 return rst.getDouble("weight");
             }
         } catch (ClassNotFoundException ex) {

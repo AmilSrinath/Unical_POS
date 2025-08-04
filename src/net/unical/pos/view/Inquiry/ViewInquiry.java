@@ -470,17 +470,17 @@ public class ViewInquiry extends JInternalFrame {
     private void getAllInquiry(String fromDate, String toDate, int status) {
         try {
             ArrayList<InquiryModel> inquiryModels = inquiryRepositoryImpl.getAllInquiryDuration(fromDate, toDate, status);
-
+            System.out.println("Inquery Model : " + inquiryModels);
             DefaultTableModel dtm = (DefaultTableModel) paymentOrdersTable.getModel();
             dtm.setRowCount(0);
 
             String statusText = null;
 
             int count = 0;
-
+           
             for (InquiryModel dto : inquiryModels) {
                 count++;
-                
+                System.out.println("Status Types: " + statusTypes);
                 if (dto.getStatusId() == statusTypes.get(0).getStatus_id()) { //Delivered
                     statusText = statusTypes.get(0).getStatus_type();
                 } else if (dto.getStatusId() == statusTypes.get(1).getStatus_id()) { //Not Delivered

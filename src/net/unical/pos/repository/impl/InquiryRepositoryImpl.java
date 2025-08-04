@@ -26,7 +26,7 @@ import net.unical.pos.view.main.LogInForm;
  */
 public class InquiryRepositoryImpl {
 
-    public CustomerDataByInquirySearch getCustomerDataByWayBill(String wayBill) {
+     public CustomerDataByInquirySearch getCustomerDataByWayBill(String wayBill) {
         String query = "SELECT c.customer_name, c.phone_one, c.phone_two , c.customer_id "
                 + "FROM pos_main_delivery_order_tb d "
                 + "JOIN pos_main_customer_tb c ON d.customer_id = c.customer_id "

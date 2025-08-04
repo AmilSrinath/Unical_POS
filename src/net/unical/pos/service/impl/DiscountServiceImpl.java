@@ -44,4 +44,9 @@ public class DiscountServiceImpl implements DiscountServiceCustom{
     public Integer getDiscountId(double percentage) {
         return discountRepositoryCustom.getDiscountId(percentage);
     }
+
+    @Override
+    public boolean updateDiscount(DiscountDto discountDto) {
+        return discountRepositoryCustom.updateDiscount(new DiscountModel(discountDto.getDiscountId(), discountDto.getDiscountName(), discountDto.getPercentage(), discountDto.getAmount(), discountDto.getStatus()));
+    }
 }

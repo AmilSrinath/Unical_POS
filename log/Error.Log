@@ -1,6 +1,307 @@
-2025-08-01 11:04:31,592 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`petal_pink_pos`.`pos_inquiry_tb`, CONSTRAINT `pos_inquiry_tb_pos_main_customer_tb_customer_id_fk` FOREIGN KEY (`customer_id`) REFERENCES `pos_main_customer_tb` (`customer_id`))	saveInquiry faild
-2025-08-01 11:04:42,086 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`petal_pink_pos`.`pos_inquiry_tb`, CONSTRAINT `pos_inquiry_tb_pos_main_customer_tb_customer_id_fk` FOREIGN KEY (`customer_id`) REFERENCES `pos_main_customer_tb` (`customer_id`))	saveInquiry faild
-2025-08-01 11:15:06,236 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`petal_pink_pos`.`pos_inquiry_tb`, CONSTRAINT `pos_inquiry_tb_pos_main_customer_tb_customer_id_fk` FOREIGN KEY (`customer_id`) REFERENCES `pos_main_customer_tb` (`customer_id`))	saveInquiry faild
-2025-08-01 11:20:14,073 ERROR error - java.sql.SQLException: Column 'status_id' not found.	get All Inquiry Duration faild
-2025-08-01 11:38:12,808 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705193999' for key 'way_bill'	saveInquiry faild
-2025-08-01 11:46:30,843 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705193999' for key 'way_bill'	saveInquiry faild
+2025-08-04 09:27:42,627 ERROR error - java.lang.RuntimeException: Uncompilable code - constructor DeliveryOrder in class net.unical.pos.model.DeliveryOrder cannot be applied to given types;
+  required: java.lang.Integer,java.lang.String,java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.Double,java.lang.String,java.lang.String,java.lang.Double,java.lang.Double,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Double,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.String,java.lang.Double,java.sql.Timestamp,java.sql.Timestamp,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Double,java.lang.Double,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.String,java.util.ArrayList<net.unical.pos.dto.OrderDetailsDto>
+  found:    java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.Double,java.lang.String,java.lang.String,java.lang.Double,java.lang.Double,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Double,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Double,java.util.Date,java.lang.Integer,java.lang.Integer,java.lang.Double,java.lang.Double,java.lang.Integer
+  reason: actual and formal argument lists differ in length	Failed to retrieve orders by customer code
+2025-08-04 09:33:19,722 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Get all duration faild
+2025-08-04 09:35:04,430 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Get all duration faild
+2025-08-04 09:42:52,533 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 09:44:25,087 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 09:44:27,395 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 09:44:28,179 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:02:59,581 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:05:40,359 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:23:57,789 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:23:59,069 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:02,359 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:04,045 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:05,213 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:10,410 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Discounts fetch failde!
+2025-08-04 10:24:10,556 ERROR error - class net.unical.pos.model.DeliveryOrder	
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1014)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:988)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:974)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.ConnectionImpl.throwConnectionClosedException(ConnectionImpl.java:1290)
+	at com.mysql.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:1282)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4468)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4434)
+	at net.unical.pos.dbConnection.Statement.getStatement(Statement.java:20)
+	at net.unical.pos.dbConnection.Statement.executeQuery(Statement.java:31)
+	at net.unical.pos.repository.impl.MainItemRepositoryImpl.getAllItems(MainItemRepositoryImpl.java:144)
+	at net.unical.pos.service.impl.MainItemServiceImpl.getAllItem(MainItemServiceImpl.java:51)
+	at net.unical.pos.controller.MainItemController.getAllItems(MainItemController.java:37)
+	at net.unical.pos.view.deliveryOrders.DeliveryOrders.getItems(DeliveryOrders.java:3899)
+	at net.unical.pos.view.deliveryOrders.DeliveryOrders.<init>(DeliveryOrders.java:184)
+	at net.unical.pos.view.home.Dashboard.deliveryOrdersBtnActionPerformed(Dashboard.java:887)
+	at net.unical.pos.view.home.Dashboard.access$1400(Dashboard.java:49)
+	at net.unical.pos.view.home.Dashboard$9.actionPerformed(Dashboard.java:268)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:407)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6621)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-08-04 10:24:10,567 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	getPaymentTypes error
+2025-08-04 10:24:10,650 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+2025-08-04 10:24:11,068 ERROR error - class net.unical.pos.model.DeliveryOrder	Cannot load Items : 
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1014)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:988)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:974)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.ConnectionImpl.throwConnectionClosedException(ConnectionImpl.java:1290)
+	at com.mysql.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:1282)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4468)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4434)
+	at net.unical.pos.dbConnection.Statement.getStatement(Statement.java:20)
+	at net.unical.pos.dbConnection.Statement.executeQuery(Statement.java:31)
+	at net.unical.pos.repository.impl.PaymentTypesRepositoryImpl.getAll(PaymentTypesRepositoryImpl.java:23)
+	at net.unical.pos.service.impl.PaymentTypesServiceImpl.getPaymentTypes(PaymentTypesServiceImpl.java:30)
+	at net.unical.pos.controller.PaymentTypesController.getPaymentTypes(PaymentTypesController.java:27)
+	at net.unical.pos.view.OrderFilter.OrderFilter.getPaymentTypes(OrderFilter.java:669)
+	at net.unical.pos.view.OrderFilter.OrderFilter.<init>(OrderFilter.java:95)
+	at net.unical.pos.view.home.Dashboard.configurationsBtnActionPerformed(Dashboard.java:849)
+	at net.unical.pos.view.home.Dashboard.access$1700(Dashboard.java:49)
+	at net.unical.pos.view.home.Dashboard$11.actionPerformed(Dashboard.java:289)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:407)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6621)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-08-04 10:24:12,164 ERROR error - class net.unical.pos.model.DeliveryOrder	Cannot load Items : 
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1014)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:988)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:974)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.ConnectionImpl.throwConnectionClosedException(ConnectionImpl.java:1290)
+	at com.mysql.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:1282)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4468)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4434)
+	at net.unical.pos.dbConnection.Statement.getStatement(Statement.java:20)
+	at net.unical.pos.dbConnection.Statement.executeQuery(Statement.java:31)
+	at net.unical.pos.repository.impl.PaymentTypesRepositoryImpl.getAll(PaymentTypesRepositoryImpl.java:23)
+	at net.unical.pos.service.impl.PaymentTypesServiceImpl.getPaymentTypes(PaymentTypesServiceImpl.java:30)
+	at net.unical.pos.controller.PaymentTypesController.getPaymentTypes(PaymentTypesController.java:27)
+	at net.unical.pos.view.OrderFilter.OrderFilter.getPaymentTypes(OrderFilter.java:669)
+	at net.unical.pos.view.OrderFilter.OrderFilter.<init>(OrderFilter.java:95)
+	at net.unical.pos.view.home.Dashboard.configurationsBtnActionPerformed(Dashboard.java:849)
+	at net.unical.pos.view.home.Dashboard.access$1700(Dashboard.java:49)
+	at net.unical.pos.view.home.Dashboard$11.actionPerformed(Dashboard.java:289)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:407)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6621)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-08-04 10:24:13,789 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:29,181 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:30,285 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:31,858 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:32,513 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:32,909 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:24:38,636 ERROR error - class net.unical.pos.model.DeliveryOrder	Cannot load Items : 
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1014)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:988)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:974)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.ConnectionImpl.throwConnectionClosedException(ConnectionImpl.java:1290)
+	at com.mysql.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:1282)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4468)
+	at com.mysql.jdbc.ConnectionImpl.prepareStatement(ConnectionImpl.java:4434)
+	at net.unical.pos.dbConnection.Statement.getStatement(Statement.java:20)
+	at net.unical.pos.dbConnection.Statement.executeQuery(Statement.java:31)
+	at net.unical.pos.repository.impl.PaymentTypesRepositoryImpl.getAll(PaymentTypesRepositoryImpl.java:23)
+	at net.unical.pos.service.impl.PaymentTypesServiceImpl.getPaymentTypes(PaymentTypesServiceImpl.java:30)
+	at net.unical.pos.controller.PaymentTypesController.getPaymentTypes(PaymentTypesController.java:27)
+	at net.unical.pos.view.OrderFilter.OrderFilter.getPaymentTypes(OrderFilter.java:669)
+	at net.unical.pos.view.OrderFilter.OrderFilter.<init>(OrderFilter.java:95)
+	at net.unical.pos.view.home.Dashboard.configurationsBtnActionPerformed(Dashboard.java:849)
+	at net.unical.pos.view.home.Dashboard.access$1700(Dashboard.java:49)
+	at net.unical.pos.view.home.Dashboard$11.actionPerformed(Dashboard.java:289)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:407)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6621)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-08-04 10:24:40,687 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:37:29,153 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:37:31,157 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:37:31,677 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:37:31,839 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:38:52,983 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:38:54,104 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:38:55,054 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:38:55,374 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:38:57,525 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:40:07,140 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:40:07,943 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:40:36,077 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	Failed to fetch delivery orders
+2025-08-04 10:47:34,053 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	Failed to fetch delivery orders
+2025-08-04 10:47:34,219 ERROR error - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0	Failed to fetch delivery orders
+2025-08-04 10:50:18,106 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:50:20,726 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:50:21,598 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:50:21,726 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.	Failed to fetch delivery orders
+2025-08-04 10:52:56,228 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:52:58,543 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:02,759 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:03,012 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:04,806 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:05,685 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:06,198 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:07,129 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:08,022 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:08,215 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:08,799 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 10:53:08,950 ERROR error - java.sql.SQLException: Database connection is null or already closed.	SQL exception in getAllOrdersByCustomerCode
+2025-08-04 12:45:14,641 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705089629' for key 'way_bill'	saveInquiry faild
+2025-08-04 12:45:42,601 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705089629' for key 'way_bill'	saveInquiry faild
+2025-08-04 12:46:32,250 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705089629' for key 'way_bill'	saveInquiry faild
+2025-08-04 12:48:56,764 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705191012' for key 'way_bill'	saveInquiry faild
+2025-08-04 13:10:59,920 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705191012' for key 'way_bill'	saveInquiry faild
+2025-08-04 13:24:01,890 ERROR error - com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'EC705191012' for key 'way_bill'	saveInquiry faild

@@ -2994,7 +2994,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     btnEdit.setEnabled(false);
 
                     // Enable buttons based on status
-                    if (statusTypes.get(0).getStatus_type().equals(status) || statusTypes.get(1).getStatus_type().equals(status)) {
+                    if (statusTypes.get(0).getStatus_type().equals(status) || statusTypes.get(1).getStatus_type().equals(status) || statusTypes.get(2).getStatus_type().equals(status)) {
                         btnWrapping.setEnabled(true);
                         btnEdit.setEnabled(true);
                         btnCancel.setEnabled(true);
@@ -3273,19 +3273,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                     totAmountLbl.setText(totalAmount.toString());
 
-                    if (cod == 0.0) {
-                        // Card payment
-                        paymentTypeCombo.setSelectedIndex(1);
-                        PaidAmountTxt.setText(totalAmount.toString());
-                        codTxt.setText("0");
-                    } else {
-                        // Cash payment
-                        paymentTypeCombo.setSelectedIndex(0);
-                        double remainingAmount = totalAmount - cod;
-                        PaidAmountTxt.setText(Double.toString(remainingAmount));
-                        codTxt.setText(
-                                "0");
-                    }
 
                     // Additional logic for updating totals and other details...
                     double subTot = totalAmount - Double.parseDouble(deliveyFeeLbl.getText());
@@ -3298,7 +3285,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         ArrayList<PosMainOrderDetails> orderDetails = mainOrderDetailRepositoryImpl.getOrderDetailsByOrderId(oid);
                         DefaultTableModel itemListTableModel = (DefaultTableModel) itemListTable.getModel();
                         itemListTableModel.setRowCount(0);
-
                         double totalWeight = 0.00;
                         double discountPrice = 0.00;
                         for (PosMainOrderDetails p : orderDetails) {
@@ -3322,10 +3308,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         for (int i = 0; i < itemListTable.getRowCount(); i++) {
                             discountPrice += Double.parseDouble(itemListTable.getValueAt(i, 4).toString());
                         }
+                        PaidAmountTxt.setText(String.format("%.2f",totalAmount-cod));
+                        codTxt.setText(String.format("%.2f", cod));
                         subTotAmountLbl.setText(String.format("%.2f", subTot));
                         double deliveryFee = calculateDeliveryFee(totalWeight);
                         deliveyFeeLbl.setText(String.format("%.2f", deliveryFee));
-                        totAmountLbl.setText(String.format("%.2f", totalAmount + deliveryFee));
+                        totAmountLbl.setText(String.format("%.2f", totalAmount));
                         Integer id = Integer.valueOf(deliveryOrdersTable.getValueAt(selectedRow, 0).toString());
                         Double weight = deliveryOrderController.getSpecificWaight(id);
                         discountLabel.setText(String.format("-%.2f", discountPrice));

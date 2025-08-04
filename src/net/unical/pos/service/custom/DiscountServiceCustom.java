@@ -18,6 +18,8 @@ public interface DiscountServiceCustom {
     public boolean addDiscount(DiscountDto discountDto);
 
     public Integer getDiscountId(double percentage);
+
+    public boolean updateDiscount(DiscountDto discountDto);
    
     
 }

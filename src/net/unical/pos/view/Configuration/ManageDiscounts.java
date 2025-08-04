@@ -6,7 +6,9 @@ package net.unical.pos.view.Configuration;
 
 import java.util.ArrayList;
 import javax.swing.JDialog;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.unical.pos.controller.DiscountController;
 import net.unical.pos.dto.DiscountDto;
 import sun.tools.jinfo.JInfo;
@@ -15,16 +17,17 @@ import sun.tools.jinfo.JInfo;
  *
  * @author Dhanujaya(Dhanu)
  */
-public class ManageDiscounts extends javax.swing.JFrame {
-    private DiscountController discountController;
+public class ManageDiscounts extends JInternalFrame {
+
+    private DiscountController discountController = new DiscountController();
+    private int clickedId = 0;
 
     /**
      * Creates new form ManageDiscounts
      */
     public ManageDiscounts() {
         initComponents();
-        
-        this.discountController = new DiscountController();
+        setTable();
     }
 
     /**
@@ -43,8 +46,7 @@ public class ManageDiscounts extends javax.swing.JFrame {
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         txtPercentage = new javax.swing.JTextField();
-        txtAmount = new javax.swing.JTextField();
-        jLabel36 = new javax.swing.JLabel();
+        btnAddDiscount1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDiscountList = new javax.swing.JTable();
 
@@ -54,6 +56,9 @@ public class ManageDiscounts extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(0, 102, 153));
 
+        btnAddDiscount.setBackground(new java.awt.Color(102, 102, 102));
+        btnAddDiscount.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAddDiscount.setForeground(new java.awt.Color(255, 255, 255));
         btnAddDiscount.setText("Add Discount");
         btnAddDiscount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,11 +79,11 @@ public class ManageDiscounts extends javax.swing.JFrame {
 
         jLabel34.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel34.setText("Discount Name");
+        jLabel34.setText("Discount Name :");
 
         jLabel35.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel35.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel35.setText("Percentage");
+        jLabel35.setText("Percentage       :");
 
         txtPercentage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,20 +96,15 @@ public class ManageDiscounts extends javax.swing.JFrame {
             }
         });
 
-        txtAmount.addActionListener(new java.awt.event.ActionListener() {
+        btnAddDiscount1.setBackground(new java.awt.Color(153, 153, 153));
+        btnAddDiscount1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAddDiscount1.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddDiscount1.setText("Reset");
+        btnAddDiscount1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtAmountActionPerformed(evt);
+                btnAddDiscount1ActionPerformed(evt);
             }
         });
-        txtAmount.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtAmountKeyReleased(evt);
-            }
-        });
-
-        jLabel36.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel36.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel36.setText("Amount");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -112,62 +112,54 @@ public class ManageDiscounts extends javax.swing.JFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel36)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel35)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel34)
                         .addGap(18, 18, 18)
-                        .addComponent(txtDiscountName, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(58, 58, 58)
-                .addComponent(jLabel35)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddDiscount))
-                .addContainerGap(449, Short.MAX_VALUE))
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(txtDiscountName, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAddDiscount)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAddDiscount1)))))
+                .addContainerGap(707, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel35))
-                        .addGap(18, 18, 18)
+                    .addComponent(jLabel34)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtDiscountName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnAddDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDiscountName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel34))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel36))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(btnAddDiscount1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel35))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         tblDiscountList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Discount Name", "Percentage"
+                "ID", "Discount Name", "Percentage"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -176,6 +168,11 @@ public class ManageDiscounts extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblDiscountList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDiscountListMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblDiscountList);
@@ -196,9 +193,9 @@ public class ManageDiscounts extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -222,13 +219,28 @@ public class ManageDiscounts extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDiscountActionPerformed
-        ArrayList<DiscountDto> allDiscounts = discountController.getAllDiscounts();
-        DiscountDto discountDto = new DiscountDto(allDiscounts.size()+1, txtDiscountName.getText(), Double.valueOf(txtPercentage.getText()), Double.valueOf(txtAmount.getText()), 1);
-        boolean isAdded = discountController.addDiscount(discountDto);
-        if (isAdded) {
-            JOptionPane.showMessageDialog(this, "Discount Added Successfully!!!.");
+        DiscountDto discountDto = new DiscountDto(0, txtDiscountName.getText(), Double.valueOf(txtPercentage.getText()), 0.0, 1);
+        if (clickedId != 0) {
+            discountDto.setDiscountId(clickedId);
+            boolean isUpdated = discountController.updateDiscount(discountDto);
+            if (isUpdated) {
+                setTable();
+                setDefault();
+                JOptionPane.showMessageDialog(this, "Discount Updated Successfully!!!.");
+            } else {
+                setDefault();
+                JOptionPane.showMessageDialog(this, "Discount Updated Unsuccessfully!!!.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Discount Added Unsuccesssfully!!!.");
+            boolean isAdded = discountController.addDiscount(discountDto);
+            if (isAdded) {
+                setTable();
+                setDefault();
+                JOptionPane.showMessageDialog(this, "Discount Added Successfully!!!.");
+            } else {
+                setDefault();
+                JOptionPane.showMessageDialog(this, "Discount Added Unsuccesssfully!!!.");
+            }
         }
     }//GEN-LAST:event_btnAddDiscountActionPerformed
 
@@ -248,13 +260,24 @@ public class ManageDiscounts extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPercentageKeyReleased
 
-    private void txtAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAmountActionPerformed
+    private void btnAddDiscount1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDiscount1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAmountActionPerformed
+    }//GEN-LAST:event_btnAddDiscount1ActionPerformed
 
-    private void txtAmountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountKeyReleased
+    private void tblDiscountListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDiscountListMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAmountKeyReleased
+        if (evt.getClickCount() == 2) {
+            btnAddDiscount.setText("Update Discount");
+            Integer row = tblDiscountList.getSelectedRow();
+            clickedId = (Integer) tblDiscountList.getValueAt(row, 0);
+            String discountName = tblDiscountList.getValueAt(row, 1).toString();
+            Double percentage = (Double) tblDiscountList.getValueAt(row, 2);
+
+            txtDiscountName.setText(discountName);
+            txtPercentage.setText(String.valueOf(percentage));
+
+        }
+    }//GEN-LAST:event_tblDiscountListMouseClicked
 
     /**
      * @param args the command line arguments
@@ -293,15 +316,39 @@ public class ManageDiscounts extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDiscount;
+    private javax.swing.JButton btnAddDiscount1;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDiscountList;
-    private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtDiscountName;
     private javax.swing.JTextField txtPercentage;
     // End of variables declaration//GEN-END:variables
+
+    private void setTable() {
+        ArrayList<DiscountDto> discountDtos = discountController.getAllDiscounts();
+        DefaultTableModel dtm = (DefaultTableModel) tblDiscountList.getModel();
+        dtm.setRowCount(0);
+
+        for (DiscountDto model : discountDtos) {
+            Object[] row = {
+                model.getDiscountId(),
+                model.getDiscountName(),
+                model.getPercentage()
+            };
+            dtm.addRow(row);
+        }
+        tblDiscountList.getColumnModel().getColumn(0).setMinWidth(0);
+        tblDiscountList.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblDiscountList.getColumnModel().getColumn(0).setWidth(0);
+    }
+
+    private void setDefault() {
+        txtDiscountName.setText("");
+        txtPercentage.setText("");
+        btnAddDiscount.setText("Add Discount");
+        clickedId = 0;
+    }
 }

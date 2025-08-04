@@ -19,5 +19,7 @@ public interface DiscountRepositoryCustom {
     public boolean addDiscount(DiscountDto discountDto);
 
     public Integer getDiscountId(double percentage);
+
+    public boolean updateDiscount(DiscountModel discountModel);
     
 }

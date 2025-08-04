@@ -423,7 +423,7 @@ public class AddInquiry extends JInternalFrame {
             } else if(cmbCompany.getSelectedIndex() == 0){
                 JOptionPane.showMessageDialog(this, "Please select the Company!");
                 return;
-            } else if(cmbBranch.getSelectedIndex() == 0){
+            } else if(cmbBranch.getSelectedItem().toString().toLowerCase().equals("select branch")){
                 JOptionPane.showMessageDialog(this, "Please select the Branch!");
                 return;
             } else if(txtBranchContact.getText().equals("")){
@@ -461,7 +461,7 @@ public class AddInquiry extends JInternalFrame {
             if(cmbCompany.getSelectedIndex() == 0){
                 JOptionPane.showMessageDialog(this, "Please select the Company!");
                 return;
-            } else if(cmbBranch.getSelectedIndex() == 0){
+            } else if(cmbBranch.getSelectedItem().toString().toLowerCase().equals("select branch")){
                 JOptionPane.showMessageDialog(this, "Please select the Branch!");
                 return;
             } else if(txtBranchContact.getText().equals("")){

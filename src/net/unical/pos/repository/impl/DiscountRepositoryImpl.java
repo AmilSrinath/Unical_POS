@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dto.DiscountDto;
 import net.unical.pos.model.DiscountModel;
@@ -41,31 +42,27 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
                 );
             }
 
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Discounts fetch failde!");
         }
         return discounts;
     }
 
     @Override
     public boolean addDiscount(DiscountDto discountDto) {
-        String sql = "INSERT INTO " + TABLE + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO " + TABLE + " (discount_name, percentage, status, user_id, visible) VALUES(?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = DBConnection.getInstance().getConnection().prepareStatement(sql);
-            ps.setInt(1, discountDto.getDiscountId());
-            ps.setString(2, discountDto.getDiscountName());
-            ps.setDouble(3, discountDto.getPercentage());
-            ps.setDouble(4, discountDto.getAmount());
-            ps.setInt(4, discountDto.getStatus());
-            ps.setInt(6, 1);
-            ps.setInt(7, 1);
+            ps.setString(1, discountDto.getDiscountName());
+            ps.setDouble(2, discountDto.getPercentage());
+            ps.setInt(3, discountDto.getStatus());
+            ps.setInt(4, 1);
+            ps.setInt(5, 1);
             return 0 < ps.executeUpdate();
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Failed to add discount to the database");
         }
         return false;
     }
@@ -82,9 +79,27 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
                 System.out.println("come to this");
                 return rs.getInt("discount_id");
             }
-        } catch (Exception e) {
-            Logger.getLogger("Something sql error");
+        } catch (ClassNotFoundException | SQLException e) {
+            Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "Discount id fetch failed");
         }
         return null;
+    }
+
+    @Override
+    public boolean updateDiscount(DiscountModel discountModel) {
+        String sql = "UPDATE " + TABLE + " SET discount_name = ?, percentage = ?, status =  ? WHERE discount_id = ?";
+        try {
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1, discountModel.getDiscountName());
+            pstm.setDouble(2, discountModel.getPercentage());
+            pstm.setInt(3, 1);
+            pstm.setInt(4, discountModel.getDiscountId());
+            return pstm.executeUpdate() > 0;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(DiscountRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Discount Not Update!");
+        }
+        return false;
     }
 }

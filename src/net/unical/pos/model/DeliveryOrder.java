@@ -49,8 +49,53 @@ public class DeliveryOrder {
     private Double totalAmount;
     private Integer paymentStatus;
     private Integer isExchange;
+
+    public DeliveryOrder() {
+    }
+
+    public DeliveryOrder(Integer orderId, String orderCode, Integer customerId, String customerName, String address, String payment_type, Double cod, String phoneOne, String phoneTwo, Double subTotalPrice, Double deliveryFee, String weight, Integer status, Integer statusType, Integer isReturn, Integer freeShip, Double grandTotalPrice, String date, String remark, Integer paymentTypeId, Integer isPrint, String customerNumber, Double paidAmount, Timestamp createDate, Timestamp editedDate, Integer userID, Integer statusID, Integer paymentId, Double codPayment, Double totalAmount, Integer paymentStatus, Integer isExchange, Integer discountId, String orderType, ArrayList<OrderDetailsDto> orderDetailsDtos) {
+        this.orderId = orderId;
+        this.orderCode = orderCode;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.payment_type = payment_type;
+        this.cod = cod;
+        this.phoneOne = phoneOne;
+        this.phoneTwo = phoneTwo;
+        this.subTotalPrice = subTotalPrice;
+        this.deliveryFee = deliveryFee;
+        this.weight = weight;
+        this.status = status;
+        this.statusType = statusType;
+        this.isReturn = isReturn;
+        this.freeShip = freeShip;
+        this.grandTotalPrice = grandTotalPrice;
+        this.date = date;
+        this.remark = remark;
+        this.paymentTypeId = paymentTypeId;
+        this.isPrint = isPrint;
+        this.customerNumber = customerNumber;
+        this.paidAmount = paidAmount;
+        this.createDate = createDate;
+        this.editedDate = editedDate;
+        this.userID = userID;
+        this.statusID = statusID;
+        this.paymentId = paymentId;
+        this.codPayment = codPayment;
+        this.totalAmount = totalAmount;
+        this.paymentStatus = paymentStatus;
+        this.isExchange = isExchange;
+        this.discountId = discountId;
+        this.orderType = orderType;
+        this.orderDetailsDtos = orderDetailsDtos;
+    }
     private Integer discountId;
     private String orderType;
+
+    public DeliveryOrder(Integer orderId, String orderCode, String customerName, String address, Double cod, String phoneOne, String phoneTwo, Double subTotalPrice, Double deliveryFee, Integer status, Integer statusType, Integer aReturn, Double grandTotalPrice, String remark, Integer paymentTypeId, Integer print, Double paidAmount, java.util.Date createDate, Integer statusID, Integer paymentId, Double codPayment, Double totalAmount, Integer paymentStatus) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     public String getPayment_type() {
         return payment_type;
@@ -97,7 +142,7 @@ public class DeliveryOrder {
     public String getOrderCode() {
         return orderCode;
     }
-    
+
     public void setPayment_Type(String payment_type) {
         this.payment_type = payment_type;
     }
@@ -342,5 +387,4 @@ public class DeliveryOrder {
         this.statusID = statusID;
     }
 
-    
 }

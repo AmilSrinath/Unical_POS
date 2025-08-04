@@ -14,6 +14,7 @@ public class DiscountModel {
     Double percentage;
     Double amount;
     Integer status;
+   
 
     public DiscountModel() {
     }
@@ -25,6 +26,8 @@ public class DiscountModel {
         this.amount = amount;
         this.status = status;
     }
+
+
 
     public Integer getDiscountId() {
         return discountId;

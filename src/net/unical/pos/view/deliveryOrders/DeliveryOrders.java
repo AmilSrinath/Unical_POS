@@ -2994,13 +2994,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     btnEdit.setEnabled(false);
 
                     // Enable buttons based on status
-                    if (statusTypes.get(0).getStatus_type().equals(status) || statusTypes.get(1).getStatus_type().equals(status) || statusTypes.get(2).getStatus_type().equals(status)) {
+                    if (statusTypes.get(0).getStatus_type().equals(status) || statusTypes.get(1).getStatus_type().equals(status)) {
                         btnWrapping.setEnabled(true);
                         btnEdit.setEnabled(true);
                         btnCancel.setEnabled(true);
                     } else if (statusTypes.get(2).getStatus_type().equals(status)) {
                         btnWrapping.setEnabled(false);
                         btnCancel.setEnabled(true);
+                        btnEdit.setEnabled(true);
                         btnOutForDelivery.setEnabled(true);
                     } else if (statusTypes.get(3).getStatus_type().equals(status)) {
                         btnReturning.setEnabled(true);

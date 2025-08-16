@@ -5,6 +5,7 @@
  */
 package net.unical.pos.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -59,7 +60,13 @@ public class CustomerDto {
         this.userId = userId;
         this.visible = visible;
     }
-    
+
+    public CustomerDto(int customer_id, String customer_name, String customerNumber) {
+        this.customerId = customer_id;
+        this.customerName = customer_name;
+        this.customer_number = customerNumber;
+    }
+
     public String getCustomerNumber() {
         return customer_number;
     }

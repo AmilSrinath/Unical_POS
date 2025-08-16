@@ -7,6 +7,7 @@ package net.unical.pos.repository.custom;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.unical.pos.dto.CustomerDto;
 import net.unical.pos.model.CustomerModel;
 
 /**
@@ -18,5 +19,7 @@ public interface CustomerRepositoryCustom {
     public boolean save(CustomerModel customerModel)throws Exception;
 
     public List<CustomerModel> getCustomer(String quary);
+
+    public CustomerDto getCustomerByPhone(String quary);
     
 }

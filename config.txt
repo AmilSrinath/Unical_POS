@@ -18,3 +18,5 @@ ADD_COST_PER_1KG=100
 
 # 1 or 0
 DEVELOPMENT_PC=1
+
+BASE_URL = https://petalpink.lk

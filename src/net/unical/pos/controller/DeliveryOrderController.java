@@ -39,5 +39,9 @@ public class DeliveryOrderController {
         return deliveryOrderCustom.getSpecificWaight(id);
     }
 
+    public String getOrderType(String deliveryID) {
+        return deliveryOrderCustom.getOrderType(deliveryID);
+    }
+
     
 }

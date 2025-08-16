@@ -5,19 +5,29 @@
  */
 package net.unical.pos.view.main;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import net.unical.pos.configurations.ConfigPropertyObject;
 import net.unical.pos.configurations.ConfigPropertyReader;
+import net.unical.pos.dto.WebsiteDto.WebsiteOrderDto;
+import net.unical.pos.view.deliveryOrders.DeliveryOrders;
 
 /**
  *
  * @author Sanjuka
  */
 public class MainForm extends javax.swing.JFrame {
-
     /**
      * Creates new form Main
      */
@@ -163,4 +173,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+   
 }

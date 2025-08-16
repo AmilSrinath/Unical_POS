@@ -49,6 +49,7 @@ public class DeliveryOrder {
     private Double totalAmount;
     private Integer paymentStatus;
     private Integer isExchange;
+    private String websiteOrderId;
 
     public DeliveryOrder() {
     }
@@ -386,5 +387,14 @@ public class DeliveryOrder {
     public void setStatusID(Integer statusID) {
         this.statusID = statusID;
     }
+
+    public String getWebsiteOrderId() {
+        return websiteOrderId;
+    }
+
+    public void setWebsiteOrderId(String websiteOrderId) {
+        this.websiteOrderId = websiteOrderId;
+    }
+    
 
 }

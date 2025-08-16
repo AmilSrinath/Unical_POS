@@ -7,6 +7,9 @@ package net.unical.pos.repository.impl;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosMainItem;
 import net.unical.pos.model.SubItemCategoryModel;
@@ -166,6 +169,20 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
             ));
         }
         return posMainItems;
+    }
+
+    public Integer getItemCode(String product_name) {
+        String sql = "SELECT item_id FROM pos_main_item_tb WHERE item_name = ?";
+        try {
+            ResultSet rst = Statement.executeQuery(sql, product_name);
+            if (rst.next()) {
+                return rst.getInt("item_id");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(MainItemRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
+            Log.error(e, "ProductId fetched error");
+        }
+        return 0;
     }
 
 }

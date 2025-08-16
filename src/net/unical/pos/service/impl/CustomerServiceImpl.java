@@ -93,7 +93,7 @@ public class CustomerServiceImpl implements CustomerServiceCustom{
 
     @Override
     public CustomerDto searchCustomer(String quary) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customerRepositoryCustom.getCustomerByPhone(quary);
     }
     
 }

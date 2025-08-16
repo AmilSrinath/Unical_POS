@@ -77,7 +77,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
 
     @Override
     public ArrayList<DeliveryOrderDto> getAllDurationOrders(String fromDate, String toDate, Integer paymentType) {
-        ArrayList<DeliveryOrder>deliveryOrders=deliveryOrderRepositoryCustom.getAllDuration(fromDate,toDate,paymentType,0);
+        ArrayList<DeliveryOrder>deliveryOrders=deliveryOrderRepositoryCustom.getAllDuration(fromDate,toDate,paymentType,0, "Any");
         ArrayList<DeliveryOrderDto>deliveryOrderDtos=new ArrayList<>();
         for(DeliveryOrder deliveryOrder:deliveryOrders){
             deliveryOrderDtos.add(new DeliveryOrderDto(deliveryOrder.getOrderId(),
@@ -102,6 +102,11 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
     @Override
     public Double getSpecificWaight(Integer id) {
         return deliveryOrderRepositoryCustom.getSpecificWaight(id);
+    }
+
+    @Override
+    public String getOrderType(String deliveryID) {
+        return deliveryOrderRepositoryCustom.getOrderType(deliveryID);
     }
 
     

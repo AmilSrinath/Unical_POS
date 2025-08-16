@@ -109,7 +109,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(DeliveryOrderRepositoryImpl.class, "UPDATE pos_main_customer_tb");
 
                 // Add Delivery
-                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange, order_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange, order_type, website_order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -120,6 +120,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(8, LogInForm.userID);
                 ps.setInt(9, deliveryOrder.getIsExchange());
                 ps.setString(10, deliveryOrder.getOrderType());
+                ps.setString(11, deliveryOrder.getWebsiteOrderId());
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
                 if (rst.next()) {
@@ -430,7 +431,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     }
 
     @Override
-    public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType, int status) {
+    public ArrayList<DeliveryOrder> getAllDuration(String fromDate, String toDate, Integer paymentType, int status, String orderType) {
         ArrayList<DeliveryOrder> deliveryOrders = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -442,7 +443,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                     "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, "
                     + "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, "
                     + "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, "
-                    + "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status "
+                    + "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status, dot.order_type "
                     + "FROM pos_main_delivery_order_tb dot "
                     + "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id "
                     + "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id "
@@ -457,6 +458,9 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             if (status != 0) {
                 sql.append(" AND dot.status_id = ?");
             }
+            if (!orderType.equals("Any")) {
+                sql.append(" AND dot.order_type = ?");
+            }
 
             ps = conn.prepareStatement(sql.toString());
             ps.setString(1, fromDate);
@@ -467,6 +471,9 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             }
             if (status != 0) {
                 ps.setInt(paramIndex++, status);
+            }
+            if (!orderType.equals("Any")) {
+                ps.setString(paramIndex++, orderType);
             }
 
             rs = ps.executeQuery();
@@ -497,6 +504,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 deliveryOrder.setCodPayment(rs.getDouble("cod_payment"));
                 deliveryOrder.setTotalAmount(rs.getDouble("total_amount"));
                 deliveryOrder.setPaymentStatus(rs.getInt("payment_status"));
+                deliveryOrder.setOrderType(rs.getString("order_type"));
 
                 deliveryOrders.add(deliveryOrder);
             }
@@ -1738,6 +1746,47 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0.0;
+    }
+
+    @Override
+    public String getOrderType(String deliveryID) {
+        String sql = "SELECT order_type FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
+        try{
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, Integer.parseInt(deliveryID));
+            ResultSet rst = pstm.executeQuery();
+            if(rst.next()) {
+                return rst.getString("order_type");
+            }
+        } catch (RuntimeException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Order Type retrieve failed!");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getOrderByDeliveryId(String delivery_id) {
+        String sql = "SELECT * FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
+        try{
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, Integer.parseInt(delivery_id));
+            ResultSet rst = pstm.executeQuery();
+            if(rst.next()) {
+                return rst.getString("website_order_id");
+            }
+        } catch (RuntimeException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Order Type retrieve failed!");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

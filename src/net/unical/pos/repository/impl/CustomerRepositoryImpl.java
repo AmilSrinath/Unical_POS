@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dbConnection.Statement;
+import net.unical.pos.dto.CustomerDto;
 import net.unical.pos.model.CustomerModel;
 import net.unical.pos.model.DeliveryOrder;
 import net.unical.pos.model.TestModel;
@@ -31,7 +32,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
 
     @Override
     public boolean save(CustomerModel customerModel) throws Exception {
-        return Statement.executeUpdate("Insert into pos_main_customer_tb values(?,?,?,?,?,?,?,?,?,?,?)",
+        return Statement.executeUpdate("Insert into pos_main_customer_tb (customer_id, customer_name, nic, address, phone_one, created_date, is_loyalty, loyalty_amount, status, user_id, visible) values(?,?,?,?,?,?,?,?,?,?,?)",
                 customerModel.getCustomerId(),
                 customerModel.getCustomerName(),
                 customerModel.getNic(),
@@ -113,6 +114,27 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom{
             }
         }
         return customerModels;
+    }
+
+    @Override
+    public CustomerDto getCustomerByPhone(String quary) {
+        String sql = "SELECT * FROM pos_main_customer_tb WHERE phone_one = ?";
+        try {
+            PreparedStatement pstm = DBCon.getDatabaseConnection().prepareStatement(sql);
+            pstm.setInt(1, Integer.parseInt(quary));
+            ResultSet rst = pstm.executeQuery();
+            if(rst.next())  {
+                return new CustomerDto(
+                        rst.getInt("customer_id"),
+                        rst.getString("customer_name"),
+                        rst.getString("customer_number")
+                );
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerRepositoryImpl.class.getName()).log(Level.SEVERE,null, e);
+            Log.error(e, "Customer fetching error");
+        }
+        return null;
     }
     
     

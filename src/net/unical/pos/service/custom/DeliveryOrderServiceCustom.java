@@ -20,5 +20,7 @@ public interface DeliveryOrderServiceCustom {
     public ArrayList<DeliveryOrderDto> getAllDurationOrders(String fromDate, String toDate, Integer paymentType);
 
     public Double getSpecificWaight(Integer id);
+
+    public String getOrderType(String deliveryID);
     
 }

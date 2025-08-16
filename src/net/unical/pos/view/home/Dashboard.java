@@ -5,6 +5,8 @@
  */
 package net.unical.pos.view.home;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,11 +17,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import net.unical.pos.configurations.Configurations;
 import net.unical.pos.configurations.Log;
+import net.unical.pos.dto.WebsiteDto.WebsiteOrderDto;
 import net.unical.pos.model.AuthModuleWise;
 import net.unical.pos.repository.impl.ManageUserAuthRepositoryImpl;
 import net.unical.pos.view.Configuration.Configuration;
@@ -56,11 +64,13 @@ public class Dashboard extends javax.swing.JFrame {
     public static String systemMAC = "";
     public static Map<String, String> configValues = new HashMap();
     private ManageUserAuthRepositoryImpl manageUserAuthRepositoryImpl;
+//    public static WebsiteOrderDto websiteOrders;
     
     Integer enterd;
     Integer exit;
     public Dashboard() throws Exception {
         initComponents();
+//        getWebsiteOrders();
         Dimension fullScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setMinimumSize(fullScreenSize);
         this.setSize(fullScreenSize);
@@ -1030,5 +1040,48 @@ public class Dashboard extends javax.swing.JFrame {
         logoutBtn.setBackground(new Color(0, 77, 128));    
         inquiryBtn.setBackground(new Color(0, 77, 128));    
         configurationBtn.setBackground(new Color(0, 77, 128));    
+    }
+    
+     private void getWebsiteOrders() {
+//        try {
+//            URL url = new URL("http://localhost:4000/api/customerOrderSave/getNewOrderDetails");
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//
+//            int responseCode = connection.getResponseCode();
+//            System.out.println("Status code : " + responseCode);
+//
+//            if (responseCode == HttpURLConnection.HTTP_OK) {
+//                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                StringBuilder response = new StringBuilder();
+//                String line;
+//                while ((line = br.readLine()) != null) {
+//                    response.append(line);
+//                }
+//                br.close();
+//
+//                String jsonResponse = response.toString();
+//                System.out.println("Json row: " + jsonResponse);
+//
+//                Gson gson = new Gson();
+//                java.lang.reflect.Type orderListType = new TypeToken<List<WebsiteOrderDto>>() {
+//                }.getType();
+//                websiteOrders = gson.fromJson(jsonResponse, orderListType);
+//
+//                for (WebsiteOrderDto  order : websiteOrders) {
+//                    System.out.println("Customer Name: " + order.getItems().get(0).getProduct_name());
+//                }
+//                System.out.println("retrieve successfully");
+//                
+//                saveOrder();
+//            } else {
+//                
+//                System.out.println("retrieve unsuccessfully");
+//
+//            }
+//        } catch (IOException ex) {
+//            Logger.getLogger(DeliveryOrders.class
+//                    .getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 }

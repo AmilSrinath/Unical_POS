@@ -5,21 +5,32 @@
  */
 package net.unical.pos.view.deliveryOrders;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.java.accessibility.util.SwingEventMonitor;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.lang.reflect.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +59,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.api.ApiClient;
 import net.unical.pos.configurations.AutoGenerator;
 import net.unical.pos.controller.CustomerController;
 import net.unical.pos.controller.DeliveryOrderController;
@@ -66,6 +78,8 @@ import net.unical.pos.dto.OrderDto;
 import net.unical.pos.dto.OrderTypeDto;
 import net.unical.pos.dto.PaymentTypeDto;
 import net.unical.pos.dto.UserDto;
+import net.unical.pos.dto.WebsiteDto.WebsiteOrderDetailDto;
+import net.unical.pos.dto.WebsiteDto.WebsiteOrderDto;
 import net.unical.pos.log.Log;
 import net.unical.pos.model.CustomerDataByInquirySearch;
 import net.unical.pos.model.CustomerModel;
@@ -93,6 +107,7 @@ import net.unical.pos.service.impl.CustomerServiceImpl;
 import net.unical.pos.view.home.Dashboard;
 import net.unical.pos.view.main.LogInForm;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.json.JSONObject;
 
 /**
  *
@@ -150,6 +165,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private boolean hasRowLevelDiscount = false;
     private boolean comboSelected = false;
     private boolean comboOrderType = false;
+    private boolean isWebsiteOrder = false;
+    private List<WebsiteOrderDto> websiteOrders = new ArrayList<>();
+    private List<WebsiteOrderDetailDto> itemList = new ArrayList<>();
+    private static boolean isOrderThreadRunning = false;
 
     public DeliveryOrders(Dashboard dashboard) throws FileNotFoundException, IOException, Exception {
         initComponents();
@@ -260,7 +279,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } else {
             deliveryFormDetailPanel.setVisible(false);
         }
+     openThread();
 
+    }
+
+    public DeliveryOrders() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -1102,25 +1126,23 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(20, 20, 20))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(qtyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(121, 121, 121)))
+                        .addGap(121, 121, 121))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(165, 165, 165)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1367,7 +1389,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(fr_de_chb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(radioExchange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 283, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(saveOrderBtn)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1458,9 +1480,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(jButton2))))
                 .addGap(33, 33, 33)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel37)
                             .addComponent(cmbOrderType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1474,7 +1496,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             .addComponent(PaidAmountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(saveOrderBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1503,7 +1524,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saveOrderBtn)
-                .addGap(45, 45, 45))
+                .addGap(25, 25, 25))
         );
 
         deliveryOrdersTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1511,14 +1532,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Date", "Delivery Status"
+                "ID", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Order Type", "Date", "Delivery Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2302,6 +2323,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     PaidAmountTxt.setText("0");
 
                     itemListTableModel.setRowCount(0);
+                    if (!cmbOrderType.isEnabled()) {
+                        cmbOrderType.setEnabled(true);
+                        cmbOrderType.setSelectedIndex(0);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "Update failed.(Duplicate order code found! or another error!)");
                 }
@@ -2326,102 +2351,201 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void saveOrder() {
         ArrayList<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
-
-        for (int i = 0; i < itemListTable.getRowCount(); i++) {
-            Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
-
-            Number priceValue = (Number) itemListTable.getValueAt(i, 2);
-
-            Number discountValue = (Number) itemListTable.getValueAt(i, 4);
-            Double applyDiscount;
-            if (isOrder) {
-                applyDiscount = Double.valueOf(discountLabel.getText().replace("-", ""));
-            } else {
-                applyDiscount = discountValue.doubleValue();
-            }
-            Double perItemPrice = priceValue.doubleValue();
-
-            Double price = priceValue.doubleValue() - applyDiscount;
-
-            Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
-            Integer qty = qtyValue.intValue();
-
-            OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, perItemPrice, applyDiscount, price * qty, "", 1, 1);
-            orderDetailsDtos.add(dto);
-        }
-
-        String phoneTwo = null;
-        if (phoneTwoCmb.getSelectedItem() != null) {
-            phoneTwo = phoneTwoCmb.getSelectedItem().toString();
-
-        }
-
-        int index = paymentTypeCombo.getSelectedIndex();
         Integer orderId = null;
+        if (!websiteOrders.isEmpty()) {
+            int index = 0;
+            for (WebsiteOrderDto websiteOrder : websiteOrders) {
+                try {
+                    for (WebsiteOrderDetailDto websiteOrderDto : itemList) {
+                        try {
+                            Integer item_id = getItemId(websiteOrderDto.getProduct_name());
+                            System.out.println("Product name : " + websiteOrderDto.getProduct_name());
+                            System.out.println("Item id : " + item_id);
+                            orderDetailsDtos.add(new OrderDetailsDto(
+                                    0,
+                                    null,
+                                    item_id,
+                                    null,
+                                    null,
+                                    1,
+                                    websiteOrderDto.getQuantity(),
+                                    websiteOrderDto.getPrice(),
+                                    0.0,
+                                    websiteOrderDto.getQuantity() * websiteOrderDto.getPrice(),
+                                    "",
+                                    1,
+                                    1
+                            ));
+                        } catch (Exception ex) {
+                            Logger.getLogger(DeliveryOrders.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    index++;
+                    DeliveryOrder deliveryOrderDto = new DeliveryOrder();
+                    deliveryOrderDto.setCustomerName(websiteOrder.getFirst_name());
+                    CustomerDto customer = customerController.searchCustomer(websiteOrder.getPhone_1());
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    LocalDate date = LocalDate.now();
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(date);
+                    if (customer == null) {
+                        try {
+                            System.out.println("Come to this....");
+                            customerController.saveCustomer(new CustomerDto(
+                                    0,
+                                    websiteOrder.getFirst_name(),
+                                    "",
+                                    websiteOrder.getAddress1() + ", " + websiteOrder.getAddress2() + " " + websiteOrder.getCity(),
+                                    Integer.valueOf(websiteOrder.getPhone_1()),
+                                    sqlDate,
+                                    0,
+                                    0.0,
+                                    1,
+                                    1,
+                                    1
+                            ));
+                            customer = customerController.searchCustomer(websiteOrder.getPhone_1());
+                        } catch (Exception ex) {
+                            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    System.out.println("Customer : " + customer.getCustomerName());
+                    deliveryOrderDto.setCustomerId(customer.getCustomerId());
+                    deliveryOrderDto.setAddress(websiteOrder.getAddress1() + ", " + websiteOrder.getAddress2() + ", " + websiteOrder.getCity());
+                    deliveryOrderDto.setCod(websiteOrder.getSub_total());
+                    deliveryOrderDto.setPhoneOne(websiteOrder.getPhone_1());
+                    deliveryOrderDto.setPhoneTwo(websiteOrder.getPhone_2());
+                    deliveryOrderDto.setSubTotalPrice(websiteOrder.getTotal());
+                    deliveryOrderDto.setDeliveryFee(websiteOrder.getDelivery());
+                    deliveryOrderDto.setWeight("0.0");
+                    deliveryOrderDto.setFreeShip(0);
+                    deliveryOrderDto.setGrandTotalPrice(websiteOrder.getSub_total());
+                    deliveryOrderDto.setCustomerNumber(customer.getCustomerNumber());
+                    deliveryOrderDto.setPaidAmount(0.0);
+                    deliveryOrderDto.setCreateDate(now);
+                    deliveryOrderDto.setEditedDate(now);
+                    deliveryOrderDto.setUserID(1);
+                    deliveryOrderDto.setIsExchange(0);
+                    deliveryOrderDto.setOrderType("Website");
+                    deliveryOrderDto.setRemark("");
+                    deliveryOrderDto.setPaymentTypeId(1);
+                    deliveryOrderDto.setWebsiteOrderId(websiteOrder.getOrder_id());
+                    deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
+                    System.out.println("Save count"+ index);
+                    orderId = deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
+                } catch (Exception ex) {
+                    Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-        Boolean free_shiping_check = fr_de_chb.getState();
+            }
+            orderDetailsDtos.clear();
+            itemList.clear();
+            System.out.println("order dto length : " + orderDetailsDtos.size());
 
-        int free_ship = 0;
-        if (free_shiping_check) {
-            free_ship = 1;
-        }
+        } else {
 
-        int isExch = 0;
-        Boolean isExchange = radioExchange.getState();
-        if (isExchange) {
-            isExch = 1;
-        }
+            for (int i = 0; i < itemListTable.getRowCount(); i++) {
+                Integer itemId = (Integer) itemListTable.getValueAt(i, 0);
 
-        try {
-            if (phoneOneCmb.getSelectedItem() != null) {
-                DeliveryOrder deliveryOrderDto = new DeliveryOrder();
-                deliveryOrderDto.setOrderCode(orderCodeTxt.getText());
-                if (customer_exist) {
-                    deliveryOrderDto.setCustomerId(customer_id);
+                Number priceValue = (Number) itemListTable.getValueAt(i, 2);
+
+                Number discountValue = (Number) itemListTable.getValueAt(i, 4);
+                Double applyDiscount;
+                if (isOrder) {
+                    applyDiscount = Double.valueOf(discountLabel.getText().replace("-", ""));
                 } else {
-                    deliveryOrderDto.setCustomerId(null);
+                    applyDiscount = discountValue.doubleValue();
                 }
-                deliveryOrderDto.setCustomerName(customerNameTxt.getText());
-                deliveryOrderDto.setAddress(addressTxt.getText());
-                deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
+                Double perItemPrice = priceValue.doubleValue();
 
-                String phoneNumber = phoneOneCmb.getSelectedItem().toString();
-                phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
-                deliveryOrderDto.setPhoneOne(phoneNumber);
+                Double price = priceValue.doubleValue() - applyDiscount;
 
-                deliveryOrderDto.setPhoneTwo(phoneTwo);
-                deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
-                deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
-                deliveryOrderDto.setWeight(weightTxt.getText().toString());
-                deliveryOrderDto.setFreeShip(free_ship);
-                deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
-                deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
-                deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                deliveryOrderDto.setCreateDate(now);
-                deliveryOrderDto.setEditedDate(now);
-                deliveryOrderDto.setUserID(1);
-                deliveryOrderDto.setIsExchange(isExch);
-                deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
+                Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
+                Integer qty = qtyValue.intValue();
 
-                deliveryOrderDto.setRemark(remarkTxt.getText());
-                deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
-                deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
-                if (!isOrder) {
-                    System.out.println("Come to this" + discount);
-                    deliveryOrderDto.setDiscountId(1);
-                }
-                deliveryOrderDto.setDiscountId(1);
-                orderId = deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
-
-                System.out.println("paymentTypeIds.get(index) : " + paymentTypeIds.get(index));
-            } else {
-                JOptionPane.showMessageDialog(this, "Add Phone Number");
+                OrderDetailsDto dto = new OrderDetailsDto(0, null, itemId, null, null, 1, qty, perItemPrice, applyDiscount, price * qty, "", 1, 1);
+                orderDetailsDtos.add(dto);
             }
 
-            if (orderId != null) {
-                JOptionPane.showMessageDialog(this, "Order saved sucessfully");
+            String phoneTwo = null;
+            if (phoneTwoCmb.getSelectedItem() != null) {
+                phoneTwo = phoneTwoCmb.getSelectedItem().toString();
 
+            }
+
+            int index = paymentTypeCombo.getSelectedIndex();
+
+            Boolean free_shiping_check = fr_de_chb.getState();
+
+            int free_ship = 0;
+            if (free_shiping_check) {
+                free_ship = 1;
+            }
+
+            int isExch = 0;
+            Boolean isExchange = radioExchange.getState();
+            if (isExchange) {
+                isExch = 1;
+            }
+
+            try {
+                if (phoneOneCmb.getSelectedItem() != null) {
+                    DeliveryOrder deliveryOrderDto = new DeliveryOrder();
+                    deliveryOrderDto.setOrderCode(orderCodeTxt.getText());
+                    if (customer_exist) {
+                        deliveryOrderDto.setCustomerId(customer_id);
+                    } else {
+                        deliveryOrderDto.setCustomerId(null);
+                    }
+                    deliveryOrderDto.setCustomerName(customerNameTxt.getText());
+                    deliveryOrderDto.setAddress(addressTxt.getText());
+                    deliveryOrderDto.setCod(Double.parseDouble(codTxt.getText()));
+
+                    String phoneNumber = phoneOneCmb.getSelectedItem().toString();
+                    phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
+                    deliveryOrderDto.setPhoneOne(phoneNumber);
+
+                    deliveryOrderDto.setPhoneTwo(phoneTwo);
+                    deliveryOrderDto.setSubTotalPrice(Double.parseDouble(subTotAmountLbl.getText()));
+                    deliveryOrderDto.setDeliveryFee(Double.parseDouble(deliveyFeeLbl.getText()));
+                    deliveryOrderDto.setWeight(weightTxt.getText().toString());
+                    deliveryOrderDto.setFreeShip(free_ship);
+                    deliveryOrderDto.setGrandTotalPrice(Double.parseDouble(totAmountLbl.getText()));
+                    deliveryOrderDto.setCustomerNumber(customerNumberTxt.getText());
+                    deliveryOrderDto.setPaidAmount(Double.parseDouble(PaidAmountTxt.getText()));
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    deliveryOrderDto.setCreateDate(now);
+                    deliveryOrderDto.setEditedDate(now);
+                    deliveryOrderDto.setUserID(1);
+                    deliveryOrderDto.setIsExchange(isExch);
+                    deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
+
+                    deliveryOrderDto.setRemark(remarkTxt.getText());
+                    deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
+                    deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
+                    if (!isOrder) {
+                        System.out.println("Come to this" + discount);
+                        deliveryOrderDto.setDiscountId(1);
+                    }
+                    deliveryOrderDto.setDiscountId(1);
+                    orderId = deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
+
+                    System.out.println("paymentTypeIds.get(index) : " + paymentTypeIds.get(index));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Add Phone Number");
+
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex, "save order error");
+            }
+        }
+        if (orderId != null) {
+            FileInputStream fis = null;
+            try {
+                JOptionPane.showMessageDialog(this, "Order saved sucessfully");
                 //Bill print
 //                printBill(orderId);
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -2433,38 +2557,52 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 clearText();
                 phoneOneCmb.requestFocus();
                 customer_exist = false;
-
-                FileInputStream fis = new FileInputStream("config.txt");
+                fis = new FileInputStream("config.txt");
                 Properties props = new Properties();
                 props.load(fis);
-
                 customerNameTxt.setText("");
                 addressTxt.setText("");
                 customerNumberTxt.setText("");
                 remarkTxt.setText("");
                 orderCodeTxt.setText("");
-                Log.info(DeliveryOrders.class, orderId + " Order Save. User ID: " + LogInForm.userID);
-
+                Log.info(DeliveryOrders.class,orderId + " Order Save. User ID: " + LogInForm.userID);
                 subTotAmountLbl.setText("0.00");
                 totAmountLbl.setText("0.00");
                 itemListTableModel.setRowCount(0);
                 codTxt.setText("");
                 PaidAmountTxt.setText("0");
-            } else {
-                JOptionPane.showMessageDialog(this, "Save fail..");
+                sendOrderConfirmation();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fis.close();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(DeliveryOrders.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error(ex, "save order error");
+        } else {
+            JOptionPane.showMessageDialog(this, "Save fail..");
         }
 
         try {
             orders = mainOrderRepositoryImpl.getAllOrders();
+
         } catch (SQLException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "save order error");
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "save order error");
         }
         delivery_id = null;
@@ -2515,7 +2653,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger
+                            .getLogger(DeliveryOrders.class
+                                    .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -2597,11 +2737,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream("config.txt")) {
             props.load(fis);
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Config file not found", ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, "Config file not found", ex);
             Log.error(ex, "FileNotFoundException error");
+
         } catch (IOException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, "Error loading config file", ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, "Error loading config file", ex);
             Log.error(ex, "IOException error");
         }
         return props;
@@ -2666,7 +2810,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             JasperExportManager.exportReportToPdfFile(jp, path);
 
         } catch (JRException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "printAllOrdersBtnActionPerformed error");
         }
     }//GEN-LAST:event_printAllOrdersBtnActionPerformed
@@ -2677,6 +2822,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         Double cod = total - amount;
         codTxt.setText(cod + "");
+
+
     }//GEN-LAST:event_saveOrderBtn1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -2711,10 +2858,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         customer_id = customerDto.getCustomerId();
                     }
                     customer_exist = true;
+
                 }
 
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Phone number seleting error");
             }
         }
@@ -2796,8 +2945,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 }
 
                 customer_exist = true;
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Phone number seleting error");
             }
         }
@@ -2907,8 +3058,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 PosMainUser userDto = null;
                 try {
                     userDto = userAccountManagementController.getUserByUserID(LogInForm.userID);
+
                 } catch (Exception ex) {
-                    Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DeliveryOrders.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
 
                 if (!(userDto.getRoleId() == 1 || userDto.getRoleId() == 2)) {
@@ -3106,8 +3259,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3131,9 +3286,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
+                updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Preparing");
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3157,9 +3315,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
+                updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "On the way");
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3183,9 +3344,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
+                updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Cancel");
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3209,9 +3373,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
+                
+                updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Return");
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3238,9 +3406,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
-                order_options.dispose();
+                String websiteOrderId = deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id);
+                System.out.println("WebsiteOrderId : " + websiteOrderId);
+                updateWebOrderStatus(websiteOrderId, "Delivered");
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3253,7 +3425,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
         if (selectedRow != -1) {
             String deliveryID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
-            String orderCodeStr = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+            System.out.println("DeliveryId : " + deliveryID);
+            Object value = deliveryOrdersTable.getValueAt(selectedRow, 1);
+            String orderCodeStr = (value != null) ? value.toString() : "";
+
+            System.out.println("Order code : " + orderCodeStr);
             if (deliveryID != null && !deliveryID.isEmpty()) {
                 orderCode = orderCodeStr;
                 System.out.println("orderCode : " + orderCode);
@@ -3273,7 +3449,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     orderCodeTxt.setText(orderCodeStr);
 
                     totAmountLbl.setText(totalAmount.toString());
-
 
                     // Additional logic for updating totals and other details...
                     double subTot = totalAmount - Double.parseDouble(deliveyFeeLbl.getText());
@@ -3309,7 +3484,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         for (int i = 0; i < itemListTable.getRowCount(); i++) {
                             discountPrice += Double.parseDouble(itemListTable.getValueAt(i, 4).toString());
                         }
-                        PaidAmountTxt.setText(String.format("%.2f",totalAmount-cod));
+                        String orderType = deliveryOrderController.getOrderType(deliveryID);
+                        if (orderType.equals("Website")) {
+                            cmbOrderType.setSelectedIndex(1);
+                        } else {
+                            cmbOrderType.setSelectedIndex(0);
+                        }
+                        cmbOrderType.setEnabled(false);
+                        PaidAmountTxt.setText(String.format("%.2f", totalAmount - cod));
                         codTxt.setText(String.format("%.2f", cod));
                         subTotAmountLbl.setText(String.format("%.2f", subTot));
                         double deliveryFee = calculateDeliveryFee(totalWeight);
@@ -3382,7 +3564,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 inquiryRepositoryImpl.saveInquiry(inquiryModel);
 
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3407,8 +3590,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     getAllOrders(fromDate, toDate, 0);
                 }
                 order_options.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, "Status Change error");
             }
         }
@@ -3437,8 +3622,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 getAllOrders(fromDate, toDate, 0);
 
                 remark.dispose();
+
             } catch (Exception ex) {
-                Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeliveryOrders.class
+                        .getName()).log(Level.SEVERE, null, ex);
                 Log.error(ex, ex);
             }
         }
@@ -3485,7 +3672,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void applyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtnActionPerformed
-        
+
         try {
             // Edge case: if subtotal is 0.00
             if (subTotAmountLbl.getText().equals("0.00")) {
@@ -3607,7 +3794,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     return;
                 }
             } else {
-                JOptionPane.showMessageDialog( this, "Please choose a discount option");
+                JOptionPane.showMessageDialog(this, "Please choose a discount option");
                 Log.error(new Logger("Exception", "Please Choose an option before apply") {
                 }, evt,
                         new RuntimeException("Please Choose an option before apply"));
@@ -3719,7 +3906,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void cmbOrderTypeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbOrderTypeMouseClicked
         // TODO add your handling code here:
-        if(evt.getClickCount() == 0){
+        if (evt.getClickCount() == 0) {
             this.comboOrderType = true;
         }
     }//GEN-LAST:event_cmbOrderTypeMouseClicked
@@ -3732,6 +3919,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbOrderTypeKeyReleased
 
+    
     /**
      * @param args the command line arguments
      */
@@ -3906,9 +4094,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 itemWeightList.add(mainItem.getWeight());
             }
             System.out.println(itemWeightList);
+
         } catch (Exception ex) {
-            Log.error(DeliveryOrder.class, "", ex);
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(DeliveryOrder.class,
+                    "", ex);
+            Logger
+                    .getLogger(DeliveryOrders.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -3922,17 +4114,19 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 paymentTypeIds.add(typeDto.getPaymentTypeId());
                 paymentTypeCombo2.addItem(typeDto.getName());
                 paymentTypeIds_2.add(typeDto.getPaymentTypeId());
+
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getPaymentTypes error");
         }
     }
 
     private void getAllOrders(String fromDate, String toDate, Integer paymentType) {
         try {
-            ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType, 0);
+            ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType, 0, "Any");
             ArrayList<DeliveryOrderAmounts> deliveryOrderAmountDto = deliveryOrderRepositoryImpl.getCalculation(fromDate, toDate, paymentType);
 
             DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
@@ -3982,6 +4176,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     dto.getPhoneTwo(),
                     dto.getCod(),
                     dto.getGrandTotalPrice(),
+                    dto.getOrderType(),
                     dto.getCreateDate(),
                     status
                 };
@@ -4007,12 +4202,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             deliveriesTotTxt.setText(totDeliveries + "");
 
         } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getAllOrders error");
         }
 
         // Assuming status is at column index 7 in your table
-        deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
+        deliveryOrdersTable.getColumnModel().getColumn(9).setCellRenderer(new StatusCellRenderer());
     }
 
     private void printBill(Integer orderId) {
@@ -4037,7 +4233,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             JasperExportManager.exportReportToPdfFile(jp, "C:/Users/Sanjuka/Documents/Petal Pink/Payment recepts/" + orderCode + ".pdf");
 
         } catch (JRException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "printBill error");
         }
     }
@@ -4063,8 +4260,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             AutoGenerator autoGenerator = new AutoGenerator();
             autoGenerator.completeText(numbers, phoneOneCmb);
+
         } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getPhone_Number_One error");
         }
     }
@@ -4082,8 +4281,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             AutoGenerator autoGenerator = new AutoGenerator();
             autoGenerator.completeText(numbers, phoneTwoCmb);
+
         } catch (Exception ex) {
-            Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "getPhone_Number_Two error");
         }
     }
@@ -4136,7 +4337,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         for (String symbol : symbols) {
             cmbSymbol.addItem(symbol);
         }
-        
+
         ArrayList<OrderTypeDto> orderTypes = orderTypeController.getAllOrderType();
         for (OrderTypeDto orderType : orderTypes) {
             cmbOrderType.addItem(orderType.getType());
@@ -4156,6 +4357,135 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         cmbDiscount.setSelectedIndex(0);
         cmbSymbol.setSelectedIndex(0);
 
+    }
+
+    private void getWebsiteOrders() {
+        try {
+            URL url = new URL("http://localhost:4000/api/customerOrderSave/getNewOrderDetails");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+                br.close();
+
+                String jsonResponse = response.toString();
+                System.out.println("Json row: " + jsonResponse);
+
+                Gson gson = new Gson();
+                Type orderListType = new TypeToken<List<WebsiteOrderDto>>() {
+                }.getType();
+                websiteOrders = gson.fromJson(jsonResponse, orderListType);
+                int index = 0;
+                for (WebsiteOrderDto order : websiteOrders) {
+                    for (WebsiteOrderDetailDto websiteOrderDetailDto : websiteOrders.get(index).getItems()) {
+                        System.out.println("Product_list: " + websiteOrderDetailDto.getProduct_name());
+                        itemList.add(websiteOrderDetailDto);
+                    }
+                    index++;
+                    System.out.println("Customer Name: " + order.getItems());
+                }
+                System.out.println("retrieve successfully");
+                saveOrder();
+            } 
+        } catch (IOException ex) {
+            Logger.getLogger(DeliveryOrders.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private Integer getItemId(String product_name) {
+        return mainItemRepositoryImpl.getItemCode(product_name);
+    }
+
+    private void sendOrderConfirmation() {
+        try {
+            URL replyUrl = new URL("http://localhost:4000/api/customerOrderSave/updateOrderTb");
+            HttpURLConnection replyConnection = (HttpURLConnection) replyUrl.openConnection();
+//            HttpURLConnection replyConnection = ApiClient.getURLConnection("/customerOrderSave/updateOrderTb");
+            replyConnection.setRequestMethod("PUT");
+            replyConnection.setDoOutput(true);
+            replyConnection.setRequestProperty("Content-Type", "application/json");
+
+            // Example payload — change based on backend requirements
+            String payload = "{\"status\": \"saved\"}";
+            try (OutputStream os = replyConnection.getOutputStream()) {
+                byte[] input = payload.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = replyConnection.getResponseCode();
+            System.out.println("Confirmation status code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("Backend updated successfully");
+            } else {
+                System.out.println("Backend update failed");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openThread() {
+        if(isOrderThreadRunning) return;
+         isOrderThreadRunning = true;
+          new Thread(() -> {
+            while (true) {
+                getWebsiteOrders();
+                try {
+                    Thread.sleep(5000); // wait 5 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break; // exit the loop if the thread is interrupted
+                }
+            }
+        }).start();
+    }
+
+    private void updateWebOrderStatus(String websiteOrderId, String status) {
+         try {
+            // Get connection from your API client
+            HttpURLConnection uRLConnection = ApiClient.getURLConnection("/order/updateStatus");
+
+            // Set request method and headers
+            uRLConnection.setRequestMethod("PUT");
+            uRLConnection.setRequestProperty("Content-Type", "application/json");
+            uRLConnection.setDoOutput(true);
+
+            // Build JSON body
+            JSONObject json = new JSONObject();
+            json.put("orderId", websiteOrderId);
+            json.put("status", status);
+
+            // Write JSON to output stream
+            try (OutputStream os = uRLConnection.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            // Check response code
+            int responseCode = uRLConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+                System.out.println("Status updated successfully");
+            } else {
+                System.out.println("Failed to update status. HTTP Code: " + responseCode);
+            }
+
+            // Close dialog
+            order_options.dispose();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

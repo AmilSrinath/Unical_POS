@@ -60,14 +60,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author apple
  */
 public class OrderFilter extends JInternalFrame {
-    private ArrayList<Integer> paymentTypeIds=new ArrayList<>();
+
+    private ArrayList<Integer> paymentTypeIds = new ArrayList<>();
     private PaymentTypesController paymentTypesController;
-    private ArrayList<Integer> paymentTypeIds_2=new ArrayList<>();
+    private ArrayList<Integer> paymentTypeIds_2 = new ArrayList<>();
     private DeliveryOrderRepositoryImpl deliveryOrderRepositoryImpl;
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
@@ -86,37 +88,37 @@ public class OrderFilter extends JInternalFrame {
         setResizable(true);
         pack();
     }
-    
+
     Dashboard dashboard;
-    
-    public OrderFilter(Dashboard dashboard){
-        this();dashboard = dashboard;
-        this.deliveryOrderRepositoryImpl=new DeliveryOrderRepositoryImpl();
-        this.paymentTypesController=new PaymentTypesController();
+
+    public OrderFilter(Dashboard dashboard) {
+        this();
+        dashboard = dashboard;
+        this.deliveryOrderRepositoryImpl = new DeliveryOrderRepositoryImpl();
+        this.paymentTypesController = new PaymentTypesController();
         this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
         this.orderTypeController = new OrderTypeController();
         setCurrentDate();
         getPaymentTypes();
-        
-        
+
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String fromDate = formatter.format(jXDatePicker1.getDate());
         String toDate = formatter.format(jXDatePicker2.getDate());
-        
+
         statusTypes = statusTypeRepositoryImpl.getAllStatusTypeByRegID(1);
         System.out.println("Status Types :" + statusTypes.get(0).getStatus_id());
         getAllOrders(fromDate, toDate, 0, 0, orderType);
-        
+
         statusCmb.addItem("Any");
-        for(StatusTypeModel stm:statusTypes){
+        for (StatusTypeModel stm : statusTypes) {
             statusCmb.addItem(stm.getStatus_type());
         }
         ArrayList<OrderTypeDto> orderTypeList = orderTypeController.getAllOrderType();
         for (OrderTypeDto orderTypeDto : orderTypeList) {
             cmbOrderType.addItem(orderTypeDto.getType());
         }
-        
+
     }
 
     /**
@@ -668,43 +670,42 @@ public class OrderFilter extends JInternalFrame {
         orderType = cmbOrderType.getSelectedItem().toString();
 
         int statusIndex = 0;
-        
-        for(StatusTypeModel stm:statusTypes){
+
+        for (StatusTypeModel stm : statusTypes) {
             if (statusCmb.getSelectedItem().equals(stm.getStatus_type())) {
                 statusIndex = stm.getStatus_id();
             }
         }
-        
-        System.out.println("statusIndex : "+statusIndex);
-        
+
+        System.out.println("statusIndex : " + statusIndex);
+
         getAllOrders(fromDate, toDate, paymentType, statusIndex, orderType);
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void setCurrentDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         jXDatePicker1.setDate(date);
         jXDatePicker2.setDate(date);
     }
-    
+
     private void getPaymentTypes() {
         try {
-            String quary="WHERE visible=1 AND status=1";
-            ArrayList<PaymentTypeDto> paymentTypes=paymentTypesController.getPaymentTypes(quary);
-            
-            for(PaymentTypeDto typeDto:paymentTypes){
+            String quary = "WHERE visible=1 AND status=1";
+            ArrayList<PaymentTypeDto> paymentTypes = paymentTypesController.getPaymentTypes(quary);
+
+            for (PaymentTypeDto typeDto : paymentTypes) {
                 paymentTypeIds.add(typeDto.getPaymentTypeId());
                 paymentTypeCombo1.addItem(typeDto.getName());
                 paymentTypeIds_2.add(typeDto.getPaymentTypeId());
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(DeliveryOrder.class, "Cannot load Items : ", ex);
         }
     }
-    
-    
+
     private void getAllOrders(String fromDate, String toDate, Integer paymentType, int status, String orderType) {
         try {
             ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllDuration(fromDate, toDate, paymentType, status, orderType);
@@ -724,7 +725,7 @@ public class OrderFilter extends JInternalFrame {
 
             for (DeliveryOrder dto : deliveryOrderDtos) {
                 count++;
-                
+
                 if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
                     statusText = statusTypes.get(0).getStatus_type();
                 } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
@@ -748,13 +749,13 @@ public class OrderFilter extends JInternalFrame {
                 isPrint = dto.getIsPrint() == 1;
                 Object[] rowData = {
                     dto.getOrderId(),
-                    dto.getOrderCode(), 
-                    dto.getCustomerName(), 
-                    dto.getPhoneOne(), 
-                    dto.getPhoneTwo(), 
-                    dto.getCod(), 
+                    dto.getOrderCode(),
+                    dto.getCustomerName(),
+                    dto.getPhoneOne(),
+                    dto.getPhoneTwo(),
+                    dto.getCod(),
                     dto.getGrandTotalPrice(),
-                    dto.getOrderType(), 
+                    dto.getOrderType(),
                     dto.getCreateDate(),
                     statusText
                 };
@@ -776,8 +777,8 @@ public class OrderFilter extends JInternalFrame {
         }
         deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
     }
-    
-    
+
+
     private void deliveryOrdersTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_deliveryOrdersTableKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_deliveryOrdersTableKeyReleased
@@ -785,16 +786,16 @@ public class OrderFilter extends JInternalFrame {
     private void deliveryOrdersTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_deliveryOrdersTablePropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_deliveryOrdersTablePropertyChange
-    
+
     int selectedRow = -1;
-    
+
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 txtRemark.setText("");
-                String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
-                
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
+
                 // Disable all buttons by default
                 btnWrapping.setEnabled(false);
                 btnCancel.setEnabled(false);
@@ -822,20 +823,20 @@ public class OrderFilter extends JInternalFrame {
                 } else if (statusTypes.get(8).getStatus_type().equals(status)) {
                     btnReturning.setEnabled(true);
                     btnDeliverd.setEnabled(true);
-                } else if (statusTypes.get(4).getStatus_type().equals(status) ||
-                           statusTypes.get(5).getStatus_type().equals(status) ||
-                           statusTypes.get(6).getStatus_type().equals(status) ||
-                           statusTypes.get(7).getStatus_type().equals(status) ||
-                           statusTypes.get(8).getStatus_type().equals(status)) {
+                } else if (statusTypes.get(4).getStatus_type().equals(status)
+                        || statusTypes.get(5).getStatus_type().equals(status)
+                        || statusTypes.get(6).getStatus_type().equals(status)
+                        || statusTypes.get(7).getStatus_type().equals(status)
+                        || statusTypes.get(8).getStatus_type().equals(status)) {
                     // All buttons remain disabled
                 } else {
                     throw new AssertionError("Unknown status: " + status);
                 }
-                
+
                 if (!status.equals("Delivered")) {
                     orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
                     orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
-                    System.out.println("orderCode : "+orderCode);
+                    System.out.println("orderCode : " + orderCode);
                     orderOptions.setLocationRelativeTo(null);
                     orderOptions.setSize(590, 150);
                     orderOptions.setVisible(true);
@@ -873,7 +874,7 @@ public class OrderFilter extends JInternalFrame {
             try {
                 String orderId = orderIdText;
                 ArrayList<DeliveryOrder> deliveryOrderDtos = deliveryOrderRepositoryImpl.getAllOrdersByOrderID(orderIdText);
-                
+
                 DefaultTableModel dtm = (DefaultTableModel) deliveryOrdersTable.getModel();
                 dtm.setRowCount(0);
 
@@ -888,7 +889,7 @@ public class OrderFilter extends JInternalFrame {
 
                 for (DeliveryOrder dto : deliveryOrderDtos) {
                     count++;
-                    
+
                     if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
                         statusText = statusTypes.get(0).getStatus_type();
                     } else if (dto.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending
@@ -912,18 +913,18 @@ public class OrderFilter extends JInternalFrame {
                     isPrint = dto.getIsPrint() == 1;
                     Object[] rowData = {
                         "",
-                        dto.getOrderCode(), 
-                        dto.getCustomerName(), 
-                        dto.getPhoneOne(), 
-                        dto.getPhoneTwo(), 
-                        dto.getCod(), 
+                        dto.getOrderCode(),
+                        dto.getCustomerName(),
+                        dto.getPhoneOne(),
+                        dto.getPhoneTwo(),
+                        dto.getCod(),
                         dto.getGrandTotalPrice(),
                         dto.getCreateDate(),
                         statusText
                     };
                     dtm.addRow(rowData);
                 }
-                total_orders_count_txt.setText(count+"");
+                total_orders_count_txt.setText(count + "");
             } catch (NumberFormatException e) {
                 Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, e);
                 Log.error(OrderFilter.class, "Invalid Order ID: ", e);
@@ -938,15 +939,19 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    String orderCode=null;
-    String orderID=null;
-    
+    String orderCode = null;
+    String orderID = null;
+
     private void statusCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statusCmbMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_statusCmbMouseClicked
 
     private void statusCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusCmbActionPerformed
-        
+        if (statusCmb.getSelectedIndex() == 7) {
+            btnPrint.setText("Print Cancel");
+        } else {
+            btnPrint.setText("Print Wrapping");
+        }
     }//GEN-LAST:event_statusCmbActionPerformed
 
     private void statusCmbKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_statusCmbKeyReleased
@@ -957,10 +962,11 @@ public class OrderFilter extends JInternalFrame {
         // Validate payment type
         if (paymentTypeCombo1.getSelectedIndex() == 0) {
             // Validate status
-            if (statusCmb.getSelectedIndex() == 3) {
+            if (statusCmb.getSelectedIndex() == 7 || statusCmb.getSelectedIndex() == 3) {
+
                 ArrayList<WrapperOrder> wrapperOrders = null;
                 try {
-                    wrapperOrders = deliveryOrderRepositoryImpl.getWrappingOrder(jXDatePicker1.getDate(), jXDatePicker2.getDate());
+                    wrapperOrders = deliveryOrderRepositoryImpl.getWrappingOrder(jXDatePicker1.getDate(), jXDatePicker2.getDate(), statusCmb.getSelectedIndex());
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
                     Log.error(ex, ex);
@@ -970,7 +976,7 @@ public class OrderFilter extends JInternalFrame {
 
                 if (wrapperOrders != null && !wrapperOrders.isEmpty()) {
                     try {
-                        boolean success = generateExcel(wrapperOrders);
+                        boolean success = generateExcel(wrapperOrders, statusCmb.getSelectedIndex());
                         if (!success) {
                             JOptionPane.showMessageDialog(this, "Excel generation was cancelled or failed.");
                         }
@@ -979,7 +985,7 @@ public class OrderFilter extends JInternalFrame {
                         String fromDate = formatter.format(jXDatePicker1.getDate());
                         String toDate = formatter.format(jXDatePicker2.getDate());
 
-                        getAllOrders(fromDate, toDate, 0,3, orderType);
+                        getAllOrders(fromDate, toDate, 0, 3, orderType);
                     } catch (Exception ex) {
                         Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, ex);
                         Log.error(ex, ex);
@@ -989,7 +995,7 @@ public class OrderFilter extends JInternalFrame {
                     JOptionPane.showMessageDialog(this, "No records found for the selected dates.");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Please select status as Wrapping");
+                JOptionPane.showMessageDialog(this, "Please select status as Wrapping or Cancel");
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please select payment type as Any");
@@ -1022,7 +1028,7 @@ public class OrderFilter extends JInternalFrame {
                     System.out.println("Size :" + deliveryOrderDtos.size());
                     System.out.println("Value: " + dto.getStatusID());
                     count++;
-                    System.out.println("StatusType2: " + statusTypes.get(0).getStatus_type() + "Dto value: "+ dto.getStatusID());
+                    System.out.println("StatusType2: " + statusTypes.get(0).getStatus_type() + "Dto value: " + dto.getStatusID());
                     if (dto.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
                         System.out.println("Meka true venava");
                         statusText = statusTypes.get(0).getStatus_type();
@@ -1046,19 +1052,19 @@ public class OrderFilter extends JInternalFrame {
 
                     isPrint = dto.getIsPrint() == 1;
                     Object[] rowData = {
-                        "", 
-                        dto.getOrderCode(), 
-                        dto.getCustomerName(), 
-                        dto.getPhoneOne(), 
-                        dto.getPhoneTwo(), 
-                        dto.getCod(), 
+                        "",
+                        dto.getOrderCode(),
+                        dto.getCustomerName(),
+                        dto.getPhoneOne(),
+                        dto.getPhoneTwo(),
+                        dto.getCod(),
                         dto.getGrandTotalPrice(),
                         dto.getCreateDate(),
                         statusText
                     };
                     dtm.addRow(rowData);
                 }
-                total_orders_count_txt.setText(count+"");
+                total_orders_count_txt.setText(count + "");
             } catch (NumberFormatException e) {
                 Logger.getLogger(OrderFilter.class.getName()).log(Level.SEVERE, null, e);
                 Log.error(OrderFilter.class, "Invalid Order ID: ", e);
@@ -1080,7 +1086,7 @@ public class OrderFilter extends JInternalFrame {
         remark.setSize(590, 150);
         remark.setVisible(true);
         orderOptions.dispose();
-        
+
         txtRemark.setText(deliveryOrderRepositoryImpl.getRemark(orderID));
     }//GEN-LAST:event_btnSpecialNoteActionPerformed
 
@@ -1092,7 +1098,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
 
@@ -1102,7 +1108,7 @@ public class OrderFilter extends JInternalFrame {
             InquiryModel inquiryModel = new InquiryModel();
 
             inquiryModel.setWayBill(deliveryOrdersTable.getValueAt(selectedRow, 1).toString());
-            inquiryModel.setCustomerId(customerDataByInquirySearch.getCustomerId()+"");
+            inquiryModel.setCustomerId(customerDataByInquirySearch.getCustomerId() + "");
             inquiryModel.setCustomerName(deliveryOrdersTable.getValueAt(selectedRow, 2).toString());
             inquiryModel.setCustomerPhone1(deliveryOrdersTable.getValueAt(selectedRow, 3).toString());
             inquiryModel.setCustomerPhone2(deliveryOrdersTable.getValueAt(selectedRow, 4).toString());
@@ -1129,7 +1135,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1146,7 +1152,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1163,7 +1169,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1180,7 +1186,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1197,7 +1203,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1214,7 +1220,7 @@ public class OrderFilter extends JInternalFrame {
             String fromDate = formatter.format(jXDatePicker1.getDate());
             String toDate = formatter.format(jXDatePicker2.getDate());
 
-            getAllOrders(fromDate, toDate, 0,0, orderType);
+            getAllOrders(fromDate, toDate, 0, 0, orderType);
 
             orderOptions.dispose();
         } catch (Exception ex) {
@@ -1233,9 +1239,9 @@ public class OrderFilter extends JInternalFrame {
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
                 Date now = new Date();
-                deliveryOrderRepositoryImpl.addDeliveredDateWithOrderID(orderID,now);
+                deliveryOrderRepositoryImpl.addDeliveredDateWithOrderID(orderID, now);
 
-                getAllOrders(fromDate, toDate, 0,0, orderType);
+                getAllOrders(fromDate, toDate, 0, 0, orderType);
 
                 orderOptions.dispose();
             } catch (Exception ex) {
@@ -1254,7 +1260,7 @@ public class OrderFilter extends JInternalFrame {
                 String fromDate = formatter.format(jXDatePicker1.getDate());
                 String toDate = formatter.format(jXDatePicker2.getDate());
 
-                getAllOrders(fromDate, toDate, 0,0, orderType);
+                getAllOrders(fromDate, toDate, 0, 0, orderType);
 
                 remark.dispose();
             } catch (Exception ex) {
@@ -1264,11 +1270,18 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_btnSaveRemarkActionPerformed
 
-    public boolean generateExcel(ArrayList<WrapperOrder> orders) throws Exception {
+    public boolean generateExcel(ArrayList<WrapperOrder> orders, int selectedIndex) throws Exception {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Wrapping Orders");
+        Sheet sheet;
+        String[] headers;
+        if (selectedIndex == 3) {
+            sheet = workbook.createSheet("Wrapping Orders");
+            headers = new String[]{"TrackingNumber", "Reference", "PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
+        } else {
+            sheet = workbook.createSheet("Cancel Orders");
+            headers = new String[]{"CustomerCode", "CustomerName", "Date"};
+        }
 
-        String[] headers = {"TrackingNumber", "Reference", "PackageDescription", "ReceiverName", "ReceiverAddress", "ReceiverCity", "ReceiverContactNo", "NoOfPcs", "Kilo", "Gram", "Amount", "Exchange", "Remark"};
         Row headerRow = sheet.createRow(0);
         CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
@@ -1283,24 +1296,32 @@ public class OrderFilter extends JInternalFrame {
 
         int rowNum = 1;
         for (WrapperOrder order : orders) {
-            double totalWeightKg = order.getWeight() / 1000.0;
-            int kilos = (int) totalWeightKg;
-            int grams = (int) ((totalWeightKg - kilos) * 1000);
+            if (selectedIndex == 3) {
+                double totalWeightKg = order.getWeight() / 1000.0;
+                int kilos = (int) totalWeightKg;
+                int grams = (int) ((totalWeightKg - kilos) * 1000);
 
-            Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(order.getOrderCode());
-            row.createCell(1).setCellValue(order.getDeliveryId());
-            row.createCell(2).setCellValue(0);
-            row.createCell(3).setCellValue(order.getCustomerName());
-            row.createCell(4).setCellValue(order.getAddress());
-            row.createCell(5).setCellValue(0);
-            row.createCell(6).setCellValue(order.getPhoneOne() + " / " + order.getPhoneTwo());
-            row.createCell(7).setCellValue(1);
-            row.createCell(8).setCellValue(kilos);
-            row.createCell(9).setCellValue(grams);
-            row.createCell(10).setCellValue(String.format("%.0f", order.getCodAmount()));
-            row.createCell(11).setCellValue(0);
-            row.createCell(12).setCellValue(0);
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(order.getOrderCode());
+                row.createCell(1).setCellValue(order.getDeliveryId());
+                row.createCell(2).setCellValue(0);
+                row.createCell(3).setCellValue(order.getCustomerName());
+                row.createCell(4).setCellValue(order.getAddress());
+                row.createCell(5).setCellValue(0);
+                row.createCell(6).setCellValue(order.getPhoneOne() + " / " + order.getPhoneTwo());
+                row.createCell(7).setCellValue(1);
+                row.createCell(8).setCellValue(kilos);
+                row.createCell(9).setCellValue(grams);
+                row.createCell(10).setCellValue(String.format("%.0f", order.getCodAmount()));
+                row.createCell(11).setCellValue(0);
+                row.createCell(12).setCellValue(0);
+            } else {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(order.getCustomerId());
+                row.createCell(1).setCellValue(order.getCustomerName());
+                row.createCell(2).setCellValue(order.getCreatedDate());
+            }
+
         }
 
         for (int i = 0; i < headers.length; i++) {
@@ -1324,11 +1345,15 @@ public class OrderFilter extends JInternalFrame {
                 workbook.close();
 
                 // ✅ Only update status AFTER file is saved
-                for (WrapperOrder order : orders) {
-                    deliveryOrderRepositoryImpl.update(order.getDeliveryId(), 4);
+                if (selectedIndex != 7) {
+                    for (WrapperOrder order : orders) {
+                        deliveryOrderRepositoryImpl.update(order.getDeliveryId(), 4);
+                    }
                 }
 
                 JOptionPane.showMessageDialog(null, "Excel file generated successfully at:\n" + filePath);
+                DefaultTableModel model = (DefaultTableModel) deliveryOrdersTable.getModel();
+                model.setRowCount(0);
                 return true;
             } else {
                 workbook.close(); // Close if cancelled
@@ -1343,8 +1368,6 @@ public class OrderFilter extends JInternalFrame {
         }
     }
 
-
-    
     /**
      * @param args the command line arguments
      */
@@ -1429,7 +1452,7 @@ public class OrderFilter extends JInternalFrame {
 
             if (order != null) {
                 String status = null;
-                
+
                 if (order.getStatusID() == statusTypes.get(0).getStatus_id()) { //Active
                     status = statusTypes.get(0).getStatus_type();
                 } else if (order.getStatusID() == statusTypes.get(1).getStatus_id()) { //Pending

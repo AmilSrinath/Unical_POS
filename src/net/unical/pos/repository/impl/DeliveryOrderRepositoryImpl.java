@@ -1175,21 +1175,25 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return null;
     }
 
-    public ArrayList<WrapperOrder> getWrappingOrder(Date fromDate, Date toDate) throws ClassNotFoundException {
+    public ArrayList<WrapperOrder> getWrappingOrder(Date fromDate, Date toDate, int selectedIndex) throws ClassNotFoundException {
         ArrayList<WrapperOrder> list = new ArrayList<>();
-        String sql = "SELECT dot.order_code, dot.delivery_id, ct.customer_name, ct.address, dot.cod_amount, "
-                + "ct.phone_one, ct.phone_two, dot.weight "
+        String sql = "SELECT dot.order_code, dot.delivery_id, ct.customer_number, ct.customer_name, ct.address, dot.cod_amount, "
+                + "ct.phone_one, ct.phone_two, dot.weight, dot.created_date "
                 + "FROM pos_main_delivery_order_tb dot "
                 + "INNER JOIN pos_main_customer_tb ct ON dot.customer_id = ct.customer_id "
                 + "INNER JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id "
                 + "INNER JOIN pos_main_payment_types_tb pt ON ot.payment_type_id = pt.payment_type_id "
                 + "LEFT JOIN pos_payment_tb p ON ot.order_id = p.order_id "
-                + "WHERE dot.status_id = 3 AND Date(dot.created_date) BETWEEN ? AND ?";
+                + "WHERE dot.status_id = ? AND Date(dot.created_date) BETWEEN ? AND ?";
 
         try (Connection con = DBCon.getDatabaseConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
-
-            pst.setDate(1, new java.sql.Date(fromDate.getTime()));
-            pst.setDate(2, new java.sql.Date(toDate.getTime()));
+            if (selectedIndex == 3) {
+                pst.setInt(1, selectedIndex);
+            } else if (selectedIndex == 7) {
+                pst.setInt(1, selectedIndex);
+            }
+            pst.setDate(2, new java.sql.Date(fromDate.getTime()));
+            pst.setDate(3, new java.sql.Date(toDate.getTime()));
 
             ResultSet rs = pst.executeQuery();
 
@@ -1198,11 +1202,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                         rs.getString("order_code"),
                         rs.getString("delivery_id"),
                         rs.getString("customer_name"),
+                        rs.getString("customer_number"),
                         rs.getString("address"),
                         rs.getDouble("cod_amount"),
                         rs.getString("phone_one"),
                         rs.getString("phone_two"),
-                        rs.getDouble("weight")
+                        rs.getDouble("weight"),
+                        rs.getString("created_date")
                 );
                 list.add(order);
             }
@@ -1521,7 +1527,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         }
     }
 
-    public List<String> getOrders(String fromDate, String toDate) {
+    public List<String> getOrders(String fromDate, String toDate, String selectedItem) {
         List<String> subTotalPrices = new ArrayList<>();
         Connection con = null;
         PreparedStatement ps = null;
@@ -1530,18 +1536,26 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         try {
             con = DBCon.getDatabaseConnection();
 
-            String sql = "SELECT ot.sub_total_price "
+            StringBuilder sql = new StringBuilder("SELECT ot.sub_total_price "
                     + "FROM pos_main_delivery_order_tb AS dot "
                     + "INNER JOIN pos_main_order_tb AS ot ON dot.delivery_id = ot.delivery_order_id "
                     + "INNER JOIN pos_main_customer_tb AS ct ON dot.customer_id = ct.customer_id "
                     + "WHERE dot.status = 1 "
                     + "AND dot.status_id = 5 "
-                    + "AND DATE(dot.delivered_date) BETWEEN ? AND ?";
+                    + "AND DATE(dot.delivered_date) BETWEEN ? AND ?"
+            );
 
-            ps = con.prepareStatement(sql);
+            if (!selectedItem.equals("any")) {
+                sql.append(" AND order_type = ?");
+
+            }
+            ps = con.prepareStatement(sql.toString());
             ps.setString(1, fromDate); // e.g., "2025-07-01"
             ps.setString(2, toDate);   // e.g., "2025-07-31"
+            if (!selectedItem.equals("any")) {
+               ps.setString(3, selectedItem);
 
+            }
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -1751,11 +1765,11 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
     @Override
     public String getOrderType(String deliveryID) {
         String sql = "SELECT order_type FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
-        try{
+        try {
             PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
             pstm.setInt(1, Integer.parseInt(deliveryID));
             ResultSet rst = pstm.executeQuery();
-            if(rst.next()) {
+            if (rst.next()) {
                 return rst.getString("order_type");
             }
         } catch (RuntimeException ex) {
@@ -1771,11 +1785,11 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
     public String getOrderByDeliveryId(String delivery_id) {
         String sql = "SELECT * FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
-        try{
+        try {
             PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
             pstm.setInt(1, Integer.parseInt(delivery_id));
             ResultSet rst = pstm.executeQuery();
-            if(rst.next()) {
+            if (rst.next()) {
                 return rst.getString("website_order_id");
             }
         } catch (RuntimeException ex) {
@@ -1787,6 +1801,43 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public DeliveryOrder getOrderCodeByDelioveryId(String delivery_id) {
+        String sql = "SELECT order_code,website_order_id FROM pos_main_delivery_order_tb WHERE delivery_id = ?";
+        try {
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, Integer.parseInt(delivery_id));
+            ResultSet rst = pstm.executeQuery();
+            if (rst.next()) {
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setOrderCode(rst.getString("order_code"));
+                deliveryOrder.setWebsiteOrderId(rst.getString("website_order_id"));
+                return deliveryOrder;
+            }
+        } catch (RuntimeException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Order Type retrieve failed!");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Integer getLastDeliveryId() {
+        String sql = "SELECT delivery_id FROM  pos_main_delivery_order_tb order by delivery_id desc LIMIT 1";
+        try {
+            ResultSet rst = DBConnection.getInstance().getConnection().prepareStatement(sql).executeQuery();
+            if (rst.next()) {
+                return rst.getInt("delivery_id");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Delivery id retrieve failed!");
+        }
+        return 0;
     }
 
 }

@@ -279,7 +279,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } else {
             deliveryFormDetailPanel.setVisible(false);
         }
-     openThread();
+        openThread();
 
     }
 
@@ -2327,6 +2327,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         cmbOrderType.setEnabled(true);
                         cmbOrderType.setSelectedIndex(0);
                     }
+                    sendOrderCode(delivery_id);
+                    updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Pending");
                 } else {
                     JOptionPane.showMessageDialog(this, "Update failed.(Duplicate order code found! or another error!)");
                 }
@@ -2355,11 +2357,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         if (!websiteOrders.isEmpty()) {
             int index = 0;
             for (WebsiteOrderDto websiteOrder : websiteOrders) {
+                System.out.println("Index in the first loop : " + index);
                 try {
-                    for (WebsiteOrderDetailDto websiteOrderDto : itemList) {
+                    for (int i = 0; i < websiteOrders.get(index).getItems().size(); i++) {
+                        System.out.println("Index in the second loop : " + index);
                         try {
-                            Integer item_id = getItemId(websiteOrderDto.getProduct_name());
-                            System.out.println("Product name : " + websiteOrderDto.getProduct_name());
+                            Integer item_id = getItemId(websiteOrders.get(index).getItems().get(i).getProduct_name());
+                            System.out.println("Product name : " + websiteOrders.get(index).getItems().get(i).getProduct_name());
                             System.out.println("Item id : " + item_id);
                             orderDetailsDtos.add(new OrderDetailsDto(
                                     0,
@@ -2368,10 +2372,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                     null,
                                     null,
                                     1,
-                                    websiteOrderDto.getQuantity(),
-                                    websiteOrderDto.getPrice(),
+                                    websiteOrders.get(index).getItems().get(i).getQuantity(),
+                                    websiteOrders.get(index).getItems().get(i).getPrice(),
                                     0.0,
-                                    websiteOrderDto.getQuantity() * websiteOrderDto.getPrice(),
+                                    websiteOrders.get(index).getItems().get(i).getQuantity() * websiteOrders.get(index).getItems().get(i).getPrice(),
                                     "",
                                     1,
                                     1
@@ -2381,6 +2385,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                     .getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+
                     index++;
                     DeliveryOrder deliveryOrderDto = new DeliveryOrder();
                     deliveryOrderDto.setCustomerName(websiteOrder.getFirst_name());
@@ -2431,14 +2436,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setPaymentTypeId(1);
                     deliveryOrderDto.setWebsiteOrderId(websiteOrder.getOrder_id());
                     deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
-                    System.out.println("Save count"+ index);
+                    System.out.println("Save count" + index);
                     orderId = deliveryOrderRepositoryImpl.save(deliveryOrderDto, isOrder);
                 } catch (Exception ex) {
                     Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                orderDetailsDtos.clear();
             }
-            orderDetailsDtos.clear();
             itemList.clear();
             System.out.println("order dto length : " + orderDetailsDtos.size());
 
@@ -2565,13 +2569,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 customerNumberTxt.setText("");
                 remarkTxt.setText("");
                 orderCodeTxt.setText("");
-                Log.info(DeliveryOrders.class,orderId + " Order Save. User ID: " + LogInForm.userID);
+                Log.info(DeliveryOrders.class, orderId + " Order Save. User ID: " + LogInForm.userID);
                 subTotAmountLbl.setText("0.00");
                 totAmountLbl.setText("0.00");
                 itemListTableModel.setRowCount(0);
                 codTxt.setText("");
                 PaidAmountTxt.setText("0");
                 sendOrderConfirmation();
+                Integer deliveryId = deliveryOrderRepositoryImpl.getLastDeliveryId();
+                sendOrderCode(String.valueOf(deliveryId));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(DeliveryOrders.class
                         .getName()).log(Level.SEVERE, null, ex);
@@ -3373,7 +3379,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
-                
+
                 updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Return");
                 order_options.dispose();
 
@@ -3919,7 +3925,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbOrderTypeKeyReleased
 
-    
     /**
      * @param args the command line arguments
      */
@@ -4361,8 +4366,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void getWebsiteOrders() {
         try {
-            URL url = new URL("http://localhost:4000/api/customerOrderSave/getNewOrderDetails");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection connection = ApiClient.getURLConnection("/customerOrderSave/getNewOrderDetails");
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
@@ -4394,7 +4398,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 }
                 System.out.println("retrieve successfully");
                 saveOrder();
-            } 
+            }
         } catch (IOException ex) {
             Logger.getLogger(DeliveryOrders.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -4407,9 +4411,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void sendOrderConfirmation() {
         try {
-            URL replyUrl = new URL("http://localhost:4000/api/customerOrderSave/updateOrderTb");
-            HttpURLConnection replyConnection = (HttpURLConnection) replyUrl.openConnection();
-//            HttpURLConnection replyConnection = ApiClient.getURLConnection("/customerOrderSave/updateOrderTb");
+            HttpURLConnection replyConnection = ApiClient.getURLConnection("/customerOrderSave/updateOrderTb");
             replyConnection.setRequestMethod("PUT");
             replyConnection.setDoOutput(true);
             replyConnection.setRequestProperty("Content-Type", "application/json");
@@ -4436,9 +4438,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 
     private void openThread() {
-        if(isOrderThreadRunning) return;
-         isOrderThreadRunning = true;
-          new Thread(() -> {
+        if (isOrderThreadRunning) {
+            return;
+        }
+        isOrderThreadRunning = true;
+        new Thread(() -> {
             while (true) {
                 getWebsiteOrders();
                 try {
@@ -4452,7 +4456,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 
     private void updateWebOrderStatus(String websiteOrderId, String status) {
-         try {
+        try {
             // Get connection from your API client
             HttpURLConnection uRLConnection = ApiClient.getURLConnection("/order/updateStatus");
 
@@ -4486,6 +4490,36 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendOrderCode(String delivery_id) throws IOException {
+        System.out.println("Call before delivery_id : " + delivery_id);
+        DeliveryOrder order = deliveryOrderRepositoryImpl.getOrderCodeByDelioveryId(delivery_id);
+        System.out.println("orderId : " + order.getWebsiteOrderId());
+        HttpURLConnection uRLConnection = ApiClient.getURLConnection("/customerOrderSave/updateTrackingNumber/" + order.getWebsiteOrderId());
+        uRLConnection.setRequestMethod("PUT");
+        uRLConnection.setRequestProperty("Content-Type", "application/json");
+        uRLConnection.setDoOutput(true);
+
+        // Build JSON body
+        JSONObject json = new JSONObject();
+        json.put("orderId", order.getWebsiteOrderId());
+        json.put("tracking_number", order.getOrderCode());
+
+        // Write JSON to output stream
+        try (OutputStream os = uRLConnection.getOutputStream()) {
+            byte[] input = json.toString().getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        // Check response code
+        int responseCode = uRLConnection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+            System.out.println("Tracking updated successfully");
+        } else {
+            System.out.println("Failed to update Tracking. HTTP Code: " + responseCode);
+        }
+
     }
 
 }

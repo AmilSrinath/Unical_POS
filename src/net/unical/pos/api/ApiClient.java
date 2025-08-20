@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
@@ -17,12 +18,14 @@ import javax.net.ssl.HttpsURLConnection;
  * @author Dhanujaya(Dhanu)
  */
 public class ApiClient {
-    private static String BASE_URL = "http://localhost:4000/api";
     private static HttpURLConnection uRLConnection;
     
     public static HttpURLConnection getURLConnection(String url){
         try {
-            URL connectionUrl = new URL(BASE_URL+url);
+            FileInputStream fis = new FileInputStream("config.txt");
+            Properties props = new Properties();
+            props.load(fis);
+            URL connectionUrl = new URL(props.getProperty("BASE_URL")+url);
             uRLConnection = (HttpURLConnection) connectionUrl.openConnection();
             return uRLConnection;
         } catch (IOException ex) {

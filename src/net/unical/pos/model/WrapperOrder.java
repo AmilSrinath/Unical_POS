@@ -12,12 +12,27 @@ package net.unical.pos.model;
 public class WrapperOrder {
     private String orderCode;
     private String deliveryId;
+    private String customerId;
     private String customerName;
     private String address;
     private double codAmount;
     private String phoneOne;
     private String phoneTwo;
     private double weight;
+    private String createdDate;
+
+    public WrapperOrder(String orderCode, String deliveryId, String customerId, String customerName, String address, double codAmount, String phoneOne, String phoneTwo, double weight, String createdDate) {
+        this.orderCode = orderCode;
+        this.deliveryId = deliveryId;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.codAmount = codAmount;
+        this.phoneOne = phoneOne;
+        this.phoneTwo = phoneTwo;
+        this.weight = weight;
+        this.createdDate = createdDate;
+    }
 
     public WrapperOrder(String orderCode, String deliveryId, String customerName, String address, double codAmount, String phoneOne, String phoneTwo, double weight) {
         this.orderCode = orderCode;
@@ -28,6 +43,22 @@ public class WrapperOrder {
         this.phoneOne = phoneOne;
         this.phoneTwo = phoneTwo;
         this.weight = weight;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getOrderCode() {

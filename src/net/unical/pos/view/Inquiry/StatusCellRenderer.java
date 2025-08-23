@@ -26,15 +26,19 @@ public Component getTableCellRendererComponent(JTable table, Object value, boole
 
     if (value != null) {
         String status = value.toString();
-
+        System.out.println("Value " + value);
         String deliveredStatus = ViewInquiry.statusTypes.get(0).getStatus_type();
         String notDeliveredStatus = ViewInquiry.statusTypes.get(1).getStatus_type();
-
+        String returnedDeliveryStatus = ViewInquiry.statusTypes.get(2).getStatus_type();
+        System.out.println("return delivery type : " + returnedDeliveryStatus);
         if (status.equals(deliveredStatus)) {
             label.setBackground(new Color(198, 239, 206));
             label.setForeground(new Color(0, 97, 0));
         } else if (status.equals(notDeliveredStatus)) {
             label.setBackground(new Color(255, 204, 204));
+            label.setForeground(new Color(178, 34, 34));
+        } else if (status.equals(returnedDeliveryStatus)){
+            label.setBackground(new Color(255, 229, 180)); 
             label.setForeground(new Color(178, 34, 34));
         }
     }

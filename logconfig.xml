@@ -1,19 +1,24 @@
-<?xml version="1.0" encoding="UTF8"?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<!-- Written by Sanjuka Dilshan @ Petal Pink 2024-06-30-->
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-<appender name="InfoFileout" class="org.apache.log4j.DailyRollingFileAppender">
-<param name="DatePattern" value="'_'yyyy-MM-dd"/>
-<param name="File" value="log/Info.Log"/>
-<param name="Append" value="true"/>
-<layout class="org.apache.log4j.PatternLayout"><param name="ConversionPattern" value="%d %-5p %c - %m%n"/></layout>
-</appender>
-<appender name="ErrorFileout" class="org.apache.log4j.DailyRollingFileAppender">
-<param name="DatePattern" value="'_'yyyy-MM-dd"/><param name="File" value="log/Error.Log"/><param name="Append" value="true"/>
-<layout class="org.apache.log4j.PatternLayout"><param name="ConversionPattern" value="%d %-5p %c - %m%n"/></layout>
-</appender>
-<logger name="error" additivity="false" ><level value="error"/><appender-ref ref="ErrorFileout"/></logger>
-<logger name="info" additivity="false" ><level value="info"/><appender-ref ref="InfoFileout"/></logger>
-<logger name="debug" additivity="false" ><level value="debug"/><appender-ref ref="InfoFileout"/></logger>
-<root><priority value ="Level.OFF" /></root>
-</log4j:configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>D:\Projects\Unical_POS\dist\anagrams.jar</jar>
+  <outfile>D:\Projects\Unical_POS\dist\Petal Pink v6.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>D:\Projects\Unical_POS\Deploy\logo.ico</icon>
+  <jre>
+    <path>C:\Program Files\Java\jdk-17</path>
+    <requiresJdk>true</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>

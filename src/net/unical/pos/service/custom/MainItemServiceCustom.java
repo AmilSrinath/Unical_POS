@@ -31,4 +31,6 @@ public interface MainItemServiceCustom {
     public ArrayList<MainItemDto> searchAllItems(Integer main, Integer sub)throws Exception;
 
     public ArrayList<MainItemDto> searchAllItems(String key)throws Exception;
+
+    public String getmainItemid(String mainCat);
 }

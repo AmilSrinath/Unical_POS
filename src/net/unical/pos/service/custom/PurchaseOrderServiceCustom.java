@@ -6,6 +6,7 @@
 package net.unical.pos.service.custom;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.unical.pos.dto.MainPurchaseOrderDto;
 import net.unical.pos.dto.PurchaseOrderDto;
 
@@ -18,5 +19,7 @@ public interface PurchaseOrderServiceCustom {
     public boolean savePurchaseOrder(MainPurchaseOrderDto mainPurchaseOrderDto)throws Exception;
 
     public ArrayList<PurchaseOrderDto> getAllPurchaseOrders()throws Exception;
+
+    public List<PurchaseOrderDto> getItemList(String itemCode);
     
 }

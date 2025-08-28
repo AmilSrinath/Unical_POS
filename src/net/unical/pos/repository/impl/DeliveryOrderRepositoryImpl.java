@@ -441,7 +441,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             conn = DBCon.getDatabaseConnection();
             StringBuilder sql = new StringBuilder(
                     "SELECT dot.created_date, dot.delivery_id, dot.order_code, ct.customer_name, ct.address, dot.cod_amount, "
-                    + "ct.phone_one, ct.phone_two, ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, "
+                    + "ct.phone_one, ct.phone_two, ot.order_id,  ot.sub_total_price, ot.delivery_fee, dot.status, dot.status_id, "
                     + "dot.status_id, dot.is_return, ot.total_order_price, dot.remark, pt.payment_type_id, ot.is_print, "
                     + "p.payment_id, p.cod AS cod_payment, p.total_amount, p.payment_status, dot.order_type "
                     + "FROM pos_main_delivery_order_tb dot "
@@ -481,7 +481,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             while (rs.next()) {
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
                 deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
-                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
+                deliveryOrder.setOrderId(rs.getInt("order_id"));
                 deliveryOrder.setOrderCode(rs.getString("order_code"));
                 deliveryOrder.setCustomerName(rs.getString("customer_name"));
                 deliveryOrder.setAddress(rs.getString("address"));
@@ -741,12 +741,13 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             String sql = "UPDATE pos_main_delivery_order_tb dot "
                     + "JOIN pos_main_order_tb ot ON dot.delivery_id = ot.delivery_order_id "
                     + "SET dot.status_id = ? "
-                    + "WHERE ot.order_id = ?";
+                    + "WHERE ot.order_id = ? ";
 
             ps = con.prepareStatement(sql);
             ps.setInt(1, status_id);
             ps.setString(2, orderId);
             ps.executeUpdate();
+            System.out.println("updated :" + (ps.executeUpdate() > 0));
 
         } catch (Exception e) {
             Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -1198,18 +1199,17 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                WrapperOrder order = new WrapperOrder(
-                        rs.getString("order_code"),
-                        rs.getString("delivery_id"),
-                        rs.getString("customer_name"),
-                        rs.getString("customer_number"),
-                        rs.getString("address"),
-                        rs.getDouble("cod_amount"),
-                        rs.getString("phone_one"),
-                        rs.getString("phone_two"),
-                        rs.getDouble("weight"),
-                        rs.getString("created_date")
-                );
+                WrapperOrder order = new WrapperOrder();
+                order.setOrderCode( rs.getString("order_code"));
+                order.setDeliveryId(rs.getString("delivery_id"));
+                order.setCustomerName(rs.getString("customer_name"));
+                order.setCustomerId( rs.getString("customer_number"));
+                order.setAddress(rs.getString("address"));
+                order.setCodAmount(rs.getDouble("cod_amount"));
+                order.setPhoneOne( rs.getString("phone_one"));
+                order.setPhoneTwo(rs.getString("phone_two"));
+                order.setWeight(rs.getDouble("weight"));
+                order.setCreatedDate(rs.getString("created_date"));
                 list.add(order);
             }
 

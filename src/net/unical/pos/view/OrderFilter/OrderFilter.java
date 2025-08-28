@@ -775,7 +775,7 @@ public class OrderFilter extends JInternalFrame {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(DeliveryOrders.class, "An error occurred in DeliveryOrders", ex);
         }
-        deliveryOrdersTable.getColumnModel().getColumn(8).setCellRenderer(new StatusCellRenderer());
+        deliveryOrdersTable.getColumnModel().getColumn(9).setCellRenderer(new StatusCellRenderer());
     }
 
 
@@ -788,14 +788,15 @@ public class OrderFilter extends JInternalFrame {
     }//GEN-LAST:event_deliveryOrdersTablePropertyChange
 
     int selectedRow = -1;
-
+    String orderCode = null;
+    String orderID = null;
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 txtRemark.setText("");
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
-
+                System.out.println("Status : " + status);
                 // Disable all buttons by default
                 btnWrapping.setEnabled(false);
                 btnCancel.setEnabled(false);
@@ -834,7 +835,12 @@ public class OrderFilter extends JInternalFrame {
                 }
 
                 if (!status.equals("Delivered")) {
-                    orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+                    Object value = deliveryOrdersTable.getValueAt(selectedRow, 1);
+                    if (value == null) {
+                        orderCode = "";
+                    } else {
+                        orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
+                    }
                     orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     System.out.println("orderCode : " + orderCode);
                     orderOptions.setLocationRelativeTo(null);
@@ -912,13 +918,14 @@ public class OrderFilter extends JInternalFrame {
 
                     isPrint = dto.getIsPrint() == 1;
                     Object[] rowData = {
-                        "",
+                        dto.getOrderId(),
                         dto.getOrderCode(),
                         dto.getCustomerName(),
                         dto.getPhoneOne(),
                         dto.getPhoneTwo(),
                         dto.getCod(),
                         dto.getGrandTotalPrice(),
+                        dto.getOrderType(),
                         dto.getCreateDate(),
                         statusText
                     };
@@ -939,8 +946,6 @@ public class OrderFilter extends JInternalFrame {
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    String orderCode = null;
-    String orderID = null;
 
     private void statusCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statusCmbMouseClicked
         // TODO add your handling code here:
@@ -1052,13 +1057,14 @@ public class OrderFilter extends JInternalFrame {
 
                     isPrint = dto.getIsPrint() == 1;
                     Object[] rowData = {
-                        "",
+                        dto.getOrderId(),
                         dto.getOrderCode(),
                         dto.getCustomerName(),
                         dto.getPhoneOne(),
                         dto.getPhoneTwo(),
                         dto.getCod(),
                         dto.getGrandTotalPrice(),
+                        dto.getOrderType(),
                         dto.getCreateDate(),
                         statusText
                     };
@@ -1474,7 +1480,6 @@ public class OrderFilter extends JInternalFrame {
                 }
 
                 Object[] rowData = {
-                    "",
                     order.getOrderId(),
                     order.getOrderCode(),
                     order.getCustomerName(),
@@ -1482,6 +1487,8 @@ public class OrderFilter extends JInternalFrame {
                     order.getPhoneTwo(),
                     order.getCod(),
                     order.getGrandTotalPrice(),
+                    order.getOrderType(),
+                    order.getDate(),
                     status
                 };
                 dtm.addRow(rowData);

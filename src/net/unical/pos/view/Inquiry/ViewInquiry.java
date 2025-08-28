@@ -407,18 +407,20 @@ public class ViewInquiry extends JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane6)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addGap(16, 16, 16))
@@ -496,7 +498,7 @@ public class ViewInquiry extends JInternalFrame {
                     statusText = statusTypes.get(0).getStatus_type();
                 } else if (dto.getStatusId() == statusTypes.get(1).getStatus_id()) { //Not Delivered
                     statusText = statusTypes.get(1).getStatus_type();
-                } else if (dto.getStatusId() == statusTypes.get(2).getStatus_id()){
+                } else if (dto.getStatusId() == statusTypes.get(2).getStatus_id()) {
                     statusText = statusTypes.get(2).getStatus_type();
                 }
 
@@ -519,11 +521,11 @@ public class ViewInquiry extends JInternalFrame {
             }
 
             total_orders_count_txt.setText(String.valueOf(count));
+            paymentOrdersTable.getColumnModel().getColumn(12).setCellRenderer(new StatusCellRenderer());
         } catch (Exception ex) {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, ex);
         }
-        paymentOrdersTable.getColumnModel().getColumn(12).setCellRenderer(new StatusCellRenderer());
     }
 
 
@@ -635,6 +637,7 @@ public class ViewInquiry extends JInternalFrame {
             }
 
             total_orders_count_txt.setText(String.valueOf(count));
+            paymentOrdersTable.getColumnModel().getColumn(12).setCellRenderer(new StatusCellRenderer());
         } catch (Exception e) {
             e.printStackTrace();
             Log.error(e, e);

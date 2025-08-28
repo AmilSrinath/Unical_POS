@@ -2793,8 +2793,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Integer row = deliveryOrdersTable.getSelectedRow();
         Integer orderId = (Integer) deliveryOrdersTable.getValueAt(row, 0);
         String orderCode = (String) deliveryOrdersTable.getValueAt(row, 1);
-        Double cod = (Double) deliveryOrdersTable.getValueAt(row, 3);
-        Double totalPrice = (Double) deliveryOrdersTable.getValueAt(row, 4);
+        Double cod = (Double) deliveryOrdersTable.getValueAt(row, 5);
+        Double totalPrice = (Double) deliveryOrdersTable.getValueAt(row, 6);
         Double paidAmount = totalPrice - cod;
 
         try {
@@ -3059,7 +3059,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
-                String status = deliveryOrdersTable.getValueAt(selectedRow, 8).toString();
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
 
                 PosMainUser userDto = null;
                 try {
@@ -3157,6 +3157,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         btnWrapping.setEnabled(true);
                         btnEdit.setEnabled(true);
                         btnCancel.setEnabled(true);
+                        btnChecking.setEnabled(true);
                     } else if (statusTypes.get(2).getStatus_type().equals(status)) {
                         btnWrapping.setEnabled(false);
                         btnCancel.setEnabled(true);
@@ -4402,6 +4403,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } catch (IOException ex) {
             Logger.getLogger(DeliveryOrders.class
                     .getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Please Check The Internet Connection!", "Network Error", 0);
         }
     }
 

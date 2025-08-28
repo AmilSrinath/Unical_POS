@@ -67,4 +67,9 @@ public class MainItemCategoryServiceImpl implements MainItemCategoryServiceCusto
         Integer categoryId=mainItemCategoryRepositoryCustom.getMainCategory(key);
         return categoryId;
     }
+
+    @Override
+    public Integer getCatCode(String catName) {
+        return mainItemCategoryRepositoryCustom.getCatCode(catName);
+    }
 }

@@ -110,4 +110,9 @@ public class SubItemCategoryServiceImpl implements SubItemCategoryServiceCustom{
         
         return subItemCategoryDto;
     }
+
+    @Override
+    public Integer getSubItemCode(String item) {
+        return subItemCategoryRepositoryCustom.getSubItemCode(item);
+    }
 }

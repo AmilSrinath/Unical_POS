@@ -21,5 +21,7 @@ public interface MainItemCategoryServiceCustom {
     public ArrayList<MainItemCategoryDto> getAllMainCategories(String quary)throws Exception;
 
     public Integer searchMainItemCategory(String key)throws Exception;
+
+    public Integer getCatCode(String catName);
     
 }

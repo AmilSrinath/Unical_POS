@@ -48,4 +48,8 @@ public class SubItemCategoryController {
     public ArrayList<SubItemCategoryDto> getSubItemCategories(Integer key)throws Exception{
         return subItemCategoryServiceCustom.getSubItemCategories(key);
     }
+
+    public Integer getSubItemCode(String item) {
+        return subItemCategoryServiceCustom.getSubItemCode(item);
+    }
 }

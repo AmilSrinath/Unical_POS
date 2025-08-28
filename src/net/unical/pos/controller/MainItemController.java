@@ -52,4 +52,8 @@ public class MainItemController {
     public ArrayList<MainItemDto> searchAllItems(Integer main,Integer sub) throws Exception{
         return mainItemServiceCustom.searchAllItems(main, sub);
     }
+
+    public String getItemId(String mainCat) {
+        return mainItemServiceCustom.getmainItemid(mainCat);
+    }
 }

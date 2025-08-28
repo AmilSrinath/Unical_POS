@@ -6,7 +6,10 @@
 package net.unical.pos.repository.impl;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.SubItemCategoryModel;
 import net.unical.pos.repository.custom.SubItemCategoryRepositoryCustom;
@@ -135,5 +138,25 @@ public class SubItemCategoryRepositoryImpl implements SubItemCategoryRepositoryC
             ));
         }
         return categoryModels;
+    }
+
+    @Override
+    public Integer getSubItemCode(String item) {
+        try {
+            ResultSet rst=Statement.executeQuery("SELECT sub_item_category_id FROM pos_sub_item_category_tb WHERE sub_item_category_name='"+item+"'");
+            
+            Integer id=null;
+            try {
+                if(rst.next()){
+                    id=rst.getInt(1);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(SubItemCategoryRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return id;
+        } catch (Exception ex) {
+            Logger.getLogger(SubItemCategoryRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 }

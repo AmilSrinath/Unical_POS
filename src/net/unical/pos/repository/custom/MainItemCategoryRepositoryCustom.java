@@ -22,4 +22,6 @@ public interface MainItemCategoryRepositoryCustom{
     public ArrayList<MainItemCategoryModel> getAll(String quary)throws Exception;
 
     public boolean Update(MainItemCategoryModel mainItemCategoryModel)throws Exception;
+
+    public Integer getCatCode(String catName);
 }

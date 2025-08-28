@@ -142,4 +142,9 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
         return mainItemDtos;
     }
 
+    @Override
+    public String getmainItemid(String mainCat) {
+        return null;
+    }
+
 }

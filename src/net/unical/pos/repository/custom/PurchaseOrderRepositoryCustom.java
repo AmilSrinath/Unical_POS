@@ -17,5 +17,7 @@ public interface PurchaseOrderRepositoryCustom {
     public Integer Save(PurchaseOrderModel purchaseOrderModel)throws Exception;
 
     public ArrayList<PurchaseOrderModel> getAllPurchaseOrders()throws Exception;
+
+    public ArrayList<PurchaseOrderModel> getItemList(String itemCode);
     
 }

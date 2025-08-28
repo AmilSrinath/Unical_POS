@@ -45,6 +45,8 @@ public class WrapperOrder {
         this.weight = weight;
     }
 
+    public WrapperOrder() {}
+
     public String getCustomerId() {
         return customerId;
     }

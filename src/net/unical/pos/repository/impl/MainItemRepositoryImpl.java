@@ -185,4 +185,9 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
         return 0;
     }
 
+    @Override
+    public String getItemId(String mainCat) {
+        return null;
+    }
+
 }

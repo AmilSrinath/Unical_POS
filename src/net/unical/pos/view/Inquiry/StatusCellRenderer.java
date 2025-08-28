@@ -23,7 +23,7 @@ public Component getTableCellRendererComponent(JTable table, Object value, boole
     JLabel label = new JLabel(value != null ? value.toString() : ""); // prevent NPE
     label.setOpaque(true);
     label.setHorizontalAlignment(LEFT);
-
+    
     if (value != null) {
         String status = value.toString();
         System.out.println("Value " + value);

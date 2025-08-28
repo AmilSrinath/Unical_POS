@@ -37,4 +37,8 @@ public class MainItemCategoryController {
     public Integer searchMainCategory(String quary)throws Exception{
         return mainItemCategoryServiceCustom.searchMainItemCategory(quary);
     }
+
+    public Integer getItemCode(String catName) {
+        return mainItemCategoryServiceCustom.getCatCode(catName);
+    }
 }

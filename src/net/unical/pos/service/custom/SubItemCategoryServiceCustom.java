@@ -27,5 +27,7 @@ public interface SubItemCategoryServiceCustom {
     public ArrayList<SubItemCategoryDto> getSubItemCategories(Integer key)throws Exception;
 
     public ArrayList<SubItemCategoryDto> getAllSubCategories()throws Exception;
+
+    public Integer getSubItemCode(String item);
     
 }

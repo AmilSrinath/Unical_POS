@@ -6,6 +6,7 @@
 package net.unical.pos.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.unical.pos.dto.MainPurchaseOrderDto;
 import net.unical.pos.dto.PurchaseOrderDetailsDto;
 import net.unical.pos.dto.PurchaseOrderDto;
@@ -37,5 +38,9 @@ public class PurchaseOrderController {
 
     public ArrayList<PurchaseOrderDetailsDto> getAllPurchaseOrderDetails(Integer poCode)throws Exception{
         return purchaseOrderDetailsServiceCustom.getAllPurchaseOrderDetails(poCode);
+    }
+
+    public List<PurchaseOrderDto> getItemList(String itemCode) {
+        return purchaseOrderServiceCustom.getItemList(itemCode);
     }
 }

@@ -25,5 +25,7 @@ public interface MainItemRepositoryCustom {
     public ArrayList<PosMainItem> searchAllItems(String key)throws Exception;
 
     public ArrayList<PosMainItem> getAllItems(String quary)throws Exception;
+
+    public String getItemId(String mainCat);
     
 }

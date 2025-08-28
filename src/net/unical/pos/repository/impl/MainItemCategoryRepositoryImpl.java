@@ -6,7 +6,10 @@
 package net.unical.pos.repository.impl;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.MainItemCategoryModel;
 import net.unical.pos.repository.custom.MainItemCategoryRepositoryCustom;
@@ -74,5 +77,26 @@ public class MainItemCategoryRepositoryImpl implements MainItemCategoryRepositor
         return Statement.executeUpdate("UPDATE pos_main_item_category_tb SET main_item_category_name = ?, image_path = ?,status=?,visible=?,edited_by=?,edited_date=? WHERE main_item_category_id=?",
                 mainItemCategoryModel.getCategoryName(),mainItemCategoryModel.getImagePath(),mainItemCategoryModel.getStatus(),
                 mainItemCategoryModel.getVisible(),mainItemCategoryModel.getEditedBy(),mainItemCategoryModel.getEditedDate(),mainItemCategoryModel.getMainItemCategeryId())>0;
+    }
+
+    @Override
+    public Integer getCatCode(String catName) {
+        try {
+            ResultSet rst = null;
+            try {
+                rst = Statement.executeQuery("SELECT main_item_category_id FROM pos_main_item_category_tb WHERE main_item_category_name='"+catName+"' and visible=1");
+            } catch (Exception ex) {
+                Logger.getLogger(MainItemCategoryRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            Integer id=null;
+            if(rst.next()){
+                id=rst.getInt(1);
+            }
+            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(MainItemCategoryRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 }

@@ -7,6 +7,7 @@ package net.unical.pos.service.impl;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.dbConnection.DBConnection;
@@ -24,23 +25,22 @@ import net.unical.pos.service.custom.PurchaseOrderServiceCustom;
  *
  * @author Sanjuka
  */
-public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom{
+public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom {
 
     private PurchaseOrderRepositoryCustom purchaseOrderRepositoryCustom;
     private PurchaseOrderDetailsRepositoryCustom purchaseOrderDetailsRepositoryCustom;
-    
-    
+
     public PurchaseOrderServiceImpl() {
-        purchaseOrderRepositoryCustom=RepositoryFactory.getInstance().getRepository(RepositoryFactory.RepositoryType.PURCHASE_ORDER);
-        purchaseOrderDetailsRepositoryCustom=RepositoryFactory.getInstance().getRepository(RepositoryFactory.RepositoryType.PURCHASE_ORDER_DETAILS);
+        purchaseOrderRepositoryCustom = RepositoryFactory.getInstance().getRepository(RepositoryFactory.RepositoryType.PURCHASE_ORDER);
+        purchaseOrderDetailsRepositoryCustom = RepositoryFactory.getInstance().getRepository(RepositoryFactory.RepositoryType.PURCHASE_ORDER_DETAILS);
     }
 
     @Override
     public boolean savePurchaseOrder(MainPurchaseOrderDto mainPurchaseOrderDto) {
         try {
-            PurchaseOrderModel purchaseOrderModel=new PurchaseOrderModel();
-            PurchaseOrderDetailsModel purchaseOrderDetailsModel=new PurchaseOrderDetailsModel();
-            
+            PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
+            PurchaseOrderDetailsModel purchaseOrderDetailsModel = new PurchaseOrderDetailsModel();
+
             purchaseOrderModel.setPoId(0);
             purchaseOrderModel.setPoPrefix(mainPurchaseOrderDto.getPurchaseOrderDto().getPoPrefix());
             purchaseOrderModel.setPoCode(mainPurchaseOrderDto.getPurchaseOrderDto().getPoCode());
@@ -54,12 +54,12 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom{
             purchaseOrderModel.setStatus(mainPurchaseOrderDto.getPurchaseOrderDto().getStatus());
             purchaseOrderModel.setUserId(mainPurchaseOrderDto.getPurchaseOrderDto().getUserId());
             purchaseOrderModel.setVisible(mainPurchaseOrderDto.getPurchaseOrderDto().getVisible());
-            Integer poId=purchaseOrderRepositoryCustom.Save(purchaseOrderModel);
-            System.out.println("PO :"+poId);
-            if (poId!=null){
-                ArrayList<PurchaseOrderDetailsDto> poDetailslist=mainPurchaseOrderDto.getPurchaseOrderDetailsDtos();
-                
-                for(PurchaseOrderDetailsDto dto: poDetailslist){
+            Integer poId = purchaseOrderRepositoryCustom.Save(purchaseOrderModel);
+            System.out.println("PO :" + poId);
+            if (poId != null) {
+                ArrayList<PurchaseOrderDetailsDto> poDetailslist = mainPurchaseOrderDto.getPurchaseOrderDetailsDtos();
+
+                for (PurchaseOrderDetailsDto dto : poDetailslist) {
                     purchaseOrderDetailsModel.setPoDetailsId(0);
                     purchaseOrderDetailsModel.setPoId(poId);
                     purchaseOrderDetailsModel.setItemId(dto.getItemId());
@@ -69,11 +69,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom{
                     purchaseOrderDetailsModel.setLastGrnPrice(dto.getLastGrnPrice());
                     purchaseOrderDetailsModel.setTotalPrice(dto.getTotalItemPrice());
                     purchaseOrderDetailsModel.setUserId(dto.getUserId());
-                    boolean result=purchaseOrderDetailsRepositoryCustom.save(purchaseOrderDetailsModel);
-                    
+                    boolean result = purchaseOrderDetailsRepositoryCustom.save(purchaseOrderDetailsModel);
+
                 }
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(PurchaseOrderServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -90,9 +90,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom{
         for (PurchaseOrderModel purchaseOrderModel : purchaseOrderModels) {
             purchaseOrderDtos.add(new PurchaseOrderDto(purchaseOrderModel.getPoId(),
                     purchaseOrderModel.getPoPrefix(),
-                    purchaseOrderModel.getPoCode(), 
-                    purchaseOrderModel.getPoCodePrefix(), 
-                    purchaseOrderModel.getSupplierId(), 
+                    purchaseOrderModel.getPoCode(),
+                    purchaseOrderModel.getPoCodePrefix(),
+                    purchaseOrderModel.getSupplierId(),
                     purchaseOrderModel.getSupplierName(),
                     purchaseOrderModel.getPoDate(),
                     purchaseOrderModel.getExpectedDate(),
@@ -104,5 +104,29 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceCustom{
         }
         return purchaseOrderDtos;
     }
-    
+
+    @Override
+    public List<PurchaseOrderDto> getItemList(String itemCode) {
+        ArrayList<PurchaseOrderDto> purchaseOrderDtos = new ArrayList<>();
+        ArrayList<PurchaseOrderModel> purchaseOrderModels = purchaseOrderRepositoryCustom.getItemList(itemCode);
+        
+        for (PurchaseOrderModel purchaseOrderModel : purchaseOrderModels) {
+            purchaseOrderDtos.add(new PurchaseOrderDto(purchaseOrderModel.getPoId(),
+                    purchaseOrderModel.getPoPrefix(),
+                    purchaseOrderModel.getPoCode(),
+                    purchaseOrderModel.getPoCodePrefix(),
+                    purchaseOrderModel.getSupplierId(),
+                    purchaseOrderModel.getSupplierName(),
+                    purchaseOrderModel.getPoDate(),
+                    purchaseOrderModel.getExpectedDate(),
+                    purchaseOrderModel.getTotalOrderPrice(),
+                    purchaseOrderModel.getPaymentType(),
+                    purchaseOrderModel.getStatus(),
+                    purchaseOrderModel.getUserId(),
+                    purchaseOrderModel.getVisible()));
+        }
+        return purchaseOrderDtos;
+        
+    }
+
 }

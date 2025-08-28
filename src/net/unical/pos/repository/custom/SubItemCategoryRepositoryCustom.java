@@ -20,4 +20,6 @@ public interface SubItemCategoryRepositoryCustom extends SuperServiceCrud<SubIte
     ArrayList<SubItemCategoryModel> getSubItemCategories(Integer key)throws Exception;
     
     ArrayList<SubItemCategoryModel>getAllSubCategories()throws Exception;
+
+    public Integer getSubItemCode(String item);
 }

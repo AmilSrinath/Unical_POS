@@ -23,6 +23,7 @@ import net.unical.pos.dto.PurchaseOrderDetailsDto;
 import net.unical.pos.dto.PurchaseOrderDto;
 import net.unical.pos.dto.SubItemCategoryDto;
 import net.unical.pos.dto.SupplierDto;
+import net.unical.pos.repository.impl.MainItemRepositoryImpl;
 import net.unical.pos.view.home.Dashboard;
 import net.unical.pos.view.inventory.inventory.MainItem;
 
@@ -37,10 +38,14 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
     private SubItemCategoryController subItemCategoryController;
     private MainItemController mainItemController;
     private PurchaseOrderController purchaseOrderController;
+    private MainItemRepositoryImpl mainItemRepositoryImpl;
     
     private ArrayList<Integer> mainCategoryIds=new ArrayList<>();
     private ArrayList<Integer> subCategoryIds=new ArrayList<>();
     private ArrayList<Integer> supplierIds=new ArrayList<>();
+    private Integer mainCategoryId = 0;
+    private Integer subCategoryId = 0;
+    
     
     DefaultTableModel tableModel = null;
     
@@ -56,6 +61,7 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
         this.subItemCategoryController=new SubItemCategoryController();
         this.mainItemController=new MainItemController();
         this.purchaseOrderController=new PurchaseOrderController();
+        this.mainItemRepositoryImpl = new MainItemRepositoryImpl();
         this.dashboard=dashboard;
         tableModel = (DefaultTableModel) purchaseOrderTbl.getModel();
         
@@ -122,7 +128,6 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        itemListTbl.setBackground(new java.awt.Color(255, 255, 255));
         itemListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -196,27 +201,18 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
-        jPanel2.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("PO Prefix");
 
-        poPrefixTxt.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("PO Code");
 
-        poCodeTxt.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Current Date");
 
         currentDatePicker.setForeground(new java.awt.Color(255, 255, 255));
         currentDatePicker.setEditable(false);
         currentDatePicker.setEnabled(false);
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Expected Date");
 
         expectedDatePicker.setForeground(new java.awt.Color(255, 255, 255));
@@ -261,17 +257,12 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Supplier Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Supplier Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Supplier");
 
-        supplierCmb.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Payment Method");
 
-        paymentCmb.setBackground(new java.awt.Color(255, 255, 255));
         paymentCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Card", " " }));
 
         jCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
@@ -314,31 +305,30 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        mainItemCategoryCmb.setBackground(new java.awt.Color(255, 255, 255));
         mainItemCategoryCmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mainItemCategoryCmbActionPerformed(evt);
             }
         });
 
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Main Category");
 
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Sub Category");
 
-        subItemCategoryCmb.setBackground(new java.awt.Color(255, 255, 255));
+        subItemCategoryCmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemCategoryCmbActionPerformed(evt);
+            }
+        });
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
             }
         });
 
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Item Name");
 
         jXButton3.setBackground(new java.awt.Color(21, 178, 21));
@@ -390,10 +380,8 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Items", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Items", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        purchaseOrderTbl.setBackground(new java.awt.Color(255, 255, 255));
-        purchaseOrderTbl.setForeground(new java.awt.Color(0, 0, 0));
         purchaseOrderTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -535,6 +523,9 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
 
     private void mainItemCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainItemCategoryCmbActionPerformed
         try {
+            System.out.println("Main Cat : " + mainItemCategoryCmb.getSelectedItem().toString());
+            mainCategoryId = mainItemCategoryController.getItemCode(mainItemCategoryCmb.getSelectedItem().toString());
+            System.out.println("Main Category ID : " + mainCategoryId);
             subItemCategoryCmb.removeAllItems();
             String mainCategoryName=mainItemCategoryCmb.getSelectedItem().toString();
             ArrayList<SubItemCategoryDto> subItemCategoryDto=subItemCategoryController.searchSubItemCategories(mainCategoryName);
@@ -557,16 +548,15 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
 
     private void jXButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton3ActionPerformed
         try {
-            Integer main=mainCategoryIds.get(mainItemCategoryCmb.getSelectedIndex());
-            Integer sub=subCategoryIds.get(subItemCategoryCmb.getSelectedIndex());
-            ArrayList<MainItemDto>alltems=mainItemController.searchAllItems(3, 3);
+            ArrayList<MainItemDto>alltems=mainItemController.searchAllItems(mainCategoryId , subCategoryId);
             
             DefaultTableModel dtm=(DefaultTableModel) itemListTbl.getModel();
             dtm.setRowCount(0);
             
             for(MainItemDto dto: alltems){
                 Object[] rowData={
-                    dto.getItemId(),dto.getItemName()
+                    dto.getItemId(),
+                    dto.getItemName()
                 };
                 dtm.addRow(rowData);
             }
@@ -575,7 +565,7 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
             
         } catch (Exception ex) {
             Logger.getLogger(PurchaseOrder.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }//GEN-LAST:event_jXButton3ActionPerformed
 
     private void jXButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton4ActionPerformed
@@ -645,9 +635,9 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
             
             boolean result=purchaseOrderController.savePurchaseOrder(mainPurchaseOrderDto);
             if(result){
-                System.out.println("Yes");
+                JOptionPane.showMessageDialog(this, "Purchese Order Saved Successfully!", "Saved", 1);
             }else{
-                System.err.println("No");
+                JOptionPane.showMessageDialog(this, "Purchese Order Saved Failed!", "Failed", 0);
             }
             
         } catch (Exception ex) {
@@ -692,6 +682,18 @@ public class PurchaseOrder extends javax.swing.JInternalFrame {
     private void purchaseOrderTblPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_purchaseOrderTblPropertyChange
 
     }//GEN-LAST:event_purchaseOrderTblPropertyChange
+
+    private void subItemCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemCategoryCmbActionPerformed
+         // TODO add your handling code here:
+        try {
+            if(subItemCategoryCmb.getSelectedItem() == null){
+                return;
+            }
+            subCategoryId = subItemCategoryController.getSubItemCode(subItemCategoryCmb.getSelectedItem().toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }      
+    }//GEN-LAST:event_subItemCategoryCmbActionPerformed
 
     /**
      * @param args the command line arguments

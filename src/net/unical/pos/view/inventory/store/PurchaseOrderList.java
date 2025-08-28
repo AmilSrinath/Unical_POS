@@ -6,9 +6,11 @@
 package net.unical.pos.view.inventory.store;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.components.items.ItemCompiler;
 import net.unical.pos.controller.PurchaseOrderController;
 import net.unical.pos.dto.PurchaseOrderDto;
 import net.unical.pos.view.home.Dashboard;
@@ -40,6 +42,7 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editForm = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -54,6 +57,17 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         jXButton5 = new org.jdesktop.swingx.JXButton();
         jXButton6 = new org.jdesktop.swingx.JXButton();
 
+        javax.swing.GroupLayout editFormLayout = new javax.swing.GroupLayout(editForm.getContentPane());
+        editForm.getContentPane().setLayout(editFormLayout);
+        editFormLayout.setHorizontalGroup(
+            editFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 820, Short.MAX_VALUE)
+        );
+        editFormLayout.setVerticalGroup(
+            editFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 372, Short.MAX_VALUE)
+        );
+
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
@@ -63,13 +77,20 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Purchase Order", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search Purchase Order", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("PO Code :");
 
-        jXTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jXTextField1.setForeground(new java.awt.Color(0, 0, 0));
+        jXTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXTextField1ActionPerformed(evt);
+            }
+        });
+        jXTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jXTextField1KeyReleased(evt);
+            }
+        });
 
         jXButton1.setBackground(new java.awt.Color(0, 102, 153));
         jXButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -78,6 +99,11 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         jXButton2.setBackground(new java.awt.Color(153, 0, 0));
         jXButton2.setForeground(new java.awt.Color(255, 255, 255));
         jXButton2.setText("Clear");
+        jXButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,10 +137,8 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order List", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order List", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        poListTbl.setBackground(new java.awt.Color(255, 255, 255));
-        poListTbl.setForeground(new java.awt.Color(0, 0, 0));
         poListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -136,6 +160,11 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         jXButton3.setBackground(new java.awt.Color(51, 153, 0));
         jXButton3.setForeground(new java.awt.Color(255, 255, 255));
         jXButton3.setText("Edit");
+        jXButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXButton3ActionPerformed(evt);
+            }
+        });
 
         jXButton4.setText("Send to Supplier");
 
@@ -205,6 +234,44 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jXTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jXTextField1ActionPerformed
+
+    private void jXTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jXTextField1KeyReleased
+        // TODO add your handling code here:
+        String itemCode = jXTextField1.getText().trim();
+        System.out.println("meka wada nedda");
+
+    if (!itemCode.isEmpty()) {
+        List<PurchaseOrderDto> purchaseOrder = purchaseOrderController.getItemList(itemCode);
+
+        DefaultTableModel dtm = (DefaultTableModel) poListTbl.getModel();
+        dtm.setRowCount(0); // clear old rows
+
+        for (PurchaseOrderDto dto : purchaseOrder) {
+            System.out.println("dto :" + dto);
+            Object[] rowData = {
+                dto.getPoCodePrefix(),
+                dto.getSupplierName(),
+                dto.getExpectedDate(),
+                dto.getStatus()
+            };
+            dtm.addRow(rowData);
+        }
+    }
+    }//GEN-LAST:event_jXTextField1KeyReleased
+
+    private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
+        // TODO add your handling code here:
+        jXTextField1.setText("");
+    }//GEN-LAST:event_jXButton2ActionPerformed
+
+    private void jXButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton3ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jXButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -241,6 +308,7 @@ public class PurchaseOrderList extends javax.swing.JInternalFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog editForm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

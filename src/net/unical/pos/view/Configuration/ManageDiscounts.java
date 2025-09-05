@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.unical.pos.controller.DiscountController;
 import net.unical.pos.dto.DiscountDto;
-import sun.tools.jinfo.JInfo;
 
 /**
  *

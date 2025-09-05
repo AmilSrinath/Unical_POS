@@ -56,8 +56,8 @@ public class InquiryRepositoryImpl {
     public void saveInquiry(InquiryModel inquiryModel) {
         String insertQuery = "INSERT INTO pos_inquiry_tb "
                 + "(way_bill, customer_id, customer_name, customer_phone_1, customer_phone_2, "
-                + "company, branch, branch_contact, reson, remark, status, created_date, edited_date, user_id) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "company, branch, branch_contact, reson, remark, status, created_date, edited_date, user_id, status_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 11)";
 
         try (Connection conn = DBCon.getDatabaseConnection(); PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
             stmt.setString(1, inquiryModel.getWayBill());

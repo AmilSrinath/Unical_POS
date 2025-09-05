@@ -1837,6 +1837,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
 
+        Log.info(DeliveryOrder.class, "Click Add item button");
+        
         double totalAmount = 0.0;
         double totalWeight = 0.0;
 
@@ -1859,6 +1861,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         int itemId = itemIds.get(itemIndex);
         double itemPrice = itemPriceList.get(itemIndex);
         double itemWeight = itemWeightList.get(itemIndex);
+        
+        Log.info(DeliveryOrder.class, "Item is "+itemName);
 
         // Apply discount only if item row was double-clicked
         double discount = isDoublePressedItemTable ? setDiscount(itemPrice) : 0.0;
@@ -2201,6 +2205,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
             }
             saveOrder();
+            clearText();
             return;
         }
 
@@ -2615,6 +2620,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
+        Log.info(DeliveryOrder.class, "Click Item remove button");
+        
         int row = itemListTable.getSelectedRow();
         if (row != -1) {
             itemListTableModel.removeRow(row);
@@ -2633,6 +2640,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     Number priceValue = (Number) itemListTable.getValueAt(i, 2);
                     Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
                     Double discountValue = (Double) itemListTable.getValueAt(i, 4);
+                    
+                    Log.info(DeliveryOrder.class, "Remove Item is "+itemId);
 
                     if (priceValue == null || qtyValue == null || discountValue == null || itemId == null) {
                         continue;
@@ -2931,10 +2940,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_paymentTypeCombo2KeyReleased
 
     private void phoneOneCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneOneCmbActionPerformed
+        Log.info(DeliveryOrder.class, "Click phone1 numer combobox");
         if (phoneOneCmb.getSelectedIndex() != -1) {
             try {
                 String number = phoneOneCmb.getSelectedItem() + "";
-
+                
+                Log.info(DeliveryOrder.class, number);
+                Log.error(DeliveryOrder.class, "Click phone1 numer combobox");
+                
+                
                 List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='" + number + "' OR `phone_two`='" + number + "'");
                 for (CustomerDto customerDto : customerDtos) {
                     phoneOneCmb.setSelectedItem("0" + customerDto.getPhoneOne());
@@ -2961,11 +2975,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_phoneOneCmbActionPerformed
 
     private void phoneOneCmbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_phoneOneCmbMouseClicked
-
+        System.out.println("A");
     }//GEN-LAST:event_phoneOneCmbMouseClicked
 
     private void phoneOneCmbKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneOneCmbKeyReleased
-
+        Log.info(DeliveryOrder.class, "Click phone1 numer combobox");
+        System.out.println("A");
     }//GEN-LAST:event_phoneOneCmbKeyReleased
 
     private void fr_de_chbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fr_de_chbMouseClicked

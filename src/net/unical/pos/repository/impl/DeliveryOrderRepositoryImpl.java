@@ -36,6 +36,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
     @Override
     public String getOrderIDByBillNo(String billNo) {
+        System.out.println("IMPL delivery_ID : "+billNo);
         String orderId = null;
         PreparedStatement ps = null;
         ResultSet rst = null;

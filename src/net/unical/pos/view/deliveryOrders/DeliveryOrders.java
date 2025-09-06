@@ -2182,29 +2182,35 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             return;
         }
 
+        System.out.println("Pissu delivery_id : "+delivery_id);
+        
         if (delivery_id == null) {
             if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
-                int result = JOptionPane.showConfirmDialog(this, "The customer's latest order is still pending delivery.Do you want add another order");
-                if (result == JOptionPane.YES_OPTION) {
-                    saveOrder();
-                    return;
-                } else if (result == JOptionPane.NO_OPTION) {
-                    delivery_id = null;
-                    clearText();
-                    DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
-                    model.setRowCount(0);
-                    return;
-                } else if (result == JOptionPane.CANCEL_OPTION) {
-                    delivery_id = null;
-                    clearText();
-                    DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
-                    model.setRowCount(0);
+                if (LogInForm.userID == 1) {
+                    int result = JOptionPane.showConfirmDialog(this, "The customer's latest order is still pending delivery.Do you want add another order");
+                    
+                    if (result == JOptionPane.YES_OPTION) {
+                        saveOrder();
+                        return;
+                    } else if (result == JOptionPane.NO_OPTION) {
+                        delivery_id = null;
+                        clearText();
+                        DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                        model.setRowCount(0);
+                        return;
+                    } else if (result == JOptionPane.CANCEL_OPTION) {
+                        delivery_id = null;
+                        clearText();
+                        DefaultTableModel model = (DefaultTableModel) itemListTable.getModel();
+                        model.setRowCount(0);
+                        return;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "This customer already have order.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
             }
             saveOrder();
-            clearText();
             return;
         }
 
@@ -2987,6 +2993,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_fr_de_chbMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Log.info(DeliveryOrder.class, "Click check button");
         if (phoneOneCmb.getSelectedItem() != null) {
             try {
                 setupTableModel(customer_id);
@@ -3070,8 +3077,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     int selectedRow = -1;
 
     private void deliveryOrdersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deliveryOrdersTableMousePressed
+        Log.info(DeliveryOrder.class, "Click table row");
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
+            Log.info(DeliveryOrder.class, "Click table "+selectedRow+" row");
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
 
@@ -3085,76 +3094,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 }
 
                 if (!(userDto.getRoleId() == 1 || userDto.getRoleId() == 2)) {
-//                    switch (status) {
-//                        case "Pending":
-//                            btnEdit.setEnabled(true);
-//                            btnWrapping.setEnabled(true);
-//                            btnCancel.setEnabled(true);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(false);
-//                            btnDeliverd.setEnabled(false);
-//                            break;
-//
-//                        case "Wrapping":
-//                            btnEdit.setEnabled(true);
-//                            btnWrapping.setEnabled(false);
-//                            btnCancel.setEnabled(true);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(true);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(false);
-//                            btnDeliverd.setEnabled(false);
-//                            break;
-//
-//                        case "Out of Delivery":
-//                            btnEdit.setEnabled(false);
-//                            btnWrapping.setEnabled(false);
-//                            btnCancel.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(true);
-//                            btnDeliverd.setEnabled(true);
-//                            break;
-//
-//                        case "Delivered":
-//                            btnEdit.setEnabled(false);
-//                            btnWrapping.setEnabled(false);
-//                            btnCancel.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(false);
-//                            btnDeliverd.setEnabled(false);
-//                            break;
-//
-//                        case "Return":
-//                            btnEdit.setEnabled(false);
-//                            btnWrapping.setEnabled(false);
-//                            btnCancel.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(false);
-//                            btnDeliverd.setEnabled(false);
-//                            break;
-//
-//                        case "Cancel":
-//                            btnEdit.setEnabled(false);
-//                            btnWrapping.setEnabled(false);
-//                            btnCancel.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnOutForDelivery.setEnabled(false);
-//                            btnActive.setEnabled(false);
-//                            btnReturn.setEnabled(false);
-//                            btnDeliverd.setEnabled(false);
-//                            break;
-//                        default:
-//                            throw new AssertionError();
-//                    }
-
                     // Disable all buttons by default
                     btnWrapping.setEnabled(false);
                     btnCancel.setEnabled(false);
@@ -3236,11 +3175,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_deliveryOrdersTableMousePressed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-
+        Log.info(DeliveryOrder.class, "Click edit button");
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         clearText();
+        Log.info(DeliveryOrder.class, "Click clear button");
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
@@ -3476,9 +3416,12 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                     String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
                     String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_ID);
+                    
+                    System.out.println("delivery_ID : "+order_ID);
+                    System.out.println("order_ID : "+orderID);
 
-                    if (orderID != null) {
-                        Integer oid = Integer.parseInt(orderID);
+                    if (order_ID != null) {
+                        Integer oid = Integer.parseInt(order_ID);
                         ArrayList<PosMainOrderDetails> orderDetails = mainOrderDetailRepositoryImpl.getOrderDetailsByOrderId(oid);
                         DefaultTableModel itemListTableModel = (DefaultTableModel) itemListTable.getModel();
                         itemListTableModel.setRowCount(0);

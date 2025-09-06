@@ -76,7 +76,7 @@ public class LogInForm extends javax.swing.JFrame {
         this.userRoleController = new UserRoleController();
         this.employeeManagementController = new EmployeeManagementController();
 
-        setDefaulUser();
+//        setDefaulUser();
         loadAllUsers();
         lowerCaseCharacters();
     }

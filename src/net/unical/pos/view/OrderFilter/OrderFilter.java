@@ -34,6 +34,7 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
+import net.unical.pos.controller.DeliveryOrderController;
 import net.unical.pos.controller.OrderTypeController;
 import net.unical.pos.controller.PaymentTypesController;
 import net.unical.pos.dbConnection.DBConnection;
@@ -74,6 +75,7 @@ public class OrderFilter extends JInternalFrame {
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     private InquiryRepositoryImpl inquiryRepositoryImpl;
     private OrderTypeController orderTypeController;
+    private DeliveryOrderController deliveryOrderController;
     private String orderType = "Any";
 
     /**
@@ -99,6 +101,7 @@ public class OrderFilter extends JInternalFrame {
         this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
         this.orderTypeController = new OrderTypeController();
+        this.deliveryOrderController = new DeliveryOrderController();
         setCurrentDate();
         getPaymentTypes();
 
@@ -841,7 +844,8 @@ public class OrderFilter extends JInternalFrame {
                     } else {
                         orderCode = deliveryOrdersTable.getValueAt(selectedRow, 1).toString();
                     }
-                    orderID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                    String delivery_id = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                    orderID = deliveryOrderController.getOrderId(delivery_id);
                     System.out.println("orderCode : " + orderCode);
                     orderOptions.setLocationRelativeTo(null);
                     orderOptions.setSize(590, 150);

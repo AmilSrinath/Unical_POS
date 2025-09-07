@@ -1837,7 +1837,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
         Log.info(DeliveryOrder.class, "Click Add item button");
-        
+
         double totalAmount = 0.0;
         double totalWeight = 0.0;
 
@@ -1860,8 +1860,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         int itemId = itemIds.get(itemIndex);
         double itemPrice = itemPriceList.get(itemIndex);
         double itemWeight = itemWeightList.get(itemIndex);
-        
-        Log.info(DeliveryOrder.class, "Item is "+itemName);
+
+        Log.info(DeliveryOrder.class, "Item is " + itemName);
 
         // Apply discount only if item row was double-clicked
         double discount = isDoublePressedItemTable ? setDiscount(itemPrice) : 0.0;
@@ -2182,13 +2182,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             return;
         }
 
-        System.out.println("Pissu delivery_id : "+delivery_id);
-        
+        System.out.println("Pissu delivery_id : " + delivery_id);
+
         if (delivery_id == null) {
             if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
                 if (LogInForm.userID == 1) {
                     int result = JOptionPane.showConfirmDialog(this, "The customer's latest order is still pending delivery.Do you want add another order");
-                    
+
                     if (result == JOptionPane.YES_OPTION) {
                         saveOrder();
                         return;
@@ -2205,7 +2205,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         model.setRowCount(0);
                         return;
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "This customer already have order.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -2626,7 +2626,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
         Log.info(DeliveryOrder.class, "Click Item remove button");
-        
+
         int row = itemListTable.getSelectedRow();
         if (row != -1) {
             itemListTableModel.removeRow(row);
@@ -2645,8 +2645,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     Number priceValue = (Number) itemListTable.getValueAt(i, 2);
                     Number qtyValue = (Number) itemListTable.getValueAt(i, 3);
                     Double discountValue = (Double) itemListTable.getValueAt(i, 4);
-                    
-                    Log.info(DeliveryOrder.class, "Remove Item is "+itemId);
+
+                    Log.info(DeliveryOrder.class, "Remove Item is " + itemId);
 
                     if (priceValue == null || qtyValue == null || discountValue == null || itemId == null) {
                         continue;
@@ -2949,11 +2949,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         if (phoneOneCmb.getSelectedIndex() != -1) {
             try {
                 String number = phoneOneCmb.getSelectedItem() + "";
-                
+
                 Log.info(DeliveryOrder.class, number);
                 Log.error(DeliveryOrder.class, "Click phone1 numer combobox");
-                
-                
+
                 List<CustomerDto> customerDtos = customerController.getCustomer("WHERE `phone_one`='" + number + "' OR `phone_two`='" + number + "'");
                 for (CustomerDto customerDto : customerDtos) {
                     phoneOneCmb.setSelectedItem("0" + customerDto.getPhoneOne());
@@ -3080,7 +3079,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         Log.info(DeliveryOrder.class, "Click table row");
         if (evt.getClickCount() == 2) {
             selectedRow = deliveryOrdersTable.getSelectedRow();
-            Log.info(DeliveryOrder.class, "Click table "+selectedRow+" row");
+            Log.info(DeliveryOrder.class, "Click table " + selectedRow + " row");
             if (selectedRow != -1) {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
 
@@ -3247,7 +3246,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     getAllOrders(fromDate, toDate, 0);
                 }
+
                 updateWebOrderStatus(deliveryOrderRepositoryImpl.getOrderByDeliveryId(delivery_id), "Preparing");
+
                 order_options.dispose();
 
             } catch (Exception ex) {
@@ -3414,14 +3415,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     // Additional logic for updating totals and other details...
                     double subTot = totalAmount - Double.parseDouble(deliveyFeeLbl.getText());
 
-                    String order_ID = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
-                    String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_ID);
-                    
-                    System.out.println("delivery_ID : "+order_ID);
-                    System.out.println("order_ID : "+orderID);
+                    String delivery_id = deliveryOrdersTable.getValueAt(selectedRow, 0).toString();
+                    String order_id = deliveryOrderController.getOrderId(delivery_id);
+                    String orderID = deliveryOrderRepositoryImpl.getOrderIDByBillNo(order_id);
 
-                    if (order_ID != null) {
-                        Integer oid = Integer.parseInt(order_ID);
+                    System.out.println("delivery_ID : " + delivery_id);
+                    System.out.println("order_ID : " + orderID);
+
+                    if (order_id != null) {
+                        Integer oid = Integer.parseInt(order_id);
                         ArrayList<PosMainOrderDetails> orderDetails = mainOrderDetailRepositoryImpl.getOrderDetailsByOrderId(oid);
                         DefaultTableModel itemListTableModel = (DefaultTableModel) itemListTable.getModel();
                         itemListTableModel.setRowCount(0);

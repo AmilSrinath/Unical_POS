@@ -24,5 +24,7 @@ public interface DeliveryOrderRepositoryCustom {
     public Double getSpecificWaight(Integer id);
 
     public String getOrderType(String deliveryID);
+
+    public String getOrderId(String order_ID);
  
 }

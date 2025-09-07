@@ -43,5 +43,9 @@ public class DeliveryOrderController {
         return deliveryOrderCustom.getOrderType(deliveryID);
     }
 
+    public String getOrderId(String order_ID) {
+        return deliveryOrderCustom.getOrderId(order_ID);
+    }
+
     
 }

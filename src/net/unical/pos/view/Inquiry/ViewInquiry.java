@@ -47,6 +47,7 @@ public class ViewInquiry extends JInternalFrame {
     private StatusTypeRepositoryImpl statusTypeRepositoryImpl;
     public static List<StatusTypeModel> statusTypes = new ArrayList<>();
     public InquiryModel inquiryModel;
+    String wayBill = null;
 
     private InquiryRepositoryImpl inquiryRepositoryImpl;
 
@@ -646,7 +647,6 @@ public class ViewInquiry extends JInternalFrame {
 
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    String wayBill = null;
 
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
         if (wayBill != null) {

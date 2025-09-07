@@ -482,7 +482,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             while (rs.next()) {
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
                 deliveryOrder.setCreateDate(rs.getTimestamp("created_date"));
-                deliveryOrder.setOrderId(rs.getInt("order_id"));
+                deliveryOrder.setOrderId(rs.getInt("delivery_id"));
                 deliveryOrder.setOrderCode(rs.getString("order_code"));
                 deliveryOrder.setCustomerName(rs.getString("customer_name"));
                 deliveryOrder.setAddress(rs.getString("address"));
@@ -1839,6 +1839,29 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             Log.error(ex, "Delivery id retrieve failed!");
         }
         return 0;
+    }
+
+    @Override
+    public String getOrderId(String order_ID) {
+        try {
+            String sql = "SELECT o.order_id "
+                    + "FROM pos_main_delivery_order_tb d "
+                    + "JOIN pos_main_order_tb o ON d.delivery_id = o.delivery_order_id "
+                    + "WHERE d.delivery_id = ?";
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1, order_ID);
+            ResultSet rst = pstm.executeQuery();
+            if (rst.next()) {
+                return String.valueOf(rst.getInt("order_id"));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOrderRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex.getMessage());
+        }
+        return null;
     }
 
 }

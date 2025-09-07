@@ -109,5 +109,10 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderServiceCustom{
         return deliveryOrderRepositoryCustom.getOrderType(deliveryID);
     }
 
+    @Override
+    public String getOrderId(String order_ID) {
+        return deliveryOrderRepositoryCustom.getOrderId(order_ID);
+    }
+
     
 }

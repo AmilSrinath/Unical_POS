@@ -2207,6 +2207,19 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "This customer already have order.", "Error", JOptionPane.ERROR_MESSAGE);
+                    clearText();
+                    
+                    customerNameTxt.setText("");
+                    addressTxt.setText("");
+                    codTxt.setText("");
+                    subTotAmountLbl.setText("0.00");
+                    totAmountLbl.setText("0.00");
+                    customerNumberTxt.setText("");
+                    remarkTxt.setText("");
+                    orderCodeTxt.setText("");
+                    PaidAmountTxt.setText("0");
+
+                    itemListTableModel.setRowCount(0);
                     return;
                 }
             }

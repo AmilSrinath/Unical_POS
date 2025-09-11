@@ -286,7 +286,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     }
 
     public DeliveryOrders() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
     }
 
     /**
@@ -2313,12 +2313,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
                 int status_id = statusTypeController.getStatusIdByStatusType(status);
-                if (status_id != -1) {
-                    deliveryOrderDto.setStatus(status_id);
-                } else {
-                    deliveryOrderDto.setStatus(2);
-                }
-
+                deliveryOrderDto.setStatus(status_id);
+                
                 if (isOrder) {
                     System.out.println("Come to this");
                     deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));

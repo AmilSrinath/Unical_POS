@@ -57,7 +57,7 @@ public class Reports extends javax.swing.JInternalFrame {
 
         saveOrderBtn.setBackground(new java.awt.Color(0, 102, 153));
         saveOrderBtn.setForeground(new java.awt.Color(255, 255, 255));
-        saveOrderBtn.setText("Daily Income Report");
+        saveOrderBtn.setText("Duration Sales Report");
         saveOrderBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveOrderBtnActionPerformed(evt);
@@ -104,7 +104,7 @@ public class Reports extends javax.swing.JInternalFrame {
                 .addComponent(saveOrderBtn2)
                 .addGap(18, 18, 18)
                 .addComponent(btnItemWiseSalesReport)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DurationSalesReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8960d3bb-3a39-4f41-ad56-b0e0510dfb8e">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (2)"/>
+	<parameter name="dateFrom" class="java.lang.String"/>
+	<parameter name="dateTo" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    -- 💰 Cash & Card
+    FORMAT(SUM(CASE WHEN pmd.status_id NOT IN (6, 7) THEN pmd.cod_amount ELSE 0 END), 2) AS Total_Report_Cash,
+    FORMAT(SUM(CASE WHEN pmd.status_id NOT IN (6, 7) THEN pmo.paid_amount ELSE 0 END), 2) AS Total_Report_Card,
+
+    -- 📊 Total orders
+    COUNT(pmo.order_id) AS Number_of_orders,
+
+    -- 🟢 Active (1)
+    COUNT(CASE WHEN pmd.status_id = 1 THEN 1 END) AS Active_orders_count,
+
+    -- ⏳ Pending (2)
+    COUNT(CASE WHEN pmd.status_id = 2 THEN 1 END) AS Pending_orders_count,
+
+    -- 🎁 Wrapping (3)
+    COUNT(CASE WHEN pmd.status_id = 3 THEN 1 END) AS Wrapping_orders_count,
+
+    -- 📤 Despatch (4)
+    COUNT(CASE WHEN pmd.status_id = 4 THEN 1 END) AS Despatch_orders_count,
+
+    -- 📦 Delivered (5)
+    COUNT(CASE WHEN pmd.status_id = 5 THEN 1 END) AS Delivered_orders_count,
+
+    -- ❌ Return (6)
+    COUNT(CASE WHEN pmd.status_id = 6 THEN 1 END) AS Return_orders_count,
+
+    -- ❌ Cancel (7)
+    COUNT(CASE WHEN pmd.status_id = 7 THEN 1 END) AS Cancel_orders_count,
+
+    -- 🔄 Returning (12)
+    COUNT(CASE WHEN pmd.status_id = 12 THEN 1 END) AS Returning_orders_count,
+
+    -- 🔍 Checking (13)
+    COUNT(CASE WHEN pmd.status_id = 13 THEN 1 END) AS Checking_orders_count,
+
+    -- 💰 Return & Cancel totals
+    FORMAT(SUM(CASE WHEN pmd.status_id = 6 THEN pmo.total_order_price ELSE 0 END), 2) AS Return_orders_Total,
+    FORMAT(SUM(CASE WHEN pmd.status_id = 7 THEN pmo.total_order_price ELSE 0 END), 2) AS Cancel_orders_Total,
+
+    -- 🚚 Delivery fee
+    FORMAT(SUM(pmo.delivery_fee), 2) AS Total_delivery_charge,
+
+    -- 💵 Grand total (Cash + Card - Return - Cancel - Delivery)
+    FORMAT(
+        (
+            SUM(CASE WHEN pmd.status_id NOT IN (6, 7) THEN pmd.cod_amount ELSE 0 END) +
+            SUM(CASE WHEN pmd.status_id NOT IN (6, 7) THEN pmo.paid_amount ELSE 0 END) -
+            SUM(CASE WHEN pmd.status_id = 6 THEN pmo.total_order_price ELSE 0 END) -
+            SUM(CASE WHEN pmd.status_id = 7 THEN pmo.total_order_price ELSE 0 END) -
+            SUM(pmo.delivery_fee)
+        ),
+        2
+    ) AS Grand_total,
+
+    -- 📊 Percentages by status
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 1  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Active_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 2  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Pending_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 3  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Wrapping_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 4  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Despatch_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 5  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Delivered_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 6  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Return_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 7  THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Cancel_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 12 THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Returning_percentage,
+    CONCAT(ROUND((COUNT(CASE WHEN pmd.status_id = 13 THEN 1 END) / COUNT(pmo.order_id)) * 100, 2), '%') AS Checking_percentage
+
+FROM
+    pos_main_order_tb pmo
+JOIN
+    pos_main_delivery_order_tb pmd ON pmo.delivery_order_id = pmd.delivery_id
+WHERE
+    DATE(pmo.created_Date) BETWEEN  $P{dateFrom}  AND  $P{dateTo} ;]]>
+	</queryString>
+	<field name="Total_Report_Cash" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Cash"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_Report_Cash"/>
+	</field>
+	<field name="Total_Report_Card" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Total_Report_Card"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_Report_Card"/>
+	</field>
+	<field name="Number_of_orders" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Number_of_orders"/>
+		<property name="com.jaspersoft.studio.field.label" value="Number_of_orders"/>
+	</field>
+	<field name="Active_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Active_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Active_orders_count"/>
+	</field>
+	<field name="Pending_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Pending_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Pending_orders_count"/>
+	</field>
+	<field name="Wrapping_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Wrapping_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Wrapping_orders_count"/>
+	</field>
+	<field name="Despatch_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Despatch_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Despatch_orders_count"/>
+	</field>
+	<field name="Delivered_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Delivered_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Delivered_orders_count"/>
+	</field>
+	<field name="Return_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Return_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Return_orders_count"/>
+	</field>
+	<field name="Cancel_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Cancel_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cancel_orders_count"/>
+	</field>
+	<field name="Returning_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Returning_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Returning_orders_count"/>
+	</field>
+	<field name="Checking_orders_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Checking_orders_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="Checking_orders_count"/>
+	</field>
+	<field name="Return_orders_Total" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Return_orders_Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Return_orders_Total"/>
+	</field>
+	<field name="Cancel_orders_Total" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Cancel_orders_Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cancel_orders_Total"/>
+	</field>
+	<field name="Total_delivery_charge" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Total_delivery_charge"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_delivery_charge"/>
+	</field>
+	<field name="Grand_total" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Grand_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Grand_total"/>
+	</field>
+	<field name="Active_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Active_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Active_percentage"/>
+	</field>
+	<field name="Pending_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Pending_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Pending_percentage"/>
+	</field>
+	<field name="Wrapping_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Wrapping_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Wrapping_percentage"/>
+	</field>
+	<field name="Despatch_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Despatch_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Despatch_percentage"/>
+	</field>
+	<field name="Delivered_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Delivered_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Delivered_percentage"/>
+	</field>
+	<field name="Return_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Return_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Return_percentage"/>
+	</field>
+	<field name="Cancel_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Cancel_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cancel_percentage"/>
+	</field>
+	<field name="Returning_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Returning_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Returning_percentage"/>
+	</field>
+	<field name="Checking_percentage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Checking_percentage"/>
+		<property name="com.jaspersoft.studio.field.label" value="Checking_percentage"/>
+	</field>
+	<group name="Total_Report_Cash">
+		<groupExpression><![CDATA[$F{Total_Report_Cash}]]></groupExpression>
+	</group>
+	<group name="Total_Report_Card">
+		<groupExpression><![CDATA[$F{Total_Report_Card}]]></groupExpression>
+	</group>
+	<group name="Number_of_orders">
+		<groupExpression><![CDATA[$F{Number_of_orders}]]></groupExpression>
+	</group>
+	<group name="Active_orders_count">
+		<groupExpression><![CDATA[$F{Active_orders_count}]]></groupExpression>
+	</group>
+	<group name="Pending_orders_count">
+		<groupExpression><![CDATA[$F{Pending_orders_count}]]></groupExpression>
+	</group>
+	<group name="Wrapping_orders_count">
+		<groupExpression><![CDATA[$F{Wrapping_orders_count}]]></groupExpression>
+	</group>
+	<group name="Despatch_orders_count">
+		<groupExpression><![CDATA[$F{Despatch_orders_count}]]></groupExpression>
+	</group>
+	<group name="Delivered_orders_count">
+		<groupExpression><![CDATA[$F{Delivered_orders_count}]]></groupExpression>
+	</group>
+	<group name="Return_orders_count">
+		<groupExpression><![CDATA[$F{Return_orders_count}]]></groupExpression>
+	</group>
+	<group name="Cancel_orders_count">
+		<groupExpression><![CDATA[$F{Cancel_orders_count}]]></groupExpression>
+	</group>
+	<group name="Returning_orders_count">
+		<groupExpression><![CDATA[$F{Returning_orders_count}]]></groupExpression>
+	</group>
+	<group name="Checking_orders_count">
+		<groupExpression><![CDATA[$F{Checking_orders_count}]]></groupExpression>
+	</group>
+	<group name="Return_orders_Total">
+		<groupExpression><![CDATA[$F{Return_orders_Total}]]></groupExpression>
+	</group>
+	<group name="Cancel_orders_Total">
+		<groupExpression><![CDATA[$F{Cancel_orders_Total}]]></groupExpression>
+	</group>
+	<group name="Total_delivery_charge">
+		<groupExpression><![CDATA[$F{Total_delivery_charge}]]></groupExpression>
+	</group>
+	<group name="Grand_total">
+		<groupExpression><![CDATA[$F{Grand_total}]]></groupExpression>
+	</group>
+	<group name="Active_percentage">
+		<groupExpression><![CDATA[$F{Active_percentage}]]></groupExpression>
+	</group>
+	<group name="Pending_percentage">
+		<groupExpression><![CDATA[$F{Pending_percentage}]]></groupExpression>
+	</group>
+	<group name="Wrapping_percentage">
+		<groupExpression><![CDATA[$F{Wrapping_percentage}]]></groupExpression>
+	</group>
+	<group name="Despatch_percentage">
+		<groupExpression><![CDATA[$F{Despatch_percentage}]]></groupExpression>
+	</group>
+	<group name="Delivered_percentage">
+		<groupExpression><![CDATA[$F{Delivered_percentage}]]></groupExpression>
+	</group>
+	<group name="Return_percentage">
+		<groupExpression><![CDATA[$F{Return_percentage}]]></groupExpression>
+	</group>
+	<group name="Cancel_percentage">
+		<groupExpression><![CDATA[$F{Cancel_percentage}]]></groupExpression>
+	</group>
+	<group name="Returning_percentage">
+		<groupExpression><![CDATA[$F{Returning_percentage}]]></groupExpression>
+	</group>
+	<group name="Checking_percentage">
+		<groupExpression><![CDATA[$F{Checking_percentage}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="176" y="2" width="203" height="30" uuid="4a577342-aa91-40c8-a1dc-9b9a97a738e8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Duration Sales]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="108" splitType="Stretch">
+			<textField>
+				<reportElement x="69" y="6" width="210" height="20" uuid="a838cf1c-7230-473a-aefc-fb052ee0a699">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Number_of_orders}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="385" y="6" width="190" height="20" uuid="7c74f987-723f-4bc9-a6b0-10ec27a8f3d3">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Active_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="394" y="26" width="180" height="20" uuid="aff46c1f-8d57-4b8d-b8bf-fb11fdad0a2e">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pending_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="27" width="179" height="18" uuid="3a546092-23e2-4a10-acab-8f3ae2e23e42">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Wrapping_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="97" y="46" width="182" height="20" uuid="1f41ab23-f960-449c-93a7-00496ae286c8">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Despatch_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="46" width="175" height="20" uuid="206500b1-40fa-4d68-bcf6-0573967a7a1a">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Delivered_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="99" y="67" width="180" height="18" uuid="9e43515d-1213-4bff-83d0-70a61cd2ddad">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Return_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="67" width="185" height="18" uuid="20aa0d7b-123e-4a20-b2f1-521af44aadfe">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cancel_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="86" width="180" height="20" uuid="ee801b51-f9bc-42c2-9592-ba4be36aeb16">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Returning_orders_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="87" width="174" height="18" uuid="c0f68a17-ce96-47a6-a1ad-f50046a12e2b">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Checking_orders_count}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-20" y="6" width="300" height="20" uuid="e6c63c63-9efd-473b-881e-dd8bc57a8a16">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[All Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="6" width="295" height="20" uuid="5f9c8c9e-a526-4752-9ea7-934bd713248e">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Active Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="26" width="300" height="20" uuid="9cb2a6bc-91f4-4553-ae41-c592777ed2c8">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Wrapping Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="26" width="295" height="20" uuid="b103eb2d-a1ed-46b5-bbcc-c61f4379ded2">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Pending Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="46" width="300" height="20" uuid="c6b1bc0e-73d9-4168-abdd-30bb9d7f22ce">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Dispatch Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="66" width="295" height="20" uuid="ec08d24b-9d82-47f3-84ee-641c6e50956f">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Cancel Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="46" width="295" height="20" uuid="6f4df4c5-037b-4c83-b359-5df752dbc863">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Delivered Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="66" width="300" height="20" uuid="a9338155-f1b4-48ac-bd46-1ee146817806">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Returned Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="86" width="300" height="20" uuid="9ffdc30e-e884-46b7-82ab-6411bf242b5a">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Returning Orders Count :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="86" width="295" height="20" uuid="feae77b1-1e4a-44a8-af60-0049fe23dbe9">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Checking Orders Count :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="491" y="6" width="84" height="20" uuid="b685da55-ed3e-4cf5-85a8-0a2434a4da42">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Active_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="27" width="72" height="18" uuid="684b4143-1671-4da7-96a2-5caf70c1eed8">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pending_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="26" width="69" height="20" uuid="bd9c0869-6ba6-4b11-bed9-314404600a5c">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Wrapping_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="46" width="69" height="20" uuid="f56badd9-5ea6-4507-9ab9-de211f62027d">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Despatch_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="506" y="46" width="69" height="20" uuid="e1df52cc-79e1-4144-b5ac-e6530b9b27db">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Delivered_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="67" width="69" height="18" uuid="3d8f35c3-7f26-400b-94cc-f53a3fd74143">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Return_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="505" y="67" width="69" height="18" uuid="202d0ecf-556c-4a58-a3b6-251fbea14629">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cancel_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="87" width="69" height="18" uuid="d8afdfd3-0996-466a-80dd-ef966b166eda">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Returning_percentage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="506" y="87" width="69" height="18" uuid="2ea084dc-c6d6-4775-9661-f68af889fc87">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Checking_percentage}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="198" splitType="Stretch">
+			<staticText>
+				<reportElement x="106" y="170" width="170" height="26" uuid="a2c0ebed-a66b-4a71-9243-8dae813e2628"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grand Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="43" width="140" height="23" forecolor="#008800" uuid="73d09ad3-26d3-467b-ab78-5b1acf23de8a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f1d7de7e-9633-4e6c-901f-ce798ca9f441"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[+ Total Report Card]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="66" width="140" height="24" forecolor="#FF0905" uuid="2ddbd313-5937-4078-83ff-537630f2fb83"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[- Return Orders Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="90" width="140" height="24" forecolor="#FF0905" uuid="954cd1af-fb7f-4f3b-a945-79e17bc8cc32"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[- Cancel Orders Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="114" width="170" height="26" forecolor="#FF0905" uuid="50c175c5-6f55-4c05-b873-524ae2cc3c0f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[- Total Delivery Charge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="20" width="140" height="23" forecolor="#008800" uuid="2f0043bf-4d61-4075-979b-b3ee75fb29b5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17723c6d-59de-4911-8eb3-b135ceb4418b"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[+ Total Report Cash]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="22" width="215" height="20" forecolor="#008800" uuid="2defa497-24ca-4165-b7e6-19e290ad2927">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Report_Cash}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="43" width="214" height="22" forecolor="#008800" uuid="4cf8755a-0718-405b-8426-055f71dd299e">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Report_Card}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="66" width="214" height="24" forecolor="#FF0905" uuid="4c368268-2139-44c8-aec3-1ed730b2c245">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Return_orders_Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="90" width="214" height="24" forecolor="#FF0905" uuid="2a1a8d28-15d9-4163-87a2-c58a275dab40">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cancel_orders_Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="114" width="214" height="26" forecolor="#FF0905" uuid="b1993651-6911-454f-9be0-bea527aacc0e">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_delivery_charge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="168" width="214" height="30" uuid="f5950065-28ca-44b8-b364-d518dc32d226">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Grand_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

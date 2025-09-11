@@ -2185,8 +2185,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
             return;
         }
 
-        System.out.println("Pissu delivery_id : " + delivery_id);
-
         if (delivery_id == null) {
             if (!deliveryOrderRepositoryImpl.isLastOrderDelivered(phoneOneCmb.getSelectedItem().toString())) {
                 if (LogInForm.userID == 1) {
@@ -2554,6 +2552,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setUserID(1);
                     deliveryOrderDto.setIsExchange(isExch);
                     deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
+                    System.out.println("Order Type : "+cmbOrderType.getSelectedItem().toString());
 
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));

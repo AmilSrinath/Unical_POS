@@ -78,7 +78,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
     @Override
     public Integer save(DeliveryOrder deliveryOrder, boolean isOrder) throws Exception {
-        System.err.println(deliveryOrder.getPaidAmount());
+        System.out.println("Order Type 1 : "+deliveryOrder.getOrderType());
         PreparedStatement ps = null;
         ResultSet rst = null;
         boolean isLocalConnection = false;
@@ -97,6 +97,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
             con.setAutoCommit(false);
 
             System.out.println("Customer Id : " + deliveryOrder.getCustomerId());
+            System.out.println("Order Type 2 : "+deliveryOrder.getOrderType());
             if (deliveryOrder.getCustomerId() != null) {
                 // Update Customer
                 ps = con.prepareStatement("UPDATE pos_main_customer_tb SET customer_name = ?, address = ?, phone_one = ?, phone_two = ? WHERE customer_id = ?");
@@ -109,6 +110,8 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
 
                 Log.info(DeliveryOrderRepositoryImpl.class, "UPDATE pos_main_customer_tb");
 
+                System.out.println("Order Type 3 : "+deliveryOrder.getOrderType());
+                
                 // Add Delivery
                 ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, is_exchange, order_type, website_order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, deliveryOrder.getCustomerId());
@@ -124,6 +127,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setString(11, deliveryOrder.getWebsiteOrderId());
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
+                
                 if (rst.next()) {
                     deliveryId = rst.getInt(1);
                 }
@@ -224,7 +228,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 Log.info(DeliveryOrderRepositoryImpl.class, "INSERT INTO pos_main_customer_tb");
 
                 // Add Delivery
-                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps = con.prepareStatement("INSERT INTO pos_main_delivery_order_tb (customer_id, order_code, cod_amount, weight, remark, status, is_free_delivery, user_id, order_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, customerId);
                 ps.setString(2, deliveryOrder.getOrderCode());
                 ps.setDouble(3, deliveryOrder.getCod());
@@ -233,6 +237,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
                 ps.setInt(6, 1);
                 ps.setInt(7, deliveryOrder.getFreeShip());
                 ps.setInt(8, LogInForm.userID);
+                ps.setString(9, deliveryOrder.getOrderType());
                 ps.executeUpdate();
                 rst = ps.getGeneratedKeys();
                 if (rst.next()) {

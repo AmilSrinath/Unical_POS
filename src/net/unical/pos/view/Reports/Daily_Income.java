@@ -145,13 +145,12 @@ public class Daily_Income extends javax.swing.JInternalFrame {
             String fromDate = formatter.format(jXDatePickerFrom.getDate());
             String toDate = formatter.format(jXDatePickerTo.getDate());
             
-            JasperDesign jasDesign = JRXmlLoader.load("./reports/DurationSales.jrxml");
+            JasperDesign jasDesign = JRXmlLoader.load("./reports/DurationSalesReport.jrxml");
             JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
 
             HashMap<String, Object> hm = new HashMap<>();
             hm.put("dateFrom", fromDate);
             hm.put("dateTo", toDate);
-            
             
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasReport, hm,DBConnection.getInstance().getConnection());
             JasperViewer.viewReport(jasperPrint,false);

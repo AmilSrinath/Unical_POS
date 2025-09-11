@@ -30,7 +30,8 @@ public Component getTableCellRendererComponent(JTable table, Object value, boole
         String deliveredStatus = ViewInquiry.statusTypes.get(0).getStatus_type();
         String notDeliveredStatus = ViewInquiry.statusTypes.get(1).getStatus_type();
         String returnedDeliveryStatus = ViewInquiry.statusTypes.get(2).getStatus_type();
-        System.out.println("return delivery type : " + returnedDeliveryStatus);
+        String cancelStatus = ViewInquiry.statusTypes.get(3).getStatus_type();
+        
         if (status.equals(deliveredStatus)) {
             label.setBackground(new Color(198, 239, 206));
             label.setForeground(new Color(0, 97, 0));
@@ -39,6 +40,9 @@ public Component getTableCellRendererComponent(JTable table, Object value, boole
             label.setForeground(new Color(178, 34, 34));
         } else if (status.equals(returnedDeliveryStatus)){
             label.setBackground(new Color(255, 229, 180)); 
+            label.setForeground(new Color(178, 34, 34));
+        } else if (status.equals(cancelStatus)){
+            label.setBackground(new Color(255, 204, 0)); 
             label.setForeground(new Color(178, 34, 34));
         }
     }

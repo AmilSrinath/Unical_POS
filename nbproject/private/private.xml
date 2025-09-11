@@ -16,6 +16,8 @@
             <file>file:/D:/Project/Unical_POS/src/net/unical/pos/repository/impl/DeliveryOrderRepositoryImpl.java</file>
             <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/Inquiry/ViewInquiry.java</file>
             <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/Reports/Daily_Income.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/OrderFilter/OrderFilter.java</file>
             <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/Inquiry/StatusCellRenderer.java</file>
         </group>
     </open-files>

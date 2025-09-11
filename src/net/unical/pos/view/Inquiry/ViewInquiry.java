@@ -126,6 +126,7 @@ public class ViewInquiry extends JInternalFrame {
         btnNotPaid = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnReturn = new javax.swing.JButton();
+        btnCanel = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         paymentOrdersTable = new org.jdesktop.swingx.JXTable();
@@ -176,6 +177,16 @@ public class ViewInquiry extends JInternalFrame {
             }
         });
 
+        btnCanel.setBackground(new java.awt.Color(255, 204, 0));
+        btnCanel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnCanel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCanel.setText("Cancel");
+        btnCanel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCanelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout InquiryOptionsLayout = new javax.swing.GroupLayout(InquiryOptions.getContentPane());
         InquiryOptions.getContentPane().setLayout(InquiryOptionsLayout);
         InquiryOptionsLayout.setHorizontalGroup(
@@ -183,15 +194,17 @@ public class ViewInquiry extends JInternalFrame {
             .addGroup(InquiryOptionsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnNotPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCanel, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InquiryOptionsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(199, 199, 199))
+                .addGap(255, 255, 255))
         );
         InquiryOptionsLayout.setVerticalGroup(
             InquiryOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,9 +213,10 @@ public class ViewInquiry extends JInternalFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(InquiryOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnReturn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPaid, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnNotPaid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnNotPaid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReturn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
         );
 
@@ -501,6 +515,8 @@ public class ViewInquiry extends JInternalFrame {
                     statusText = statusTypes.get(1).getStatus_type();
                 } else if (dto.getStatusId() == statusTypes.get(2).getStatus_id()) {
                     statusText = statusTypes.get(2).getStatus_type();
+                } else if (dto.getStatusId() == statusTypes.get(3).getStatus_id()) {
+                    statusText = statusTypes.get(3).getStatus_type();
                 }
 
                 Object[] rowData = {
@@ -546,7 +562,7 @@ public class ViewInquiry extends JInternalFrame {
                 wayBill = wayBillVal != null ? wayBillVal.toString() : "";
 
                 InquiryOptions.setLocationRelativeTo(null);
-                InquiryOptions.setSize(440, 110);
+                InquiryOptions.setSize(590, 110);
                 InquiryOptions.setVisible(true);
             }
         } else {
@@ -720,6 +736,20 @@ public class ViewInquiry extends JInternalFrame {
         }
     }//GEN-LAST:event_btnReturnActionPerformed
 
+    private void btnCanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCanelActionPerformed
+        if (wayBill != null) {
+            inquiryRepositoryImpl.update(wayBill, 15);
+
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = formatter.format(jXDatePicker1.getDate());
+            String toDate = formatter.format(jXDatePicker2.getDate());
+
+            getAllInquiry(fromDate, toDate, 0);
+
+            InquiryOptions.dispose();
+        }
+    }//GEN-LAST:event_btnCanelActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -773,6 +803,7 @@ public class ViewInquiry extends JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog InquiryOptions;
     private javax.swing.JComboBox<String> StatusCombo;
+    private javax.swing.JButton btnCanel;
     private javax.swing.JButton btnNotPaid;
     private javax.swing.JButton btnPaid;
     private javax.swing.JButton btnReturn;

@@ -5,6 +5,8 @@
  */
 package net.unical.pos.controller;
 
+import java.util.ArrayList;
+import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.StockDto;
 import net.unical.pos.factory.ServiceFactory;
 import net.unical.pos.service.custom.StockServiceCustome;
@@ -31,6 +33,10 @@ public class StockController {
     
     public StockDto searchStock(Integer itemId)throws Exception{
         return stockServiceCustome.searchStock(itemId);
+    }
+
+    public ArrayList<StockDto> searchAllItems(Integer mainCategoryId, Integer subCategoryId) {
+        return stockServiceCustome.searchAllItems(mainCategoryId, subCategoryId);
     }
     
 }

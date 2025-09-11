@@ -2330,7 +2330,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     String fromDate = formatter.format(jXDatePicker1.getDate());
                     String toDate = formatter.format(jXDatePicker2.getDate());
                     getAllOrders(fromDate, toDate, default_paymentType);
-                    getPhone_Number_One();
+                    getPhone_Number_One(); 
                     getPhone_Number_Two();
                     clearText();
                     phoneOneCmb.requestFocus();

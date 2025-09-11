@@ -25,6 +25,8 @@ public class PosInvStock {
     private Integer status;
     private Integer userId;
     private Integer visible;
+    private String codePrefix;
+    private String itemName;
 
     public PosInvStock() {
     }
@@ -165,6 +167,22 @@ public class PosInvStock {
 
     public void setVisible(Integer visible) {
         this.visible = visible;
+    }
+
+    public String getCodePrefix() {
+        return codePrefix;
+    }
+
+    public void setCodePrefix(String codePrefix) {
+        this.codePrefix = codePrefix;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
     
     

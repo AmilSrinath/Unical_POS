@@ -33,4 +33,6 @@ public interface MainItemServiceCustom {
     public ArrayList<MainItemDto> searchAllItems(String key)throws Exception;
 
     public String getmainItemid(String mainCat);
+
+    public boolean isNewItem(String itemName);
 }

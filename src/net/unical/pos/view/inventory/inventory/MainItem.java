@@ -23,6 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import net.unical.pos.configurations.ConfigTimer;
 import net.unical.pos.configurations.Configurations;
+import net.unical.pos.controller.ItemRegistryController;
 import net.unical.pos.controller.MainItemCategoryController;
 import net.unical.pos.controller.MainItemController;
 import net.unical.pos.controller.PrinterTypesController;
@@ -61,6 +62,7 @@ public class MainItem extends javax.swing.JInternalFrame {
     private StoreTemplateController storeTemplateController;
     private PrinterTypesController printerTypesController;
     private UnitTypesController unitTypesController;
+    private ItemRegistryController itemRegistryController;
     private ConfigTimer configTimer;
     
     private ArrayList<Integer> mainCategoryIds=new ArrayList<>();
@@ -85,6 +87,7 @@ public class MainItem extends javax.swing.JInternalFrame {
         this.storeTemplateController=new StoreTemplateController();
         this.unitTypesController=new UnitTypesController();
         this.printerTypesController=new PrinterTypesController();
+        this.itemRegistryController = new ItemRegistryController();
         this.configTimer=new ConfigTimer();
         
         this.isEditItem=isEditItem;
@@ -791,6 +794,7 @@ public class MainItem extends javax.swing.JInternalFrame {
 
         if(!update){
             try {
+                System.out.println("Is save one");
                 boolean result=newItemController.saveItem(itemDto);
                 if (result) {
                     if(!storeTemplateDtos.isEmpty()){

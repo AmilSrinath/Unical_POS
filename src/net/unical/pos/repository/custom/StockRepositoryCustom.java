@@ -5,6 +5,7 @@
  */
 package net.unical.pos.repository.custom;
 
+import java.util.ArrayList;
 import net.unical.pos.model.PosInvStock;
 
 /**
@@ -20,4 +21,6 @@ public interface StockRepositoryCustom {
     public PosInvStock searchStock(Integer itemId)throws Exception;
     
     public Integer updateQty(Integer  barCode, Integer qty);
+
+    public ArrayList<PosInvStock> searchAllItems(Integer mainCategoryId, Integer subCategoryId);
 }

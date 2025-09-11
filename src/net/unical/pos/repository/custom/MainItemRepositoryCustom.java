@@ -5,6 +5,7 @@
  */
 package net.unical.pos.repository.custom;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import net.unical.pos.model.PosMainItem;
 
@@ -14,7 +15,7 @@ import net.unical.pos.model.PosMainItem;
  */
 public interface MainItemRepositoryCustom {
 
-    public boolean save(PosMainItem item)throws Exception;
+    public boolean save(PosMainItem item, Connection connection)throws Exception;
     
     public ArrayList<PosMainItem> searchAllSubItems(Integer key)throws Exception;
     
@@ -27,5 +28,7 @@ public interface MainItemRepositoryCustom {
     public ArrayList<PosMainItem> getAllItems(String quary)throws Exception;
 
     public String getItemId(String mainCat);
+
+    public boolean isNewItem(String itemName);
     
 }

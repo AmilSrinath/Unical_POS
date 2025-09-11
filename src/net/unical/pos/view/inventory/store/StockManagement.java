@@ -5,7 +5,23 @@
  */
 package net.unical.pos.view.inventory.store;
 
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.unical.pos.configurations.Log;
+import net.unical.pos.controller.MainItemCategoryController;
+import net.unical.pos.controller.MainItemController;
+import net.unical.pos.controller.StockController;
+import net.unical.pos.controller.SubItemCategoryController;
+import net.unical.pos.dto.MainItemCategoryDto;
+import net.unical.pos.dto.MainItemDto;
+import net.unical.pos.dto.StockDto;
+import net.unical.pos.dto.SubItemCategoryDto;
 import net.unical.pos.view.home.Dashboard;
+import net.unical.pos.view.inventory.inventory.MainItem;
 
 /**
  *
@@ -13,11 +29,51 @@ import net.unical.pos.view.home.Dashboard;
  */
 public class StockManagement extends javax.swing.JInternalFrame {
 
+    private SubItemCategoryController subItemCategoryController;
+    private MainItemCategoryController mainItemCategoryController;
+    private MainItemController mainItemController;
+    private StockController stockController;
+    private Integer mainCategoryId;
+    private Integer subCategoryId;
+    private ArrayList<Integer> mainCategoryIds = new ArrayList<>();
+    private ArrayList<Integer> subCategoryIds = new ArrayList<>();
+    private Integer adjustQty;
+
     /**
      * Creates new form StockManagement
      */
     public StockManagement(Dashboard dashboard) {
         initComponents();
+        this.subItemCategoryController = new SubItemCategoryController();
+        this.mainItemCategoryController = new MainItemCategoryController();
+        this.mainItemController = new MainItemController();
+        this.stockController = new StockController();
+        loadItemCategories();
+        itemListTbl.getModel().addTableModelListener(e -> {
+            if (e.getType() == javax.swing.event.TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+
+                if (column == 3) { // 4th column (Available Qty)
+                    Object newValue = itemListTbl.getValueAt(row, column);
+                    Object itemId = itemListTbl.getValueAt(row, 0); // Item ID column
+
+                    System.out.println("Qty changed for Item ID " + itemId + " → " + newValue);
+
+                    // Here you can call your controller to update DB
+                    try {
+                        int newQty = Integer.parseInt(newValue.toString());
+                        this.adjustQty = newQty;
+//                        stockController.updateItemQty((Integer) itemId, newQty);
+                    } catch (NumberFormatException ex) {
+                        javax.swing.JOptionPane.showMessageDialog(this, "Invalid quantity entered!");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -29,19 +85,91 @@ public class StockManagement extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        adjustQtyDialog = new javax.swing.JDialog();
+        txtQty = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        btnMin = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        mainCmb = new javax.swing.JComboBox<>();
-        subCmb = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        codeTxt = new org.jdesktop.swingx.JXTextField();
         nameTxt = new org.jdesktop.swingx.JXTextField();
-        jXButton1 = new org.jdesktop.swingx.JXButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jXButton2 = new org.jdesktop.swingx.JXButton();
+        itemListTbl = new javax.swing.JTable();
+        cmbItemCode = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        mainItemCategoryCmb = new javax.swing.JComboBox<>();
+        subItemCategoryCmb = new javax.swing.JComboBox<>();
+        btnSearch = new org.jdesktop.swingx.JXButton();
+        btnClear = new javax.swing.JButton();
+
+        txtQty.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtQty.setText("0");
+        txtQty.setMinimumSize(new java.awt.Dimension(100, 22));
+        txtQty.setPreferredSize(new java.awt.Dimension(100, 22));
+        txtQty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQtyActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setBackground(new java.awt.Color(102, 102, 102));
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("+");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnMin.setBackground(new java.awt.Color(102, 102, 102));
+        btnMin.setForeground(new java.awt.Color(255, 255, 255));
+        btnMin.setText("-");
+        btnMin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMinActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(0, 153, 0));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Adjust");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout adjustQtyDialogLayout = new javax.swing.GroupLayout(adjustQtyDialog.getContentPane());
+        adjustQtyDialog.getContentPane().setLayout(adjustQtyDialogLayout);
+        adjustQtyDialogLayout.setHorizontalGroup(
+            adjustQtyDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(adjustQtyDialogLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(adjustQtyDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addGroup(adjustQtyDialogLayout.createSequentialGroup()
+                        .addComponent(btnMin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAdd)))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+        adjustQtyDialogLayout.setVerticalGroup(
+            adjustQtyDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(adjustQtyDialogLayout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(adjustQtyDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnMin))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -51,20 +179,11 @@ public class StockManagement extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Main Category");
-
-        jLabel2.setText("Sub Category");
-
         jLabel3.setText("Item Code");
 
         jLabel4.setText("Item Name");
 
-        jXButton1.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton1.setText("Search");
-
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        itemListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -80,11 +199,18 @@ public class StockManagement extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        itemListTbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemListTblMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(itemListTbl);
 
-        jXButton2.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton2.setText("Stock Adjustment");
+        cmbItemCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmbItemCodeKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,59 +219,105 @@ public class StockManagement extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(mainCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(subCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(codeTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cmbItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(32, 32, 32)
-                        .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(mainCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(subCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(codeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                .addGap(52, 52, 52))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel1.setText("Main Category");
+
+        jLabel2.setText("Sub Category");
+
+        mainItemCategoryCmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainItemCategoryCmbActionPerformed(evt);
+            }
+        });
+
+        subItemCategoryCmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemCategoryCmbActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(0, 102, 153));
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnClear.setBackground(new java.awt.Color(102, 102, 102));
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mainItemCategoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(subItemCategoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mainItemCategoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(subItemCategoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -153,14 +325,151 @@ public class StockManagement extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mainItemCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainItemCategoryCmbActionPerformed
+        // TODO add your handling code here:
+        try {
+            System.out.println("Main Cat : " + mainItemCategoryCmb.getSelectedItem().toString());
+            mainCategoryId = mainItemCategoryController.getItemCode(mainItemCategoryCmb.getSelectedItem().toString());
+            System.out.println("Main Category ID : " + mainCategoryId);
+            subItemCategoryCmb.removeAllItems();
+            String mainCategoryName = mainItemCategoryCmb.getSelectedItem().toString();
+            ArrayList<SubItemCategoryDto> subItemCategoryDto = subItemCategoryController.searchSubItemCategories(mainCategoryName);
+
+            if (mainCategoryName != null) {
+                if (subItemCategoryDto.size() == 0) {
+                    subItemCategoryCmb.addItem(null);
+                } else {
+                    for (SubItemCategoryDto dto : subItemCategoryDto) {
+                        subItemCategoryCmb.addItem(dto.getSubCategoryName());
+                        subCategoryIds.add(dto.getSubItemCategoryId());
+                    }
+                }
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mainItemCategoryCmbActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        try {
+            ArrayList<StockDto> alltems = stockController.searchAllItems(mainCategoryId, subCategoryId);
+
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+
+            for (StockDto dto : alltems) {
+                double qtyDouble = dto.getQty();
+                int qty = (int) qtyDouble;
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    qty
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(PurchaseOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void subItemCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemCategoryCmbActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (subItemCategoryCmb.getSelectedItem() == null) {
+                return;
+            }
+            subCategoryId = subItemCategoryController.getSubItemCode(subItemCategoryCmb.getSelectedItem().toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }//GEN-LAST:event_subItemCategoryCmbActionPerformed
+
+    private void btnMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinActionPerformed
+        // TODO add your handling code here:
+        if (txtQty.getText().equals("0")) {
+            JOptionPane.showMessageDialog(this, "Canot have qty < 0", "Info", 1);
+        } else {
+            Integer qty = Integer.parseInt(txtQty.getText()) - 1;
+            txtQty.setText(String.valueOf(qty));
+        }
+    }//GEN-LAST:event_btnMinActionPerformed
+
+    private void txtQtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQtyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQtyActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        Integer qty = Integer.parseInt(txtQty.getText()) + 1;
+        txtQty.setText(String.valueOf(qty));
+    }//GEN-LAST:event_btnAddActionPerformed
+    int selectedRow;
+    private void itemListTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListTblMouseClicked
+        // TODO add your handling code here:
+        selectedRow = itemListTbl.getSelectedRow();
+        String qty = itemListTbl.getValueAt(selectedRow, 3).toString();
+        txtQty.setText(qty);
+        if (evt.getClickCount() == 2) {
+            adjustQtyDialog.setVisible(true);
+            adjustQtyDialog.setLocationRelativeTo(this);
+            adjustQtyDialog.setSize(250, 200);
+            adjustQtyDialog.setTitle("Adjust Quantity");
+        }
+    }//GEN-LAST:event_itemListTblMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (txtQty.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid value", "Info", 1);
+        } else {
+            Object itemId = itemListTbl.getValueAt(selectedRow, 0);
+            StockDto stockDto = new StockDto();
+            stockDto.setItemId(Integer.valueOf(itemId.toString()));
+            stockDto.setQty(Double.valueOf(txtQty.getText()));
+            try {
+                boolean isUpdated = stockController.updateStock(stockDto);
+                if(isUpdated) {
+                    adjustQtyDialog.setVisible(false);
+                    btnSearchActionPerformed(evt);
+                    JOptionPane.showMessageDialog(this, "Quantity Adjust Successfully!", "Info", 1);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(StockManagement.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(this, "Stock QTY update unsuccessfull!");
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cmbItemCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbItemCodeKeyReleased
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cmbItemCodeKeyReleased
 
     /**
      * @param args the command line arguments
@@ -198,18 +507,39 @@ public class StockManagement extends javax.swing.JInternalFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXTextField codeTxt;
+    private javax.swing.JDialog adjustQtyDialog;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnMin;
+    private org.jdesktop.swingx.JXButton btnSearch;
+    private javax.swing.JComboBox<String> cmbItemCode;
+    private javax.swing.JTable itemListTbl;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private org.jdesktop.swingx.JXButton jXButton1;
-    private org.jdesktop.swingx.JXButton jXButton2;
-    private javax.swing.JComboBox<String> mainCmb;
+    private javax.swing.JComboBox<String> mainItemCategoryCmb;
     private org.jdesktop.swingx.JXTextField nameTxt;
-    private javax.swing.JComboBox<String> subCmb;
+    private javax.swing.JComboBox<String> subItemCategoryCmb;
+    private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
+
+    private void loadItemCategories() {
+        try {
+            String quary = "WHERE status=1 and visible=1";
+            ArrayList<MainItemCategoryDto> allCategories = mainItemCategoryController.getAll(quary);
+
+            for (MainItemCategoryDto dto : allCategories) {
+                mainItemCategoryCmb.addItem(dto.getCategoryName());
+                mainCategoryIds.add(dto.getMainItemCategeryId());
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

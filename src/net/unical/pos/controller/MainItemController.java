@@ -56,4 +56,8 @@ public class MainItemController {
     public String getItemId(String mainCat) {
         return mainItemServiceCustom.getmainItemid(mainCat);
     }
+
+    public boolean isNewItem(String itemName) {
+        return mainItemServiceCustom.isNewItem(itemName);
+    }
 }

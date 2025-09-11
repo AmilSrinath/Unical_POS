@@ -5,6 +5,8 @@
  */
 package net.unical.pos.service.impl;
 
+import java.util.ArrayList;
+import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.StockDto;
 import net.unical.pos.factory.RepositoryFactory;
 import net.unical.pos.model.PosInvStock;
@@ -80,6 +82,21 @@ public class StockServiceImpl implements StockServiceCustome{
             return null;
         }
         
+    }
+
+    @Override
+    public ArrayList<StockDto> searchAllItems(Integer mainCategoryId, Integer subCategoryId) {
+        ArrayList<PosInvStock> stocks =  stockRepositoryCustom.searchAllItems(mainCategoryId, subCategoryId);
+        ArrayList<StockDto> stockDtos = new ArrayList<>();
+        for (PosInvStock stock : stocks) {
+            StockDto stockDto = new StockDto();
+            stockDto.setItemId(stock.getItemId());
+            stockDto.setCodePrefix(stock.getCodePrefix());
+            stockDto.setItemName(stock.getItemName());
+            stockDto.setQty(stock.getQuantity());
+            stockDtos.add(stockDto);
+        }
+        return stockDtos;
     }
     
 }

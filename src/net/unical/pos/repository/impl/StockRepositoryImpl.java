@@ -5,10 +5,14 @@
  */
 package net.unical.pos.repository.impl;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.unical.pos.configurations.Log;
+import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.dbConnection.Statement;
 import net.unical.pos.model.PosInvStock;
 import net.unical.pos.repository.custom.StockRepositoryCustom;
@@ -68,6 +72,34 @@ public class StockRepositoryImpl implements StockRepositoryCustom{
             Log.error(ex, "update Qty error");
             return 0;
         }
+    }
+
+    @Override
+    public ArrayList<PosInvStock> searchAllItems(Integer mainCategoryId, Integer subCategoryId) {
+        ArrayList<PosInvStock> posInvStocks = new ArrayList<>();
+        try {
+            String sql = "SELECT i.item_id, i.item_code_prefix, i.item_name, s.quantity FROM pos_inv_stock_tb s JOIN pos_main_item_tb i ON s.item_id = i. item_id WHERE s.main_item_category_id = ? AND s.sub_item_category_id = ? ";
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, mainCategoryId);
+            pstm.setInt(2, subCategoryId);
+            ResultSet rst = pstm.executeQuery();
+            while(rst.next()) {
+                PosInvStock posInvStock = new PosInvStock();
+                posInvStock.setItemId(rst.getInt("item_id"));
+                posInvStock.setCodePrefix(rst.getString("item_code_prefix"));
+                posInvStock.setItemName(rst.getString("item_name"));
+                posInvStock.setQuantity((double)rst.getInt("quantity"));
+                posInvStocks.add(posInvStock);
+            }
+            return posInvStocks;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StockRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(StockRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Stock Search Error!");
+        }
+        return null;
     }
     
 }

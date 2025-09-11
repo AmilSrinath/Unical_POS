@@ -26,6 +26,8 @@ public class StockDto {
     Integer status;
     Integer userId;
     Integer visible;
+    String itemName;
+    String codePrefix;
 
     public StockDto() {
     }
@@ -166,6 +168,22 @@ public class StockDto {
 
     public void setVisible(Integer visible) {
         this.visible = visible;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getCodePrefix() {
+        return codePrefix;
+    }
+
+    public void setCodePrefix(String codePrefix) {
+        this.codePrefix = codePrefix;
     }
     
     

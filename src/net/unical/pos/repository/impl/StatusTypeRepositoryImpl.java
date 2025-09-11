@@ -157,7 +157,7 @@ public class StatusTypeRepositoryImpl implements StatusTypeRepositoryCustom{
             Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(ex, "Status id fetched error");
         }
-        return -1;
+        return 2;
     }
 
 }

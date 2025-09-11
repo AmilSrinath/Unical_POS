@@ -5,7 +5,10 @@
  */
 package net.unical.pos.service.custom;
 
+import java.util.ArrayList;
+import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.StockDto;
+import net.unical.pos.model.PosInvStock;
 
 /**
  *
@@ -18,5 +21,7 @@ public interface StockServiceCustome {
     public boolean updateTock(StockDto stockDto)throws Exception;
 
     public StockDto searchStock(Integer itemId)throws Exception;
+
+    public ArrayList<StockDto> searchAllItems(Integer mainCategoryId, Integer subCategoryId);
     
 }

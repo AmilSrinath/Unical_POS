@@ -29,6 +29,7 @@ public class MainItemDto {
     Integer status;
     Integer userId;
     Double weight;
+    private Integer registryId;
 
     public MainItemDto() {
     }
@@ -197,5 +198,14 @@ public class MainItemDto {
     public void setWeight(Double weight){
         this.weight = weight;
     }
+
+    public Integer getRegistryId() {
+        return registryId;
+    }
+
+    public void setRegistryId(Integer registryId) {
+        this.registryId = registryId;
+    }
+    
     
 }

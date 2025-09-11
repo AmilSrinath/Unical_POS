@@ -30,6 +30,7 @@ public class PosMainItem {
     private Integer userId;
     private Integer visible;
     private Double weight;
+    private Integer registryId; 
 
     public PosMainItem() {
     }
@@ -207,5 +208,14 @@ public class PosMainItem {
     public void setWeight(Double weight){
         this.weight = weight;
     }
+
+    public Integer getRegistryId() {
+        return registryId;
+    }
+
+    public void setRegistryId(Integer registryId) {
+        this.registryId = registryId;
+    }
+
     
 }

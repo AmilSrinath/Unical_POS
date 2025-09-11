@@ -14,6 +14,7 @@ import net.unical.pos.repository.impl.EmployeeDesignationRepositoryImpl;
 import net.unical.pos.repository.impl.EmployeeManagementRepositoryImpl;
 import net.unical.pos.repository.impl.EmployeeTitleRepositoryImpl;
 import net.unical.pos.repository.impl.GrnRepositoryImpl;
+import net.unical.pos.repository.impl.ItemRegistryRepositoryImpl;
 import net.unical.pos.repository.impl.MainItemCategoryRepositoryImpl;
 import net.unical.pos.repository.impl.MainItemRepositoryImpl;
 import net.unical.pos.repository.impl.MainOrderRepositoryImpl;
@@ -69,7 +70,8 @@ public class RepositoryFactory {
         DELIVERY_ORDER, 
         DISCOUNT, 
         ORDER_TYPE, 
-        STATUS_TYPE
+        STATUS_TYPE,
+        ITEM_REGISTRY
         ;
     }
 
@@ -141,6 +143,8 @@ public class RepositoryFactory {
                 return (T)new OrderTypeRepositoryImpl();
             case STATUS_TYPE:
                 return (T)new StatusTypeRepositoryImpl();
+            case ITEM_REGISTRY:
+                return (T)new ItemRegistryRepositoryImpl();
             default:
                 return null;
         }

@@ -333,6 +333,7 @@ public class ItemList extends javax.swing.JInternalFrame{
         if (selectedRows.length == 0) {
             JOptionPane.showMessageDialog(this, "Select a item");
         } else {
+            System.out.println("Call this");
             int idItem = Integer.parseInt((String) itemListTbl.getValueAt(itemListTbl.getSelectedRow(), 0).toString());
             System.out.println("Id Item : "+idItem);
             MainItem mainItem = new MainItem(true, idItem);

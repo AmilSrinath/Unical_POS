@@ -892,7 +892,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         return deliveryOrdersAmounts;
     }
 
-    public boolean update(DeliveryOrder deliveryOrderDto, Integer orderId, String delivery_id, boolean isOrder) throws ClassNotFoundException, SQLException {
+     public boolean update(DeliveryOrder deliveryOrderDto, Integer orderId, String delivery_id, boolean isOrder) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         boolean success = false;
 
@@ -980,7 +980,7 @@ public class DeliveryOrderRepositoryImpl implements DeliveryOrderRepositoryCusto
         orderStatement.setDouble(2, deliveryOrderDto.getCod());
         orderStatement.setString(3, deliveryOrderDto.getWeight());
         orderStatement.setString(4, deliveryOrderDto.getRemark());
-        orderStatement.setInt(5, 2);
+        orderStatement.setInt(5, deliveryOrderDto.getStatus());
         orderStatement.setInt(6, deliveryOrderDto.getFreeShip());
         orderStatement.setInt(7, 0);
         orderStatement.setInt(8, 1);

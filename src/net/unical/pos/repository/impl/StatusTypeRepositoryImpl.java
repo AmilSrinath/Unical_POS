@@ -8,6 +8,7 @@ package net.unical.pos.repository.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,15 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.unical.pos.configurations.Log;
 import net.unical.pos.dbConnection.DBCon;
+import net.unical.pos.dbConnection.DBConnection;
 import net.unical.pos.model.StatusTypeModel;
+import net.unical.pos.repository.custom.StatusTypeRepositoryCustom;
 
 /**
  *
  * @author Amil Srinath
  */
-public class StatusTypeRepositoryImpl {
+public class StatusTypeRepositoryImpl implements StatusTypeRepositoryCustom{
 
     public void saveStatusType(StatusTypeModel statusTypeModel) {
         String insertQuery = "INSERT INTO pos_status_types "
@@ -135,6 +138,26 @@ public class StatusTypeRepositoryImpl {
         }
 
         return list;
+    }
+
+    @Override
+    public int getStatusIdByStatus(String status) {
+        try {
+            String sql = "SELECT status_id FROM pos_status_types WHERE status_type = ? ";
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1, status);
+            ResultSet rst = pstm.executeQuery();
+            if(rst.next()) {
+                return Integer.parseInt(rst.getString("status_id"));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(StatusTypeRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Status id fetched error");
+        }
+        return -1;
     }
 
 }

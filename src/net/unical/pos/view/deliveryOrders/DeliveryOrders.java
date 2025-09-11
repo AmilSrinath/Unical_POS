@@ -66,6 +66,7 @@ import net.unical.pos.controller.DiscountController;
 import net.unical.pos.controller.MainItemController;
 import net.unical.pos.controller.OrderTypeController;
 import net.unical.pos.controller.PaymentTypesController;
+import net.unical.pos.controller.StatusTypeController;
 import net.unical.pos.controller.UserAccountManagementController;
 import net.unical.pos.dbConnection.DBCon;
 import net.unical.pos.dto.CustomerDto;
@@ -145,6 +146,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private CustomerController customerController;
     private UserAccountManagementController userAccountManagementController;
     CustomerRepositoryImpl customerRepositoryImpl = new CustomerRepositoryImpl();
+    private StatusTypeController statusTypeController;
     TestClass testClass = new TestClass();
 
     DefaultTableModel itemListTableModel = null;
@@ -187,6 +189,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         this.userAccountManagementController = new UserAccountManagementController();
         this.statusTypeRepositoryImpl = new StatusTypeRepositoryImpl();
         this.inquiryRepositoryImpl = new InquiryRepositoryImpl();
+        this.statusTypeController = new StatusTypeController();
 
         itemListTableModel = (DefaultTableModel) itemListTable.getModel();
         orderListTableModel = (DefaultTableModel) deliveryOrdersTable.getModel();
@@ -2208,7 +2211,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "This customer already have order.", "Error", JOptionPane.ERROR_MESSAGE);
                     clearText();
-                    
+
                     customerNameTxt.setText("");
                     addressTxt.setText("");
                     codTxt.setText("");
@@ -2307,6 +2310,15 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 deliveryOrderDto.setRemark(remarkTxt.getText());
                 deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
                 deliveryOrderDto.setOrderDetailsDtos(orderDetailsDtos);
+
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
+                int status_id = statusTypeController.getStatusIdByStatusType(status);
+                if (status_id != -1) {
+                    deliveryOrderDto.setStatus(status_id);
+                } else {
+                    deliveryOrderDto.setStatus(2);
+                }
+
                 if (isOrder) {
                     System.out.println("Come to this");
                     deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));

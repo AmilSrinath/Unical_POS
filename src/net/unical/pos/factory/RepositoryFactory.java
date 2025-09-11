@@ -24,6 +24,7 @@ import net.unical.pos.repository.impl.PaymentTypesRepositoryImpl;
 import net.unical.pos.repository.impl.PrinterTypesRepositoryImpl;
 import net.unical.pos.repository.impl.PurchaseOrderDetailsRepositoryImpl;
 import net.unical.pos.repository.impl.PurchaseOrderRepositoryImpl;
+import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
 import net.unical.pos.repository.impl.StockRepositoryImpl;
 import net.unical.pos.repository.impl.StoreTemplateRepositoryImpl;
 import net.unical.pos.repository.impl.SubItemCategoryRepositoryImpl;
@@ -64,7 +65,12 @@ public class RepositoryFactory {
         EMPLOYEE_MANAGEMENT,
         MAIN_ORDER,
         ORDER,
-        CUSTOMER, DELIVERY_ORDER,DISCOUNT, ORDER_TYPE;
+        CUSTOMER,
+        DELIVERY_ORDER, 
+        DISCOUNT, 
+        ORDER_TYPE, 
+        STATUS_TYPE
+        ;
     }
 
     public RepositoryFactory() {
@@ -133,6 +139,8 @@ public class RepositoryFactory {
                 return (T)new DiscountRepositoryImpl();
             case ORDER_TYPE:
                 return (T)new OrderTypeRepositoryImpl();
+            case STATUS_TYPE:
+                return (T)new StatusTypeRepositoryImpl();
             default:
                 return null;
         }

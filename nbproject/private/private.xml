@@ -12,39 +12,11 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/home/Dashboard.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/model/CancelOrder.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/factory/RepositoryFactory.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/main/MainForm.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/PurchaseOrderList.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/Payment/Payment.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/DeliveryOrderRepositoryImpl.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/api/ApiClient.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/controller/StockController.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/impl/StockServiceImpl.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/dto/CustomerDto.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/Inquiry/ViewInquiry.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/custom/StockServiceCustome.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/CustomerRepositoryImpl.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/employee/CommissionAndBonus.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/GoodReceiveNoteList.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/config.txt</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/custom/StockRepositoryCustom.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/deliveryOrders/PromptTextField.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/StockLocation.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/PurchaseOrder.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/dto/StockDto.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/main/LogInForm.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/employee/CalculateCommissionAndBonus.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/Inquiry/StatusCellRenderer.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/factory/ServiceFactory.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/GoodReceiveNote.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/InquiryRepositoryImpl.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/dto/WebsiteDto/WebsiteOrderDto.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/model/WrapperOrder.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/StockRepositoryImpl.java</file>
-            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/OrderFilter/OrderFilter.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/dbConnection/DBCon.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/repository/impl/DeliveryOrderRepositoryImpl.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/Inquiry/ViewInquiry.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
+            <file>file:/D:/Project/Unical_POS/src/net/unical/pos/view/Inquiry/StatusCellRenderer.java</file>
         </group>
     </open-files>
 </project-private>

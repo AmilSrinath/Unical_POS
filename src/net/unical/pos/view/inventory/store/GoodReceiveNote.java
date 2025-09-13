@@ -121,8 +121,6 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setForeground(new java.awt.Color(255, 255, 255));
 
-        poListTbl.setBackground(new java.awt.Color(255, 255, 255));
-        poListTbl.setForeground(new java.awt.Color(0, 0, 0));
         poListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -203,15 +201,10 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Purchase Order Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Supplier");
 
-        supplierCmb.setBackground(new java.awt.Color(255, 255, 255));
-        supplierCmb.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Date");
 
         currentDatePicker.setForeground(new java.awt.Color(0, 0, 0));
@@ -227,7 +220,6 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         stockCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Stock Name" }));
 
         jLabel9.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Stock Name");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -244,7 +236,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(supplierCmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(currentDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                    .addComponent(currentDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 154, Short.MAX_VALUE)
                     .addComponent(invNoTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(stockCmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(8, Short.MAX_VALUE))
@@ -272,30 +264,25 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Main Category");
 
-        mainItemCategoryCmb.setBackground(new java.awt.Color(255, 255, 255));
-        mainItemCategoryCmb.setForeground(new java.awt.Color(0, 0, 0));
         mainItemCategoryCmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mainItemCategoryCmbActionPerformed(evt);
             }
         });
 
-        subItemCategoryCmb.setBackground(new java.awt.Color(255, 255, 255));
-        subItemCategoryCmb.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Sub Category");
 
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Item Code | Name");
 
-        jXTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jXTextField2.setForeground(new java.awt.Color(0, 0, 0));
+        jXTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXTextField2ActionPerformed(evt);
+            }
+        });
 
         jXButton1.setBackground(new java.awt.Color(0, 102, 153));
         jXButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -511,6 +498,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
@@ -685,6 +673,10 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
     private void grnTblPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_grnTblPropertyChange
         
     }//GEN-LAST:event_grnTblPropertyChange
+
+    private void jXTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jXTextField2ActionPerformed
 
     /**
      * @param args the command line arguments

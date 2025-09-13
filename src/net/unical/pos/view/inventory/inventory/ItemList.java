@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package net.unical.pos.view.inventory.inventory;
+
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -11,29 +12,46 @@ import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import jdk.jpackage.internal.Log;
+import net.unical.pos.controller.MainItemCategoryController;
 import net.unical.pos.controller.MainItemController;
+import net.unical.pos.controller.SubItemCategoryController;
+import net.unical.pos.dto.MainItemCategoryDto;
 import net.unical.pos.dto.MainItemDto;
+import net.unical.pos.dto.SubItemCategoryDto;
 import net.unical.pos.view.home.Dashboard;
+import net.unical.pos.view.inventory.store.PurchaseOrder;
 
 /**
  *
  * @author Sanjuka
  */
-public class ItemList extends javax.swing.JInternalFrame{
+public class ItemList extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ItemList
      */
-    
     Dashboard dashboard;
     private MainItemController newItemController;
-    
+    private MainItemController mainItemController;
+    private MainItemCategoryController mainItemCategoryController;
+    private SubItemCategoryController subItemCategoryController;
+    private ArrayList<Integer> mainCategoryIds = new ArrayList<>();
+    private ArrayList<Integer> subCategoryIds = new ArrayList<>();
+    private Integer mainCategoryId = 0;
+    private Integer subCategoryId = 0;
+
     public ItemList(Dashboard dashboard) throws Exception {
-        initComponents();
-        
-        this.newItemController=new MainItemController();
         this.dashboard = new Dashboard();
+        initComponents();
+
+        this.newItemController = new MainItemController();
+        
+        this.mainItemController = new MainItemController();
+        this.mainItemCategoryController = new MainItemCategoryController();
+        this.subItemCategoryController = new SubItemCategoryController();
         loadAllItems();
+        loadCategoryCombo();
     }
 
     /**
@@ -73,21 +91,35 @@ public class ItemList extends javax.swing.JInternalFrame{
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Direct Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Direct Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Item Code");
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Item Name");
 
-        jXTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jXTextField1.setForeground(new java.awt.Color(0, 0, 0));
+        jXTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXTextField1ActionPerformed(evt);
+            }
+        });
+        jXTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jXTextField1KeyReleased(evt);
+            }
+        });
 
-        jXTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jXTextField2.setForeground(new java.awt.Color(0, 0, 0));
+        jXTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXTextField2ActionPerformed(evt);
+            }
+        });
+        jXTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jXTextField2KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -119,31 +151,40 @@ public class ItemList extends javax.swing.JInternalFrame{
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filter Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filter Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Main Category");
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
         jComboBox1.setBorder(null);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Sub Category");
 
-        jComboBox2.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox2.setForeground(new java.awt.Color(0, 0, 0));
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
         jComboBox2.setBorder(null);
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setBackground(new java.awt.Color(0, 102, 153));
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Search");
         jLabel6.setOpaque(true);
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -182,7 +223,7 @@ public class ItemList extends javax.swing.JInternalFrame{
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Action", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Action", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jLabel7.setBackground(new java.awt.Color(0, 102, 153));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -192,6 +233,9 @@ public class ItemList extends javax.swing.JInternalFrame{
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel7MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel7MousePressed(evt);
             }
         });
 
@@ -239,8 +283,6 @@ public class ItemList extends javax.swing.JInternalFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        itemListTbl.setBackground(new java.awt.Color(255, 255, 255));
-        itemListTbl.setForeground(new java.awt.Color(0, 0, 0));
         itemListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -316,11 +358,17 @@ public class ItemList extends javax.swing.JInternalFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        
+        MainItem newItem = new MainItem(true, 1);
+        System.out.println("J Label..");
+        dashboard.desktopPane.add(newItem);
+        Dimension d = dashboard.desktopPane.getSize();
+        newItem.setLayer(JDesktopPane.POPUP_LAYER);
+        newItem.setSize(d);
+        newItem.setVisible(true);
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        MainItem newItem = new MainItem(false,0);
+        MainItem newItem = new MainItem(false, 0);
         dashboard.desktopPane.add(newItem);
         Dimension d = dashboard.desktopPane.getSize();
         newItem.setLayer(JDesktopPane.POPUP_LAYER);
@@ -329,22 +377,177 @@ public class ItemList extends javax.swing.JInternalFrame{
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int selectedRows[] = itemListTbl.getSelectedRows();
-        if (selectedRows.length == 0) {
-            JOptionPane.showMessageDialog(this, "Select a item");
-        } else {
-            System.out.println("Call this");
-            int idItem = Integer.parseInt((String) itemListTbl.getValueAt(itemListTbl.getSelectedRow(), 0).toString());
-            System.out.println("Id Item : "+idItem);
-            MainItem mainItem = new MainItem(true, idItem);
-            dashboard.desktopPane.add(mainItem);
-            Dimension d = dashboard.desktopPane.getSize();
-            mainItem.setLayer(JDesktopPane.POPUP_LAYER);
-            mainItem.setSize(d);
-            mainItem.setVisible(true);
-
+        int selectedRow = itemListTbl.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an item to edit.");
+            return;
         }
+
+        // Get the actual item ID from the hidden column (column 0)
+        int itemId = (Integer) itemListTbl.getValueAt(selectedRow, 0);
+
+        MainItem editItem = new MainItem(true, itemId);
+        dashboard.desktopPane.add(editItem);
+        Dimension d = dashboard.desktopPane.getSize();
+        editItem.setLayer(JDesktopPane.POPUP_LAYER);
+        editItem.setSize(d);
+        editItem.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jXTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextField1ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jXTextField1ActionPerformed
+
+    private void jXTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jXTextField1KeyReleased
+        // TODO add your handling code here:
+        String text = jXTextField1.getText();
+        String query = "WHERE item_code_prefix  LIKE \'%" + text + "%\'";
+        try {
+            ArrayList<MainItemDto> itemDtos = mainItemController.getAllItems(query);
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+            boolean status;
+            for (MainItemDto dto : itemDtos) {
+                status = dto.getStatus() == 1;
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getMainCategoryId(),
+                    dto.getSubCataegoryId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    status
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error("Items Fetched Error");
+        }
+    }//GEN-LAST:event_jXTextField1KeyReleased
+
+    private void jXTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextField2ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jXTextField2ActionPerformed
+
+    private void jXTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jXTextField2KeyReleased
+        // TODO add your handling code here:
+        String text = jXTextField2.getText();
+        String query = "WHERE item_name LIKE \'%" + text + "%\'";
+        try {
+            ArrayList<MainItemDto> itemDtos = mainItemController.getAllItems(query);
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+            boolean status;
+            for (MainItemDto dto : itemDtos) {
+                status = dto.getStatus() == 1;
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getMainCategoryId(),
+                    dto.getSubCataegoryId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    status
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error("Items Fetched Error");
+        }
+    }//GEN-LAST:event_jXTextField2KeyReleased
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        if (jComboBox1.getSelectedItem().toString().equals("All")) {
+            jComboBox2.setSelectedItem("All");
+            return;
+        }
+        try {
+            System.out.println("Main Cat : " + jComboBox1.getSelectedItem().toString());
+            mainCategoryId = mainItemCategoryController.getItemCode(jComboBox1.getSelectedItem().toString());
+            System.out.println("Main Category ID : " + mainCategoryId);
+            jComboBox2.removeAllItems();
+            String mainCategoryName = jComboBox1.getSelectedItem().toString();
+            ArrayList<SubItemCategoryDto> subItemCategoryDto = subItemCategoryController.searchSubItemCategories(mainCategoryName);
+
+            if (mainCategoryName != null) {
+                if (subItemCategoryDto.size() == 0) {
+                    jComboBox2.addItem(null);
+                } else {
+                    for (SubItemCategoryDto dto : subItemCategoryDto) {
+                        jComboBox2.addItem(dto.getSubCategoryName());
+                        subCategoryIds.add(dto.getSubItemCategoryId());
+                    }
+                }
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (jComboBox2.getSelectedItem() == null) {
+                return;
+            }
+            subCategoryId = subItemCategoryController.getSubItemCode(jComboBox2.getSelectedItem().toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        // TODO add your handling code here:
+        try {
+            String query = "WHERE main_item_category_id = " + mainCategoryId + " AND sub_item_category_id = " + subCategoryId;
+            if (!jXTextField1.getText().trim().equals("")) {
+                String text = jXTextField1.getText();
+                query = query + " AND item_code_prefix LIKE \'%" + text + "%\'";
+            }
+            if (!jXTextField2.getText().trim().equals("")) {
+                String text = jXTextField2.getText();
+                query = query + " AND item_name LIKE \'%" + text + "%\'";
+            }
+            ArrayList<MainItemDto> alltems = mainItemController.getAllItems(query);
+
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+            boolean status;
+            for (MainItemDto dto : alltems) {
+
+                status = dto.getStatus() == 1;
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getMainCategoryId(),
+                    dto.getSubCataegoryId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    status
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(PurchaseOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MousePressed
+        System.out.println("Test Click");
+        MainItem newItem = new MainItem(true,0);
+        System.out.println("J Label..");
+        dashboard.desktopPane.add(newItem);
+        Dimension d =dashboard.desktopPane.getSize();
+        newItem.setLayer(JDesktopPane.POPUP_LAYER);
+        newItem.setSize(d);
+        newItem.setVisible(true);
+    }//GEN-LAST:event_jLabel7MousePressed
 
     /**
      * @param args the command line arguments
@@ -404,20 +607,16 @@ public class ItemList extends javax.swing.JInternalFrame{
 
     private void loadAllItems() {
         try {
-            String quary="WHERE visible=1";
-            boolean status=false;
-            ArrayList<MainItemDto> allCategories=newItemController.getAllItems(quary);
-        
-            DefaultTableModel dtm=(DefaultTableModel) itemListTbl.getModel();
+            String quary = "WHERE visible=1";
+            boolean status = false;
+            ArrayList<MainItemDto> allCategories = newItemController.getAllItems(quary);
+
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
             dtm.setRowCount(0);
-            
-            for(MainItemDto dto: allCategories){
-                if(dto.getStatus()==1){
-                    status=true;
-                }else{
-                    status=false;
-                }
-                Object[] rowData={
+
+            for (MainItemDto dto : allCategories) {
+                status = dto.getStatus() == 1;
+                Object[] rowData = {
                     dto.getItemId(),
                     dto.getMainCategoryId(),
                     dto.getSubCataegoryId(),
@@ -427,7 +626,22 @@ public class ItemList extends javax.swing.JInternalFrame{
                 };
                 dtm.addRow(rowData);
             }
-            
+
+        } catch (Exception ex) {
+            Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadCategoryCombo() {
+        try {
+            String quary = "WHERE status=1 and visible=1";
+            ArrayList<MainItemCategoryDto> allCategories = mainItemCategoryController.getAll(quary);
+
+            for (MainItemCategoryDto dto : allCategories) {
+                jComboBox1.addItem(dto.getCategoryName());
+                mainCategoryIds.add(dto.getMainItemCategeryId());
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
         }

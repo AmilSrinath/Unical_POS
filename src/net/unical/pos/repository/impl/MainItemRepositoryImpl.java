@@ -124,6 +124,7 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
 
     @Override
     public ArrayList<PosMainItem> getAllItems(String quary) throws Exception {
+        System.err.println("SELECT * FROM pos_main_item_tb " + quary);
         ResultSet rst = DBConnection.getInstance().getConnection().prepareStatement("SELECT * FROM pos_main_item_tb " + quary).executeQuery();
         ArrayList<PosMainItem> posMainItems = new ArrayList<>();
         while (rst.next()) {

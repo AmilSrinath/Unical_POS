@@ -1,4 +1,3 @@
-
 CREATE DATABASE unical_pos_test;
 
 use unical_pos_test;

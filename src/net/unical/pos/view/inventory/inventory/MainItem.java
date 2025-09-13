@@ -48,14 +48,13 @@ public class MainItem extends javax.swing.JInternalFrame {
     /**
      * Creates new form MainItem
      */
-    
     String destFileName = ""; // full local file path
     String selectedFilePath = ""; // only server folder stracture file path
     String absoluteFilePath = "";
     boolean isLogoImageChanged = false;
-    
+
     Dashboard dashboard;
-    private boolean update=false;
+    private boolean update = false;
     private MainItemCategoryController mainItemCategoryController;
     private SubItemCategoryController subItemCategoryController;
     private MainItemController newItemController;
@@ -64,54 +63,56 @@ public class MainItem extends javax.swing.JInternalFrame {
     private UnitTypesController unitTypesController;
     private ItemRegistryController itemRegistryController;
     private ConfigTimer configTimer;
-    
-    private ArrayList<Integer> mainCategoryIds=new ArrayList<>();
-    private ArrayList<Integer> subCategoryIds=new ArrayList<>();
-    private ArrayList<Integer> mainCategoryTamplateIds=new ArrayList<>();
-    private ArrayList<Integer> subCategoryTamplateIds=new ArrayList<>();
-    private ArrayList<Integer> unitTypeIds=new ArrayList<>();
-    private ArrayList<Integer> printerTypeIds=new ArrayList<>();
-    ArrayList<StoreTemplateDto> storeTemplateDtos=new ArrayList<>();
-    
+
+    private ArrayList<Integer> mainCategoryIds = new ArrayList<>();
+    private ArrayList<Integer> subCategoryIds = new ArrayList<>();
+    private ArrayList<Integer> mainCategoryTamplateIds = new ArrayList<>();
+    private ArrayList<Integer> subCategoryTamplateIds = new ArrayList<>();
+    private ArrayList<Integer> unitTypeIds = new ArrayList<>();
+    private ArrayList<Integer> printerTypeIds = new ArrayList<>();
+    ArrayList<StoreTemplateDto> storeTemplateDtos = new ArrayList<>();
+
     DefaultTableModel tableModel = null;
-    
-    boolean isEditItem=false;
-    int idItem=0;
-    
-    public MainItem(boolean isEditItem,int idItem) {
+
+    boolean isEditItem = false;
+    int idItem = 0;
+
+    public MainItem(boolean isEditItem, int idItem) {
+        super("Main Item", true, true, true, true); // title, closable, resizable, maximizable, iconifiable
         initComponents();
-        this.dashboard=dashboard;
-        this.mainItemCategoryController=new MainItemCategoryController();
-        this.subItemCategoryController=new SubItemCategoryController();
-        this.newItemController=new MainItemController();
-        this.storeTemplateController=new StoreTemplateController();
-        this.unitTypesController=new UnitTypesController();
-        this.printerTypesController=new PrinterTypesController();
+        System.out.println("Init Components");
+
+        this.dashboard = dashboard;
+        this.isEditItem = isEditItem;
+        this.idItem = idItem;
+
+        this.mainItemCategoryController = new MainItemCategoryController();
+        this.subItemCategoryController = new SubItemCategoryController();
+        this.newItemController = new MainItemController();
+        this.storeTemplateController = new StoreTemplateController();
+        this.unitTypesController = new UnitTypesController();
+        this.printerTypesController = new PrinterTypesController();
         this.itemRegistryController = new ItemRegistryController();
-        this.configTimer=new ConfigTimer();
-        
-        this.isEditItem=isEditItem;
-        this.idItem=idItem;
-        
+        this.configTimer = new ConfigTimer();
+
         tableModel = (DefaultTableModel) templateItemsTbl.getModel();
-        
+
         loadMainCategory();
         loadUnitTypes();
         loadPrinterTypes();
-        loadAllItems();
         loadMainCategoryTamplate();
-        
-        templateItemsTbl.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if(templateItemsTbl.getSelectedRow()==-1){
-                    update=false;
-                    return;
-                }
-                
-                qtyTxt.setText(templateItemsTbl.getValueAt(templateItemsTbl.getSelectedRow(), 3).toString());
+        loadAllItems();
+
+        if (isEditItem && idItem > 0) {
+            loadItemForEdit(idItem);
+        }
+
+        templateItemsTbl.getSelectionModel().addListSelectionListener(e -> {
+            if (templateItemsTbl.getSelectedRow() == -1) {
+                update = false;
+                return;
             }
-            
+            qtyTxt.setText(templateItemsTbl.getValueAt(templateItemsTbl.getSelectedRow(), 3).toString());
         });
     }
 
@@ -199,7 +200,7 @@ public class MainItem extends javax.swing.JInternalFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Item Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jLabel16.setText("Item Code");
 
@@ -468,10 +469,10 @@ public class MainItem extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add / Edit Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add / Edit Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 102, 153))); // NOI18N
 
         jLabel1.setText("Main Category");
 
@@ -578,6 +579,12 @@ public class MainItem extends javax.swing.JInternalFrame {
 
         jLabel19.setText("Weight");
 
+        sellingPriceTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellingPriceTxtActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -602,14 +609,13 @@ public class MainItem extends javax.swing.JInternalFrame {
                         .addContainerGap())
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(weightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
@@ -632,15 +638,11 @@ public class MainItem extends javax.swing.JInternalFrame {
                             .addComponent(mainItemCategoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(prefixTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(printerTypeCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(iconLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(iconLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(statusBox, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(grnBox, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -753,29 +755,28 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
 
-        Integer grnStatus=0;
-        Integer activeStatus=0;
-        Integer sellingItem=0;
-        int mainCategoryIndex=mainItemCategoryCmb.getSelectedIndex();
-        int subCategoryIndex=subItemCategoryCmb.getSelectedIndex();
-                
-        if(grnBox.isSelected()){
-            grnStatus=1;
+        Integer grnStatus = 0;
+        Integer activeStatus = 0;
+        Integer sellingItem = 0;
+        int mainCategoryIndex = mainItemCategoryCmb.getSelectedIndex();
+        int subCategoryIndex = subItemCategoryCmb.getSelectedIndex();
+
+        if (grnBox.isSelected()) {
+            grnStatus = 1;
         }
-        if(statusBox.isSelected()){
-            activeStatus=1;
+        if (statusBox.isSelected()) {
+            activeStatus = 1;
         }
-        if(sellingItemBox.isSelected()){
-            sellingItem=1;
+        if (sellingItemBox.isSelected()) {
+            sellingItem = 1;
         }
-        
-        
-        MainItemDto itemDto=new MainItemDto(Integer.parseInt(itemCodeTxt.getText()),
-                Integer.parseInt(barCodeTxt.getText()+""),
-                mainCategoryIds.get(mainCategoryIndex), 
+
+        MainItemDto itemDto = new MainItemDto(Integer.parseInt(itemCodeTxt.getText()),
+                Integer.parseInt(barCodeTxt.getText() + ""),
+                mainCategoryIds.get(mainCategoryIndex),
                 subCategoryIds.get(subCategoryIndex),
                 prefixTxt.getText(),
-                prefixTxt.getText()+itemCodeTxt.getText(),
+                prefixTxt.getText() + itemCodeTxt.getText(),
                 0.00, /*discount*/
                 nameTxt.getText(),
                 unitTypeCmb.getSelectedItem().toString(),
@@ -789,18 +790,55 @@ public class MainItem extends javax.swing.JInternalFrame {
                 dashboard.CREATED_USER_ID,
                 Double.parseDouble(weightTxt.getText())
         );
-        
-        
 
-        if(!update){
+        // Check if this is an edit operation
+        if (isEditItem && idItem > 0) {
             try {
-                System.out.println("Is save one");
-                boolean result=newItemController.saveItem(itemDto);
+                System.out.println("Is update operation for item ID: " + idItem);
+
+                // Set the item ID for update
+                itemDto.setItemId(idItem);
+
+                boolean result = newItemController.updateItem(itemDto);
                 if (result) {
-                    if(!storeTemplateDtos.isEmpty()){
-                        for(StoreTemplateDto dto:storeTemplateDtos){
+                    JOptionPane.showMessageDialog(this, "Item updated successfully!");
+
+                    // Handle store templates if any
+                    if (!storeTemplateDtos.isEmpty()) {
+                        for (StoreTemplateDto dto : storeTemplateDtos) {
                             try {
-                                StoreTemplateDto storeTemplateDto=new StoreTemplateDto(0,
+                                StoreTemplateDto storeTemplateDto = new StoreTemplateDto(0,
+                                        idItem, // Use the actual item ID
+                                        dto.getSubItemId(),
+                                        dto.getTemplateName(),
+                                        dto.getQty(),
+                                        dto.getUserId(),
+                                        1
+                                );
+                                storeTemplateController.saveTemplate(storeTemplateDto);
+                            } catch (Exception ex) {
+                                Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to update item!");
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error updating item: " + ex.getMessage());
+            }
+        } // This is a new item save operation
+        else {
+            try {
+                System.out.println("Is save new item operation");
+                boolean result = newItemController.saveItem(itemDto);
+                if (result) {
+                    // Handle store templates if any
+                    if (!storeTemplateDtos.isEmpty()) {
+                        for (StoreTemplateDto dto : storeTemplateDtos) {
+                            try {
+                                StoreTemplateDto storeTemplateDto = new StoreTemplateDto(0,
                                         Integer.parseInt(itemCodeTxt.getText()),
                                         dto.getSubItemId(),
                                         dto.getTemplateName(),
@@ -815,47 +853,38 @@ public class MainItem extends javax.swing.JInternalFrame {
                             }
                         }
                     }
-                    JOptionPane.showMessageDialog(this, "Successfull!");
+                    JOptionPane.showMessageDialog(this, "Item saved successfully!");
                 } else {
-                    //                   JOptionPane.showMessageDialog(this, "Failed to add the Category");
+                    JOptionPane.showMessageDialog(this, "Failed to save item!");
                 }
             } catch (Exception ex) {
                 Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else{
-            try {
-                if(ItemTbl.getSelectedRow()==-1){
-                    return;
-                }
-
-                itemDto.setItemId((int) ItemTbl.getValueAt(ItemTbl.getSelectedRow(), 0));
-                boolean result=newItemController.updateItem(itemDto);
-                if (result) {
-                    JOptionPane.showMessageDialog(this, "Successfull!");
-                } else {
-                    //                     JOptionPane.showMessageDialog(this, "Update Fail");
-                }
-
-            } catch (Exception ex) {
-                Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error saving item: " + ex.getMessage());
             }
         }
-                loadAllItems();
+
+        // Refresh the items table
+        loadAllItems();
+
+        // Clear form if it was a new item save (optional)
+        if (!isEditItem) {
+            clearForm();
+        }
     }//GEN-LAST:event_saveBtnActionPerformed
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
         FileFilter imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
         fileChooser.addChoosableFileFilter(imageFilter);
-        
+
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
-            
+
             File file = fileChooser.getSelectedFile();
 
             String file_name = file.toString();
 
             Date d = new Date();
-            
+
             // select file type 
             if (file_name.endsWith(".gif")) {
                 destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + ".gif";
@@ -872,14 +901,14 @@ public class MainItem extends javax.swing.JInternalFrame {
             } else {
                 destFileName = d.getTime() + Dashboard.CREATED_USER_ID + Dashboard.systemMAC + file_name.substring(file_name.length() - 5, file_name.length());
             }
-            
+
             selectedFilePath = "" + destFileName;
 
             destFileName = Dashboard.configValues.get(Configurations.SE_IMAGE_PATH.getConfigValue()) + "" + destFileName;
             File source = new File(file_name);
             File dest = new File(destFileName);
             absoluteFilePath = dest.getAbsolutePath();
-            
+
             try {
                 //FileUtils.copyDirectory(source, dest);
                 FileUtils.copyFile(source, dest);
@@ -908,20 +937,20 @@ public class MainItem extends javax.swing.JInternalFrame {
         try {
             subItemCategoryCmb.removeAllItems();
             subCategoryIds.removeAll(subCategoryIds);
-            String mainCategoryName=mainItemCategoryCmb.getSelectedItem().toString();
-            ArrayList<SubItemCategoryDto> subItemCategoryDto=subItemCategoryController.searchSubItemCategories(mainCategoryName);
-            
-            if(mainCategoryName!=null){
-                if(subItemCategoryDto.size()==0){
+            String mainCategoryName = mainItemCategoryCmb.getSelectedItem().toString();
+            ArrayList<SubItemCategoryDto> subItemCategoryDto = subItemCategoryController.searchSubItemCategories(mainCategoryName);
+
+            if (mainCategoryName != null) {
+                if (subItemCategoryDto.size() == 0) {
                     subItemCategoryCmb.addItem(null);
-                    
-                }else{
-                    for(SubItemCategoryDto dto : subItemCategoryDto){
+
+                } else {
+                    for (SubItemCategoryDto dto : subItemCategoryDto) {
                         subItemCategoryCmb.addItem(dto.getSubCategoryName());
                         subCategoryIds.add(dto.getSubItemCategoryId());
                     }
                 }
-                
+
             }
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -938,20 +967,20 @@ public class MainItem extends javax.swing.JInternalFrame {
         try {
             subCategoryCmb.removeAllItems();
             subCategoryTamplateIds.removeAll(subCategoryTamplateIds);
-            String mainCategoryName=mainCategoryCmb.getSelectedItem().toString();
-            ArrayList<SubItemCategoryDto> subItemCategoryDto=subItemCategoryController.searchSubItemCategories(mainCategoryName);
-            
-            if(mainCategoryName!=null){
-                if(subItemCategoryDto.size()==0){
+            String mainCategoryName = mainCategoryCmb.getSelectedItem().toString();
+            ArrayList<SubItemCategoryDto> subItemCategoryDto = subItemCategoryController.searchSubItemCategories(mainCategoryName);
+
+            if (mainCategoryName != null) {
+                if (subItemCategoryDto.size() == 0) {
                     subCategoryCmb.addItem(null);
-                    
-                }else{
-                    for(SubItemCategoryDto dto : subItemCategoryDto){
+
+                } else {
+                    for (SubItemCategoryDto dto : subItemCategoryDto) {
                         subCategoryCmb.addItem(dto.getSubCategoryName());
                         subCategoryTamplateIds.add(dto.getSubItemCategoryId());
                     }
                 }
-                
+
             }
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -964,19 +993,19 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void jXButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton7ActionPerformed
         try {
-            Integer mainCategoryId=mainCategoryTamplateIds.get(mainCategoryCmb.getSelectedIndex());
-            System.out.println("Index : "+subCategoryCmb.getSelectedIndex());
-            Integer subCategoryId=subCategoryTamplateIds.get(subCategoryCmb.getSelectedIndex());
-            for(Integer i:subCategoryTamplateIds){
-                System.out.println("ID : "+i);
+            Integer mainCategoryId = mainCategoryTamplateIds.get(mainCategoryCmb.getSelectedIndex());
+            System.out.println("Index : " + subCategoryCmb.getSelectedIndex());
+            Integer subCategoryId = subCategoryTamplateIds.get(subCategoryCmb.getSelectedIndex());
+            for (Integer i : subCategoryTamplateIds) {
+                System.out.println("ID : " + i);
             }
             System.out.println(subCategoryTamplateIds.get(1));
-            ArrayList<MainItemDto> mainItemDtos=newItemController.searchAllItems(mainCategoryId , subCategoryId);
-            DefaultTableModel dtm=(DefaultTableModel) templateSingleItemTbl.getModel();
+            ArrayList<MainItemDto> mainItemDtos = newItemController.searchAllItems(mainCategoryId, subCategoryId);
+            DefaultTableModel dtm = (DefaultTableModel) templateSingleItemTbl.getModel();
             dtm.setRowCount(0);
-            
-            for(MainItemDto dto: mainItemDtos){
-                Object[] rowData={
+
+            for (MainItemDto dto : mainItemDtos) {
+                Object[] rowData = {
                     dto.getItemId(),
                     dto.getCodePrefix(),
                     dto.getItemName(),
@@ -991,18 +1020,18 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
         int tableRows = templateSingleItemTbl.getRowCount();
-        Double qty=0.00;
+        Double qty = 0.00;
         for (int i = 0; tableRows > i; i++) {
             try {
                 boolean isSelected = Boolean.valueOf(String.valueOf(templateSingleItemTbl.getValueAt(i, 4)));
-                Integer itemCode=(Integer) templateSingleItemTbl.getValueAt(i, 0);
-                
-                ArrayList<MainItemDto> list=newItemController.searchAllItems(itemCode);
-                
-                if(isSelected){
-                    for(MainItemDto dto: list){
-                        Object singleItemSelected[] = {itemCode,templateSingleItemTbl.getValueAt(i, 1),templateSingleItemTbl.getValueAt(i, 2), qty,dto.getUnitPrice()};
-                    
+                Integer itemCode = (Integer) templateSingleItemTbl.getValueAt(i, 0);
+
+                ArrayList<MainItemDto> list = newItemController.searchAllItems(itemCode);
+
+                if (isSelected) {
+                    for (MainItemDto dto : list) {
+                        Object singleItemSelected[] = {itemCode, templateSingleItemTbl.getValueAt(i, 1), templateSingleItemTbl.getValueAt(i, 2), qty, dto.getUnitPrice()};
+
                         tableModel.insertRow(0, singleItemSelected);
                     }
                 }
@@ -1013,38 +1042,42 @@ public class MainItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jXButton2ActionPerformed
 
     private void jXButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton8ActionPerformed
-        Double qty=Double.parseDouble(qtyTxt.getText());
-        int row=templateItemsTbl.getSelectedRow();
+        Double qty = Double.parseDouble(qtyTxt.getText());
+        int row = templateItemsTbl.getSelectedRow();
         tableModel.setValueAt(qty, row, 3);
     }//GEN-LAST:event_jXButton8ActionPerformed
 
     private void jXButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton6ActionPerformed
-        
+
         int tableRows = templateItemsTbl.getRowCount();
-        
+
         for (int i = 0; tableRows > i; i++) {
-            StoreTemplateDto storeTemplateDto=new StoreTemplateDto(0, 
-                    0, 
-                    (Integer) templateItemsTbl.getValueAt(i, 0), 
-                    templateNameTxt.getText(), 
-                    (Double) templateItemsTbl.getValueAt(i, 3), 
-                    dashboard.CREATED_USER_ID, 
+            StoreTemplateDto storeTemplateDto = new StoreTemplateDto(0,
+                    0,
+                    (Integer) templateItemsTbl.getValueAt(i, 0),
+                    templateNameTxt.getText(),
+                    (Double) templateItemsTbl.getValueAt(i, 3),
+                    dashboard.CREATED_USER_ID,
                     1
             );
-            
+
             storeTemplateDtos.add(storeTemplateDto);
         }
-        
+
         storeTamplate.dispose();
     }//GEN-LAST:event_jXButton6ActionPerformed
 
     private void subCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subCategoryCmbActionPerformed
-        
+
     }//GEN-LAST:event_subCategoryCmbActionPerformed
 
     private void templateNameTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_templateNameTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_templateNameTxtActionPerformed
+
+    private void sellingPriceTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingPriceTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sellingPriceTxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1147,18 +1180,18 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void loadAllItems() {
         try {
-            boolean status=false;
-            String quary="WHERE visible=1 and status=1";
-            ArrayList<MainItemDto> allCategories=newItemController.getAllItems(quary);
-        
-            DefaultTableModel dtm=(DefaultTableModel) ItemTbl.getModel();
+            boolean status = false;
+            String quary = "WHERE visible=1 and status=1";
+            ArrayList<MainItemDto> allCategories = newItemController.getAllItems(quary);
+
+            DefaultTableModel dtm = (DefaultTableModel) ItemTbl.getModel();
             dtm.setRowCount(0);
-            
-            for(MainItemDto dto: allCategories){
-                if(dto.getStatus()==1){
-                    status=true;
+
+            for (MainItemDto dto : allCategories) {
+                if (dto.getStatus() == 1) {
+                    status = true;
                 }
-                Object[] rowData={
+                Object[] rowData = {
                     dto.getItemId(),
                     dto.getItemName(),
                     dto.getUnitPrice(),
@@ -1167,7 +1200,7 @@ public class MainItem extends javax.swing.JInternalFrame {
                 };
                 dtm.addRow(rowData);
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1175,10 +1208,10 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void loadMainCategory() {
         try {
-            String quary="WHERE status=1 and visible=1";
-            List<MainItemCategoryDto> allCategories=mainItemCategoryController.getAll(quary);
-        
-            for(MainItemCategoryDto dto: allCategories){
+            String quary = "WHERE status=1 and visible=1";
+            List<MainItemCategoryDto> allCategories = mainItemCategoryController.getAll(quary);
+
+            for (MainItemCategoryDto dto : allCategories) {
                 mainItemCategoryCmb.addItem(dto.getCategoryName());
                 mainCategoryIds.add(dto.getMainItemCategeryId());
             }
@@ -1186,13 +1219,13 @@ public class MainItem extends javax.swing.JInternalFrame {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void loadMainCategoryTamplate() {
         try {
-            String quary="WHERE status=1 and visible=1";
-            List<MainItemCategoryDto> allCategories=mainItemCategoryController.getAll(quary);
-        
-            for(MainItemCategoryDto dto: allCategories){
+            String quary = "WHERE status=1 and visible=1";
+            List<MainItemCategoryDto> allCategories = mainItemCategoryController.getAll(quary);
+
+            for (MainItemCategoryDto dto : allCategories) {
                 mainCategoryCmb.addItem(dto.getCategoryName());
                 mainCategoryTamplateIds.add(dto.getMainItemCategeryId());
             }
@@ -1203,10 +1236,10 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void loadPrinterTypes() {
         try {
-            String quary="WHERE status=1 and visible=1";
-            List<MainPrinterTypesDto> mainPrinterTypesDtos=printerTypesController.getPrinterTypes(quary);
-        
-            for(MainPrinterTypesDto dto: mainPrinterTypesDtos){
+            String quary = "WHERE status=1 and visible=1";
+            List<MainPrinterTypesDto> mainPrinterTypesDtos = printerTypesController.getPrinterTypes(quary);
+
+            for (MainPrinterTypesDto dto : mainPrinterTypesDtos) {
                 printerTypeCmb.addItem(dto.getName());
                 printerTypeIds.add(dto.getPrinterTypeId());
             }
@@ -1217,15 +1250,74 @@ public class MainItem extends javax.swing.JInternalFrame {
 
     private void loadUnitTypes() {
         try {
-            String quary="WHERE status=1 and visible=1";
-            List<ItemUnitTypeDto> itemUnitTypeDtos=unitTypesController.getUnitTypes(quary);
-        
-            for(ItemUnitTypeDto dto: itemUnitTypeDtos){
+            String quary = "WHERE status=1 and visible=1";
+            List<ItemUnitTypeDto> itemUnitTypeDtos = unitTypesController.getUnitTypes(quary);
+
+            for (ItemUnitTypeDto dto : itemUnitTypeDtos) {
                 unitTypeCmb.addItem(dto.getName());
                 unitTypeIds.add(dto.getUnitTypeId());
             }
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void loadItemForEdit(int itemId) {
+        try {
+            // Query to get the specific item
+            String query = "WHERE item_id = " + itemId;
+            ArrayList<MainItemDto> items = newItemController.getAllItems(query);
+
+            if (!items.isEmpty()) {
+                MainItemDto item = items.get(0);
+
+                // Populate form fields
+                prefixTxt.setText(item.getCodePrefix());
+                itemCodeTxt.setText(String.valueOf(item.getItemId())); // or however you store item code
+                nameTxt.setText(item.getItemName());
+                sellingPriceTxt.setText(String.valueOf(item.getUnitPrice()));
+                weightTxt.setText(String.valueOf(item.getWeight()));
+
+                // Set combo box selections
+                // You'll need to find and set the correct indexes based on the item's data
+                // Set checkboxes
+                statusBox.setSelected(item.getStatus() == 1);
+                grnBox.setSelected(item.getGrnStatus() == 1);
+                sellingItemBox.setSelected(item.getSellingItem() == 1);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearForm() {
+        prefixTxt.setText("");
+        itemCodeTxt.setText("");
+        barCodeTxt.setText("");
+        nameTxt.setText("");
+        sellingPriceTxt.setText("");
+        weightTxt.setText("");
+        selectedFilePath = "";
+        iconLbl.setIcon(null);
+        iconLbl.setText("Image");
+
+        // Reset combo boxes to first item
+        if (mainItemCategoryCmb.getItemCount() > 0) {
+            mainItemCategoryCmb.setSelectedIndex(0);
+        }
+        if (subItemCategoryCmb.getItemCount() > 0) {
+            subItemCategoryCmb.setSelectedIndex(0);
+        }
+        if (unitTypeCmb.getItemCount() > 0) {
+            unitTypeCmb.setSelectedIndex(0);
+        }
+        if (printerTypeCmb.getItemCount() > 0) {
+            printerTypeCmb.setSelectedIndex(0);
+        }
+
+        // Reset checkboxes to default
+        statusBox.setSelected(true);
+        grnBox.setSelected(true);
+        sellingItemBox.setSelected(true);
     }
 }

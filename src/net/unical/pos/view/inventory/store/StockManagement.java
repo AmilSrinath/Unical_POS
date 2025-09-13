@@ -21,6 +21,7 @@ import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.StockDto;
 import net.unical.pos.dto.SubItemCategoryDto;
 import net.unical.pos.view.home.Dashboard;
+import net.unical.pos.view.inventory.inventory.ItemList;
 import net.unical.pos.view.inventory.inventory.MainItem;
 
 /**
@@ -96,7 +97,7 @@ public class StockManagement extends javax.swing.JInternalFrame {
         nameTxt = new org.jdesktop.swingx.JXTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         itemListTbl = new javax.swing.JTable();
-        cmbItemCode = new javax.swing.JComboBox<>();
+        txtItemCode = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -183,6 +184,12 @@ public class StockManagement extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Item Name");
 
+        nameTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameTxtKeyReleased(evt);
+            }
+        });
+
         itemListTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -206,9 +213,14 @@ public class StockManagement extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(itemListTbl);
 
-        cmbItemCode.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtItemCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtItemCodeActionPerformed(evt);
+            }
+        });
+        txtItemCode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                cmbItemCodeKeyReleased(evt);
+                txtItemCodeKeyReleased(evt);
             }
         });
 
@@ -221,11 +233,11 @@ public class StockManagement extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtItemCode))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -239,7 +251,7 @@ public class StockManagement extends javax.swing.JInternalFrame {
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -466,10 +478,61 @@ public class StockManagement extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void cmbItemCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbItemCodeKeyReleased
+    private void txtItemCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtItemCodeActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_cmbItemCodeKeyReleased
+    }//GEN-LAST:event_txtItemCodeActionPerformed
+
+    private void txtItemCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtItemCodeKeyReleased
+        // TODO add your handling code here:
+         String text = txtItemCode.getText();
+        String query = "WHERE item_code_prefix LIKE \'%" + text + "%\'";
+        try {
+            ArrayList<MainItemDto> itemDtos = mainItemController.getAllItems(query);
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+            for (MainItemDto dto : itemDtos) {
+                System.out.println("item_id " + dto.getItemId());
+                
+                
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    10
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
+            jdk.jpackage.internal.Log.error("Items Fetched Error");
+        }
+    }//GEN-LAST:event_txtItemCodeKeyReleased
+
+    private void nameTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameTxtKeyReleased
+        // TODO add your handling code here:
+        String text = nameTxt.getText();
+        String query = "WHERE item_name LIKE \'%" + text + "%\'";
+        try {
+            ArrayList<MainItemDto> itemDtos = mainItemController.getAllItems(query);
+            DefaultTableModel dtm = (DefaultTableModel) itemListTbl.getModel();
+            dtm.setRowCount(0);
+            for (MainItemDto dto : itemDtos) {
+                
+                Object[] rowData = {
+                    dto.getItemId(),
+                    dto.getCodePrefix(),
+                    dto.getItemName(),
+                    10
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
+            jdk.jpackage.internal.Log.error("Items Fetched Error");
+        }
+    }//GEN-LAST:event_nameTxtKeyReleased
 
     /**
      * @param args the command line arguments
@@ -512,7 +575,6 @@ public class StockManagement extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnMin;
     private org.jdesktop.swingx.JXButton btnSearch;
-    private javax.swing.JComboBox<String> cmbItemCode;
     private javax.swing.JTable itemListTbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -525,6 +587,7 @@ public class StockManagement extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> mainItemCategoryCmb;
     private org.jdesktop.swingx.JXTextField nameTxt;
     private javax.swing.JComboBox<String> subItemCategoryCmb;
+    private javax.swing.JTextField txtItemCode;
     private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
 

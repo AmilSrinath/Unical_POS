@@ -873,6 +873,9 @@
                   </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTextField" name="sellingPriceTxt">
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sellingPriceTxtActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

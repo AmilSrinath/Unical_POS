@@ -1,8 +1,8 @@
 server_ip=localhost
 server_port=3306
 server_user=root
-server_pw=95334238Sd$
-server_pwd=pos$dS83243359
+server_pw=12345678
+server_pwd=pos87654321
 server_db=petal_pink_pos
 
 #Delivery_Fee

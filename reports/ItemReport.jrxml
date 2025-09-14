@@ -37,6 +37,7 @@ JOIN (
         pos_main_order_details_tb od
     JOIN
         pos_main_item_tb i ON od.item_id = i.item_id
+    WHERE od.status = 1
     GROUP BY
         od.order_id, i.item_id, i.item_name
 ) AS item ON o.order_id = item.order_id

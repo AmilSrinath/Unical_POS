@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import jdk.jpackage.internal.Log;
 import net.unical.pos.controller.MainItemCategoryController;
 import net.unical.pos.controller.MainItemController;
 import net.unical.pos.controller.SubItemCategoryController;
 import net.unical.pos.dto.MainItemCategoryDto;
 import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.SubItemCategoryDto;
+import net.unical.pos.log.Log;
 import net.unical.pos.view.home.Dashboard;
 import net.unical.pos.view.inventory.store.PurchaseOrder;
 
@@ -42,7 +42,7 @@ public class ItemList extends javax.swing.JInternalFrame {
     private Integer subCategoryId = 0;
 
     public ItemList(Dashboard dashboard) throws Exception {
-        this.dashboard = new Dashboard();
+        this.dashboard = dashboard;
         initComponents();
 
         this.newItemController = new MainItemController();
@@ -423,7 +423,7 @@ public class ItemList extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error("Items Fetched Error");
+            Log.error(ItemList.class,"Items Fetched Error");
         }
     }//GEN-LAST:event_jXTextField1KeyReleased
 
@@ -456,7 +456,7 @@ public class ItemList extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
-            Log.error("Items Fetched Error");
+            Log.error(ItemList.class, "Items Fetched Error");
         }
     }//GEN-LAST:event_jXTextField2KeyReleased
 

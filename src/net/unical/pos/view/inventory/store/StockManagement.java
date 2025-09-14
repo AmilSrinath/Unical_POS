@@ -505,7 +505,7 @@ public class StockManagement extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
-            jdk.jpackage.internal.Log.error("Items Fetched Error");
+            Log.error(ItemList.class, ex);
         }
     }//GEN-LAST:event_txtItemCodeKeyReleased
 
@@ -530,7 +530,7 @@ public class StockManagement extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             Logger.getLogger(ItemList.class.getName()).log(Level.SEVERE, null, ex);
-            jdk.jpackage.internal.Log.error("Items Fetched Error");
+            Log.error(ItemList.class, ex);
         }
     }//GEN-LAST:event_nameTxtKeyReleased
 

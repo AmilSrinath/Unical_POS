@@ -5,6 +5,8 @@
  */
 package net.unical.pos.view.inventory.store;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import net.unical.pos.controller.MainItemCategoryController;
 import net.unical.pos.controller.MainItemController;
 import net.unical.pos.controller.PurchaseOrderController;
 import net.unical.pos.controller.StockController;
+import net.unical.pos.controller.StockLocationController;
 import net.unical.pos.controller.SubItemCategoryController;
 import net.unical.pos.controller.SupplierController;
 import net.unical.pos.dto.GoodReceivedNoteDto;
@@ -24,8 +27,10 @@ import net.unical.pos.dto.MainItemDto;
 import net.unical.pos.dto.PurchaseOrderDetailsDto;
 import net.unical.pos.dto.PurchaseOrderDto;
 import net.unical.pos.dto.StockDto;
+import net.unical.pos.dto.StockLocationDto;
 import net.unical.pos.dto.SubItemCategoryDto;
 import net.unical.pos.dto.SupplierDto;
+import net.unical.pos.log.Log;
 import net.unical.pos.view.home.Dashboard;
 
 /**
@@ -41,30 +46,34 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
     private MainItemController mainItemController;
     private StockController stockController;
     private GrnController grnController;
-    
-    private ArrayList<Integer> supplierIds=new ArrayList<>();
-    private ArrayList<Integer> mainCategoryIds=new ArrayList<>();
-    private ArrayList<Integer> subCategoryIds=new ArrayList<>();
-    
+    private StockLocationController stockLocationController;
+
+    private ArrayList<Integer> supplierIds = new ArrayList<>();
+    private ArrayList<Integer> mainCategoryIds = new ArrayList<>();
+    private ArrayList<Integer> subCategoryIds = new ArrayList<>();
+    private boolean isItem = false;
+
     Dashboard dashboard;
+
     /**
      * Creates new form GRN
      */
     public GoodReceiveNote(Dashboard dashboard) {
         initComponents();
-        this.dashboard=dashboard;
-        
-        this.supplierController=new SupplierController();
-        this.mainItemCategoryController=new MainItemCategoryController();
-        this.subItemCategoryController=new SubItemCategoryController();
-        this.purchaseOrderController=new PurchaseOrderController();
-        this.mainItemController=new MainItemController();
-        this.stockController=new StockController();
-        this.grnController=new GrnController();
-        
+        this.dashboard = dashboard;
+
+        this.supplierController = new SupplierController();
+        this.mainItemCategoryController = new MainItemCategoryController();
+        this.subItemCategoryController = new SubItemCategoryController();
+        this.purchaseOrderController = new PurchaseOrderController();
+        this.mainItemController = new MainItemController();
+        this.stockController = new StockController();
+        this.grnController = new GrnController();
+        this.stockLocationController = new StockLocationController();
+
         loadAllSuppliers();
         loadMainCategory();
-        
+        loadStockCombo();
         currentDatePicker.setDate(new Date());
     }
 
@@ -81,7 +90,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         poListTbl = new org.jdesktop.swingx.JXTable();
-        jXButton5 = new org.jdesktop.swingx.JXButton();
+        btnSelect = new org.jdesktop.swingx.JXButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -98,15 +107,15 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         subItemCategoryCmb = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jXTextField2 = new org.jdesktop.swingx.JXTextField();
-        jXButton1 = new org.jdesktop.swingx.JXButton();
-        jXButton2 = new org.jdesktop.swingx.JXButton();
+        txtItemSearch = new org.jdesktop.swingx.JXTextField();
+        btnSearch = new org.jdesktop.swingx.JXButton();
+        btnReset = new org.jdesktop.swingx.JXButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         subTotalTxt = new javax.swing.JLabel();
         grandTotalTxt = new javax.swing.JLabel();
         addToStockBtn = new org.jdesktop.swingx.JXButton();
-        jXButton3 = new org.jdesktop.swingx.JXButton();
+        btnTransferForm = new org.jdesktop.swingx.JXButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         grnTbl = new org.jdesktop.swingx.JXTable();
 
@@ -126,14 +135,14 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "PO ID", "PO Code", "Supplier", "Date", "Total"
+                "PO ID", "PO Code", "Supplier", "Date", "Total", "Item Code", "Price", "Item Name", "Select"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -151,12 +160,12 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
             poListTbl.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        jXButton5.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton5.setText("Select");
-        jXButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnSelect.setBackground(new java.awt.Color(0, 102, 153));
+        btnSelect.setForeground(new java.awt.Color(255, 255, 255));
+        btnSelect.setText("Select");
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton5ActionPerformed(evt);
+                btnSelectActionPerformed(evt);
             }
         });
 
@@ -167,7 +176,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(248, 248, 248)
-                .addComponent(jXButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -175,7 +184,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -278,27 +287,32 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Item Code | Name");
 
-        jXTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtItemSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXTextField2ActionPerformed(evt);
+                txtItemSearchActionPerformed(evt);
+            }
+        });
+        txtItemSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtItemSearchKeyReleased(evt);
             }
         });
 
-        jXButton1.setBackground(new java.awt.Color(0, 102, 153));
-        jXButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton1.setText("Search");
-        jXButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setBackground(new java.awt.Color(0, 102, 153));
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton1ActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
 
-        jXButton2.setBackground(new java.awt.Color(153, 0, 0));
-        jXButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton2.setText("Reset");
-        jXButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnReset.setBackground(new java.awt.Color(153, 0, 0));
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton2ActionPerformed(evt);
+                btnResetActionPerformed(evt);
             }
         });
 
@@ -310,9 +324,9 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +339,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel7)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jXTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtItemSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -341,11 +355,11 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtItemSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -378,12 +392,12 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
             }
         });
 
-        jXButton3.setBackground(new java.awt.Color(0, 153, 51));
-        jXButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jXButton3.setText("Transfer from perchase order");
-        jXButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnTransferForm.setBackground(new java.awt.Color(0, 153, 51));
+        btnTransferForm.setForeground(new java.awt.Color(255, 255, 255));
+        btnTransferForm.setText("Transfer from perchase order");
+        btnTransferForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton3ActionPerformed(evt);
+                btnTransferFormActionPerformed(evt);
             }
         });
 
@@ -452,7 +466,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(grandTotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(addToStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jXButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnTransferForm, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane3)
         );
@@ -473,7 +487,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                             .addComponent(jLabel8)
                             .addComponent(grandTotalTxt))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTransferForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addToStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -496,187 +510,315 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jXButton1ActionPerformed
+        isItem = true;
+        String item = txtItemSearch.getText();
+        String query = "WHERE item_code_prefix LIKE \'%" + item + "%\' OR item_name LIKE \'%" + item + "%\'";
+        try {
+            DefaultTableModel dtm = new DefaultTableModel(
+                    new Object[]{"INV Number", "Supplier", "Date", "Item Code", "Item Name", "Price", "Select"}, 0
+            ) {
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (columnIndex == getColumnCount() - 1) {
+                        return Boolean.class; // Last column = checkbox
+                    }
+                    return super.getColumnClass(columnIndex);
+                }
 
-    private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return column == getColumnCount() - 1; // Only last column editable
+                }
+            };
+
+            poListTbl.setModel(dtm);
+            ArrayList<MainItemDto> items = mainItemController.getAllItems(query);
+            dtm.setRowCount(0);
+
+            for (MainItemDto dto : items) {
+                Object[] rowData = {
+                    invNoTxt.getText(),
+                    supplierCmb.getSelectedItem().toString(),
+                    currentDatePicker.getDate(),
+                    dto.getCodePrefix(), // hidden
+                    dto.getItemName(), // hidden
+                    dto.getCostPrice(),
+                    false // checkbox (default unchecked)
+                };
+                dtm.addRow(rowData);
+            }
+
+            poList.setLocationRelativeTo(null);
+            poList.setVisible(true);
+
+        } catch (Exception ex) {
+            Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Item Fetch Error");
+        }
+
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jXButton2ActionPerformed
+        formReset();
+    }//GEN-LAST:event_btnResetActionPerformed
 
     private void mainItemCategoryCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainItemCategoryCmbActionPerformed
         try {
             subItemCategoryCmb.removeAllItems();
-            String mainCategoryName=mainItemCategoryCmb.getSelectedItem().toString();
-            ArrayList<SubItemCategoryDto> subItemCategoryDto=subItemCategoryController.searchSubItemCategories(mainCategoryName);
-            
-            if(mainCategoryName!=null){
-                if(subItemCategoryDto.size()==0){
+            String mainCategoryName = mainItemCategoryCmb.getSelectedItem().toString();
+            ArrayList<SubItemCategoryDto> subItemCategoryDto = subItemCategoryController.searchSubItemCategories(mainCategoryName);
+
+            if (mainCategoryName != null) {
+                if (subItemCategoryDto.size() == 0) {
                     subItemCategoryCmb.addItem(null);
-                }else{
-                    for(SubItemCategoryDto dto : subItemCategoryDto){
+                } else {
+                    for (SubItemCategoryDto dto : subItemCategoryDto) {
                         subItemCategoryCmb.addItem(dto.getSubCategoryName());
                         subCategoryIds.add(dto.getSubItemCategoryId());
                     }
                 }
-                
+
             }
         } catch (Exception ex) {
             Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_mainItemCategoryCmbActionPerformed
 
-    private void jXButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton3ActionPerformed
+    private void btnTransferFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferFormActionPerformed
+        isItem = false;
         loadAllPO();
-    }//GEN-LAST:event_jXButton3ActionPerformed
+    }//GEN-LAST:event_btnTransferFormActionPerformed
 
-    private void jXButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton5ActionPerformed
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         try {
-            grnTbl.removeAll();
-            Integer poCode=(Integer) poListTbl.getValueAt(poListTbl.getSelectedRow(), 0);
-            ArrayList<PurchaseOrderDetailsDto> purchaseOrderDetailsDtos=purchaseOrderController.getAllPurchaseOrderDetails(poCode);
-            
-            DefaultTableModel dtm=(DefaultTableModel) grnTbl.getModel();
-            dtm.setRowCount(0);
-            Double subTotal=0.00;
-            
-            for(PurchaseOrderDetailsDto dto: purchaseOrderDetailsDtos){
-                subTotal=subTotal+dto.getLastGrnPrice()*dto.getQty();
-                Object[] rowData={
-                    dto.getPoDetailsId(),
-                    dto.getItemId(),
-                    dto.getItemName(),
-                    dto.getQty(),
-                    dto.getLastGrnPrice(),
-                    dto.getLastGrnPrice(),
-                    dto.getTotalItemPrice(),
-                    0
-                };
-                dtm.addRow(rowData);
+            if (isItem) {
+                grnTbl.removeAll();
+                DefaultTableModel poTableModel = (DefaultTableModel) poListTbl.getModel();
+                DefaultTableModel grnTableModel = (DefaultTableModel) grnTbl.getModel();
+                grnTableModel.setRowCount(0); // clear old rows
+            } else {
+                System.out.println("Not item");
+                grnTbl.removeAll();
+
+                DefaultTableModel poTableModel = (DefaultTableModel) poListTbl.getModel();
+                DefaultTableModel grnTableModel = (DefaultTableModel) grnTbl.getModel();
+                grnTableModel.setRowCount(0); // clear old rows
+
+                // Loop through PO List table
+                for (int i = 0; i < poTableModel.getRowCount(); i++) {
+                    Boolean isSelected = (Boolean) poTableModel.getValueAt(i, poTableModel.getColumnCount() - 1); // last col = checkbox
+
+                    if (isSelected != null && isSelected) {
+                        Integer poCode = (Integer) poTableModel.getValueAt(i, 0);
+                        System.out.println("PO_CODE : " + poCode);
+
+                        ArrayList<PurchaseOrderDetailsDto> purchaseOrderDetailsDtos
+                                = purchaseOrderController.getAllPurchaseOrderDetails(poCode);
+
+                        for (PurchaseOrderDetailsDto dto : purchaseOrderDetailsDtos) {
+
+                            boolean found = false;
+
+                            // 🔍 Check if item already exists in GRN table
+                            for (int j = 0; j < grnTableModel.getRowCount(); j++) {
+                                Integer existingItemId = (Integer) grnTableModel.getValueAt(j, 1); // col 1 = itemId
+                                if (existingItemId.equals(dto.getItemId())) {
+                                    // Update qty
+                                    Double oldQty = Double.valueOf(grnTableModel.getValueAt(j, 3).toString()); // col 3 = qty
+                                    Integer convertQty = oldQty.intValue();
+                                    Integer dbQty = dto.getQty().intValue();
+                                    Integer newQty = convertQty + dbQty;
+
+                                    grnTableModel.setValueAt(newQty, j, 3);
+
+                                    // Update total price
+                                    Double price = (Double) grnTableModel.getValueAt(j, 4); // col 4 = lastGrnPrice
+                                    Double newTotal = price * newQty;
+                                    grnTableModel.setValueAt(newTotal, j, 6); // col 6 = totalItemPrice
+
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            // ➕ Add new row if not found
+                            if (!found) {
+                                Object[] rowData = {
+                                    dto.getPoDetailsId(),
+                                    dto.getItemId(),
+                                    dto.getItemName(),
+                                    dto.getQty(),
+                                    dto.getLastGrnPrice(),
+                                    dto.getLastGrnPrice(),
+                                    dto.getTotalItemPrice(),
+                                    0
+                                };
+                                grnTableModel.addRow(rowData);
+                            }
+                        }
+                    }
+                }
+
+                // 🔄 Recalculate totals after processing
+                double subTotal = 0.0;
+                for (int k = 0; k < grnTableModel.getRowCount(); k++) {
+                    Double rowTotal = (Double) grnTableModel.getValueAt(k, 6); // col 6 = totalItemPrice
+                    subTotal += rowTotal;
+                }
+
+                subTotalTxt.setText(String.valueOf(subTotal));
+                grandTotalTxt.setText(String.valueOf(subTotal));
             }
-            
-            subTotalTxt.setText(subTotal+"");
-            grandTotalTxt.setText(subTotal+"");
-            
         } catch (Exception ex) {
             Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         poList.dispose();
-        
-    }//GEN-LAST:event_jXButton5ActionPerformed
+
+    }//GEN-LAST:event_btnSelectActionPerformed
 
     private void addToStockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToStockBtnActionPerformed
         try {
+            if (invNoTxt.getText() == null || invNoTxt.getText().trim().isEmpty() || stockCmb.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter invoice number or choose a stock ", "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             int tableRows = grnTbl.getRowCount();
-            boolean result=false;
-            
-            Integer supplierId=supplierIds.get(supplierCmb.getSelectedIndex());
-            GoodReceivedNoteDto grnDto=new GoodReceivedNoteDto(0, 
-                        invNoTxt.getText(), 
-                        supplierId, 
-                        Double.parseDouble(grandTotalTxt.getText()), 
-                        Double.parseDouble(grandTotalTxt.getText()), 
-                        currentDatePicker.getDate(), 
-                        1, 
-                        dashboard.CREATED_USER_ID, 
-                        1);
-                
-                Integer grnId=grnController.saveGrn(grnDto);
-                
+            boolean result = false;
+            boolean update = false;
+            Integer supplierId = supplierIds.get(supplierCmb.getSelectedIndex());
+            GoodReceivedNoteDto grnDto = new GoodReceivedNoteDto(0,
+                    invNoTxt.getText(),
+                    supplierId,
+                    Double.parseDouble(grandTotalTxt.getText()),
+                    Double.parseDouble(grandTotalTxt.getText()),
+                    currentDatePicker.getDate(),
+                    1,
+                    dashboard.CREATED_USER_ID,
+                    1);
+
+            Integer grnId = grnController.saveGrn(grnDto);
+
             for (int i = 0; tableRows > i; i++) {
-                Integer itemId=(Integer) grnTbl.getValueAt(i, 1);
-                Double costPrice=(Double) grnTbl.getValueAt(i, 4);
-                Double lastGrnPrice=(Double) grnTbl.getValueAt(i, 4);
-                Double qty=(Double) grnTbl.getValueAt(i, 3);
-                
-                ArrayList<MainItemDto> mainItemDtos=mainItemController.searchAllItems(itemId);
-                
-                for(MainItemDto itemDto:mainItemDtos){
-                    StockDto searchStockDto=stockController.searchStock(itemDto.getItemId());
-                    if(searchStockDto!=null){
-                            Double fromDBqty=searchStockDto.getQty();
-                            StockDto stockDto=new StockDto(
-                            0, 
-                            grnId,        
-                            itemDto.getMainCategoryId(), 
-                            itemDto.getSubCataegoryId(),
-                            itemDto.getItemId(),
-                            itemDto.getBarCode(), 
-                            1,
-                            "Stock Name", 
-                            1,
-                            costPrice, 
-                            lastGrnPrice, 
-                            qty+fromDBqty, 
-                            1, 
-                            dashboard.CREATED_USER_ID, 
-                            1);
-                            result=stockController.updateStock(stockDto);
-                    }else{
-                       StockDto stockDto=new StockDto(
-                            0,
-                            grnId,   
-                            itemDto.getMainCategoryId(), 
-                            itemDto.getSubCataegoryId(),
-                            itemDto.getItemId(),
-                            itemDto.getBarCode(), 
-                            1,
-                            "Stock Name", 
-                            1,
-                            costPrice, 
-                            lastGrnPrice, 
-                            qty, 
-                            1, 
-                            dashboard.CREATED_USER_ID, 
-                            1); 
-                       
-                            result=stockController.saveStock(stockDto);
+                Integer itemId = (Integer) grnTbl.getValueAt(i, 1);
+                Double costPrice = (Double) grnTbl.getValueAt(i, 4);
+                Double lastGrnPrice = (Double) grnTbl.getValueAt(i, 4);
+                Double qty = (Double) grnTbl.getValueAt(i, 3);
+
+                ArrayList<MainItemDto> mainItemDtos = mainItemController.searchAllItems(itemId);
+
+                for (MainItemDto itemDto : mainItemDtos) {
+                    StockDto searchStockDto = stockController.searchStock(itemDto.getItemId());
+                    if (searchStockDto != null) {
+                        Double fromDBqty = searchStockDto.getQty();
+                        System.out.println("QTY: " + fromDBqty);
+                        StockDto stockDto = new StockDto(
+                                0,
+                                grnId,
+                                itemDto.getMainCategoryId(),
+                                itemDto.getSubCataegoryId(),
+                                itemDto.getItemId(),
+                                itemDto.getBarCode(),
+                                1,
+                                stockCmb.getSelectedItem().toString(),
+                                1,
+                                costPrice,
+                                lastGrnPrice,
+                                qty,
+                                1,
+                                dashboard.CREATED_USER_ID,
+                                1);
+                        Integer regId = mainItemController.getRegistryId(itemDto.getItemId());
+                        if (regId == 0) {
+                            Log.error(this, "Reg Id Can't Get");
+                        }
+                        System.out.println("RegID : " + regId);
+                        stockDto.setRegistryId(regId);
+
+                        update = stockController.updateStock(stockDto);
+                    } else {
+                        StockDto stockDto = new StockDto(
+                                0,
+                                grnId,
+                                itemDto.getMainCategoryId(),
+                                itemDto.getSubCataegoryId(),
+                                itemDto.getItemId(),
+                                itemDto.getBarCode(),
+                                1,
+                                stockCmb.getSelectedItem().toString(),
+                                1,
+                                costPrice,
+                                lastGrnPrice,
+                                qty,
+                                1,
+                                dashboard.CREATED_USER_ID,
+                                1);
+                        Integer regId = mainItemController.getRegistryId(itemDto.getItemId());
+                        if (regId == 0) {
+                            Log.error(this, "Reg Id Can't Get");
+                        }
+                        System.out.println("Reg ID : " + regId);
+                        stockDto.setRegistryId(regId);
+                        result = stockController.saveStock(stockDto);
 
                     }
-                    
+
                 }
-                
+
             }
-            if(result){
+            if (result) {
+                formReset();
                 JOptionPane.showMessageDialog(this, "Stock Added Successfully");
-                grnTbl.removeAll();
-            }else{
+
+            } else if (update) {
+                formReset();
+                JOptionPane.showMessageDialog(this, "Stock Updated Successfully");
+
+            } else {
                 JOptionPane.showMessageDialog(this, "Stock Added Fail");
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
+
     }//GEN-LAST:event_addToStockBtnActionPerformed
 
     private void grnTblKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_grnTblKeyReleased
         int tableRows = grnTbl.getRowCount();
-        Double totalPrice=0.00;
-        Double totalItemPrice=0.00;
+        Double totalPrice = 0.00;
+        Double totalItemPrice = 0.00;
         for (int i = 0; tableRows > i; i++) {
-            Double itemPrice=(Double) grnTbl.getValueAt(i, 4);
-            Double qty=(Double) grnTbl.getValueAt(i, 3);
-            
-            totalPrice=totalPrice+itemPrice*qty;
-            totalItemPrice=itemPrice*qty;
-            
+            Double itemPrice = (Double) grnTbl.getValueAt(i, 4);
+            Double qty = (Double) grnTbl.getValueAt(i, 3);
+
+            totalPrice = totalPrice + itemPrice * qty;
+            totalItemPrice = itemPrice * qty;
+
             grnTbl.setValueAt(totalItemPrice, i, 6);
         }
 
-        subTotalTxt.setText(totalPrice+"");
-        grandTotalTxt.setText(totalPrice+"");
+        subTotalTxt.setText(totalPrice + "");
+        grandTotalTxt.setText(totalPrice + "");
     }//GEN-LAST:event_grnTblKeyReleased
 
     private void grnTblPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_grnTblPropertyChange
-        
+
     }//GEN-LAST:event_grnTblPropertyChange
 
-    private void jXTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextField2ActionPerformed
+    private void txtItemSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtItemSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jXTextField2ActionPerformed
+
+    }//GEN-LAST:event_txtItemSearchActionPerformed
+
+    private void txtItemSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtItemSearchKeyReleased
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtItemSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -715,6 +857,10 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXButton addToStockBtn;
+    private org.jdesktop.swingx.JXButton btnReset;
+    private org.jdesktop.swingx.JXButton btnSearch;
+    private org.jdesktop.swingx.JXButton btnSelect;
+    private org.jdesktop.swingx.JXButton btnTransferForm;
     private org.jdesktop.swingx.JXDatePicker currentDatePicker;
     private javax.swing.JLabel grandTotalTxt;
     private org.jdesktop.swingx.JXTable grnTbl;
@@ -734,11 +880,6 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private org.jdesktop.swingx.JXButton jXButton1;
-    private org.jdesktop.swingx.JXButton jXButton2;
-    private org.jdesktop.swingx.JXButton jXButton3;
-    private org.jdesktop.swingx.JXButton jXButton5;
-    private org.jdesktop.swingx.JXTextField jXTextField2;
     private javax.swing.JComboBox<String> mainItemCategoryCmb;
     private javax.swing.JDialog poList;
     private org.jdesktop.swingx.JXTable poListTbl;
@@ -746,17 +887,18 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> subItemCategoryCmb;
     private javax.swing.JLabel subTotalTxt;
     private javax.swing.JComboBox<String> supplierCmb;
+    private org.jdesktop.swingx.JXTextField txtItemSearch;
     // End of variables declaration//GEN-END:variables
 
     private void loadAllSuppliers() {
         try {
-            ArrayList<SupplierDto> supplierDtos=supplierController.getAll();
-        
-            for(SupplierDto dto: supplierDtos){
+            ArrayList<SupplierDto> supplierDtos = supplierController.getAll();
+
+            for (SupplierDto dto : supplierDtos) {
                 supplierCmb.addItem(dto.getCompanyName());
                 supplierIds.add(dto.getSupplierId());
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -764,10 +906,10 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
     private void loadMainCategory() {
         try {
-            String quary="WHERE status=1 and visible=1";
-            ArrayList<MainItemCategoryDto> allCategories=mainItemCategoryController.getAll(quary);
-            
-            for(MainItemCategoryDto dto: allCategories){
+            String quary = "WHERE status=1 and visible=1";
+            ArrayList<MainItemCategoryDto> allCategories = mainItemCategoryController.getAll(quary);
+
+            for (MainItemCategoryDto dto : allCategories) {
                 mainItemCategoryCmb.addItem(dto.getCategoryName());
                 mainCategoryIds.add(dto.getMainItemCategeryId());
             }
@@ -778,25 +920,70 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
     private void loadAllPO() {
         try {
-            ArrayList<PurchaseOrderDto> allOrderDtos=purchaseOrderController.getAllPurchaseOrder();
-            DefaultTableModel dtm=(DefaultTableModel) poListTbl.getModel();
+
+            DefaultTableModel dtm = new DefaultTableModel(
+                    new Object[]{"ID", "PO Code", "Supplier", "Date", "Total", "Select"}, 0
+            ) {
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (columnIndex == getColumnCount() - 1) {
+                        return Boolean.class; // Last column = checkbox
+                    }
+                    return super.getColumnClass(columnIndex);
+                }
+
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return column == getColumnCount() - 1; // Only last column editable
+                }
+            };
+
+            poListTbl.setModel(dtm);
+            poListTbl.getColumnModel().getColumn(1).setMinWidth(0);
+            // Load data
+            ArrayList<PurchaseOrderDto> allOrderDtos = purchaseOrderController.getAllPurchaseOrder();
             dtm.setRowCount(0);
-            
-            for(PurchaseOrderDto dto: allOrderDtos){
-                Object[] rowData={
+
+            for (PurchaseOrderDto dto : allOrderDtos) {
+                Object[] rowData = {
                     dto.getPoId(),
                     dto.getPoCodePrefix(),
                     dto.getSupplierName(),
                     dto.getExpectedDate(),
-                    dto.getStatus()
+                    dto.getTotalOrderPrice(),
+                    false // checkbox (default unchecked)
                 };
                 dtm.addRow(rowData);
             }
-            
+
             poList.setLocationRelativeTo(null);
             poList.setVisible(true);
+
+            // Define table model with checkbox in the last column
         } catch (Exception ex) {
             Logger.getLogger(GoodReceiveNote.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    private void loadStockCombo() {
+        ArrayList<StockLocationDto> stockLocationDtos = stockLocationController.getStockLocations();
+        for (StockLocationDto stockLocationDto : stockLocationDtos) {
+            stockCmb.addItem(stockLocationDto.getStockName());
+        }
+    }
+
+    private void formReset() {
+        DefaultTableModel df = (DefaultTableModel) grnTbl.getModel();
+        df.setRowCount(0);
+
+        txtItemSearch.setText("");
+        invNoTxt.setText("");
+        supplierCmb.setSelectedIndex(0);
+        mainItemCategoryCmb.setSelectedIndex(0);
+        stockCmb.setSelectedIndex(0);
+        LocalDate localDate = LocalDate.now();
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        currentDatePicker.setDate(date);
+    }
+
 }

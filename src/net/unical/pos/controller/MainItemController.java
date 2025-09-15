@@ -60,4 +60,8 @@ public class MainItemController {
     public boolean isNewItem(String itemName) {
         return mainItemServiceCustom.isNewItem(itemName);
     }
+
+    public Integer getRegistryId(Integer itemId) {
+        return mainItemServiceCustom.getRegistryId(itemId);
+    }
 }

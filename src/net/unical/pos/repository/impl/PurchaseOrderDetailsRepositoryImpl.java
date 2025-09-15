@@ -35,7 +35,7 @@ public class PurchaseOrderDetailsRepositoryImpl implements PurchaseOrderDetailsR
     @Override
     public ArrayList<PurchaseOrderDetailsModel> getAllPurchaseOrderDetails(Integer poCode) throws Exception {
         ResultSet rst=Statement.executeQuery("SELECT * FROM pos_inv_purchase_order_details_tb where po_id='"+poCode+"'");
-        
+        System.err.println("SELECT * FROM pos_inv_purchase_order_details_tb where po_id='"+poCode+"'");
         ArrayList<PurchaseOrderDetailsModel> purchaseOrderModels=new ArrayList<>();
         while(rst.next()){
             purchaseOrderModels.add(new PurchaseOrderDetailsModel(rst.getInt(1),

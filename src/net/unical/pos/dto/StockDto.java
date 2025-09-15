@@ -28,6 +28,7 @@ public class StockDto {
     Integer visible;
     String itemName;
     String codePrefix;
+    Integer registryId;
 
     public StockDto() {
     }
@@ -184,6 +185,14 @@ public class StockDto {
 
     public void setCodePrefix(String codePrefix) {
         this.codePrefix = codePrefix;
+    }
+
+    public Integer getRegistryId() {
+        return registryId;
+    }
+
+    public void setRegistryId(Integer registryId) {
+        this.registryId = registryId;
     }
     
     

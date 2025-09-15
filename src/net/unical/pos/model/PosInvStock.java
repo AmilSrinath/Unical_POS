@@ -27,6 +27,7 @@ public class PosInvStock {
     private Integer visible;
     private String codePrefix;
     private String itemName;
+    private Integer registryId;
 
     public PosInvStock() {
     }
@@ -183,6 +184,14 @@ public class PosInvStock {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public Integer getRegistryId() {
+        return registryId;
+    }
+
+    public void setRegistryId(Integer registryId) {
+        this.registryId = registryId;
     }
     
     

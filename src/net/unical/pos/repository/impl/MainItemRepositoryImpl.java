@@ -214,4 +214,24 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
         return pstm.executeUpdate() > 0;
     }
 
+    @Override
+    public Integer getRegistryId(Integer itemId) {
+        String sql = "SELECT registry_id FROM pos_main_item_tb WHERE item_id = ?";
+        try {
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setInt(1, itemId);
+            ResultSet rst = pstm.executeQuery();
+            if (rst.next()) {
+                return rst.getInt("registry_id");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainItemRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, ex.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(MainItemRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Log.error(ex, "Registry ID Fetched Error");
+        }
+        return 0;
+    }
+
 }

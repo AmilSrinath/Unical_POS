@@ -143,6 +143,7 @@ public class MainItem extends javax.swing.JInternalFrame {
         jXButton7 = new org.jdesktop.swingx.JXButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         templateSingleItemTbl = new org.jdesktop.swingx.JXTable();
+        jXButton9 = new org.jdesktop.swingx.JXButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         templateItemsTbl = new org.jdesktop.swingx.JXTable();
         jXButton4 = new org.jdesktop.swingx.JXButton();
@@ -151,6 +152,7 @@ public class MainItem extends javax.swing.JInternalFrame {
         qtyTxt = new org.jdesktop.swingx.JXTextField();
         jLabel18 = new javax.swing.JLabel();
         jXButton8 = new org.jdesktop.swingx.JXButton();
+        btnRemove = new org.jdesktop.swingx.JXButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -278,6 +280,15 @@ public class MainItem extends javax.swing.JInternalFrame {
             templateSingleItemTbl.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
+        jXButton9.setBackground(new java.awt.Color(255, 153, 51));
+        jXButton9.setForeground(new java.awt.Color(255, 255, 255));
+        jXButton9.setText("Reset");
+        jXButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -304,10 +315,13 @@ public class MainItem extends javax.swing.JInternalFrame {
                         .addComponent(jXButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jXButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,9 +351,11 @@ public class MainItem extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jXButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jXButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jXButton9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         templateItemsTbl.setModel(new javax.swing.table.DefaultTableModel(
@@ -406,6 +422,15 @@ public class MainItem extends javax.swing.JInternalFrame {
             }
         });
 
+        btnRemove.setBackground(new java.awt.Color(255, 153, 51));
+        btnRemove.setForeground(new java.awt.Color(255, 255, 255));
+        btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -421,6 +446,8 @@ public class MainItem extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jXButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jXButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jXButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -445,8 +472,9 @@ public class MainItem extends javax.swing.JInternalFrame {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jXButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jXButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jXButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jXButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout storeTamplateLayout = new javax.swing.GroupLayout(storeTamplate.getContentPane());
@@ -1079,6 +1107,24 @@ public class MainItem extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_sellingPriceTxtActionPerformed
 
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel df = (DefaultTableModel) templateItemsTbl.getModel();
+        int selectedRow = templateItemsTbl.getSelectedRow();
+
+        if (selectedRow != -1) { // make sure a row is selected
+            df.removeRow(selectedRow);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to remove.");
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void jXButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton9ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel df = (DefaultTableModel) templateSingleItemTbl.getModel();
+        df.setRowCount(0);
+    }//GEN-LAST:event_jXButton9ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1117,6 +1163,7 @@ public class MainItem extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXTable ItemTbl;
     private org.jdesktop.swingx.JXTextField barCodeTxt;
+    private org.jdesktop.swingx.JXButton btnRemove;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JCheckBox grnBox;
     private javax.swing.JLabel iconLbl;
@@ -1156,6 +1203,7 @@ public class MainItem extends javax.swing.JInternalFrame {
     private org.jdesktop.swingx.JXButton jXButton6;
     private org.jdesktop.swingx.JXButton jXButton7;
     private org.jdesktop.swingx.JXButton jXButton8;
+    private org.jdesktop.swingx.JXButton jXButton9;
     private org.jdesktop.swingx.JXTextField jXTextField1;
     private org.jdesktop.swingx.JXTextField jXTextField2;
     private javax.swing.JComboBox<String> mainCategoryCmb;

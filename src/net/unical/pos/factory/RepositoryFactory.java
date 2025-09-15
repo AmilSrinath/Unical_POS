@@ -26,6 +26,7 @@ import net.unical.pos.repository.impl.PrinterTypesRepositoryImpl;
 import net.unical.pos.repository.impl.PurchaseOrderDetailsRepositoryImpl;
 import net.unical.pos.repository.impl.PurchaseOrderRepositoryImpl;
 import net.unical.pos.repository.impl.StatusTypeRepositoryImpl;
+import net.unical.pos.repository.impl.StockLocationRepositoryImpl;
 import net.unical.pos.repository.impl.StockRepositoryImpl;
 import net.unical.pos.repository.impl.StoreTemplateRepositoryImpl;
 import net.unical.pos.repository.impl.SubItemCategoryRepositoryImpl;
@@ -71,7 +72,8 @@ public class RepositoryFactory {
         DISCOUNT, 
         ORDER_TYPE, 
         STATUS_TYPE,
-        ITEM_REGISTRY
+        ITEM_REGISTRY,
+        STOCK_LOCATION,
         ;
     }
 
@@ -145,6 +147,8 @@ public class RepositoryFactory {
                 return (T)new StatusTypeRepositoryImpl();
             case ITEM_REGISTRY:
                 return (T)new ItemRegistryRepositoryImpl();
+            case STOCK_LOCATION:
+                return (T)new StockLocationRepositoryImpl();
             default:
                 return null;
         }

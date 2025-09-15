@@ -35,4 +35,6 @@ public interface MainItemServiceCustom {
     public String getmainItemid(String mainCat);
 
     public boolean isNewItem(String itemName);
+
+    public Integer getRegistryId(Integer itemId);
 }

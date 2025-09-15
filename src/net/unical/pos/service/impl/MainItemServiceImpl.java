@@ -193,4 +193,9 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
         return repo.isNewItem(itemName);
     }
 
+    @Override
+    public Integer getRegistryId(Integer itemId) {
+        return repo.getRegistryId(itemId);
+    }
+
 }

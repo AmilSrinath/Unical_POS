@@ -43,6 +43,7 @@ public class StockServiceImpl implements StockServiceCustome{
                 stockDto.getStatus(),
                 stockDto.getUserId(),
                 1);
+        posInvStock.setRegistryId(stockDto.getRegistryId());
         return stockRepositoryCustom.Save(posInvStock);
     }
 
@@ -63,6 +64,7 @@ public class StockServiceImpl implements StockServiceCustome{
                 stockDto.getStatus(),
                 stockDto.getUserId(),
                 1);
+        posInvStock.setRegistryId(stockDto.getRegistryId());
         return stockRepositoryCustom.Update(posInvStock);
     }
 

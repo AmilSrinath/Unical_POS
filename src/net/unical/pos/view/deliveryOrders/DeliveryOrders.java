@@ -281,7 +281,6 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         } else {
             deliveryFormDetailPanel.setVisible(false);
         }
-        openThread();
 
     }
 
@@ -410,6 +409,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
         jLabel17 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
+        btnSyncWebsiteOrders = new javax.swing.JButton();
         deliveryFormDetailPanel = new java.awt.Panel();
         jLabel26 = new javax.swing.JLabel();
         amountTotTxt = new javax.swing.JLabel();
@@ -1629,6 +1629,13 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("To");
 
+        btnSyncWebsiteOrders.setText("Sync Website Orders");
+        btnSyncWebsiteOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyncWebsiteOrdersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1652,6 +1659,8 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addGap(77, 77, 77)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSyncWebsiteOrders)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1675,7 +1684,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(total_orders_count_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(btnSyncWebsiteOrders, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1798,7 +1809,9 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane6)
+                                .addGap(0, 0, 0))))
                     .addComponent(deliveryFormDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2312,7 +2325,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                 String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
                 int status_id = statusTypeController.getStatusIdByStatusType(status);
                 deliveryOrderDto.setStatus(status_id);
-                
+
                 if (isOrder) {
                     System.out.println("Come to this");
                     deliveryOrderDto.setDiscountId(discountController.getDiscountId(this.discount));
@@ -2328,7 +2341,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     String fromDate = formatter.format(jXDatePicker1.getDate());
                     String toDate = formatter.format(jXDatePicker2.getDate());
                     getAllOrders(fromDate, toDate, default_paymentType);
-                    getPhone_Number_One(); 
+                    getPhone_Number_One();
                     getPhone_Number_Two();
                     clearText();
                     phoneOneCmb.requestFocus();
@@ -2552,7 +2565,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setUserID(1);
                     deliveryOrderDto.setIsExchange(isExch);
                     deliveryOrderDto.setOrderType(cmbOrderType.getSelectedItem().toString());
-                    System.out.println("Order Type : "+cmbOrderType.getSelectedItem().toString());
+                    System.out.println("Order Type : " + cmbOrderType.getSelectedItem().toString());
 
                     deliveryOrderDto.setRemark(remarkTxt.getText());
                     deliveryOrderDto.setPaymentTypeId(paymentTypeIds.get(index));
@@ -3905,6 +3918,11 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbOrderTypeKeyReleased
 
+    private void btnSyncWebsiteOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncWebsiteOrdersActionPerformed
+        // TODO add your handling code here:
+        openThread();
+    }//GEN-LAST:event_btnSyncWebsiteOrdersActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3961,6 +3979,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnReturning;
     private javax.swing.JButton btnSaveRemark;
     private javax.swing.JButton btnSpecialNote;
+    private javax.swing.JButton btnSyncWebsiteOrders;
     private javax.swing.JButton btnWrapping;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JDialog check_customer;
@@ -4424,15 +4443,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         isOrderThreadRunning = true;
         new Thread(() -> {
-            while (true) {
-                getWebsiteOrders();
-                try {
-                    Thread.sleep(5000); // wait 5 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    break; // exit the loop if the thread is interrupted
-                }
-            }
+            getWebsiteOrders();        
         }).start();
     }
 

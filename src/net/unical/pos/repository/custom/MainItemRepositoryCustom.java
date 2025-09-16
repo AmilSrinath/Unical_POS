@@ -32,5 +32,7 @@ public interface MainItemRepositoryCustom {
     public boolean isNewItem(String itemName);
 
     public Integer getRegistryId(Integer itemId);
+
+    public boolean updateItem(PosMainItem item) throws Exception;
     
 }

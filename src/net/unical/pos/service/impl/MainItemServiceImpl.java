@@ -41,7 +41,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
     }
 
     @Override
-    public boolean saveItem(MainItemDto itemDto) throws Exception{
+    public boolean saveItem(MainItemDto itemDto) throws Exception {
         Connection connection = null;
         try {
             connection = DBConnection.getInstance().getConnection();
@@ -51,7 +51,7 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
                     itemDto.getItemName(), itemDto.getUnitType(), itemDto.getPriterType(), itemDto.getCostPrice(), itemDto.getUnitPrice(),
                     itemDto.getImagePath(), itemDto.getStatus(), itemDto.getGrnStatus(), itemDto.getSellingItem(), itemDto.getUserId(), 1, itemDto.getWeight());
             boolean isSaved = itemRegistryServiceCustom.saveRegistry(item, connection);
-            
+
             if (isSaved) {
                 System.out.println("Registry is saved!!");
                 ItemRegistry itemRegistry = itemRegistryServiceCustom.getLatestRegistry();
@@ -84,7 +84,31 @@ public class MainItemServiceImpl implements MainItemServiceCustom {
 
     @Override
     public boolean updateItem(MainItemDto itemDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PosMainItem item = new PosMainItem();
+        item.setItemId(itemDto.getItemId());
+        item.setBarCode(itemDto.getBarCode());
+        item.setMainItemCategoryId(itemDto.getMainCategoryId());
+        item.setSubItemCategoryId(itemDto.getSubCataegoryId()); // Correct spelling if needed
+        item.setPrefix(itemDto.getPrefix());
+        item.setCodePrefix(itemDto.getCodePrefix());
+        item.setDiscount(itemDto.getDiscount());
+        item.setItemName(itemDto.getItemName());
+        item.setUnitType(itemDto.getUnitType());
+        item.setPriterType(itemDto.getPriterType()); // Might be a typo: should be "PrinterType"?
+        item.setCostPrice(itemDto.getCostPrice());
+        item.setUnitPrice(itemDto.getUnitPrice());
+        item.setImagePath(itemDto.getImagePath());
+        item.setGrnStatus(itemDto.getGrnStatus());
+        item.setSellingItem(itemDto.getSellingItem());
+        item.setStatus(itemDto.getStatus());
+        item.setUserId(itemDto.getUserId());
+        item.setWeight(itemDto.getWeight());
+        item.setRegistryId(itemDto.getRegistryId());
+
+        // Handle 'visible' field – optional/default
+        item.setVisible(1); // or null / itemDto.getVisible() if it exists
+
+        return repo.updateItem(item);
     }
 
     @Override

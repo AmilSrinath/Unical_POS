@@ -27,6 +27,7 @@ import net.unical.pos.view.main.LogInForm;
  * @author HP
  */
 public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
+
     @Override
     public ArrayList<PosMainItem> searchAllSubItems(Integer key) throws Exception {
         ResultSet rst = Statement.executeQuery("SELECT * FROM pos_main_item_tb WHERE sub_item_category_id='" + key + "' AND status=1 and selling_status=1 and visible=1");
@@ -210,7 +211,7 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
         pstm.setInt(18, item.getVisible());
         pstm.setDouble(19, item.getWeight());
         pstm.setInt(20, item.getRegistryId());
-        
+
         return pstm.executeUpdate() > 0;
     }
 
@@ -232,6 +233,64 @@ public class MainItemRepositoryImpl implements MainItemRepositoryCustom {
             Log.error(ex, "Registry ID Fetched Error");
         }
         return 0;
+    }
+
+    @Override
+    public boolean updateItem(PosMainItem item) throws Exception{
+        String sql = "UPDATE pos_main_item_tb SET status = ? WHERE item_id = ?";
+        Connection connection = DBConnection.getInstance().getConnection();
+        connection.setAutoCommit(false);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, 0);
+            ps.setInt(2, item.getItemId());
+            boolean isUpdated = ps.executeUpdate() > 0;
+
+            if (isUpdated) {
+                System.out.println("Meka wenawa");
+                String insertSql = "INSERT into pos_main_item_tb (item_id, item_bar_code, main_item_category_id, sub_item_category_id, item_prefix, item_code_prefix, discount, item_name, unit_type, printer_type, cost_price, unit_price, image_path, grn_status, selling_status, status, user_id, visible, weight, registry_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                PreparedStatement pstm = connection.prepareStatement(insertSql);
+                pstm.setInt(1, 0);
+                pstm.setInt(2, item.getBarCode());
+                pstm.setInt(3, item.getMainItemCategoryId());
+                pstm.setInt(4, item.getSubItemCategoryId());
+                pstm.setString(5, item.getPrefix());
+                pstm.setString(6, item.getCodePrefix());
+                pstm.setDouble(7, item.getDiscount());
+                pstm.setString(8, item.getItemName());
+                pstm.setString(9, item.getUnitType());
+                pstm.setString(10, item.getPriterType());
+                pstm.setDouble(11, item.getCostPrice());
+                pstm.setDouble(12, item.getUnitPrice());
+                pstm.setString(13, item.getImagePath());
+                pstm.setInt(14, item.getStatus());
+                pstm.setInt(15, item.getGrnStatus());
+                pstm.setInt(16, item.getSellingItem());
+                pstm.setInt(17, LogInForm.userID);
+                pstm.setInt(18, item.getVisible());
+                pstm.setDouble(19, item.getWeight());
+                pstm.setInt(20, item.getRegistryId());
+
+                boolean isInserted = ps.executeUpdate() > 0;
+
+                if (isInserted) {
+                    System.out.println("Inser wenwa");
+                    connection.commit();
+                    return true;
+
+                } else {
+                    connection.rollback();
+                    return false;
+                }
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StockRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            connection.setAutoCommit(true);
+        }
+        return false;
     }
 
 }

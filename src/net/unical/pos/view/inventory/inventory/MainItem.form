@@ -880,6 +880,9 @@
                     <Property name="text" type="java.lang.String" value="Reset"/>
                     <Property name="opaque" type="boolean" value="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel12MouseClicked"/>
+                  </Events>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXButton" name="jXButton3">
                   <Properties>

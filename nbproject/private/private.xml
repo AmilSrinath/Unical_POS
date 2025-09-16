@@ -14,7 +14,9 @@
         <group>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/model/PosInvStock.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/home/Dashboard.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/factory/RepositoryFactory.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/PurchaseOrderDetailsRepositoryImpl.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/model/StockLocation.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/impl/MainItemServiceImpl.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/controller/StockController.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/impl/StockServiceImpl.java</file>
@@ -29,13 +31,21 @@
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/custom/MainItemServiceCustom.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/config.txt</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/custom/StockRepositoryCustom.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/deliveryOrders/DeliveryOrders.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/controller/PurchaseOrderController.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/impl/StockLocationServiceImpl.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/inventory/ItemList.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/dto/StockDto.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/PurchaseOrder.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/main/LogInForm.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/custom/MainItemRepositoryCustom.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/dto/StockLocationDto.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/StockLocationRepositoryImpl.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/controller/StockLocationController.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/inventory/MainItem.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/factory/ServiceFactory.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/service/custom/StockLoactionServiceCustom.java</file>
+            <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/custom/StockLocationRepositoryCustom.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/view/inventory/store/GoodReceiveNote.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/StockRepositoryImpl.java</file>
             <file>file:/D:/Projects/PetalPink/Unical_POS/src/net/unical/pos/repository/impl/PurchaseOrderRepositoryImpl.java</file>

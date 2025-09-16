@@ -539,7 +539,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
             for (MainItemDto dto : items) {
                 Object[] rowData = {
-                    invNoTxt.getText(),
+                    dto.getItemId(),
                     supplierCmb.getSelectedItem().toString(),
                     currentDatePicker.getDate(),
                     dto.getCodePrefix(), // hidden
@@ -599,6 +599,69 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                 DefaultTableModel poTableModel = (DefaultTableModel) poListTbl.getModel();
                 DefaultTableModel grnTableModel = (DefaultTableModel) grnTbl.getModel();
                 grnTableModel.setRowCount(0); // clear old rows
+
+                for (int i = 0; i < poTableModel.getRowCount(); i++) {
+                    Boolean isSelected = (Boolean) poTableModel.getValueAt(i, poTableModel.getColumnCount() - 1); // last col = checkbox
+
+                    if (isSelected != null && isSelected) {
+                        Integer itemCode = (Integer) poTableModel.getValueAt(i, 0);
+                        System.out.println("item_code : " + itemCode);
+
+                        ArrayList<MainItemDto> itemDtos
+                                = mainItemController.searchAllItems(itemCode);
+
+                        for (MainItemDto dto : itemDtos) {
+                            System.out.println("item : " + dto.getItemName());
+                            boolean found = false;
+
+                            // 🔍 Check if item already exists in GRN table
+                            for (int j = 0; j < grnTableModel.getRowCount(); j++) {
+                                Integer existingItemId = (Integer) grnTableModel.getValueAt(j, 1); // col 1 = itemId
+                                if (existingItemId.equals(dto.getItemId())) {
+                                    // Update qty
+                                    Double oldQty = Double.valueOf(grnTableModel.getValueAt(j, 3).toString()); // col 3 = qty
+                                    Integer convertQty = oldQty.intValue();
+                                    Integer dbQty = 0;
+                                    Integer newQty = convertQty + dbQty;
+
+                                    grnTableModel.setValueAt(newQty, j, 3);
+
+                                    // Update total price
+                                    Double price = (Double) grnTableModel.getValueAt(j, 4); // col 4 = lastGrnPrice
+                                    Double newTotal = price * newQty;
+                                    grnTableModel.setValueAt(newTotal, j, 6); // col 6 = totalItemPrice
+
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            // ➕ Add new row if not found
+                            if (!found) {
+                                System.out.println("mekata enne nedda");
+                                Object[] rowData = {
+                                    dto.getCodePrefix(),
+                                    dto.getItemId(),
+                                    dto.getItemName(),
+                                    0,
+                                    0.0,
+                                    dto.getUnitPrice(),
+                                    0.0,
+                                    0
+                                };
+                                grnTableModel.addRow(rowData);
+                            }
+                        }
+                    }
+                }
+                double subTotal = 0.0;
+                for (int k = 0; k < grnTableModel.getRowCount(); k++) {
+                    Double rowTotal = (Double) grnTableModel.getValueAt(k, 6); // col 6 = totalItemPrice
+                    subTotal += rowTotal;
+                }
+
+                subTotalTxt.setText(String.valueOf(subTotal));
+                grandTotalTxt.setText(String.valueOf(subTotal));
             } else {
                 System.out.println("Not item");
                 grnTbl.removeAll();

@@ -36,6 +36,7 @@ import net.unical.pos.dto.MainItemCategoryDto;
 import net.unical.pos.dto.MainPrinterTypesDto;
 import net.unical.pos.dto.StoreTemplateDto;
 import net.unical.pos.dto.SubItemCategoryDto;
+import net.unical.pos.log.Log;
 import net.unical.pos.view.home.Dashboard;
 import org.apache.commons.io.FileUtils;
 
@@ -591,6 +592,11 @@ public class MainItem extends javax.swing.JInternalFrame {
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Reset");
         jLabel12.setOpaque(true);
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
 
         jXButton3.setBackground(new java.awt.Color(51, 51, 51));
         jXButton3.setForeground(new java.awt.Color(204, 204, 204));
@@ -818,6 +824,12 @@ public class MainItem extends javax.swing.JInternalFrame {
                 dashboard.CREATED_USER_ID,
                 Double.parseDouble(weightTxt.getText())
         );
+        Integer regId = newItemController.getRegistryId(itemDto.getItemId());
+                        if (regId == 0) {
+                            Log.error(this, "Reg Id Can't Get");
+                        }
+                        System.out.println("RegID : " + regId);
+                        itemDto.setRegistryId(regId);
 
         // Check if this is an edit operation
         if (isEditItem && idItem > 0) {
@@ -1125,6 +1137,12 @@ public class MainItem extends javax.swing.JInternalFrame {
         df.setRowCount(0);
     }//GEN-LAST:event_jXButton9ActionPerformed
 
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        // TODO add your handling code here:
+        saveBtn.setText("Save");
+        clearForm();
+    }//GEN-LAST:event_jLabel12MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1325,13 +1343,16 @@ public class MainItem extends javax.swing.JInternalFrame {
                 nameTxt.setText(item.getItemName());
                 sellingPriceTxt.setText(String.valueOf(item.getUnitPrice()));
                 weightTxt.setText(String.valueOf(item.getWeight()));
-
+                barCodeTxt.setText(String.valueOf(item.getBarCode()));
+                unitTypeCmb.setSelectedItem(item.getUnitType());
+                printerTypeCmb.setSelectedItem(item.getPriterType());
                 // Set combo box selections
                 // You'll need to find and set the correct indexes based on the item's data
                 // Set checkboxes
                 statusBox.setSelected(item.getStatus() == 1);
                 grnBox.setSelected(item.getGrnStatus() == 1);
                 sellingItemBox.setSelected(item.getSellingItem() == 1);
+                saveBtn.setText("Edit");
             }
         } catch (Exception ex) {
             Logger.getLogger(MainItem.class.getName()).log(Level.SEVERE, null, ex);

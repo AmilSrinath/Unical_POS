@@ -30,7 +30,7 @@ public class MainItemController {
     public boolean updateItem(MainItemDto itemDto) throws Exception{
 //        return .saveDoctor(mainItemCategoryDto);
 
-    return true;
+    return mainItemServiceCustom.updateItem(itemDto);
     }
     
     public ArrayList<MainItemDto> getAllItems(String quary)throws Exception{

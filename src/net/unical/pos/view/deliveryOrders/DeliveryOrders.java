@@ -2456,6 +2456,10 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    
+                    FileInputStream fis = new FileInputStream("config.txt");
+                    Properties props = new Properties();
+                    props.load(fis);
                     System.out.println("Customer : " + customer.getCustomerName());
                     deliveryOrderDto.setCustomerId(customer.getCustomerId());
                     deliveryOrderDto.setAddress(websiteOrder.getAddress1() + ", " + websiteOrder.getAddress2() + ", " + websiteOrder.getCity());
@@ -2463,7 +2467,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     deliveryOrderDto.setPhoneOne(websiteOrder.getPhone_1());
                     deliveryOrderDto.setPhoneTwo(websiteOrder.getPhone_2());
                     deliveryOrderDto.setSubTotalPrice(websiteOrder.getTotal());
-                    deliveryOrderDto.setDeliveryFee(websiteOrder.getDelivery());
+                    deliveryOrderDto.setDeliveryFee(Double.valueOf(props.getProperty("DELIVERY_FEE")));
                     deliveryOrderDto.setWeight("0.0");
                     deliveryOrderDto.setFreeShip(0);
                     deliveryOrderDto.setGrandTotalPrice(websiteOrder.getSub_total());
@@ -3920,7 +3924,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
 
     private void btnSyncWebsiteOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncWebsiteOrdersActionPerformed
         // TODO add your handling code here:
-        openThread();
+        getWebsiteOrders();
     }//GEN-LAST:event_btnSyncWebsiteOrdersActionPerformed
 
     /**
@@ -4443,7 +4447,7 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
         }
         isOrderThreadRunning = true;
         new Thread(() -> {
-            getWebsiteOrders();        
+            getWebsiteOrders();
         }).start();
     }
 

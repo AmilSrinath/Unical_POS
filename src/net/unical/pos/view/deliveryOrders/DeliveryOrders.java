@@ -2463,14 +2463,14 @@ public class DeliveryOrders extends javax.swing.JInternalFrame {
                     System.out.println("Customer : " + customer.getCustomerName());
                     deliveryOrderDto.setCustomerId(customer.getCustomerId());
                     deliveryOrderDto.setAddress(websiteOrder.getAddress1() + ", " + websiteOrder.getAddress2() + ", " + websiteOrder.getCity());
-                    deliveryOrderDto.setCod(websiteOrder.getSub_total());
+                    deliveryOrderDto.setCod(websiteOrder.getTotal());
                     deliveryOrderDto.setPhoneOne(websiteOrder.getPhone_1());
                     deliveryOrderDto.setPhoneTwo(websiteOrder.getPhone_2());
                     deliveryOrderDto.setSubTotalPrice(websiteOrder.getTotal());
                     deliveryOrderDto.setDeliveryFee(Double.valueOf(props.getProperty("DELIVERY_FEE")));
                     deliveryOrderDto.setWeight("0.0");
                     deliveryOrderDto.setFreeShip(0);
-                    deliveryOrderDto.setGrandTotalPrice(websiteOrder.getSub_total());
+                    deliveryOrderDto.setGrandTotalPrice(websiteOrder.getTotal());
                     deliveryOrderDto.setCustomerNumber(customer.getCustomerNumber());
                     deliveryOrderDto.setPaidAmount(0.0);
                     deliveryOrderDto.setCreateDate(now);

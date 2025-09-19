@@ -373,14 +373,14 @@ public class OrderFilter extends JInternalFrame {
 
             },
             new String [] {
-                "", "Order Code", "Customer Name", "Phone One", "Phone Two", "COD", "Total Amount", "Order Type", "Date", "Status"
+                "", "Order Code", "Customer Name", "Phone One", "Phone Two", "Address", "COD", "Total Amount", "Order Type", "Date", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, true, false, false
+                true, false, false, false, false, false, false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -412,6 +412,7 @@ public class OrderFilter extends JInternalFrame {
         jScrollPane6.setViewportView(deliveryOrdersTable);
         if (deliveryOrdersTable.getColumnModel().getColumnCount() > 0) {
             deliveryOrdersTable.getColumnModel().getColumn(0).setResizable(false);
+            deliveryOrdersTable.getColumnModel().getColumn(8).setResizable(false);
         }
         if (deliveryOrdersTable.getColumnModel().getColumnCount() > 0) {
             deliveryOrdersTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -756,6 +757,7 @@ public class OrderFilter extends JInternalFrame {
                     dto.getCustomerName(),
                     dto.getPhoneOne(),
                     dto.getPhoneTwo(),
+                    dto.getAddress(),
                     dto.getCod(),
                     dto.getGrandTotalPrice(),
                     dto.getOrderType(),

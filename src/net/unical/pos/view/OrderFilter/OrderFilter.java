@@ -780,7 +780,7 @@ public class OrderFilter extends JInternalFrame {
             Logger.getLogger(DeliveryOrders.class.getName()).log(Level.SEVERE, null, ex);
             Log.error(DeliveryOrders.class, "An error occurred in DeliveryOrders", ex);
         }
-        deliveryOrdersTable.getColumnModel().getColumn(9).setCellRenderer(new StatusCellRenderer());
+        deliveryOrdersTable.getColumnModel().getColumn(10).setCellRenderer(new StatusCellRenderer());
     }
 
 
@@ -800,7 +800,7 @@ public class OrderFilter extends JInternalFrame {
             selectedRow = deliveryOrdersTable.getSelectedRow();
             if (selectedRow != -1) {
                 txtRemark.setText("");
-                String status = deliveryOrdersTable.getValueAt(selectedRow, 9).toString();
+                String status = deliveryOrdersTable.getValueAt(selectedRow, 10).toString();
                 System.out.println("Status : " + status);
                 // Disable all buttons by default
                 btnWrapping.setEnabled(false);

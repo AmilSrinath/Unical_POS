@@ -609,7 +609,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
 
                         ArrayList<MainItemDto> itemDtos
                                 = mainItemController.searchAllItems(itemCode);
-
+                        System.out.println("DTOS :" + itemDtos.getFirst().getItemName());
                         for (MainItemDto dto : itemDtos) {
                             System.out.println("item : " + dto.getItemName());
                             boolean found = false;
@@ -635,7 +635,7 @@ public class GoodReceiveNote extends javax.swing.JInternalFrame {
                                     break;
                                 }
                             }
-
+                            System.out.println("Found : " + found);
                             // ➕ Add new row if not found
                             if (!found) {
                                 System.out.println("mekata enne nedda");
